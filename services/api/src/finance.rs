@@ -198,14 +198,14 @@ struct Changes {
     growth_pct: f64,
 }
 
-#[derive(Clone, Deserialize, Serialize)]
+#[derive(Clone, Deserialize, Serialize, schemars::JsonSchema)]
 #[serde(deny_unknown_fields)]
 pub struct Business {
     pub monthly_revenue_cents: i64,
     pub gross_margin_pct: f64,
     pub collection_days: i64,
 }
-#[derive(Clone, Deserialize, Serialize)]
+#[derive(Clone, Deserialize, Serialize, schemars::JsonSchema)]
 #[serde(deny_unknown_fields)]
 pub struct Goal {
     pub metric: String,
@@ -357,17 +357,28 @@ pub async fn assessment(
         .iter()
         .find(|c| c.id == id)
         .ok_or_else(|| ApiError::bad("Assessment not available for this company."))?;
-    let days = query.days.unwrap_or(90);
-    let buffer = query.buffer_cents.unwrap_or(company.buffer_cents);
+    Ok(Json(assess(
+        company,
+        query.days.unwrap_or(90),
+        query.buffer_cents.unwrap_or(company.buffer_cents),
+    )?))
+}
+
+pub fn assess(company: &Company, days: i64, buffer: i64) -> ApiResult<Value> {
     if !(7..=180).contains(&days) || !(0..=MAX_MONEY).contains(&buffer) {
         return Err(ApiError::bad(
             "Use a 7–180 day horizon and a non-negative buffer.",
         ));
     }
-    Ok(Json(
-        json!({"company":company,"forecast":forecast(company,days,buffer,&Changes::default(),None)}),
-    ))
+    let mut snapshot = company.clone();
+    snapshot
+        .flows
+        .retain(|flow| flow.known_on <= company.assessment_date);
+    Ok(
+        json!({"company":snapshot,"forecast":forecast(company,days,buffer,&Changes::default(),None)}),
+    )
 }
+
 pub async fn plans(
     State(state): State<AppState>,
     headers: HeaderMap,
