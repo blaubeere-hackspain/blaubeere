@@ -1,5 +1,6 @@
 pub mod auth;
 pub mod finance;
+pub mod oauth;
 
 use axum::{
     Json, Router,
@@ -136,6 +137,17 @@ pub fn router(state: AppState) -> Router {
         .route("/api/auth/login", post(auth::login))
         .route("/api/auth/logout", post(auth::logout))
         .route("/api/me", get(auth::me))
+        .route(
+            "/.well-known/oauth-authorization-server",
+            get(oauth::metadata),
+        )
+        .route("/oauth/register", post(oauth::register))
+        .route("/oauth/token", post(oauth::token))
+        .route("/oauth/revoke", post(oauth::revoke))
+        .route("/api/oauth/request", get(oauth::consent_request))
+        .route("/api/oauth/consent", post(oauth::consent))
+        .route("/api/connections", get(oauth::connections))
+        .route("/api/connections/{id}/revoke", post(oauth::disconnect))
         .route("/api/companies", get(finance::companies))
         .route("/api/companies/{id}/assessment", get(finance::assessment))
         .route("/api/companies/{id}/plans", post(finance::plans))

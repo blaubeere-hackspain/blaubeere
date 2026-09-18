@@ -3,7 +3,7 @@ use axum::{body::Body, http::Request};
 use http_body_util::BodyExt;
 use tower::ServiceExt;
 
-async fn state() -> AppState {
+pub(crate) async fn state() -> AppState {
     AppState::new(
         "sqlite::memory:",
         Config {
