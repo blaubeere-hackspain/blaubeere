@@ -1,0 +1,14 @@
+# Este repo versiona SOLO datos e informes.
+# El codigo del pipeline vive fuera de este repositorio.
+
+# Ignorar todo por defecto
+/*
+
+# Excepciones: unicamente data/ y reports/
+!/.gitignore
+!/.gitattributes
+!/data/
+!/reports/
+
+# data/interim/ es un paso intermedio regenerable: no se versiona (cuota LFS)
+/data/interim/
