@@ -9,7 +9,12 @@ async fn main() -> anyhow::Result<()> {
     std::fs::create_dir_all(".local")?;
     let database =
         std::env::var("DATABASE_URL").unwrap_or_else(|_| "sqlite://.local/blaubeere.db".into());
-    let state = AppState::new(&database, Config::from_env()?).await?;
+    let mut state = AppState::new(&database, Config::from_env()?).await?;
+    if let Ok(path) = std::env::var("ASSESSMENT_FILE") {
+        state.companies = std::sync::Arc::new(blaubeere_api::finance::load(
+            &std::fs::read_to_string(path)?,
+        )?);
+    }
     if let (Ok(email), Ok(password)) = (
         std::env::var("BOOTSTRAP_EMAIL"),
         std::env::var("BOOTSTRAP_PASSWORD"),

@@ -1,0 +1,397 @@
+[
+  {
+    "id": "DEMO_001",
+    "name": "Mediterr\u00e1nea Supply",
+    "group": "Mediterr\u00e1nea Group",
+    "currency": "EUR",
+    "assessment_date": "2026-08-31",
+    "model_version": "demo-scorecard-v1",
+    "history_mode": "reconstructed",
+    "data_mode": "demo",
+    "opening_cash_cents": 200000000,
+    "buffer_cents": 10000000,
+    "health": {
+      "score": 56,
+      "previous_score": 68,
+      "period": "3 months",
+      "label": "Deteriorating \u00b7 illustrative score",
+      "note": "Demo score supplied by the fixture. Not the official challenge model or a validated rating."
+    },
+    "history": [
+      {
+        "date": "2026-06-02",
+        "cash_cents": 310000000,
+        "score": 68
+      },
+      {
+        "date": "2026-07-02",
+        "cash_cents": 274000000,
+        "score": 65
+      },
+      {
+        "date": "2026-08-01",
+        "cash_cents": 238000000,
+        "score": 61
+      },
+      {
+        "date": "2026-08-31",
+        "cash_cents": 200000000,
+        "score": 56
+      }
+    ],
+    "drivers": [
+      {
+        "label": "Receipts arrive after supplier payments",
+        "detail": "\u20ac3.2m expected 17 days after the \u20ac4m supplier batch.",
+        "points": -12,
+        "source_ids": [
+          "AR-108",
+          "INV-042"
+        ]
+      },
+      {
+        "label": "Contractual commitments concentrate in September",
+        "detail": "\u20ac520k of payroll, tax and debt service each month.",
+        "points": -6,
+        "source_ids": [
+          "PAY-01",
+          "DEBT-01"
+        ]
+      },
+      {
+        "label": "Lower discretionary spending",
+        "detail": "Illustrative observed improvement compared with the previous quarter.",
+        "points": 6,
+        "source_ids": [
+          "OPS-01"
+        ]
+      }
+    ],
+    "coverage": [
+      {
+        "label": "Bank balances",
+        "status": "available",
+        "as_of": "2026-08-31",
+        "detail": "Usable cash in EUR. No restricted balances in this demo."
+      },
+      {
+        "label": "Open invoices",
+        "status": "available",
+        "as_of": "2026-08-31",
+        "detail": "Remaining balances only; settled cash is not counted twice."
+      },
+      {
+        "label": "Debt schedule",
+        "status": "available",
+        "as_of": "2026-08-31",
+        "detail": "Contractual repayments. New funding is a separate assumption."
+      },
+      {
+        "label": "Committed credit",
+        "status": "missing",
+        "as_of": null,
+        "detail": "No verified accessible facility. Additional funding requires approval."
+      },
+      {
+        "label": "Business metrics",
+        "status": "missing",
+        "as_of": null,
+        "detail": "Revenue, margins and retention need finance-team inputs."
+      },
+      {
+        "label": "Supplier update",
+        "status": "stale",
+        "as_of": "2026-08-10",
+        "detail": "Illustrative stale source. Confirm obligations before relying on a plan."
+      }
+    ],
+    "flows": [
+      {
+        "id": "INV-042",
+        "label": "Inventory suppliers",
+        "amount_cents": -400000000,
+        "settled_cents": 0,
+        "date": "2026-09-28",
+        "known_on": "2026-08-01",
+        "kind": "payable",
+        "timing": "contractual",
+        "source": "Supplier invoices \u00b7 12 open invoices"
+      },
+      {
+        "id": "AR-108",
+        "label": "September customer receipts",
+        "amount_cents": 320000000,
+        "settled_cents": 0,
+        "date": "2026-10-15",
+        "known_on": "2026-08-16",
+        "kind": "receivable",
+        "timing": "estimated",
+        "source": "Customer invoices \u00b7 historical collection timing"
+      },
+      {
+        "id": "REV-01",
+        "label": "Recurring customer receipts",
+        "amount_cents": 75000000,
+        "settled_cents": 0,
+        "date": "2026-09-30",
+        "known_on": "2026-08-30",
+        "kind": "operating_receipt",
+        "timing": "estimated",
+        "source": "Demo treasury schedule \u00b7 monthly assumption"
+      },
+      {
+        "id": "PAY-01",
+        "label": "Payroll and tax",
+        "amount_cents": -40000000,
+        "settled_cents": 0,
+        "date": "2026-10-01",
+        "known_on": "2026-08-30",
+        "kind": "payroll",
+        "timing": "contractual",
+        "source": "Demo ledger \u00b7 dated commitments"
+      },
+      {
+        "id": "OPS-01",
+        "label": "Discretionary operating spend",
+        "amount_cents": -18000000,
+        "settled_cents": 0,
+        "date": "2026-10-03",
+        "known_on": "2026-08-30",
+        "kind": "discretionary",
+        "timing": "estimated",
+        "source": "Demo treasury schedule \u00b7 monthly assumption"
+      },
+      {
+        "id": "DEBT-01",
+        "label": "Debt instalment",
+        "amount_cents": -12000000,
+        "settled_cents": 0,
+        "date": "2026-10-05",
+        "known_on": "2026-08-30",
+        "kind": "debt",
+        "timing": "contractual",
+        "source": "Demo ledger \u00b7 dated commitments"
+      },
+      {
+        "id": "REV-02",
+        "label": "Recurring customer receipts",
+        "amount_cents": 75000000,
+        "settled_cents": 0,
+        "date": "2026-10-30",
+        "known_on": "2026-08-30",
+        "kind": "operating_receipt",
+        "timing": "estimated",
+        "source": "Demo treasury schedule \u00b7 monthly assumption"
+      },
+      {
+        "id": "PAY-02",
+        "label": "Payroll and tax",
+        "amount_cents": -40000000,
+        "settled_cents": 0,
+        "date": "2026-10-31",
+        "known_on": "2026-08-30",
+        "kind": "payroll",
+        "timing": "contractual",
+        "source": "Demo ledger \u00b7 dated commitments"
+      },
+      {
+        "id": "OPS-02",
+        "label": "Discretionary operating spend",
+        "amount_cents": -18000000,
+        "settled_cents": 0,
+        "date": "2026-11-02",
+        "known_on": "2026-08-30",
+        "kind": "discretionary",
+        "timing": "estimated",
+        "source": "Demo treasury schedule \u00b7 monthly assumption"
+      },
+      {
+        "id": "DEBT-02",
+        "label": "Debt instalment",
+        "amount_cents": -12000000,
+        "settled_cents": 0,
+        "date": "2026-11-04",
+        "known_on": "2026-08-30",
+        "kind": "debt",
+        "timing": "contractual",
+        "source": "Demo ledger \u00b7 dated commitments"
+      },
+      {
+        "id": "REV-03",
+        "label": "Recurring customer receipts",
+        "amount_cents": 75000000,
+        "settled_cents": 0,
+        "date": "2026-11-29",
+        "known_on": "2026-08-30",
+        "kind": "operating_receipt",
+        "timing": "estimated",
+        "source": "Demo treasury schedule \u00b7 monthly assumption"
+      },
+      {
+        "id": "PAY-03",
+        "label": "Payroll and tax",
+        "amount_cents": -40000000,
+        "settled_cents": 0,
+        "date": "2026-11-30",
+        "known_on": "2026-08-30",
+        "kind": "payroll",
+        "timing": "contractual",
+        "source": "Demo ledger \u00b7 dated commitments"
+      },
+      {
+        "id": "OPS-03",
+        "label": "Discretionary operating spend",
+        "amount_cents": -18000000,
+        "settled_cents": 0,
+        "date": "2026-12-02",
+        "known_on": "2026-08-30",
+        "kind": "discretionary",
+        "timing": "estimated",
+        "source": "Demo treasury schedule \u00b7 monthly assumption"
+      },
+      {
+        "id": "DEBT-03",
+        "label": "Debt instalment",
+        "amount_cents": -12000000,
+        "settled_cents": 0,
+        "date": "2026-12-04",
+        "known_on": "2026-08-30",
+        "kind": "debt",
+        "timing": "contractual",
+        "source": "Demo ledger \u00b7 dated commitments"
+      },
+      {
+        "id": "REV-04",
+        "label": "Recurring customer receipts",
+        "amount_cents": 75000000,
+        "settled_cents": 0,
+        "date": "2026-12-29",
+        "known_on": "2026-08-30",
+        "kind": "operating_receipt",
+        "timing": "estimated",
+        "source": "Demo treasury schedule \u00b7 monthly assumption"
+      },
+      {
+        "id": "PAY-04",
+        "label": "Payroll and tax",
+        "amount_cents": -40000000,
+        "settled_cents": 0,
+        "date": "2026-12-30",
+        "known_on": "2026-08-30",
+        "kind": "payroll",
+        "timing": "contractual",
+        "source": "Demo ledger \u00b7 dated commitments"
+      },
+      {
+        "id": "OPS-04",
+        "label": "Discretionary operating spend",
+        "amount_cents": -18000000,
+        "settled_cents": 0,
+        "date": "2027-01-01",
+        "known_on": "2026-08-30",
+        "kind": "discretionary",
+        "timing": "estimated",
+        "source": "Demo treasury schedule \u00b7 monthly assumption"
+      },
+      {
+        "id": "DEBT-04",
+        "label": "Debt instalment",
+        "amount_cents": -12000000,
+        "settled_cents": 0,
+        "date": "2027-01-03",
+        "known_on": "2026-08-30",
+        "kind": "debt",
+        "timing": "contractual",
+        "source": "Demo ledger \u00b7 dated commitments"
+      },
+      {
+        "id": "REV-05",
+        "label": "Recurring customer receipts",
+        "amount_cents": 75000000,
+        "settled_cents": 0,
+        "date": "2027-01-28",
+        "known_on": "2026-08-30",
+        "kind": "operating_receipt",
+        "timing": "estimated",
+        "source": "Demo treasury schedule \u00b7 monthly assumption"
+      },
+      {
+        "id": "PAY-05",
+        "label": "Payroll and tax",
+        "amount_cents": -40000000,
+        "settled_cents": 0,
+        "date": "2027-01-29",
+        "known_on": "2026-08-30",
+        "kind": "payroll",
+        "timing": "contractual",
+        "source": "Demo ledger \u00b7 dated commitments"
+      },
+      {
+        "id": "OPS-05",
+        "label": "Discretionary operating spend",
+        "amount_cents": -18000000,
+        "settled_cents": 0,
+        "date": "2027-01-31",
+        "known_on": "2026-08-30",
+        "kind": "discretionary",
+        "timing": "estimated",
+        "source": "Demo treasury schedule \u00b7 monthly assumption"
+      },
+      {
+        "id": "DEBT-05",
+        "label": "Debt instalment",
+        "amount_cents": -12000000,
+        "settled_cents": 0,
+        "date": "2027-02-02",
+        "known_on": "2026-08-30",
+        "kind": "debt",
+        "timing": "contractual",
+        "source": "Demo ledger \u00b7 dated commitments"
+      },
+      {
+        "id": "REV-06",
+        "label": "Recurring customer receipts",
+        "amount_cents": 75000000,
+        "settled_cents": 0,
+        "date": "2027-02-27",
+        "known_on": "2026-08-30",
+        "kind": "operating_receipt",
+        "timing": "estimated",
+        "source": "Demo treasury schedule \u00b7 monthly assumption"
+      },
+      {
+        "id": "PAY-06",
+        "label": "Payroll and tax",
+        "amount_cents": -40000000,
+        "settled_cents": 0,
+        "date": "2027-02-28",
+        "known_on": "2026-08-30",
+        "kind": "payroll",
+        "timing": "contractual",
+        "source": "Demo ledger \u00b7 dated commitments"
+      },
+      {
+        "id": "OPS-06",
+        "label": "Discretionary operating spend",
+        "amount_cents": -18000000,
+        "settled_cents": 0,
+        "date": "2027-03-02",
+        "known_on": "2026-08-30",
+        "kind": "discretionary",
+        "timing": "estimated",
+        "source": "Demo treasury schedule \u00b7 monthly assumption"
+      },
+      {
+        "id": "DEBT-06",
+        "label": "Debt instalment",
+        "amount_cents": -12000000,
+        "settled_cents": 0,
+        "date": "2027-03-04",
+        "known_on": "2026-08-30",
+        "kind": "debt",
+        "timing": "contractual",
+        "source": "Demo ledger \u00b7 dated commitments"
+      }
+    ]
+  }
+]

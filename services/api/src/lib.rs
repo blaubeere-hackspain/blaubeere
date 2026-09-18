@@ -1,4 +1,5 @@
 pub mod auth;
+pub mod finance;
 
 use axum::{
     Json, Router,
@@ -58,6 +59,7 @@ pub struct AppState {
     pub db: SqlitePool,
     pub config: Config,
     pub dummy_hash: Arc<String>,
+    pub companies: Arc<Vec<finance::Company>>,
 }
 
 impl AppState {
@@ -77,6 +79,9 @@ impl AppState {
             db,
             config,
             dummy_hash,
+            companies: Arc::new(finance::load(include_str!(
+                "../../../fixtures/companies.json"
+            ))?),
         })
     }
 }
@@ -131,6 +136,9 @@ pub fn router(state: AppState) -> Router {
         .route("/api/auth/login", post(auth::login))
         .route("/api/auth/logout", post(auth::logout))
         .route("/api/me", get(auth::me))
+        .route("/api/companies", get(finance::companies))
+        .route("/api/companies/{id}/assessment", get(finance::assessment))
+        .route("/api/companies/{id}/plans", post(finance::plans))
         .layer(DefaultBodyLimit::max(32 * 1024))
         .layer(middleware::from_fn_with_state(
             state.clone(),
