@@ -1,0 +1,19 @@
+[package]
+name = "blaubeere-mcp"
+version.workspace = true
+edition.workspace = true
+rust-version.workspace = true
+
+[dependencies]
+anyhow.workspace = true
+axum.workspace = true
+dotenvy.workspace = true
+serde.workspace = true
+serde_json.workspace = true
+tokio.workspace = true
+tower-http.workspace = true
+tracing.workspace = true
+tracing-subscriber.workspace = true
+reqwest = { version = "0.13", default-features = false, features = ["json", "rustls"] }
+rmcp = { version = "=3.1.4", features = ["server", "macros", "schemars", "transport-streamable-http-server"] }
+schemars = "1"
