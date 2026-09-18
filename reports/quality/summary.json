@@ -1,0 +1,258 @@
+{
+  "closed_months_range": {
+    "first": "2024-09-01",
+    "last": "2026-08-01",
+    "open_month": [
+      "2026-09-01"
+    ]
+  },
+  "coverage": {
+    "sources": {
+      "cuentas_bancarias": {
+        "companies": 1283,
+        "pct": 99.77
+      },
+      "deuda": {
+        "companies": 378,
+        "pct": 29.39
+      },
+      "facturas": {
+        "companies": 785,
+        "pct": 61.04
+      },
+      "saldos": {
+        "companies": 1273,
+        "pct": 98.99
+      },
+      "transacciones": {
+        "companies": 1286,
+        "pct": 100.0
+      }
+    },
+    "total_companies": 1286
+  },
+  "data_gaps": {
+    "transactions_without_amount_eur_pct": 0.05,
+    "transactions_without_amount_eur_rows": 1334,
+    "transactions_without_category_pct": 24.87,
+    "transactions_without_category_rows": 635860
+  },
+  "flags": {
+    "balances": {
+      "fk_orphan": 29,
+      "sentinel_hidden_balance": 6
+    },
+    "banking_products": {},
+    "companies": {
+      "country_normalized": 36
+    },
+    "debt_products": {
+      "amount_missing": 169
+    },
+    "debt_schedule_config": {
+      "fk_orphan": 10
+    },
+    "groups": {},
+    "invoices": {
+      "amount_extreme": 10,
+      "date_order_invalid": 34310,
+      "date_out_of_range": 223,
+      "fx_not_convertible": 118146,
+      "fx_rate_invalid": 3650,
+      "open_month": 5233,
+      "paid_with_pending": 300
+    },
+    "transactions": {
+      "amount_extreme": 24,
+      "category_missing": 635530,
+      "date_out_of_range": 8,
+      "fk_orphan": 1314,
+      "fx_not_convertible": 1334,
+      "fx_rate_invalid": 77,
+      "open_month": 9242,
+      "status_missing": 29839
+    }
+  },
+  "history_months": {
+    "companies_lt_6_closed_months": 8,
+    "companies_with_history": 1286,
+    "max_closed_months": 24,
+    "median_closed_months": 18.0,
+    "min_closed_months": 1,
+    "p25_closed_months": 10.0,
+    "p75_closed_months": 24.0
+  },
+  "monthly_activity": [
+    {
+      "companies": 439,
+      "month": "2024-09-01",
+      "transactions": 41975
+    },
+    {
+      "companies": 470,
+      "month": "2024-10-01",
+      "transactions": 49521
+    },
+    {
+      "companies": 476,
+      "month": "2024-11-01",
+      "transactions": 44730
+    },
+    {
+      "companies": 520,
+      "month": "2024-12-01",
+      "transactions": 48178
+    },
+    {
+      "companies": 648,
+      "month": "2025-01-01",
+      "transactions": 61961
+    },
+    {
+      "companies": 684,
+      "month": "2025-02-01",
+      "transactions": 61678
+    },
+    {
+      "companies": 717,
+      "month": "2025-03-01",
+      "transactions": 71859
+    },
+    {
+      "companies": 742,
+      "month": "2025-04-01",
+      "transactions": 77155
+    },
+    {
+      "companies": 762,
+      "month": "2025-05-01",
+      "transactions": 79439
+    },
+    {
+      "companies": 777,
+      "month": "2025-06-01",
+      "transactions": 83975
+    },
+    {
+      "companies": 829,
+      "month": "2025-07-01",
+      "transactions": 97619
+    },
+    {
+      "companies": 842,
+      "month": "2025-08-01",
+      "transactions": 85031
+    },
+    {
+      "companies": 890,
+      "month": "2025-09-01",
+      "transactions": 101442
+    },
+    {
+      "companies": 933,
+      "month": "2025-10-01",
+      "transactions": 110678
+    },
+    {
+      "companies": 960,
+      "month": "2025-11-01",
+      "transactions": 99263
+    },
+    {
+      "companies": 1019,
+      "month": "2025-12-01",
+      "transactions": 114764
+    },
+    {
+      "companies": 1153,
+      "month": "2026-01-01",
+      "transactions": 130699
+    },
+    {
+      "companies": 1217,
+      "month": "2026-02-01",
+      "transactions": 147951
+    },
+    {
+      "companies": 1223,
+      "month": "2026-03-01",
+      "transactions": 182783
+    },
+    {
+      "companies": 1229,
+      "month": "2026-04-01",
+      "transactions": 176180
+    },
+    {
+      "companies": 1216,
+      "month": "2026-05-01",
+      "transactions": 166696
+    },
+    {
+      "companies": 1205,
+      "month": "2026-06-01",
+      "transactions": 177661
+    },
+    {
+      "companies": 1199,
+      "month": "2026-07-01",
+      "transactions": 185290
+    },
+    {
+      "companies": 1163,
+      "month": "2026-08-01",
+      "transactions": 150667
+    }
+  ],
+  "row_count_mismatches": [],
+  "row_counts": {
+    "balances": {
+      "clean": 7996,
+      "expected": 7996,
+      "interim": 7996,
+      "ok": true
+    },
+    "banking_products": {
+      "clean": 5987,
+      "expected": 5987,
+      "interim": 5987,
+      "ok": true
+    },
+    "companies": {
+      "clean": 1286,
+      "expected": 1286,
+      "interim": 1286,
+      "ok": true
+    },
+    "debt_products": {
+      "clean": 2239,
+      "expected": 2239,
+      "interim": 2239,
+      "ok": true
+    },
+    "debt_schedule_config": {
+      "clean": 87,
+      "expected": 87,
+      "interim": 87,
+      "ok": true
+    },
+    "groups": {
+      "clean": 250,
+      "expected": 250,
+      "interim": 250,
+      "ok": true
+    },
+    "invoices": {
+      "clean": 897894,
+      "expected": 897894,
+      "interim": 897894,
+      "ok": true
+    },
+    "transactions": {
+      "clean": 2556437,
+      "expected": 2556437,
+      "interim": 2556437,
+      "ok": true
+    }
+  }
+}
