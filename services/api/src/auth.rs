@@ -138,14 +138,55 @@ pub async fn login(
             "Email or password is incorrect.".into(),
         )
     })?;
+    start_session(&state, &user_id, &email).await
+}
+
+pub async fn demo_login(State(state): State<AppState>, headers: HeaderMap) -> ApiResult<Response> {
+    if !state.config.demo_login {
+        return Err(ApiError::forbidden());
+    }
+    if headers.contains_key(header::AUTHORIZATION) {
+        return Err(ApiError::bad("Use browser sign-in."));
+    }
+    let company = state
+        .companies
+        .iter()
+        .find(|company| company.id == "DEMO_001" && company.data_mode == "demo")
+        .ok_or_else(|| {
+            ApiError(
+                StatusCode::SERVICE_UNAVAILABLE,
+                "The sample workspace is temporarily unavailable. Please retry.".into(),
+            )
+        })?;
+    limit(&state, "login:demo", 120, 60).await?;
+    let user_id = secret();
+    let email = format!("visitor-{user_id}@demo.blaubeere.local");
+    // ponytail: demo identities persist with their OAuth grants; prune inactive demo visitors for long-running public demos.
+    let mut tx = state.db.begin().await?;
+    sqlx::query("INSERT INTO users (id, email, password_hash) VALUES (?, ?, ?)")
+        .bind(&user_id)
+        .bind(&email)
+        .bind(state.dummy_hash.as_str())
+        .execute(&mut *tx)
+        .await?;
+    sqlx::query("INSERT INTO memberships (user_id, company_id) VALUES (?, ?)")
+        .bind(&user_id)
+        .bind(&company.id)
+        .execute(&mut *tx)
+        .await?;
+    tx.commit().await?;
+    start_session(&state, &user_id, &email).await
+}
+
+async fn start_session(state: &AppState, user_id: &str, email: &str) -> ApiResult<Response> {
     let token = secret();
     sqlx::query("INSERT INTO sessions VALUES (?, ?, ?)")
         .bind(digest(&token))
-        .bind(&user_id)
+        .bind(user_id)
         .bind(now() + 43_200)
         .execute(&state.db)
         .await?;
-    let cookie = cookie(&state, &token, 43_200);
+    let cookie = cookie(state, &token, 43_200);
     Ok(([(header::SET_COOKIE, cookie)], Json(json!({"email":email}))).into_response())
 }
 

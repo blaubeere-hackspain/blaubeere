@@ -6,6 +6,7 @@ use tower::ServiceExt;
 #[test]
 fn origins_match_the_served_oauth_endpoints() {
     let valid = Config {
+        demo_login: false,
         app_origin: "http://localhost:3100".into(),
         api_origin: "https://api.example.com".into(),
         mcp_resource: "https://mcp.example.com/mcp".into(),
@@ -48,6 +49,7 @@ pub(crate) async fn state() -> AppState {
     AppState::new(
         "sqlite::memory:",
         Config {
+            demo_login: false,
             app_origin: "http://localhost:3100".into(),
             api_origin: "http://localhost:8080".into(),
             mcp_resource: "http://localhost:8081/mcp".into(),
@@ -205,5 +207,197 @@ async fn sessions_require_sign_in_origin_and_company_membership() {
         .await
         .status(),
         StatusCode::TOO_MANY_REQUESTS
+    );
+}
+
+#[tokio::test]
+async fn demo_entry_keeps_sessions_and_company_isolation() {
+    let mut state = state().await;
+    let origin = state.config.app_origin.clone();
+    assert_eq!(
+        request(
+            router(state.clone()),
+            "POST",
+            "/api/auth/demo",
+            json!({}),
+            None,
+            Some(&origin)
+        )
+        .await
+        .status(),
+        StatusCode::FORBIDDEN
+    );
+    state.config.demo_login = true;
+    auth::provision(
+        &state,
+        "team@example.com",
+        "long-test-password",
+        &["PRIVATE_001"],
+    )
+    .await
+    .unwrap();
+    let app = router(state.clone());
+    assert_eq!(
+        request(
+            app.clone(),
+            "POST",
+            "/api/auth/demo",
+            json!({}),
+            None,
+            Some("https://evil.example")
+        )
+        .await
+        .status(),
+        StatusCode::FORBIDDEN
+    );
+    let bearer = Request::builder()
+        .method("POST")
+        .uri("/api/auth/demo")
+        .header("authorization", "Bearer ignored")
+        .body(Body::empty())
+        .unwrap();
+    assert_eq!(
+        app.clone().oneshot(bearer).await.unwrap().status(),
+        StatusCode::BAD_REQUEST
+    );
+    let mut cookies = Vec::new();
+    for _ in 0..2 {
+        let response = request(
+            app.clone(),
+            "POST",
+            "/api/auth/demo",
+            json!({"email":"team@example.com"}),
+            None,
+            Some(&origin),
+        )
+        .await;
+        assert_eq!(response.status(), StatusCode::OK);
+        let header = response.headers()[header::SET_COOKIE].to_str().unwrap();
+        assert!(
+            header.contains("HttpOnly")
+                && header.contains("SameSite=Lax")
+                && header.contains("Max-Age=43200")
+        );
+        let cookie = header.split(';').next().unwrap().to_owned();
+        let response = request(
+            app.clone(),
+            "GET",
+            "/api/me",
+            json!(null),
+            Some(&cookie),
+            None,
+        )
+        .await;
+        assert_eq!(response.status(), StatusCode::OK);
+        let identity: serde_json::Value =
+            serde_json::from_slice(&response.into_body().collect().await.unwrap().to_bytes())
+                .unwrap();
+        assert_eq!(identity["company_ids"], json!(["DEMO_001"]));
+        assert_ne!(identity["email"], "team@example.com");
+        assert_eq!(
+            request(
+                app.clone(),
+                "GET",
+                "/api/companies/DEMO_001/assessment",
+                json!(null),
+                Some(&cookie),
+                None
+            )
+            .await
+            .status(),
+            StatusCode::OK
+        );
+        assert_eq!(
+            request(
+                app.clone(),
+                "GET",
+                "/api/companies/PRIVATE_001/assessment",
+                json!(null),
+                Some(&cookie),
+                None
+            )
+            .await
+            .status(),
+            StatusCode::FORBIDDEN
+        );
+        cookies.push(cookie);
+    }
+    let visitors: i64 = sqlx::query_scalar("SELECT COUNT(DISTINCT user_id) FROM sessions")
+        .fetch_one(&state.db)
+        .await
+        .unwrap();
+    assert_eq!(
+        visitors, 2,
+        "Demo visitors must not share identities or assistant grants"
+    );
+    assert_eq!(
+        request(
+            app.clone(),
+            "POST",
+            "/api/auth/login",
+            json!({"email":"team@example.com","password":"wrong"}),
+            None,
+            Some(&origin)
+        )
+        .await
+        .status(),
+        StatusCode::UNAUTHORIZED
+    );
+    assert_eq!(
+        request(
+            app.clone(),
+            "POST",
+            "/api/auth/logout",
+            json!({}),
+            Some(&cookies[0]),
+            Some(&origin)
+        )
+        .await
+        .status(),
+        StatusCode::OK
+    );
+    assert_eq!(
+        request(
+            app.clone(),
+            "GET",
+            "/api/me",
+            json!(null),
+            Some(&cookies[0]),
+            None
+        )
+        .await
+        .status(),
+        StatusCode::UNAUTHORIZED
+    );
+    assert_eq!(
+        request(
+            app.clone(),
+            "GET",
+            "/api/me",
+            json!(null),
+            Some(&cookies[1]),
+            None
+        )
+        .await
+        .status(),
+        StatusCode::OK
+    );
+    let mut companies = (*state.companies).clone();
+    for company in &mut companies {
+        company.data_mode = "real".into();
+    }
+    state.companies = Arc::new(companies);
+    assert_eq!(
+        request(
+            router(state),
+            "POST",
+            "/api/auth/demo",
+            json!({}),
+            None,
+            Some(&origin)
+        )
+        .await
+        .status(),
+        StatusCode::SERVICE_UNAVAILABLE
     );
 }

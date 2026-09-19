@@ -253,6 +253,7 @@ mod tests {
         let state = AppState::new(
             "sqlite::memory:",
             Config {
+                demo_login: false,
                 app_origin: "http://localhost:3100".into(),
                 api_origin: "http://localhost:8080".into(),
                 mcp_resource: "http://localhost:8081/mcp".into(),

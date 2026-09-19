@@ -20,6 +20,7 @@ use tower_http::cors::CorsLayer;
 
 #[derive(Clone)]
 pub struct Config {
+    pub demo_login: bool,
     pub app_origin: String,
     pub api_origin: String,
     pub mcp_resource: String,
@@ -28,6 +29,9 @@ pub struct Config {
 impl Config {
     pub fn from_env() -> anyhow::Result<Self> {
         let config = Self {
+            demo_login: std::env::var("DEMO_LOGIN")
+                .unwrap_or_else(|_| "false".into())
+                .parse()?,
             app_origin: std::env::var("APP_ORIGIN")
                 .unwrap_or_else(|_| "http://localhost:3100".into()),
             api_origin: std::env::var("API_ORIGIN")
@@ -151,6 +155,7 @@ pub fn router(state: AppState) -> Router {
     Router::new()
         .route("/health", get(|| async { Json(json!({"status": "ok"})) }))
         .route("/api/auth/login", post(auth::login))
+        .route("/api/auth/demo", post(auth::demo_login))
         .route("/api/auth/logout", post(auth::logout))
         .route("/api/me", get(auth::me))
         .route(
