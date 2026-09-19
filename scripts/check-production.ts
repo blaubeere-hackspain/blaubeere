@@ -12,7 +12,7 @@ assert.ok(login.includes("Blaubeere"));
 const homepage = await (await read(landing)).text();
 assert.ok(homepage.includes(app), "Landing must link to the deployed app");
 const paintings = new Set([...homepage.matchAll(/<img[^>]+src="([^"]+)"/g)].map(match => match[1]));
-assert.ok(paintings.size >= 4, "Landing must include the hero and three editorial paintings");
+assert.ok(paintings.size >= 5, "Landing must include the hero, three editorial paintings and assistant painting");
 const artworkUrls = [...paintings].map(path => new URL(path.replaceAll("&amp;", "&"), landing).href);
 for (const file of ["open-path-oil.png", "conversation-oil.png"]) artworkUrls.push(`${app}/_next/image?url=%2F${file}&w=640&q=75`);
 for (const path of artworkUrls) {
