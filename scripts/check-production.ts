@@ -7,9 +7,15 @@ async function read(path: string, init?: RequestInit) {
   assert.equal(response.status, 200, `Unhealthy public endpoint: ${path}`);
   return response;
 }
-assert.ok((await (await read(`${app}/login`)).text()).includes("Blaubeere"));
+const login = await (await read(`${app}/login`)).text();
+assert.ok(login.includes("Blaubeere"));
 const homepage = await (await read(landing)).text();
 assert.ok(homepage.includes(app), "Landing must link to the deployed app");
+for (const [origin, html] of [[app, login], [landing, homepage]]) {
+  const assets = new Set([...html.matchAll(/(?:src|href)="([^" ]+\.(?:js|css)(?:\?[^" ]*)?)"/g)].map(match => match[1]));
+  assert.ok(assets.size > 0, "Production page must include built assets");
+  for (const asset of assets) await read(new URL(asset.replaceAll("&amp;", "&"), origin).href);
+}
 const oauth = await (await read(`${app}/.well-known/oauth-authorization-server`)).json();
 assert.equal(oauth.issuer, app);
 assert.equal(oauth.authorization_endpoint, `${app}/connect`);
@@ -20,4 +26,4 @@ assert.equal((await fetch(`${app}/api/me`)).status, 401);
 const challenge = await fetch(`${app}/mcp`, { method: "POST" });
 assert.equal(challenge.status, 401);
 assert.ok(challenge.headers.get("www-authenticate")?.includes(`${app}/.well-known/oauth-protected-resource/mcp`));
-console.log("Production checks passed: app, landing, OAuth origins, MCP discovery and unauthorised access.");
+console.log("Production checks passed: app, landing, built assets, OAuth origins, MCP discovery and unauthorised access.");

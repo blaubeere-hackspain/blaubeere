@@ -54,7 +54,7 @@ jobs:
           install -d -m 700 "$JIO_STATE_DIR" "$JIO_STATE_DIR/sessions" "$session"
           printf '%s\n' "$JIO_SSH_KEY" > "$session/id_ed25519"
           ssh-keygen -y -f "$session/id_ed25519" > "$session/id_ed25519.pub"
-          printf 'large\n' > "$session/requested-size"
+          printf 'medium\n' > "$session/requested-size"
           # Jio pins the current host key through its authenticated API.
           unset JIO_SSH_KEY
           bash deploy/jio.sh
