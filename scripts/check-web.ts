@@ -14,7 +14,7 @@ import { HealthExplanation } from "../apps/app/components/health-explanation";
 import { healthHref, healthTimeline, validHealthDate } from "../apps/app/lib/health";
 import type { Company } from "../apps/app/lib/types";
 import { outsideDialog } from "../apps/app/components/dialog";
-import { ModelDashboard, modelNumber, modelReason } from "../apps/app/components/model-dashboard";
+import { ModelDashboard, modelNumber, modelReason, hasMonthlyData } from "../apps/app/components/model-dashboard";
 import { agingAmounts, DebtServiceCard } from "../apps/app/components/financial-cards";
 import type { CashMonth, ModelAssessment, ModelRecord } from "../apps/app/lib/types";
 
@@ -24,7 +24,7 @@ const { renderToStaticMarkup } = requireApp("react-dom/server");
 const demo = { company: companies[0] as Company };
 const record: ModelRecord = {
   version: "healthscore_v4", company_id: "COMP_TEST", group_id: "GROUP_TEST", month: "2026-08-01", as_of: "2026-08-31",
-  health_score: null, excluida: false, confidence: "ninguna", n_meses_ventana: 6, n_meses_con_actividad: 0,
+  health_score: null, excluida: false, confidence: "ninguna", n_meses_ventana: 6, n_meses_con_actividad: 1,
   c6: null, p6: null, d6: null, t6_efectivo: null, r_hist: null, colchon_v4: null, colchon_aplicable: null,
   mora_indice: null, h_antes_de_ajustes: null, penalizacion_mora_puntos: null, volumen_ambiguo_eur: null, volumen_ambiguo_pct: null,
   deficit_servicio_6: null, obligacion_vencida_m: null, multiplicador_deuda: null, penalizacion_multiplicador_puntos: null,
@@ -84,6 +84,15 @@ const daily: CashMonth = { currency: "EUR", anchor_date: "2026-09-01", income: 1
   { date: "2026-08-02", income: null, expense: null, balance: null, unknown_movements: 1 },
   { date: "2026-08-03", income: 0, expense: 0, balance: -321.09, unknown_movements: 0 },
 ] };
+const inactive = { ...record, n_meses_con_actividad: 0 };
+assert.equal(hasMonthlyData(inactive), false, "An empty model-grid row is not an available company month");
+assert.equal(hasMonthlyData({ ...inactive, cash: cashRecord.cash }), true, "Cash activity remains available even without a score");
+assert.equal(hasMonthlyData({ ...inactive, payment: cashRecord.payment }), true, "Invoice evidence makes a month available");
+assert.equal(hasMonthlyData({ ...inactive, health_score: 0 }), true, "A real zero score is still a recorded assessment");
+const inactiveOverview = renderToStaticMarkup(createElement(ModelDashboard, { data: { ...model, records: [inactive] } }));
+assert.ok(inactiveOverview.includes("No recorded activity yet") && inactiveOverview.includes('id="model-date"') && inactiveOverview.includes('disabled=""'));
+const latestEmpty = renderToStaticMarkup(createElement(ModelDashboard, { data: { ...model, records: [{ ...cashRecord, as_of: "2026-07-31" }, inactive] } }));
+assert.ok(latestEmpty.includes('Selected month: July 2026'), "Default to the latest month with company evidence");
 const cashRecords = [{ ...cashRecord, as_of: "2026-06-30" }, { ...record, as_of: "2026-07-31" }, { ...cashRecord, daily_cash: [daily] }];
 const dataOverview = renderToStaticMarkup(createElement(ModelDashboard, { data: { ...model, records: cashRecords } }));
 for (const text of ["Cash flow", "Income", "Expenses", "Reconstructed cash", "Overdue collections", "Overdue payments", "Debt service", "Debt and overdue obligations", "Monthly source records", "€678.12", "-€321.88", "€123.45", "€876.54", "€60.25", "1 invoice(s) with unknown EUR amounts"]) assert.ok(dataOverview.includes(text), `Display the published amount or explanation: ${text}`);

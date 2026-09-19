@@ -12,6 +12,12 @@ import type { ModelAssessment, ModelRecord } from "../lib/types";
 export const modelNumber = (value: number | null | undefined, suffix = "", maximumFractionDigits = 1) => value == null ? "Not available" : `${new Intl.NumberFormat("en-GB", { maximumFractionDigits }).format(value)}${suffix}`;
 const euro = (value: number | null | undefined) => value == null ? "Not available" : money(Math.round(value * 100), "EUR", false, true);
 const confidence: Record<string, string> = { alta: "High", media: "Medium", baja: "Low", ninguna: "None", excluida: "Excluded" };
+export function hasMonthlyData(row: ModelRecord) {
+  return row.health_score !== null || row.n_meses_con_actividad > 0 ||
+    (row.cash?.volumen_conocido ?? 0) > 0 ||
+    (row.payment?.pago_n_facturas ?? 0) > 0 || (row.payment?.cobro_n_facturas ?? 0) > 0 ||
+    (row.debt?.servicio_observado_eur ?? 0) > 0 || (row.debt?.servicio_esperado_eur ?? 0) > 0;
+}
 export function modelReason(reason: string) {
   const unknown = reason.match(/^([cpd]_eur|deficit_servicio_eur)_desconocido_en_(\d+)_meses$/);
   if (unknown) return `${({ c_eur: "Collections", p_eur: "Operating payments", d_eur: "Debt service", deficit_servicio_eur: "Debt-service shortfall" } as Record<string, string>)[unknown[1]]} could not be fully determined in ${unknown[2]} month(s) of the window.`;
@@ -69,7 +75,8 @@ function MonthlyRecords({ records, company, selected, demo }: { records: ModelRe
 
 export function ModelDashboard({ data, scoreDate, demo = false }: { data: ModelAssessment; scoreDate?: string; demo?: boolean }) {
   const companyName = data.company.name.replace(/^COMP_0*(\d+)$/, "COMP $1");
-  const [month, setMonth] = useState(data.records.at(-1)?.as_of ?? "");
+  const availableDates = data.records.filter(hasMonthlyData).map(record => record.as_of);
+  const [month, setMonth] = useState(availableDates.at(-1) ?? "");
   const row = data.records.find(row => row.as_of === (scoreDate ?? month));
   const scoreHref = (day: string) => healthHref(data.company.id,day,demo);
   const chartRecords = data.records.filter(record => record.as_of >= "2025-01-01");
@@ -79,8 +86,8 @@ export function ModelDashboard({ data, scoreDate, demo = false }: { data: ModelA
   const delta = row?.health_score != null && previous?.health_score != null ? row.health_score - previous.health_score : null;
   return <div className="model-dashboard">
     <p className="sr-only" role="status">{row ? `Showing data for ${date(row.as_of, true)}` : "No assessment selected"}</p>
-    <header className="page-heading company-heading"><div><h1>{scoreDate ? "The story behind this rating." : companyName}</h1><p className="muted mt-2">{scoreDate ? companyName : "Financial health and the movements behind it."}</p></div><div className="company-heading-actions"><AssessmentCalendar dates={data.records.map(record => record.as_of)} selected={row?.as_of ?? ""} onSelect={value => scoreDate ? window.location.assign(scoreHref(value)) : setMonth(value)}/>{scoreDate && <Link className="button secondary" href={`${demo ? "/demo" : "/dashboard"}?company=${encodeURIComponent(data.company.id)}`}><ArrowLeft size={16} aria-hidden/>Overview</Link>}</div></header>
-    {!row ? <section className="card metric-intro"><h2>No assessment for this date</h2><p>The model output is monthly. Choose a saved month-end assessment above.</p></section> : <>
+    <header className="page-heading company-heading"><div><h1>{scoreDate ? "The story behind this rating." : companyName}</h1><p className="muted mt-2">{scoreDate ? companyName : "Financial health and the movements behind it."}</p></div><div className="company-heading-actions"><AssessmentCalendar dates={availableDates} selected={row?.as_of ?? ""} onSelect={value => scoreDate ? window.location.assign(scoreHref(value)) : setMonth(value)}/>{scoreDate && <Link className="button secondary" href={`${demo ? "/demo" : "/dashboard"}?company=${encodeURIComponent(data.company.id)}`}><ArrowLeft size={16} aria-hidden/>Overview</Link>}</div></header>
+    {!row ? <section className="card metric-intro"><h2>{availableDates.length ? "No assessment for this date" : "No recorded activity yet"}</h2><p>{availableDates.length ? "Choose an available month above." : "No cash movements, invoices or model activity were recorded for this company."}</p></section> : <>
       <section className="stats-grid model-stats" aria-label="Source data at the selected cutoff">{[["Monthly net movement",euro(row.cash?.flujo_neto),`Month ending ${date(row.as_of, true)}`],["Overdue supplier payments",euro(row.payment?.pago_vencido_eur),`Due and unpaid at ${date(row.as_of, true)}`],["Overdue customer collections",euro(row.payment?.cobro_vencido_eur),`Due and uncollected at ${date(row.as_of, true)}`],["Observed debt service",euro(row.d6),`${row.n_meses_ventana} months ending ${date(row.as_of, true)}`]].map(([label,value,caption])=><article className="stat-card" key={label}><div><span>{label}</span></div><strong className="stat-value num">{value}</strong><p>{caption}</p></article>)}</section>
       <div className={scoreDate ? undefined : "dashboard-charts"}>
       <section className="card health-overview-panel" id="health" aria-labelledby="health-title">
