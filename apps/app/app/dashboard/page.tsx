@@ -1,14 +1,16 @@
 "use client";
 import { useEffect, useState } from "react";
-import Image from "next/image";
-import openPath from "../../public/open-path-oil.png";
-import { Activity, ArrowDownRight, ArrowRight, Building2, CalendarDays, ChevronDown, CircleHelp, FlaskConical, Layers3, LoaderCircle, LogOut, PanelLeft, Plug, ShieldCheck, TrendingUp, TriangleAlert, Wallet, X } from "lucide-react";
+import { Activity, ArrowDownRight, ArrowRight, Building2, CalendarDays, ChevronDown, FlaskConical, Layers3, LoaderCircle, PanelLeft, PanelLeftClose, ShieldCheck, TrendingUp, TriangleAlert, Wallet, X } from "lucide-react";
 import { ApiError, api } from "../../lib/api";
 import { date, money } from "../../lib/format";
 import type { Assessment, CompanySummary, Comparison, Identity, Plan } from "../../lib/types";
 import { CashChart } from "../../components/cash-chart";
 import { Planner } from "../../components/planner";
 import { Connections } from "../../components/connections";
+import { Sidebar } from "../../components/sidebar";
+import { Dialog } from "../../components/dialog";
+import Image from "next/image";
+import openPath from "../../public/open-path-oil.png";
 
 export default function Dashboard() {
   const [identity, setIdentity] = useState<Identity | null>(null);
@@ -24,6 +26,8 @@ export default function Dashboard() {
   const [comparison, setComparison] = useState<Comparison | null>(null);
   const [plan, setPlan] = useState<Plan | undefined>();
   const [logoutBusy, setLogoutBusy] = useState(false);
+  const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
+  const [mobileNavigation, setMobileNavigation] = useState(false);
 
   function handleError(error: unknown) {
     if (error instanceof ApiError && error.status === 401) {
@@ -55,14 +59,21 @@ export default function Dashboard() {
   const company = assessment?.company.id === selected ? assessment.company : undefined;
   const forecast = comparison?.baseline ?? assessment?.forecast;
   const format = (value: number, compact = false) => money(value, company?.currency ?? "EUR", compact);
-  return <div className="app-shell"><a href="#main" className="skip-link">Skip to cash outlook</a>
-    <aside className="sidebar"><a className="brand" href="/dashboard"><span className="brand-mark" aria-hidden><i/><i/><i/><i/></span>blaubeere</a><div className="workspace-label"><span className="workspace-avatar"><Building2 size={18} aria-hidden/></span><div><strong>Finance workspace</strong><span>Private company access</span></div><ShieldCheck size={14} aria-hidden/></div>
-      <span className="eyebrow nav-label">Workspace</span><nav aria-label="Workspace"><a className="nav-link active" href="/dashboard" aria-current="page"><Activity size={18} aria-hidden/>Cash outlook<span className="nav-indicator"/></a><button className="nav-link" onClick={() => setPlanning(true)} disabled={!company || loading}><TrendingUp size={18} aria-hidden/>Explore a plan</button></nav>
-      <div className="sidebar-bottom"><div className="assistant-callout"><span className="assistant-icon"><Plug size={18} aria-hidden/></span><strong>A second pair of eyes.</strong><p>Bring your cash outlook into your finance assistant.</p><button onClick={() => setConnections(true)} disabled={!identity}>Connect assistant<ArrowRight size={14} aria-hidden/></button></div><div className="sidebar-user"><span className="user-avatar">FT</span><div><strong>Finance team</strong><span title={identity?.email}>{identity?.email ?? "Signing in…"}</span></div><button className="icon-button" onClick={logout} disabled={logoutBusy || !identity} aria-label="Sign out"><LogOut size={17}/></button></div></div>
-    </aside>
-    <div className="app-content"><header className="topbar"><div className="topbar-context"><span className="desktop-label"><PanelLeft size={17} aria-hidden/></span><span className="muted">Workspace</span><span className="breadcrumb-slash">/</span><strong>Cash outlook</strong></div><div className="topbar-actions"><span className="private-label"><ShieldCheck size={14} aria-hidden/>Private workspace</span><button className="icon-button mobile-control" onClick={() => setConnections(true)} disabled={!identity} aria-label="Connect assistant"><Plug size={18}/></button><button className="icon-button mobile-control" onClick={logout} disabled={logoutBusy || !identity} aria-label="Sign out"><LogOut size={18}/></button><a href="#evidence" className="icon-button" aria-label="Understand sources and assumptions"><CircleHelp size={19}/></a><span className="user-avatar desktop-label">FT</span></div></header>
-      <main id="main" className="dashboard-main"><div className="page-heading"><div><div className="eyebrow mb-2">A little foresight goes a long way</div><h1>Your cash, in perspective.</h1><p className="muted mt-2">See what’s ahead. Understand why. Choose your next move.</p></div><button className="button" onClick={() => setPlanning(true)} disabled={!company || loading}><TrendingUp size={17} aria-hidden/>Explore a plan<ArrowRight size={16} aria-hidden/></button></div>
-        <div className="context-row"><div className="company-selector"><Building2 size={17} aria-hidden/><label className="sr-only" htmlFor="company">Company</label><select id="company" value={selected} onChange={e => setSelected(e.target.value)} disabled={!companies?.length}>{companies?.map(c => <option key={c.id} value={c.id}>{c.name}</option>)}</select></div><span className="context-date"><CalendarDays size={15} aria-hidden/>{company ? `As of ${date(company.assessment_date, true)}` : loading ? "Loading assessment" : "No assessment available"}</span><span className="badge">{company?.currency ?? "EUR"}</span>{company?.data_mode === "demo" && <span className="badge accent"><FlaskConical size={13} aria-hidden/>Demo data</span>}<div className="horizon-select"><label htmlFor="horizon" className="small muted">Outlook</label><select id="horizon" value={comparison?.baseline.horizon_days ?? days} onChange={e => { setComparison(null); setPlan(undefined); setDays(Number(e.target.value)); }} disabled={!company || loading}>{[30,60,90,180].map(d => <option key={d} value={d}>{d} days</option>)}{forecast && ![30,60,90,180].includes(forecast.horizon_days) && <option value={forecast.horizon_days}>{forecast.horizon_days} days · goal</option>}</select></div></div>
+  const sidebar = <Sidebar companies={companies} selected={selected} identity={identity} canPlan={Boolean(company) && !loading} logoutBusy={logoutBusy}
+    onCompany={id => { setSelected(id); setMobileNavigation(false); }}
+    onPlan={() => { setMobileNavigation(false); setPlanning(true); }}
+    onConnections={() => { setMobileNavigation(false); setConnections(true); }}
+    onLogout={logout} onNavigate={() => setMobileNavigation(false)}/>;
+  return <div className="app-shell" data-sidebar-collapsed={sidebarCollapsed}><a href="#main" className="skip-link">Skip to cash outlook</a>
+    <aside className="sidebar" id="workspace-sidebar" aria-label="Workspace navigation">{sidebar}</aside>
+    <div className="app-content"><header className="topbar"><div className="topbar-context">
+      <button className="icon-button desktop-sidebar-toggle" aria-label={sidebarCollapsed ? "Show sidebar" : "Hide sidebar"} aria-expanded={!sidebarCollapsed} aria-controls="workspace-sidebar" onClick={() => setSidebarCollapsed(!sidebarCollapsed)}><span className="icon-swap" aria-hidden><PanelLeft data-visible={sidebarCollapsed}/><PanelLeftClose data-visible={!sidebarCollapsed}/></span></button>
+      <button className="icon-button mobile-sidebar-toggle" aria-label="Open navigation" aria-haspopup="dialog" onClick={() => setMobileNavigation(true)}><PanelLeft/></button>
+      <span className="current-view"><Activity size={16} aria-hidden/>Cash outlook</span>
+      {company && <a className="topbar-link" href="#evidence">Sources &amp; evidence</a>}
+    </div><div className="topbar-actions"><span className="private-label"><ShieldCheck size={14} aria-hidden/>Private workspace</span><span className="user-avatar" aria-label="Finance team">FT</span></div></header>
+      <main id="main" className="dashboard-main" tabIndex={-1}><div className="page-heading"><div><div className="eyebrow mb-2">A little foresight goes a long way</div><h1>Your cash, in perspective.</h1><p className="muted mt-2">See what’s ahead. Understand why. Choose your next move.</p></div><button className="button" onClick={() => setPlanning(true)} disabled={!company || loading}><TrendingUp size={17} aria-hidden/>Explore a plan<ArrowRight size={16} aria-hidden/></button></div>
+        <div className="context-row"><div className="company-selector"><Building2 size={17} aria-hidden/><label className="sr-only" htmlFor="company">Company</label><select id="company" value={selected} onChange={e => setSelected(e.target.value)} disabled={!companies?.length}>{!companies?.length && <option value="">No company selected</option>}{companies?.map(c => <option key={c.id} value={c.id}>{c.name}</option>)}</select></div><span className="context-date"><CalendarDays size={15} aria-hidden/>{company ? `As of ${date(company.assessment_date, true)}` : loading ? "Loading assessment" : "No assessment available"}</span><span className="badge">{company?.currency ?? "EUR"}</span>{company?.data_mode === "demo" && <span className="badge accent"><FlaskConical size={13} aria-hidden/>Demo data</span>}<div className="horizon-select"><label htmlFor="horizon" className="small muted">Outlook</label><select id="horizon" value={comparison?.baseline.horizon_days ?? days} onChange={e => { setComparison(null); setPlan(undefined); setDays(Number(e.target.value)); }} disabled={!company || loading}>{[30,60,90,180].map(d => <option key={d} value={d}>{d} days</option>)}{forecast && ![30,60,90,180].includes(forecast.horizon_days) && <option value={forecast.horizon_days}>{forecast.horizon_days} days · goal</option>}</select></div></div>
         {error && <div className="error error-retry" role="alert"><span>{error}</span><button className="button secondary" onClick={() => setRetry(retry + 1)}>Try again</button></div>}
         <p className="refresh-status small" role="status">{loading && company && <><LoaderCircle className="spinner" size={14} aria-hidden/>Updating outlook… Showing the previous assessment.</>}{error && company && !loading && `Showing the last available ${forecast?.horizon_days}-day outlook.`}</p>
         {loading && !company && <div className="dashboard-skeleton" role="status"><span className="sr-only">Loading company cash outlook…</span><div className="skeleton-stats">{[1,2,3,4].map(n => <div key={n}/>)}</div><div className="skeleton-chart"/></div>}
@@ -81,6 +92,7 @@ export default function Dashboard() {
         </div>}
       </main>
     </div>
+    <Dialog open={mobileNavigation} onClose={() => setMobileNavigation(false)} className="navigation-dialog" titleId="navigation-title"><h2 id="navigation-title" className="sr-only">Workspace navigation</h2><button className="icon-button close-navigation" aria-label="Close navigation" onClick={() => setMobileNavigation(false)}><X/></button>{sidebar}</Dialog>
     {company && <Planner key={company.id} company={company} open={planning} onClose={() => setPlanning(false)} onCompare={value => { setComparison(value); setPlan(undefined); }} onPreview={setPlan}/>}
     {identity && <Connections endpoint={identity.mcp_resource} open={connections} onClose={() => setConnections(false)}/>}
   </div>;
