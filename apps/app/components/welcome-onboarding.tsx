@@ -30,6 +30,7 @@ export function WelcomeOnboarding({ scope, hasCompanies, demo = false, autoOpen 
       <div className={styles.painting}>
         <Image src="/welcome-garden-oil.png" alt="" fill sizes="(max-width: 540px) 100vw, 512px" loading="eager"/>
         <div className={styles.brand} aria-label="blau"><span className="brand-mark" aria-hidden><i/><i/><i/><i/></span></div>
+        {guide && <button className={`icon-button ${styles.back}`} aria-label="Back" onClick={() => advance("welcome")}><ArrowLeft size={18} aria-hidden/></button>}
         <button className={`icon-button ${styles.close}`} aria-label="Close welcome" onClick={() => advance("done")}><X size={18} aria-hidden/></button>
       </div>
       <div className={styles.body}>
@@ -53,7 +54,6 @@ export function WelcomeOnboarding({ scope, hasCompanies, demo = false, autoOpen 
         <footer className={styles.footer}>
           {!guide ? <button className={`button ${styles.continue}`} onClick={() => advance("guide")}>Continue onboarding<ArrowRight size={16} aria-hidden/></button> : <>
             {!hasCompanies && !demo ? <a className={`button ${styles.continue}`} href="/demo" onClick={() => advance("done")}>Explore the demo<ArrowRight size={16} aria-hidden/></a> : <button className={`button ${styles.continue}`} onClick={() => advance("done")}>Open workspace<ArrowRight size={16} aria-hidden/></button>}
-            <button className={styles.back} onClick={() => advance("welcome")}><ArrowLeft size={14} aria-hidden/>Back</button>
           </>}
           <span className={styles.progress} aria-label={`Step ${guide ? 2 : 1} of 2`}><i data-active={!guide}/><i data-active={guide}/></span>
         </footer>
