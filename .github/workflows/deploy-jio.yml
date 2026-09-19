@@ -38,6 +38,7 @@ jobs:
           JIO_INSTALL_DIR="$RUNNER_TEMP/bin" sh "$RUNNER_TEMP/install-jio.sh"
           echo "$RUNNER_TEMP/bin" >> "$GITHUB_PATH"
       - name: Deploy and verify production
+        id: deploy
         env:
           JIO_API_KEY: ${{ secrets.JIO_API_KEY }}
           JIO_SSH_KEY: ${{ secrets.JIO_SSH_KEY }}
@@ -58,3 +59,16 @@ jobs:
           # Jio pins the current host key through its authenticated API.
           unset JIO_SSH_KEY
           bash deploy/jio.sh
+      - name: Show Jiovanni URLs
+        if: ${{ always() && steps.deploy.outputs.landing_url != '' }}
+        env:
+          LANDING_URL: ${{ steps.deploy.outputs.landing_url }}
+          APP_URL: ${{ steps.deploy.outputs.app_url }}
+          DEPLOY_RESULT: ${{ steps.deploy.outcome }}
+        run: |
+          {
+            printf '## blau on Jiovanni\n\nDeployment: **%s**\n\n' "$DEPLOY_RESULT"
+            printf '[App](%s) · [Pricing](%s/pricing) · [MCP](%s/mcp)\n\n' "$APP_URL" "$LANDING_URL" "$APP_URL"
+            printf 'Commit: `%s`\n\n' "$GITHUB_SHA"
+            printf '### Landing page\n\n[%s](%s)\n' "$LANDING_URL" "$LANDING_URL"
+          } | tee -a "$GITHUB_STEP_SUMMARY"
