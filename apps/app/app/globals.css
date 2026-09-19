@@ -469,6 +469,26 @@ body { background: #f1f1ee; }
 .model-note { background: var(--warn-soft); color: var(--warn); padding: 16px; border-radius: 12px; font-size: 13px; line-height: 1.6; }
 .model-formula { display: grid; gap: 12px; padding: 16px 0; font-size: 13px; color: var(--muted); overflow-wrap: anywhere; }
 .model-provenance { padding: 24px; margin-top: 24px; }
+.monthly-cash, .monthly-records { margin-block: 24px; }
+.monthly-chart-mode { display: flex; align-items: center; gap: 8px; font-size: var(--text-caption); color: var(--muted); }
+.monthly-chart-mode .control { width: auto; max-width: 100%; }
+.monthly-cash .checkpoints dd { font-size: var(--text-heading); margin: 10px 0 0; font-variant-numeric: tabular-nums; overflow-wrap: anywhere; }
+.monthly-empty { padding: 24px 8px; color: var(--muted); line-height: 1.6; }
+.monthly-breakdown { display: grid; grid-template-columns: repeat(2,minmax(0,1fr)); gap: 24px; margin-block: 24px; }
+.monthly-detail { padding: 24px; min-width: 0; }
+.monthly-detail > p, .monthly-debt > div > p { margin-top: 8px; line-height: 1.6; }
+.monthly-detail .metric-equation dd { overflow-wrap: anywhere; min-width: 0; }
+.monthly-detail h3 { font-size: var(--text-ui); font-weight: 500; }
+.monthly-debt { grid-column: 1 / -1; display: grid; grid-template-columns: repeat(2,minmax(0,1fr)); gap: 32px; align-items: start; }
+.monthly-debt .metric-equation { margin: 0; }
+.monthly-records table { min-width: 1050px; }
+.monthly-records tr[data-selected="true"] { background: var(--accent-soft); }
+.monthly-row-button, .monthly-rating-link { display: inline-flex; align-items: center; gap: 8px; min-height: 44px; padding: 8px; border-radius: 8px; color: var(--ink); text-decoration: none; font: inherit; font-variant-numeric: tabular-nums; }
+.monthly-row-button { border: 0; background: transparent; cursor: pointer; }
+.monthly-row-button[aria-pressed="true"] { color: var(--accent); font-weight: 600; }
+@media (hover:hover) and (pointer:fine) { .monthly-row-button:hover, .monthly-rating-link:hover { color: var(--accent); text-decoration: underline; text-underline-offset: 4px; } }
+@media (max-width:900px) { .monthly-breakdown, .monthly-debt { grid-template-columns: 1fr; } .monthly-debt { gap: 16px; } }
+@media (max-width:700px) { .monthly-detail { padding: 20px 16px; } .monthly-cash .card-heading { flex-direction: column; align-items: stretch; gap: 16px; } .monthly-cash .card-heading > div { flex-basis: auto; } .monthly-chart-mode .control { flex: 1; min-width: 0; } .monthly-breakdown { gap: 16px; } .monthly-cash .checkpoints { grid-template-columns: 1fr; } .monthly-cash .checkpoints > div + div { border-left: 0; border-top: 1px solid var(--line); } }
 .model-provenance > p { margin-top: 12px; }
 .model-provenance summary { min-height: 44px; padding-block: 16px; font-size: 13px; }
 .model-source-list { display: grid; gap: 16px; padding-block: 16px; overflow-wrap: anywhere; }

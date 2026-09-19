@@ -48,8 +48,20 @@ export type ModelRecord = {
   mora_ratio: number | null; h_antes_de_mora: number | null; penalizacion_mora_puntos: number | null;
   volumen_ambiguo_eur: number | null; volumen_ambiguo_pct: number | null;
   k: number; alpha: number; beta: number; reasons: string[];
-  cash: { posicion_acumulada: number | null; flujo_neto: number | null; meses_de_cobertura: number | null; mes_origen: string; confidence: string } | null;
-  payment: { debido_eur: number | null; en_mora_en_el_corte_eur: number | null; retraso_medio_dias_pagado: number | null; confidence: string } | null;
+  cash: {
+    posicion_acumulada: number | null; flujo_neto: number | null; meses_de_cobertura: number | null; mes_origen: string; confidence: string;
+    flujo_operating_in: number | null; flujo_operating_out: number | null;
+    flujo_financing_in: number | null; flujo_financing_out: number | null;
+    flujo_investment_in: number | null; flujo_investment_out: number | null;
+    flujo_transfer: number | null; flujo_non_economic: number | null; flujo_unknown: number | null;
+    flags: string[];
+  } | null;
+  payment: {
+    debido_eur: number | null; en_mora_en_el_corte_eur: number | null; retraso_medio_dias_pagado: number | null; confidence: string;
+    mora_ratio: number | null; cobro_debido_eur: number | null; cobro_en_mora_en_el_corte_eur: number | null;
+    cobro_mora_ratio: number | null; cobro_retraso_medio_dias_pagado: number | null;
+    n_huecos_eur: number; n_vencimiento_desconocido: number;
+  } | null;
 };
 export type ModelAssessment = {
   kind: "model"; company: CompanySummary; records: ModelRecord[];

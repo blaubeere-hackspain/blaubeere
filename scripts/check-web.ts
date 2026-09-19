@@ -38,6 +38,19 @@ assert.ok(!modelDetail.includes("NaN") && !modelDetail.includes("€0"), "Missin
 assert.equal(modelNumber(null), "Not available");
 assert.equal(modelNumber(0), "0");
 assert.match(modelReason("p_eur_desconocido_en_2_meses"), /Operating payments.*2 month/);
+const cashRecord: ModelRecord = { ...record, d6: 60.25, p6: 1234.56, t6: 1294.81,
+  cash: { posicion_acumulada: -321.09, flujo_neto: 678.12, meses_de_cobertura: null, mes_origen: "2026-06-01", confidence: "baja", flujo_operating_in: 1000, flujo_operating_out: -321.88, flujo_financing_in: 0, flujo_financing_out: 0, flujo_investment_in: 0, flujo_investment_out: 0, flujo_transfer: null, flujo_non_economic: 0, flujo_unknown: null, flags: ["agujeros_en_tramo"] },
+  payment: { debido_eur: 500.44, en_mora_en_el_corte_eur: 123.45, retraso_medio_dias_pagado: 4.5, mora_ratio: null, confidence: "baja", cobro_debido_eur: 2000, cobro_en_mora_en_el_corte_eur: 876.54, cobro_mora_ratio: 0.43827, cobro_retraso_medio_dias_pagado: 12, n_huecos_eur: 2, n_vencimiento_desconocido: 3 },
+};
+const cashRecords = [{ ...cashRecord, as_of: "2026-06-30" }, { ...record, as_of: "2026-07-31" }, cashRecord];
+const dataOverview = renderToStaticMarkup(createElement(ModelDashboard, { data: { ...model, records: cashRecords }, companies: [model.company], onCompany: () => {} }));
+for (const text of ["Cash movements over time", "Payments and collections", "Debt service in the model window", "Monthly source records", "€678.12", "-€321.88", "€123.45", "€876.54", "€60.25", "2 invoice(s) with unknown EUR amounts"]) assert.ok(dataOverview.includes(text), `Display the published amount or explanation: ${text}`);
+assert.match(dataOverview, /id="model-date"/, "The overview must let users select any published month");
+assert.ok(dataOverview.includes("not the outstanding debt balance") && dataOverview.includes("not a bank balance"));
+const cashSvg = dataOverview.match(/<svg[^>]*aria-labelledby="monthly-chart-title monthly-chart-description"[\s\S]*?<\/svg>/)![0];
+assert.equal((cashSvg.match(/<path d="([^"]*)"/)![1].match(/M/g) ?? []).length, 2, "Missing cash months split the plotted series");
+assert.ok(!cashSvg.includes("NaN") && !cashSvg.includes("undefined"));
+assert.ok(modelOverview.includes("No cash movements were published"), "An empty cash history needs a clear state without suppressing other datasets");
 const login = renderToStaticMarkup(createElement(LoginForm));
 assert.ok(login.includes('name="email"') && login.includes('type="password"'), "The normal sign-in form stays visible");
 assert.match(login, /<form\b[^>]*method="post"/, "A submit before hydration must never put credentials in the URL");

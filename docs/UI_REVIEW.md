@@ -91,3 +91,12 @@ Verification: both frontend production builds and web checks pass. Chrome checks
 Not verified in this pass: Safari/Firefox, physical touch devices, a screen-reader session, automated accessibility audit, 200% browser zoom, RTL, and 10%-speed animation replay. Reduced-motion behavior was checked in code.
 
 **Approve** for the inspected typography/component scope; no unresolved HIGH finding.
+
+
+## Monthly cash, payment and debt views
+
+- Added native month and chart-mode selectors, signed cash categories, distinct supplier-payment/customer-collection sections, rolling debt-service totals and a keyboard-scrollable history table. Existing cards, typography and chart scaling are reused.
+- Financial values retain EUR precision; missing months split the cash line. Labels distinguish cumulative movements from bank balances, invoice cutoff totals from monthly flows, and observed debt service from outstanding debt.
+- Fixed the mobile chart header’s inherited flex basis, which created unnecessary vertical space when its controls stacked.
+
+Verification: web regression checks cover exact amounts, negative outflows, separate payment/collection arrears, incomplete evidence, empty cash history and gaps in the plotted series. Chrome checks with the Rust-imported data covered month/table selection, dated score links, cumulative chart mode, unavailable cash with available invoices, company changes, and 320px/390px layouts. Document width remained equal to viewport width at 320px; the records table scrolls within its card. TypeScript and the production app build pass. Safari/Firefox, physical touch and a screen-reader session remain unverified.
