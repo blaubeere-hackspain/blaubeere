@@ -2,7 +2,6 @@ import { notFound } from "next/navigation";
 import { Dashboard } from "../../../../components/dashboard";
 import { validHealthDate } from "../../../../lib/health";
 import { appOrigin, pageMetadata } from "../../../../../metadata";
-import demo from "../../../../lib/demo.json";
 
 type Props = { params: Promise<{ date: string }> };
 export async function generateMetadata({ params }: Props) {
@@ -12,5 +11,5 @@ export async function generateMetadata({ params }: Props) {
 export default async function Page({ params }: Props) {
   const { date } = await params;
   if (!validHealthDate(date)) notFound();
-  return <Dashboard demo={demo} scoreDate={date}/>;
+  return <Dashboard demo scoreDate={date}/>;
 }

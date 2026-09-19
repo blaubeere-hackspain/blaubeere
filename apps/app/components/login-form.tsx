@@ -27,6 +27,6 @@ export function LoginForm({ register = false, returnTo }: { register?: boolean; 
       <button type="submit" className="button" disabled={busy}>{busy ? <><LoaderCircle className="spinner" aria-hidden/>{register ? "Creating account…" : "Signing in…"}</> : <>{register ? "Create account" : "Sign in"}<ArrowRight size={16} aria-hidden/></>}</button>
     </form>
     <p className="auth-switch">{register ? "Already have an account?" : "New to blau?"}<a className="auth-demo-link" href={`/${register ? "login" : "register"}?returnTo=${encodeURIComponent(destination)}`}>{register ? "Sign in" : "Create an account"}</a></p>
-    <div className="auth-demo"><a href="/demo" className="auth-demo-link">Access demo<ArrowRight size={16} aria-hidden/></a><p className="small muted">Take a look around with sample data. No sign-in needed.</p></div>
+    <div className="auth-demo"><a href="/demo" className="auth-demo-link">Access demo<ArrowRight size={16} aria-hidden/></a><p className="small muted">Explore the imported companies and their health scores. No sign-in needed.</p></div>
   </div>;
 }

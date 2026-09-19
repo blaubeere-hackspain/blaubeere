@@ -4,10 +4,6 @@ version.workspace = true
 edition.workspace = true
 rust-version.workspace = true
 
-[[example]]
-name = "offline_demo"
-test = true
-
 [dependencies]
 anyhow.workspace = true
 axum.workspace = true

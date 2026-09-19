@@ -4,47 +4,45 @@ Internal finance planning: understand a dated cash gap, inspect the evidence, an
 
 ## Run locally
 
-For the frontend demo, only Bun 1.3.12 is needed:
-
-```sh
-bun install --frozen-lockfile
-bun run dev:app
-```
-
-Open http://localhost:3100/login and choose **Access demo →**, or go directly to http://localhost:3100/demo. No credentials, environment setup, API, database or deployment is required. The demo bundles synthetic data, four chart horizons and two prepared plans with fixed assumptions. Custom planning and assistant connections require a signed-in workspace.
-
-To run the full authenticated app, install Rust 1.94 or newer as well:
+Install Bun 1.3.12 and Rust 1.94 or newer:
 
 ```sh
 bun install --frozen-lockfile
 bun run setup
+```
+
+Import the published Parquet files using the command below in **Published Parquet assessments in the app**. Set the resulting `DATASET_DATABASE_URL` in `.env` and set `DATASET_DEMO=true` to make the challenge snapshot available to the public demo. Then run:
+
+```sh
 bun run dev
 ```
 
-Setup creates an ignored `.env` and preserves existing configuration. The regular sign-in form accepts `finance@blaubeere.local` with the generated `BOOTSTRAP_PASSWORD`. The public **Access demo** link works regardless of `DEMO_LOGIN`.
+Open http://localhost:3100/login and choose **Access demo →**, or go directly to http://localhost:3100/demo. No sign-in is needed for the published dataset. Rust and its imported SQLite snapshot must be running; there is no bundled mock fallback.
+
+Setup preserves existing configuration. The regular sign-in form accepts `finance@blaubeere.local` with the generated `BOOTSTRAP_PASSWORD`. Set `DATASET_TEAM_EMAIL=finance@blaubeere.local` to grant that account access to imported companies.
 
 | Workspace | Address | Purpose |
 | --- | --- | --- |
 | `apps/landing` | http://localhost:3102 | Product landing page |
-| `apps/app` | http://localhost:3100 | Sign-in, cash dashboard, planning and assistant consent |
-| `services/api` | http://localhost:8080 | Axum API, persistent identity, OAuth and shared finance calculations |
+| `apps/app` | http://localhost:3100 | Company health dashboard, sign-in and assistant consent |
+| `services/api` | http://localhost:8080 | Axum API, Parquet import, identity, OAuth and finance calculations |
 | `services/mcp` | http://localhost:8081/mcp | Authenticated Streamable HTTP MCP |
 
-Both Rust services share the SQLite database in `.local/blaubeere.db`. Run commands from the repository root. Each service also has a separate `dev:api`, `dev:mcp`, `dev:app`, or `dev:landing` script.
+Both Rust services share the identity database in `.local/blaubeere.db` and read the imported dataset snapshot. Run commands from the repository root. Each service also has a separate `dev:api`, `dev:mcp`, `dev:app`, or `dev:landing` script.
 
 ## Try the workflow
 
-1. Sign in with the locally provisioned account to try custom plans, or choose **Access demo →** to explore the prepared example. The demo company starts with €2m cash and a €4m payment on 28 September, before its later receivable. Its €100k cash floor makes the funding requirement €2.1m.
-2. Inspect the chart, health drivers, coverage notes and source records. History is labelled reconstructed; the score and underlying records are illustrative.
-3. Select **Explore a plan**. Compare the default goal with earlier collections, reduced discretionary spending and conditional funding. Constraints are checked on every projected day.
-4. Set maximum new funding to zero and compare again to see the remaining gaps. Preview either plan on the cash chart; observed health and source records stay unchanged.
-5. Choose monthly revenue to enter starting revenue, gross margin and collection delay explicitly. Retention and margin goals remain unavailable without their required source inputs.
+1. Choose **Access demo →** and switch among imported companies using the selector at the top of the sidebar.
+2. Inspect the health history chart. Change its month to update the rating, evidence summary, cash movements, payment arrears and observed debt service together.
+3. Open **Explain this score** for the saved model inputs, formula, confidence and reasons at that cutoff. Missing scores remain unavailable.
+4. Inspect cash categories, supplier payments, customer collections and the monthly source table. The challenge data is synthetic but these are its actual published outputs, not hand-authored dashboard values.
+5. Sign in to connect an assistant to your authorised workspace. Forecasts and plans require additional verified inputs and are not fabricated from monthly historical records.
 
 ## Authentication and MCP
 
-`DEMO_LOGIN=true` enables the optional `POST /api/auth/demo` endpoint for authenticated integration and MCP demos. It is separate from the public `/demo` page, which never creates a session or calls the API. Each visitor receives a separate authenticated, 12-hour session and membership only in `DEMO_001`, which must be labelled `data_mode: "demo"`. Visitors cannot enter existing accounts or see each other’s assistant grants. Signing out ends the session; entering again creates a new visitor. Demo identities and grants remain in SQLite until explicitly removed.
+`DEMO_LOGIN=true` enables the optional `POST /api/auth/demo` endpoint for authenticated integration and MCP demos. It is separate from the read-only `/demo` page, which reads the published challenge dataset without creating a session. Each visitor receives a separate authenticated, 12-hour session and membership only in `DEMO_001`, which must be labelled `data_mode: "demo"`. Visitors cannot enter existing accounts or see each other’s assistant grants. Signing out ends the session; entering again creates a new visitor. Demo identities and grants remain in SQLite until explicitly removed.
 
-The local example and MVP production deployment enable this flag. Set it to `false` in `.env` (local) or `deploy/runtime.sh` and the matching check in `deploy/jio.sh` (production, then redeploy) to disable the authenticated demo endpoint. The backend defaults to disabled when the flag is absent. The public frontend demo remains available.
+The local example and MVP production deployment enable this flag. Set it to `false` in `.env` (local) or `deploy/runtime.sh` and the matching check in `deploy/jio.sh` (production, then redeploy) to disable the authenticated demo endpoint. The backend defaults to disabled when the flag is absent. Public dataset access is controlled separately by `DATASET_DEMO`.
 
 Team accounts are provisioned through `BOOTSTRAP_EMAIL`, `BOOTSTRAP_PASSWORD` and comma-separated `BOOTSTRAP_COMPANIES` on API startup. Public registration creates an identity without company access; memberships must be granted separately. Provisioning an existing email preserves its password and memberships; changing bootstrap variables does not reset that account.
 
@@ -54,14 +52,9 @@ Add `http://localhost:8081/mcp` as a remote MCP server in a client supporting OA
 
 Available tools are `list_companies`, `get_cash_outlook` and `compare_plans`. The `finance:read` scope includes non-mutating plan calculations. Access tokens are bound to the MCP resource; refresh tokens rotate, and replay revokes the grant. Tokens are stored as hashes. No tool changes records or executes payments.
 
-The public demo snapshot is generated from the same Rust finance model and bundled synthetic fixture. To refresh it after changing either:
+The public `/demo` workspace now uses all imported challenge companies through the Rust API. Set `DATASET_DEMO=true` only for a dataset intended for public access, along with `DATASET_DATABASE_URL`. It defaults to false and is explicitly enabled in the MVP Jio deployment. `GET /api/demo/companies` and `GET /api/demo/companies/:id/assessment` read only the immutable challenge snapshot. They cannot access runtime company fixtures, accounts or assistant grants. Private company endpoints and MCP still require authentication and membership.
 
-```sh
-cargo run -q -p blaubeere-api --example offline_demo > apps/app/lib/demo.json
-cargo test -p blaubeere-api --example offline_demo
-```
-
-The exporter never reads runtime company files or credentials.
+The old bundled Mediterránea dashboard and generated frontend snapshot have been removed. An unavailable import displays an error with retry; there is no mock-data fallback. The sidebar company selector is shared by the demo and private dashboard. Health history leads the overview, followed by monthly cash movements, payment/collection evidence, debt service and source records.
 
 ## Assessment inputs
 
@@ -69,7 +62,7 @@ The default snapshot is [fixtures/companies.json](fixtures/companies.json), a sy
 
 Amounts are signed integer cents in one reporting currency per company. This version assumes two decimal places. Each flow carries a stable ID, due date, knowledge date, settled amount, source and contractual/estimated timing. Inputs are bounded, duplicate flow IDs are rejected, settlements are deducted, internal transfers are excluded, and facts learned after the assessment date do not enter the forecast. Open overdue items are projected on the next day and disclosed as an assumption.
 
-The upstream Data/Model workstreams own challenge CSV reconciliation, currency conversion, validated historical assessments and the official score. The app does not yet import those CSVs or compute a validated challenge score. Health, driver and coverage evidence comes from the supplied snapshot. Missing business metrics require explicit finance-team inputs.
+The upstream Data/Model workstreams own challenge CSV reconciliation, currency conversion, validated historical assessments and the official score. Rust imports their published Parquet outputs; the app does not compute a replacement challenge score. Health, driver and coverage evidence comes from the supplied snapshot. Missing business metrics require explicit finance-team inputs.
 
 Planning compares two deterministic candidates, not every possible plan. Funding is conditional on availability, assumed on day one at 8% annual interest, with principal repayment after the horizon. Growth applies only to incremental revenue and associated costs. Plans are held in the current browser session and are not saved to the database.
 
@@ -156,7 +149,7 @@ Repository configuration:
 | Variable | `JIO_VM_ID` | Dedicated persistent VM ID |
 | Variable | `JIO_ENDPOINT` | Jio endpoint; omit to use the CLI default |
 
-Jio publishes port 8080 for the app, API, OAuth and MCP, and port 3102 for the landing. Only the app URL appears in the Actions completion summary. Nginx forwards app traffic to Next.js, whose rewrites proxy API/OAuth requests to Rust and MCP requests to the existing MCP listener; systemd runs the four application services as an unprivileged `blaubeere` user.
+Jio publishes port 8080 for the app, API, OAuth and MCP, and port 3102 for the landing. Only the landing URL appears in the Actions completion summary. Nginx forwards app traffic to Next.js, whose rewrites proxy API/OAuth requests to Rust and MCP requests to the existing MCP listener; systemd runs the four application services as an unprivileged `blaubeere` user.
 
 Deployment verifies that the key belongs to `blaubeere` before touching a VM. For local commands, `JIO_API_KEY` overrides `jio login`; unset a stale environment key to use the saved login. GitHub Actions uses the repository secret.
 

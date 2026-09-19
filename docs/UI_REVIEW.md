@@ -109,3 +109,18 @@ Verification: web regression checks cover exact amounts, negative outflows, sepa
 | Landing and pricing | Below-the-fold sections appeared at once | One-time 420ms opacity/16px rise reveals, with 60ms group staggering. Native IntersectionObserver; no new dependency or dashboard animation. |
 
 Verified in Chrome at 1800px and 390px: first entry, staggered paintings, no replay when scrolling back, immediate keyboard focus, pricing-table entry and no horizontal overflow. Story alignment also checked at 320px. Web checks cover initial visibility, focused content, observer cleanup, late observer callbacks, changing reduced-motion preferences and unsupported browsers. Landing production build passes. Server markup remains visible without JavaScript; reduced-motion and print CSS keep it static. OS/browser-emulated reduced motion and print rendering remain unverified.
+
+
+## Imported-company demo and health-first dashboard
+
+This pass replaces the earlier offline Mediterránea demo. The public `/demo` now reads the published challenge snapshot from Rust, using the same joined records and model component as the private workspace. The fixture bundle and its exporter were deleted. The user explicitly requested all imported companies in the demo.
+
+| Severity | Location | Before | After | Why |
+| --- | --- | --- | --- | --- |
+| HIGH — fixed | `apps/app/app/demo/page.tsx`, `apps/app/components/dashboard.tsx` | Access demo opened one hardcoded company and forecast. | All imported companies, server-supplied monthly data, explicit loading/error states and no mock fallback. | The entry flow now exposes the data the user expects. |
+| MEDIUM — fixed | `apps/app/components/sidebar.tsx`, `apps/app/app/globals.css` | Company selection was duplicated in the body and lower sidebar; navigation used pill surfaces. | One selector at the sidebar top, white surface, outlined icons, compact rounded active row, grouped navigation and actual recently selected companies. | Matches the supplied sidebar reference and gives company context one home. |
+| MEDIUM — fixed | `apps/app/components/model-dashboard.tsx` | Health history appeared below cash and payment details with a repeated grid of date tiles. | Health score, history chart and cutoff evidence lead; cash, payment/collection timing, debt and records follow. A native month control synchronizes every section. | The published rating becomes the starting point, with evidence close at hand. |
+
+Verification: Rust checks cover all 1,286 demo companies, exact parity with the private dataset response, explicit publication gating, a missing import, absent companies, refusal of writes and retained private authentication. Web checks cover public explanation links, chart order, missing scores, monetary values and the absence of a body company selector. Chrome checks covered company switching (including COMP_1286), public explanation/overview navigation, synchronized dates, unavailable ratings, mobile company selection and 320px/390px layouts. No document overflow at 320px. TypeScript, production build, Rust tests and Clippy pass.
+
+Not verified: Safari/Firefox, physical touch hardware, a screen-reader session and animation replay at 10% speed. Existing reduced-motion and native dialog handling are retained. **Approve** for the inspected scope.

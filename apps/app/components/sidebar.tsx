@@ -1,39 +1,47 @@
 "use client";
 import Image from "next/image";
+import { useEffect, useState } from "react";
 import logo from "../../brand/blau.svg";
-import { Activity, ArrowUpRight, Building2, FileText, LoaderCircle, LogOut, Plug, Plus, ShieldCheck } from "lucide-react";
+import { Activity, ChartNoAxesCombined, FileText, LayoutGrid, LoaderCircle, LogOut, Plug, ReceiptText, ShieldCheck, Wallet } from "lucide-react";
 import type { CompanySummary, Identity } from "../lib/types";
 
 type Props = {
-  companies: CompanySummary[] | null; selected: string; identity: Identity | null;
-  canPlan: boolean; canInspect?: boolean; logoutBusy: boolean; offline?: boolean; overviewHref?: string; overviewLabel?: string;
-  onCompany: (id: string) => void; onPlan: () => void; onConnections: () => void;
-  onLogout: () => void; onNavigate: () => void;
+  companies: CompanySummary[] | null; recentCompanies: CompanySummary[]; selected: string; identity: Identity | null;
+  canInspect: boolean; logoutBusy: boolean; demo?: boolean; overviewHref?: string; selectorId: string;
+  onCompany: (id: string) => void; onConnections: () => void; onLogout: () => void; onNavigate: () => void;
 };
 
-export function Sidebar({ overviewLabel = "Cash outlook", overviewHref, offline = false, companies, selected, identity, canPlan, canInspect = canPlan, logoutBusy, onCompany, onPlan, onConnections, onLogout, onNavigate }: Props) {
-  const demo = offline || identity?.email.endsWith("@demo.blaubeere.local");
+export function Sidebar({ overviewHref, demo = false, selectorId, companies, recentCompanies, selected, identity, canInspect, logoutBusy, onCompany, onConnections, onLogout, onNavigate }: Props) {
+  const [section, setSection] = useState("");
+  useEffect(() => {
+    const update = () => setSection(window.location.hash);
+    update(); window.addEventListener("hashchange", update);
+    return () => window.removeEventListener("hashchange", update);
+  }, []);
+  const current = overviewHref ? "#health" : section === "#main" ? "" : section;
+  const navProps = (hash: string) => ({ className: `nav-link ${current === hash ? "active" : ""}`, "aria-current": current === hash ? "location" as const : undefined });
   return <>
-    <a className="brand sidebar-brand" href={offline ? "/demo" : "/dashboard"} aria-label="blau workspace"><Image className="brand-logo" src={logo} alt="blau"/></a>
+    <a className="brand sidebar-brand" href={demo ? "/demo" : "/dashboard"} aria-label="blau workspace"><Image className="brand-logo" src={logo} alt="blau"/></a>
+    <div className="sidebar-company-picker"><label htmlFor={selectorId}>Company<span>{companies?.length.toLocaleString("en-GB") ?? "—"}</span></label><select className="control" id={selectorId} value={selected} disabled={!companies?.length} onChange={event => onCompany(event.target.value)}><option value="" disabled>{companies === null ? "Loading companies…" : companies.length ? "Choose a company" : "No companies available"}</option>{companies?.map(company => <option key={company.id} value={company.id}>{company.name}</option>)}</select></div>
     <div className="sidebar-scroll">
+      <nav className="sidebar-section sidebar-primary" aria-label="Financial overview">
+        <a {...navProps("")} href={overviewHref ?? "#main"} onClick={onNavigate}><LayoutGrid aria-hidden/>Overview</a>
+        <a {...navProps("#health")} href={`${overviewHref ?? ""}#health`} onClick={onNavigate} aria-disabled={!canInspect} tabIndex={canInspect ? undefined : -1}><ChartNoAxesCombined aria-hidden/>Health history</a>
+        <a {...navProps("#cash")} href={`${overviewHref ?? ""}#cash`} onClick={onNavigate} aria-disabled={!canInspect} tabIndex={canInspect ? undefined : -1}><Wallet aria-hidden/>Cash movements</a>
+        <a {...navProps("#payments")} href={`${overviewHref ?? ""}#payments`} onClick={onNavigate} aria-disabled={!canInspect} tabIndex={canInspect ? undefined : -1}><ReceiptText aria-hidden/>Payments &amp; debt</a>
+        <button className="nav-link" onClick={onConnections} disabled={!demo && !identity}><Plug aria-hidden/>Integrations</button>
+      </nav>
       <nav className="sidebar-section" aria-label="Workspace">
         <span className="nav-label">Workspace</span>
-        <a className={`nav-link ${overviewHref ? "" : "active"}`} href={overviewHref ?? "#main"} aria-current={overviewHref ? undefined : "page"} onClick={onNavigate}><Activity aria-hidden/>{overviewLabel}</a>
-        <button className="nav-link" onClick={onPlan} disabled={!canPlan}><Plus aria-hidden/>Explore a plan</button>
-        <a className="nav-link" href={overviewHref ? `${overviewHref}#evidence` : "#evidence"} onClick={onNavigate} aria-disabled={!canInspect} tabIndex={canInspect ? undefined : -1}><FileText aria-hidden/>Sources &amp; evidence</a>
-        <button className="nav-link" onClick={onConnections} disabled={!offline && !identity}><Plug aria-hidden/>Connected assistants</button>
+        <a {...navProps("#history")} href={`${overviewHref ?? ""}#history`} onClick={onNavigate} aria-disabled={!canInspect} tabIndex={canInspect ? undefined : -1}><Activity aria-hidden/>Monthly records</a>
+        <a {...navProps("#evidence")} href={`${overviewHref ?? ""}#evidence`} onClick={onNavigate} aria-disabled={!canInspect} tabIndex={canInspect ? undefined : -1}><FileText aria-hidden/>Source evidence</a>
       </nav>
-      <nav className="sidebar-section" aria-label="Companies">
-        <span className="nav-label">Your companies<span>{companies?.length ?? "—"}</span></span>
-        {companies && companies.length > 12 ? <><label className="sr-only" htmlFor="sidebar-company">Choose a company</label><select className="control sidebar-company-select" id="sidebar-company" value={selected} onChange={event => onCompany(event.target.value)}><option value="" disabled>Choose a company</option>{companies.map(company => <option key={company.id} value={company.id}>{company.name}</option>)}</select></> : companies?.map(company => <button className="nav-link company-link" key={company.id} onClick={() => onCompany(company.id)} aria-pressed={selected === company.id} title={company.name}><Building2 aria-hidden/><span>{company.name}</span>{selected === company.id && <span className="company-dot" aria-hidden/>}</button>)}
-        {!companies && <p className="sidebar-note">Loading your companies…</p>}
-        {companies?.length === 0 && <p className="sidebar-note">Companies appear here when your administrator grants access.</p>}
-      </nav>
+      {recentCompanies.length > 0 && <nav className="sidebar-section sidebar-recents" aria-label="Recent companies"><span className="nav-label">Recents</span>{recentCompanies.map(company => <button key={company.id} className="nav-link" onClick={() => onCompany(company.id)} aria-pressed={company.id === selected}>{company.name}{company.id === selected && <span className="recent-current" aria-hidden/>}</button>)}</nav>}
     </div>
     <div className="sidebar-bottom">
-      <button className="assistant-shortcut" onClick={onConnections} disabled={!offline && !identity}><span className="assistant-icon"><Plug aria-hidden/></span><span><strong>A second pair of eyes</strong><span>Connect your assistant</span></span><ArrowUpRight aria-hidden/></button>
-      <div className="sidebar-user"><span className="user-avatar" aria-hidden>{demo ? "DV" : "FT"}</span><div><strong>{demo ? "Demo workspace" : "Finance workspace"}</strong><span title={demo ? undefined : identity?.email}>{demo ? "Demo visitor" : identity?.email ?? "Signing in…"}</span></div><button className="icon-button" onClick={onLogout} disabled={logoutBusy || (!offline && !identity)} aria-label={offline ? "Exit demo" : "Sign out"}>{logoutBusy ? <LoaderCircle className="spinner"/> : <LogOut/>}</button></div>
-      <span className="sidebar-privacy"><ShieldCheck aria-hidden/>{offline ? "Sample data · no account connected" : "Private company access"}</span>
+
+      <div className="sidebar-user"><span className="user-avatar" aria-hidden>{demo ? "DV" : "FT"}</span><div><strong>{demo ? "Demo workspace" : "Finance workspace"}</strong><span title={demo ? undefined : identity?.email}>{demo ? "Published company data" : identity?.email ?? "Signing in…"}</span></div><button className="icon-button" onClick={onLogout} disabled={logoutBusy || (!demo && !identity)} aria-label={demo ? "Exit demo" : "Sign out"}>{logoutBusy ? <LoaderCircle className="spinner"/> : <LogOut/>}</button></div>
+      <span className="sidebar-privacy"><ShieldCheck aria-hidden/>{demo ? "Read-only · no account connected" : "Private company access"}</span>
     </div>
   </>;
 }

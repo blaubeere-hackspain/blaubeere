@@ -62,15 +62,21 @@ body { background: #f1f1ee; }
 }
 
 .app-shell { min-height: 100svh; display: flex; background: #fafaf9; }
-.sidebar { width: 288px; position: fixed; inset: 0 auto 0 0; display: flex; flex-direction: column; padding: 18px 12px 12px; z-index: 10; background: #fafaf9; }
+.sidebar { width: 268px; position: fixed; inset: 0 auto 0 0; display: flex; flex-direction: column; padding: 20px 12px 16px; z-index: 10; background: var(--surface); border-right: 1px solid var(--line); }
 .sidebar-brand { padding: 0 12px 14px; min-height: 52px; align-self: flex-start; }
 .sidebar-scroll { overflow-y: auto; min-height: 0; scrollbar-width: thin; }
 .sidebar-section { display: grid; gap: 3px; margin-bottom: 20px; }
-.nav-label { display: flex; justify-content: space-between; gap: 8px; color: var(--subtle); padding: 18px 14px 10px; font-size: 12px; }
+.nav-label { display: flex; justify-content: space-between; gap: 8px; color: var(--muted); padding: 18px 12px 10px; font-size: 11px; text-transform: uppercase; letter-spacing: .04em; }
 .nav-label > span { font-variant-numeric: tabular-nums; }
-.nav-link { display: flex; align-items: center; gap: 12px; min-height: 44px; width: 100%; padding: 10px 14px; text-decoration: none; background: transparent; border: 0; text-align: left; border-radius: 999px; color: var(--muted); font-size: var(--text-ui); }
+.nav-link { display: flex; align-items: center; gap: 12px; min-height: 44px; width: 100%; padding: 10px 12px; text-decoration: none; background: transparent; border: 1px solid transparent; text-align: left; border-radius: 10px; color: var(--muted); font-size: 16px; }
 .nav-link svg { width: 18px; height: 18px; stroke-width: 1.5px; }
-.nav-link.active { color: var(--ink); background: #ededeb; font-weight: 500; }
+.nav-link.active { color: var(--ink); background: #f7f7f7; border-color: var(--line); font-weight: 500; }
+.nav-link.active::after, .recent-current { content: ""; width: 5px; height: 5px; border-radius: 50%; background: var(--accent); margin-left: auto; flex-shrink: 0; }
+.sidebar-primary { padding-top: 12px; }
+.sidebar-recents .nav-link { font-size: var(--text-ui); }
+.sidebar-company-picker { padding: 0 10px 18px; border-bottom: 1px solid var(--line); }
+.sidebar-company-picker label { display: flex; justify-content: space-between; color: var(--muted); font-size: var(--text-caption); margin-bottom: 8px; }
+.sidebar-company-picker select { width: 100%; min-height: 44px; background: var(--surface); font-size: var(--text-ui); }
 .nav-link[aria-disabled="true"] { pointer-events: none; opacity: .5; }
 .company-link > span:first-of-type { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 .company-link[aria-pressed="true"] { color: var(--ink); }
@@ -91,8 +97,8 @@ body { background: #f1f1ee; }
 .user-avatar { width: 30px; height: 30px; display: grid; place-items: center; border-radius: 50%; background: #ece7df; color: #6e6253; font-size: .75rem; font-weight: 500; flex-shrink: 0; }
 .sidebar-privacy { display: flex; align-items: center; gap: 6px; padding: 8px 8px 0; font-size: .75rem; color: var(--subtle); }
 .sidebar-privacy svg { width: 12px; height: 12px; }
-.app-content { margin-left: 288px; flex: 1; min-width: 0; background: var(--surface); }
-.topbar { min-height: 52px; padding: 6px 20px 6px 12px; border-bottom: 1px solid var(--line); display: flex; align-items: center; justify-content: space-between; gap: 12px; }
+.app-content { margin-left: 268px; flex: 1; min-width: 0; background: #fafafa; }
+.topbar { background: var(--surface); min-height: 52px; padding: 6px 20px 6px 12px; border-bottom: 1px solid var(--line); display: flex; align-items: center; justify-content: space-between; gap: 12px; }
 .topbar-context, .topbar-actions { display: flex; align-items: center; gap: 12px; font-size: var(--text-caption); }
 .current-view { display: flex; align-items: center; gap: 8px; background: var(--surface); padding: 8px 16px; border-radius: 999px; box-shadow: var(--shadow-border); white-space: nowrap; }
 .current-view svg { stroke-width: 1.5px; color: var(--muted); }
@@ -103,7 +109,7 @@ body { background: #f1f1ee; }
 .app-shell[data-sidebar-collapsed="true"] > .app-content { margin-left: 0; }
 .dashboard-main { max-width: 1408px; padding: 36px; margin: 0 auto; }
 .dashboard-main:focus { outline: none; }
-.navigation-dialog { display: none; color: var(--ink); background: #fafaf9; border: 0; padding: 20px 12px 12px; width: min(320px,calc(100% - 24px)); max-width: none; height: calc(100svh - 24px); max-height: none; margin: 12px auto 12px 12px; border-radius: 24px; box-shadow: var(--shadow-raised); }
+.navigation-dialog { display: none; color: var(--ink); background: var(--surface); border: 0; padding: 20px 12px 12px; width: min(320px,calc(100% - 24px)); max-width: none; height: calc(100svh - 24px); max-height: none; margin: 12px auto 12px 12px; border-radius: 24px; box-shadow: var(--shadow-raised); }
 .navigation-dialog[open] { display: flex; flex-direction: column; }
 .navigation-dialog::backdrop { background: #25272455; backdrop-filter: blur(2px); }
 .close-navigation { position: absolute; top: 16px; right: 12px; }
@@ -449,7 +455,7 @@ body { background: #f1f1ee; }
 }
 
 .model-dashboard .context-row .control { width: auto; min-width: 0; max-width: 100%; font-size: var(--text-ui); }
-.sidebar-company-select { margin-inline: 10px; max-width: calc(100% - 20px); min-height: 44px; font-size: 13px; }
+
 .model-score-link { display: flex; align-items: baseline; gap: 6px; color: var(--ink); text-decoration: none; min-height: 44px; border-radius: 8px; }
 .model-stats .stat-value { display: flex; align-items: center; min-height: 44px; }
 .model-score-link strong { min-width: 0; }
@@ -460,10 +466,6 @@ body { background: #f1f1ee; }
 .model-chart text { fill: var(--muted); font-family: var(--font-ui); font-size: 12px; font-variant-numeric: tabular-nums; }
 .model-chart circle { cursor: pointer; }
 .model-chart a:focus-visible circle { stroke-width: 5px; }
-.model-dates { display: grid; grid-template-columns: repeat(auto-fit,minmax(116px,1fr)); gap: 8px; padding: 0 24px 24px; }
-.model-dates a { display: grid; gap: 6px; padding: 12px; min-height: 64px; color: var(--ink); background: var(--canvas); border-radius: 10px; text-decoration: none; }
-.model-dates a strong { font-size: var(--text-heading); font-weight: 500; }
-.model-dates a span { font-size: var(--text-caption); color: var(--muted); }
 .model-reasons { padding-left: 18px; margin-block: 16px; font-size: 13px; color: var(--muted); line-height: 1.7; }
 .model-reasons li + li { margin-top: 8px; }
 .model-note { background: var(--warn-soft); color: var(--warn); padding: 16px; border-radius: 12px; font-size: 13px; line-height: 1.6; }
@@ -494,8 +496,8 @@ body { background: #f1f1ee; }
 .model-source-list { display: grid; gap: 16px; padding-block: 16px; overflow-wrap: anywhere; }
 .model-source-list strong, .model-source-list span { display: block; font-size: var(--text-caption); }
 .model-source-list span { color: var(--muted); margin-top: 4px; }
-@media (hover:hover) and (pointer:fine) { .model-score-link:hover, .model-dates a:hover { color: var(--accent); text-decoration: underline; text-underline-offset: 4px; } }
-@media (max-width:760px) { .model-dashboard .context-row .control { width: 100%; } .model-provenance { padding: 16px; } .model-chart { padding-inline: 8px; } .model-dates { padding-inline: 16px; } }
+@media (hover:hover) and (pointer:fine) { .model-score-link:hover { color: var(--accent); text-decoration: underline; text-underline-offset: 4px; } }
+@media (max-width:760px) { .model-dashboard .context-row .control { width: 100%; } .model-provenance { padding: 16px; } .model-chart { padding-inline: 8px; } }
 @media (max-width: 380px) {
   .checkpoints { grid-template-columns: 1fr; }
   .checkpoints > div { display: grid; grid-template-columns: 1fr auto; align-items: baseline; gap: 4px 12px; }
@@ -504,3 +506,34 @@ body { background: #f1f1ee; }
 }
 
 @media (min-width: 961px) and (max-width: 1100px) { .stats-grid { grid-template-columns: repeat(2,minmax(0,1fr)); } }
+
+/* Company dashboard: the published score leads, source records follow. */
+.model-dashboard .card, .model-dashboard .stat-card { border-radius: 16px; }
+.model-dashboard .page-heading h1 { font-family: var(--font-ui); font-size: 28px; font-weight: 500; letter-spacing: -.035em; }
+.model-dashboard .context-row > .control { margin-left: auto; }
+.model-dashboard section[id], #payments { scroll-margin-top: 24px; }
+.health-overview-panel { display: grid; grid-template-columns: minmax(0,1fr) 300px; margin-bottom: 24px; overflow: hidden; }
+.health-overview-main { min-width: 0; }
+.health-selected-score { display: flex; align-items: baseline; flex-wrap: wrap; gap: 8px; padding: 0 24px 12px; }
+.health-selected-score > strong { font-size: 44px; line-height: 1.1; font-weight: 500; letter-spacing: -.045em; }
+.health-selected-score > span { color: var(--muted); font-size: 18px; }
+.health-selected-score > div { display: grid; gap: 4px; margin-left: 14px; font-size: var(--text-caption); color: var(--muted); }
+.health-evidence-summary { display: flex; flex-direction: column; align-items: start; padding: 28px 24px; border-left: 1px solid var(--line); background: #fdfdfc; }
+.health-evidence-summary h3 { margin-top: 12px; font-size: var(--text-heading); font-weight: 500; }
+.health-evidence-summary .metric-equation { width: 100%; }
+.health-evidence-summary > p { line-height: 1.6; margin-bottom: 12px; }
+.health-evidence-summary > .button { margin-top: auto; width: 100%; }
+.health-history-chart .chart-inspector { margin-inline: 0; }
+.model-dashboard .model-chart circle { cursor: default; }
+@media (max-width:1100px) {
+  .health-overview-panel { grid-template-columns: minmax(0,1fr); }
+  .health-evidence-summary { border-left: 0; border-top: 1px solid var(--line); }
+  .health-evidence-summary > .button { width: auto; }
+}
+@media (max-width:700px) {
+  .health-selected-score { padding-inline: 16px; }
+  .health-selected-score > strong { font-size: 36px; }
+  .health-selected-score > div { margin-left: 0; flex-basis: 100%; }
+  .health-evidence-summary { padding: 20px 16px; }
+  .model-dashboard .context-row > .control { margin-left: 0; }
+}

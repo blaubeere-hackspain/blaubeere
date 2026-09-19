@@ -4,8 +4,8 @@ import { createRequire } from "node:module";
 import { LoginForm } from "../apps/app/components/login-form";
 import { api, ApiError, returnPath } from "../apps/app/lib/api";
 import { addDays, cents, money } from "../apps/app/lib/format";
-import { CashChart, cashScale } from "../apps/app/components/cash-chart";
-import demo from "../apps/app/lib/demo.json";
+import { cashScale } from "../apps/app/components/cash-chart";
+import companies from "../fixtures/companies.json";
 import { HealthExplanation } from "../apps/app/components/health-explanation";
 import { healthHref, healthTimeline, validHealthDate } from "../apps/app/lib/health";
 import type { Company } from "../apps/app/lib/types";
@@ -16,6 +16,7 @@ import type { ModelAssessment, ModelRecord } from "../apps/app/lib/types";
 const requireApp = createRequire(new URL("../apps/app/package.json", import.meta.url));
 const { createElement } = requireApp("react");
 const { renderToStaticMarkup } = requireApp("react-dom/server");
+const demo = { company: companies[0] as Company };
 const record: ModelRecord = {
   version: "healthscore_v3", company_id: "COMP_TEST", group_id: "GROUP_TEST", month: "2026-08-01", as_of: "2026-08-31",
   health_score: null, confidence: "ninguna", n_meses_ventana: 6, n_meses_con_actividad: 0,
@@ -24,16 +25,22 @@ const record: ModelRecord = {
   k: 4178.45, alpha: 3, beta: 0.25, reasons: ["sin_actividad_en_ventana"], cash: null, payment: null,
 };
 const model: ModelAssessment = { kind: "model", company: { id: record.company_id, name: record.company_id, group: record.group_id, currency: "EUR", data_mode: "challenge" }, records: [record], provenance: { batch_id: "test", source_revision: "test", imported_at: "2026-09-19", files: [], model_summary: { advertencia: "Provisional", limitaciones: [] } } };
-const modelOverview = renderToStaticMarkup(createElement(ModelDashboard, { data: model, companies: [model.company], onCompany: () => {} }));
+const modelOverview = renderToStaticMarkup(createElement(ModelDashboard, { data: model }));
 assert.ok(modelOverview.includes("No score") && modelOverview.includes("Monthly observations") && !modelOverview.includes("Usable cash today"));
 assert.ok(modelOverview.includes('/dashboard/health/2026-08-31?company=COMP_TEST'));
+assert.ok(!modelOverview.includes('id="model-company"'), "Company selection belongs only in the sidebar");
+assert.ok(modelOverview.indexOf('id="health"') < modelOverview.indexOf('id="cash"'), "Health history must lead the dashboard");
+const publicOverview = renderToStaticMarkup(createElement(ModelDashboard, { data: model, demo: true }));
+assert.ok(publicOverview.includes('/demo/health/2026-08-31?company=COMP_TEST') && !publicOverview.includes('/dashboard/health/'), "Public score links must stay in the company demo");
+const publicDetail = renderToStaticMarkup(createElement(ModelDashboard, { data: model, demo: true, scoreDate: record.as_of }));
+assert.ok(publicDetail.includes('/demo?company=COMP_TEST'), "Returning from an explanation must retain the demo company");
 const chartRecords = Array.from({ length: 24 }, (_, index) => ({ ...record, as_of: new Date(Date.UTC(2024, index + 1, 0)).toISOString().slice(0, 10), health_score: index === 12 ? null : 50 + index }));
-const modelHistory = renderToStaticMarkup(createElement(ModelDashboard, { data: { ...model, records: chartRecords }, companies: [model.company], onCompany: () => {} }));
+const modelHistory = renderToStaticMarkup(createElement(ModelDashboard, { data: { ...model, records: chartRecords } }));
 const modelSvg = modelHistory.match(/<svg[^>]*aria-labelledby="model-chart-title model-chart-description"[\s\S]*?<\/svg>/)![0];
 assert.equal([...modelSvg.matchAll(/<text /g)].length, 8, "Keep five score ticks and three readable date labels in the desktop chart");
 assert.equal([...modelSvg.matchAll(/<circle /g)].length, 23, "Missing ratings remain gaps, never plotted as zero");
 assert.equal((modelSvg.match(/<path d="([^"]*)"/)![1].match(/M/g) ?? []).length, 2, "Do not join the line across a missing rating");
-const modelDetail = renderToStaticMarkup(createElement(ModelDashboard, { data: model, scoreDate: record.as_of, companies: [model.company], onCompany: () => {} }));
+const modelDetail = renderToStaticMarkup(createElement(ModelDashboard, { data: model, scoreDate: record.as_of }));
 assert.ok(modelDetail.includes("Not available") && modelDetail.includes("No cash activity was observed") && modelDetail.includes("not a bank balance"));
 assert.ok(!modelDetail.includes("NaN") && !modelDetail.includes("€0"), "Missing source values must not become zero-valued cash");
 assert.equal(modelNumber(null), "Not available");
@@ -44,7 +51,7 @@ const cashRecord: ModelRecord = { ...record, d6: 60.25, p6: 1234.56, t6: 1294.81
   payment: { debido_eur: 500.44, en_mora_en_el_corte_eur: 123.45, retraso_medio_dias_pagado: 4.5, mora_ratio: null, confidence: "baja", cobro_debido_eur: 2000, cobro_en_mora_en_el_corte_eur: 876.54, cobro_mora_ratio: 0.43827, cobro_retraso_medio_dias_pagado: 12, n_huecos_eur: 2, n_vencimiento_desconocido: 3 },
 };
 const cashRecords = [{ ...cashRecord, as_of: "2026-06-30" }, { ...record, as_of: "2026-07-31" }, cashRecord];
-const dataOverview = renderToStaticMarkup(createElement(ModelDashboard, { data: { ...model, records: cashRecords }, companies: [model.company], onCompany: () => {} }));
+const dataOverview = renderToStaticMarkup(createElement(ModelDashboard, { data: { ...model, records: cashRecords } }));
 for (const text of ["Cash movements over time", "Payments and collections", "Debt service in the model window", "Monthly source records", "€678.12", "-€321.88", "€123.45", "€876.54", "€60.25", "2 invoice(s) with unknown EUR amounts"]) assert.ok(dataOverview.includes(text), `Display the published amount or explanation: ${text}`);
 assert.match(dataOverview, /id="model-date"/, "The overview must let users select any published month");
 assert.ok(dataOverview.includes("not the outstanding debt balance") && dataOverview.includes("not a bank balance"));
@@ -63,9 +70,6 @@ assert.ok(registration.includes('autoComplete="new-password"') && registration.i
 assert.ok(registration.includes('href="/login?returnTo=%2Fconnect%3Fstate%3Dkeep-me"'), "Switching auth forms must preserve the assistant authorization flow");
 const unsafeRegistration = renderToStaticMarkup(createElement(LoginForm, { register: true, returnTo: "https://evil.example" }));
 assert.ok(!unsafeRegistration.includes("evil.example") && unsafeRegistration.includes('href="/login?returnTo=%2Fdashboard"'));
-const chart = renderToStaticMarkup(createElement(CashChart, { company: demo.company, forecast: demo.forecasts[90] }));
-assert.ok(chart.includes('<title id="cash-chart-title">Daily closing cash, history and 90-day outlook</title>'), "The chart title must survive server rendering for hydration and assistive technology");
-
 // A historical rating must resolve to its own saved model response, never today's drivers.
 const timeline = healthTimeline(demo.company);
 assert.equal(timeline.length, 6);
@@ -119,4 +123,4 @@ try {
     await assert.rejects(api("/companies/DEMO_001/plans"), error => error instanceof ApiError && error.status === status && error.message.includes("input format"));
   }
 } finally { globalThis.fetch = originalFetch; }
-console.log("Web checks passed: offline demo entry and team sign-in, redirects, exact money input, dated horizons, chart scales, dated health explanations, dialog boundaries and validation errors.");
+console.log("Web checks passed: published company demo and team sign-in, redirects, exact money input, dated horizons, chart scales, dated health explanations, dialog boundaries and validation errors.");

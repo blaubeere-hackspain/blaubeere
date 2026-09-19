@@ -14,11 +14,21 @@ assert.ok(login.includes('href="/register?returnTo=%2Fdashboard"'), "Sign-in mus
 const registration = await (await read(`${app}/register`)).text();
 assert.ok(registration.includes("Create account") && registration.includes('autoComplete="new-password"'), "Registration must render a new-account form");
 const demo = await (await read(`${app}/demo`)).text();
-assert.ok(demo.includes("Mediterránea Supply") && demo.includes("Cash over time"), "Demo must render its sample dashboard without an authenticated session");
+assert.ok(demo.includes("Published challenge dataset") && !demo.includes("Mediterránea Supply"), "Demo must use imported companies, never the removed hardcoded workspace");
 assert.ok(!demo.includes('Why this number') && !demo.includes('Why this score'), "Cash metrics must not have explanation popups");
-assert.ok(demo.includes('/demo/health/2026-08-31?company=DEMO_001'), "The rating must link to its own dated page");
-const dailyHealth = await (await read(`${app}/demo/health/2026-08-30?company=DEMO_001`)).text();
-assert.ok(dailyHealth.includes("daily rating falls by one point") && dailyHealth.includes("Behind this rating"), "Deep links must render the selected day's model explanation without a backend session");
+const companies = await (await read(`${app}/api/demo/companies`)).json();
+assert.ok(companies.length > 1 && companies.every((company: { data_mode: string; id: string }) => company.data_mode === "challenge" && company.id !== "DEMO_001"));
+for (const company of [companies[0], companies.at(-1)]) {
+  const assessment = await (await read(`${app}/api/demo/companies/${company.id}/assessment`)).json();
+  assert.equal(assessment.kind, "model");
+  assert.equal(assessment.company.id, company.id);
+  assert.ok(assessment.records.length > 1 && assessment.provenance.files.length >= 3);
+  const latest = assessment.records.at(-1);
+  const health = await (await read(`${app}/demo/health/${latest.as_of}?company=${company.id}`)).text();
+  assert.ok(health.includes(`Health assessment · ${latest.as_of}`), "Imported rating deep links must load without a session");
+}
+assert.equal((await fetch(`${app}/api/companies/${companies[0].id}/assessment`)).status, 401, "Private company access must still require authentication");
+assert.equal((await fetch(`${app}/api/demo/companies/DEMO_001/assessment`)).status, 404, "Public dataset endpoints cannot read private fixture data");
 const homepage = await (await read(landing)).text();
 assert.ok(homepage.includes(app), "Landing must link to the deployed app");
 const pricing = await (await read(`${landing}/pricing`)).text();
