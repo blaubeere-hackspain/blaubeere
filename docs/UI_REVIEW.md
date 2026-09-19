@@ -100,3 +100,12 @@ Not verified in this pass: Safari/Firefox, physical touch devices, a screen-read
 - Fixed the mobile chart header’s inherited flex basis, which created unnecessary vertical space when its controls stacked.
 
 Verification: web regression checks cover exact amounts, negative outflows, separate payment/collection arrears, incomplete evidence, empty cash history and gaps in the plotted series. Chrome checks with the Rust-imported data covered month/table selection, dated score links, cumulative chart mode, unavailable cash with available invoices, company changes, and 320px/390px layouts. Document width remained equal to viewport width at 320px; the records table scrolls within its card. TypeScript and the production app build pass. Safari/Firefox, physical touch and a screen-reader session remain unverified.
+
+## Landing story and scroll motion
+
+| Location | Before | After |
+| --- | --- | --- |
+| Product story | Label/logo, first-line indent and a narrower paragraph measure | Label/logo removed. An 800px column meets the right content edge, with matching left-aligned heading and paragraph widths. This supersedes the earlier 65ch body measure. |
+| Landing and pricing | Below-the-fold sections appeared at once | One-time 420ms opacity/16px rise reveals, with 60ms group staggering. Native IntersectionObserver; no new dependency or dashboard animation. |
+
+Verified in Chrome at 1800px and 390px: first entry, staggered paintings, no replay when scrolling back, immediate keyboard focus, pricing-table entry and no horizontal overflow. Story alignment also checked at 320px. Web checks cover initial visibility, focused content, observer cleanup, late observer callbacks, changing reduced-motion preferences and unsupported browsers. Landing production build passes. Server markup remains visible without JavaScript; reduced-motion and print CSS keep it static. OS/browser-emulated reduced motion and print rendering remain unverified.
