@@ -31,16 +31,16 @@ Approve for the inspected code and desktop coverage. Remaining verification is l
 
 ## Planning drawer follow-up
 
-Reference: the supplied detail-panel screenshot and [Interfaces’ interaction guidance](https://interfaces.dev/magazine/issues/details-that-make-interfaces-feel-better). The panel opens from the left as requested. It retains the existing planning inputs, validation, calculations and chart previews.
+Reference: the supplied detail-panel screenshot and [Interfaces’ interaction guidance](https://interfaces.dev/magazine/issues/details-that-make-interfaces-feel-better). The panel opens from the right, following the user’s direction correction. It retains the existing planning inputs, validation, calculations and chart previews.
 
 | Severity | Location | Before | After | Why |
 | --- | --- | --- | --- | --- |
-| MEDIUM, fixed | `apps/app/app/globals.css:231` | Wide floating modal positioned on the right | 640px left drawer, light backdrop, compact breadcrumb header and divided form sections | Keeps the dashboard visible and follows the requested detail-panel hierarchy. |
+| MEDIUM, fixed | `apps/app/app/globals.css:231` | Wide floating modal positioned on the right | 640px right drawer, light backdrop, compact breadcrumb header and divided form sections | Keeps the dashboard visible and follows the requested detail-panel hierarchy. |
 | MEDIUM, fixed | `apps/app/components/planner.tsx:44` | Compare action scrolled away with the form | Independently scrolling fields/results and a fixed footer button associated with the native form | The action stays reachable while native validation and keyboard submission are preserved. |
-| MEDIUM, fixed | `apps/app/app/globals.css:355`, `apps/app/components/dialog.tsx:12` | Panel appeared without a directional transition | Interruptible CSS slide from the left (260ms), short fading exit (180ms); keyboard actions and reduced motion open/close immediately | Direction explains the panel’s position; native dialog retains Escape and focus restoration. |
-| LOW, fixed | `apps/app/app/globals.css:349` | Three narrow comparison columns | Stacked, softly outlined results, with the qualifying state explicitly labelled | Results remain readable inside the drawer and at mobile width. |
+| MEDIUM, fixed | `apps/app/app/globals.css:350`, `apps/app/components/dialog.tsx:12` | Panel appeared without a directional transition | Interruptible CSS slide from the right (260ms), short fading exit (180ms); keyboard actions and reduced motion open/close immediately | Direction explains the panel’s position; native dialog retains Escape and focus restoration. |
+| LOW, fixed | `apps/app/app/globals.css:344` | Three narrow comparison columns | Stacked, softly outlined results, with the qualifying state explicitly labelled | Results remain readable inside the drawer and at mobile width. |
 
-Passed: web checks, both app TypeScript checks and the app production build. Chrome on macOS at desktop size and 390×844: left placement, fixed header/footer, scrollable fields and result cards, default comparison, result focus, preview on the unchanged cash chart, keyboard opening, Escape and close-button dismissal with focus restored, revenue-specific fields and native required-field validation through the fixed footer. Mobile viewport restored after testing.
+Passed: web checks, both app TypeScript checks and the app production build. Chrome on macOS at desktop size and 390×844: panel placement, fixed header/footer, scrollable fields and result cards, default comparison, result focus, preview on the unchanged cash chart, keyboard opening, Escape and close-button dismissal with focus restored, revenue-specific fields and native required-field validation through the fixed footer. Mobile viewport restored after testing.
 
 Code inspected: all shared Dialog callers, native modal semantics, pointer backdrop boundaries, disabled/loading/error states, keyboard motion bypass, reduced-motion CSS and exact transition properties. Existing runnable web checks cover backdrop boundaries; the integration check exercises plan calculations.
 

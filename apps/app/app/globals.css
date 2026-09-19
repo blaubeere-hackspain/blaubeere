@@ -228,7 +228,7 @@ body { font-family: "Inter Variable", system-ui, sans-serif; background: #f1f1ee
 .skeleton-stats > div, .skeleton-chart { background: var(--line); border-radius: var(--radius); height: 140px; }
 .skeleton-chart { height: 420px; }
 .planning-dialog, .connection-dialog { color: var(--ink); border: 0; background: var(--surface); padding: 0; border-radius: 28px; max-height: calc(100svh - 48px); width: min(1040px, calc(100% - 48px)); max-width: none; box-shadow: var(--shadow-raised), 0 24px 100px #131a2430; }
-.planning-dialog { display: none; width: min(640px, calc(100% - 24px)); height: calc(100svh - 24px); max-height: none; margin: 12px auto 12px 12px; border-radius: 16px; overflow: hidden; box-shadow: var(--shadow-raised), 16px 0 64px -24px oklch(0 0 0 / .16); }
+.planning-dialog { display: none; width: min(640px, calc(100% - 24px)); height: calc(100svh - 24px); max-height: none; margin: 12px 12px 12px auto; border-radius: 16px; overflow: hidden; box-shadow: var(--shadow-raised), -16px 0 64px -24px oklch(0 0 0 / .16); }
 .planning-dialog[open] { display: flex; flex-direction: column; }
 .connection-dialog { width: min(560px, calc(100% - 32px)); margin: auto; }
 .planning-dialog::backdrop, .connection-dialog::backdrop { background: #131a2466; backdrop-filter: blur(2px); }
@@ -347,12 +347,12 @@ body { font-family: "Inter Variable", system-ui, sans-serif; background: #f1f1ee
 .planning-dialog .comparison { scroll-margin-top: 4px; }
 .planning-dialog .comparison h2 { font-size: 20px; }
 @media (prefers-reduced-motion: no-preference) {
-  .planning-dialog { opacity: 0; transform: translateX(-24px); transition: opacity 180ms var(--ease-out), transform 180ms var(--ease-out), display 180ms allow-discrete, overlay 180ms allow-discrete; }
+  .planning-dialog { opacity: 0; transform: translateX(24px); transition: opacity 180ms var(--ease-out), transform 180ms var(--ease-out), display 180ms allow-discrete, overlay 180ms allow-discrete; }
   .planning-dialog[open] { opacity: 1; transform: translateX(0); transition-duration: 260ms; }
   .planning-dialog::backdrop { opacity: 0; transition: opacity 180ms var(--ease-out), display 180ms allow-discrete, overlay 180ms allow-discrete; }
   .planning-dialog[open]::backdrop { opacity: 1; }
   @starting-style {
-    .planning-dialog[open] { opacity: 0; transform: translateX(calc(-100% - 12px)); }
+    .planning-dialog[open] { opacity: 0; transform: translateX(calc(100% + 12px)); }
     .planning-dialog[open]::backdrop { opacity: 0; }
   }
   .planning-dialog[data-instant="true"], .planning-dialog[data-instant="true"]::backdrop { transition: none; }
