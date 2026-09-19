@@ -1,0 +1,24 @@
+@import "tailwindcss";
+@import "../../theme.css";
+
+.auth-layout { min-height: 100svh; display: grid; grid-template-columns: 1fr 1fr; background: var(--surface); }
+.auth-story { padding: 48px 64px; display: flex; flex-direction: column; justify-content: space-between; background: var(--accent-soft); }
+.auth-story h1 { max-width: 520px; font-size: clamp(40px, 4.5vw, 64px); line-height: 1.06; margin: 24px 0; }
+.auth-story p { max-width: 400px; font-size: 17px; color: var(--muted); }
+.auth-art { margin: 48px 0; height: 180px; position: relative; border-bottom: 1px solid var(--accent); }
+.auth-art svg { width: 100%; height: 100%; color: var(--accent); }
+.auth-form-area { padding: 40px 24px; display: grid; align-items: center; justify-items: center; }
+.auth-form { width: min(100%, 380px); display: flex; flex-direction: column; gap: 24px; }
+.auth-form h1 { font-size: 30px; margin-bottom: 8px; }
+.auth-form form { display: grid; gap: 20px; }
+.password-input { position: relative; }
+.password-input input { padding-right: 52px; }
+.password-input button { position: absolute; right: 2px; top: 1px; }
+.auth-footer { padding-top: 24px; border-top: 1px solid var(--line); color: var(--muted); font-size: 12px; }
+.consent-list { padding: 0; margin: 0; list-style: none; display: grid; gap: 12px; }
+.consent-list li { display: flex; gap: 12px; align-items: flex-start; }
+.consent-list svg { color: var(--accent); margin-top: 2px; }
+.consent-actions { display: flex; gap: 12px; }
+.break-word { overflow-wrap: anywhere; }
+@media (max-width: 760px) { .auth-layout { grid-template-columns: 1fr; } .auth-story { padding: 24px; } .auth-story > div:not(:first-child), .auth-story > p { display: none; } .auth-form-area { padding: 40px 24px 64px; } }
+
