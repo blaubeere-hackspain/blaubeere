@@ -51,7 +51,7 @@ jobs:
           [[ -n "$JIO_API_KEY" && -n "$JIO_SSH_KEY" && "$JIO_VM_ID" =~ ^[0-9a-f]{32}$ ]] || { echo 'Configure JIO_API_KEY, JIO_SSH_KEY and JIO_VM_ID'; exit 1; }
           [[ -n "$JIO_ENDPOINT" ]] || unset JIO_ENDPOINT
           session="$JIO_STATE_DIR/sessions/$JIO_VM_ID"
-          install -d -m 700 "$session"
+          install -d -m 700 "$JIO_STATE_DIR" "$JIO_STATE_DIR/sessions" "$session"
           printf '%s\n' "$JIO_SSH_KEY" > "$session/id_ed25519"
           ssh-keygen -y -f "$session/id_ed25519" > "$session/id_ed25519.pub"
           printf 'large\n' > "$session/requested-size"
