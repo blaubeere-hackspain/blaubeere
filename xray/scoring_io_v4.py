@@ -75,10 +75,25 @@ DEFAULT_K = 4178.45
 DEFAULT_ALPHA = 3.0
 DEFAULT_BETA = 0.25
 CONFIDENCE_INPUTS = ('alta', 'media', 'baja', 'ninguna')
+# NOTA (calibracion v4, 2026-09-19): k = 4178.45 es el valor ORIGINALMENTE
+# MEDIDO sobre la rejilla v3 (reports/calibration_k/report.md) y fue
+# REVALIDADO SIN CAMBIOS sobre la rejilla v4 por la calibracion de
+# sensibilidad y estabilidad de xray/calibrate_params_v4.py
+# (reports/calibration_v4/report.md): los tres parametros (k, alpha = 3.0,
+# beta = 0.25) quedan revalidados en sus valores heredados, con estabilidad
+# mes a mes |dH| p75 = 6.99 < 10 sobre 10.022 pares consecutivos. La escala
+# sigue condicionada al sesgo de observabilidad de la poblacion con nota
+# (ver advertencia de provisionalidad del informe de calibracion).
 ADVERTENCIA_CALIBRACION = (
-    'k=4178.45 esta medido sobre la rejilla v3 (reports/calibration_k/'
-    'report.md); alpha=3.0 y beta=0.25 son PROVISIONALES sin recalibrar '
-    'para v4. La escala no es comparable hasta recalibrar.'
+    'k=4178.45 es el valor originalmente medido sobre la rejilla v3 '
+    '(reports/calibration_k/report.md) y fue REVALIDADO sin cambios sobre '
+    'la rejilla v4 por calibracion de sensibilidad y estabilidad '
+    '(reports/calibration_v4/report.md, 2026-09-19): k, alpha=3.0 y '
+    'beta=0.25 quedan revalidados; estabilidad mes a mes |dH| p75=6.99 < 10 '
+    'sobre 10.022 pares. Los valores siguen siendo PROVISIONALES en cuanto '
+    'a la escala: la poblacion de calibracion esta sesgada por '
+    'observabilidad; revalidar cuando se resuelva la clasificacion de '
+    'cobros (informe de calibracion).'
 )
 REFERENCIA_V3_SIN_FIX = {
     'n_con_nota': 959,

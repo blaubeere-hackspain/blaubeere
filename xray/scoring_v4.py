@@ -86,14 +86,29 @@ descompone el castigo por canal (ver reports/score_v4/summary.json,
 'riesgo_triple_conteo', y reports/score_v4/INFORME.md). La formula NO se
 cambia aqui sin decision de producto.
 
-Parametros inyectados (defaults PROVISIONALES pendientes de recalibracion
-para v4; el motor funciona con cualquier combinacion no negativa):
-  k     = 4178.45 euros virtuales: valor medido en reports/calibration_k/
-          report.md sobre la rejilla v3. PENDIENTE DE RECALIBRAR PARA v4.
+Parametros inyectados (CALIBRADOS para v4; el motor funciona con cualquier
+combinacion no negativa):
+  k     = 4178.45 euros virtuales: medido originalmente sobre la rejilla v3
+          (reports/calibration_k/report.md) y REVALIDADO sin cambios sobre
+          la rejilla v4 (ver informe de calibracion mas abajo).
   alpha = 3.0     saturacion del colchon contra los propios pagos
-                  T6_efectivo. PENDIENTE DE CALIBRACION.
+                  T6_efectivo.
   beta  = 0.25    intensidad de la mora: con mora_indice = 1 la nota cae un
-                  25% como maximo por ese canal. PENDIENTE DE CALIBRACION.
+                  25% como maximo por ese canal.
+
+Calibracion (xray/calibrate_params_v4.py, informe
+reports/calibration_v4/report.md, 2026-09-19): k, alpha y beta fueron
+calibrados por SENSIBILIDAD y ESTABILIDAD medidas sobre la rejilla v4, sin
+leer targets_proxy ni label_review, y los tres valores heredados quedaron
+REVALIDADOS sin cambiarlos. Estabilidad mes a mes de v4 medida: |dH_final|
+entre meses consecutivos de la misma empresa, p50 = 2,36 / p75 = 6,99 /
+p90 = 16,12 sobre 10.022 pares; umbral declarado p75 < 10: CUMPLE.
+Limitacion conocida y ACEPTADA (decision de producto, variante (a): beta
+constante sin atenuar): la misma senal de impago entra por tres canales a
+la vez (obligacion vencida en denominador, multiplicador de deuda y mora;
+reparto Shapley del castigo p50 0,163 denominador / 0,6487 multiplicador /
+0,0785 mora, Spearman +0,43 entre los castigos de mora y multiplicador).
+Ver reports/score_v4/summary.json ('riesgo_triple_conteo').
 """
 
 import math
