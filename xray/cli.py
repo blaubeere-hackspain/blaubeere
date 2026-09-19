@@ -104,6 +104,10 @@ def cmd_pipeline(_args):
     from xray.marts.cobro import build_panel_cobro
     from xray.marts.fx import build_fx_rates
     from xray.marts.observabilidad import build_observabilidad
+    from xray.marts.flujos import build_panel_flujos
+    from xray.marts.deuda import build_panel_deuda
+    from xray.marts.evidencia import build_panel_evidencia
+    from xray.marts.targets import build_targets_proxy
     from xray.quality import build_quality_report
 
     con = connect()
@@ -114,7 +118,8 @@ def cmd_pipeline(_args):
             _print_results(title, results)
             if not _invariants_ok(results):
                 raise ValueError(f'Invariantes fallidas: {title}')
-        for operation in (classify_flows, build_fx_rates, build_panel_cobro, build_observabilidad):
+        for operation in (classify_flows, build_fx_rates, build_panel_cobro, build_observabilidad,
+                          build_panel_flujos, build_panel_deuda, build_panel_evidencia, build_targets_proxy):
             result = operation(con)
             _print_results(result.table, {result.table: result})
         report = build_quality_report(con)

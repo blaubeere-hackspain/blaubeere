@@ -15,6 +15,9 @@ import duckdb
 from xray import paths
 from xray.schema import TABLES
 from xray.period import FIRST_MONTH, DATASET_END
+from xray.marts.common import CASH_PRODUCTS, VIEW_CONTRACT_VERSION
+from xray.marts.evidencia import MIN_HISTORY_MONTHS, MIN_COHORT_INVOICES, MAX_COHORT_AGE_DAYS
+from xray.marts.targets import TARGET_VERSION, TARGET_HORIZON_MONTHS, COLLECTION_HORIZON_DAYS, MIN_DEFICIT_MONTHS, BASELINE_COHORT_MONTHS
 
 
 def digest(file):
@@ -122,14 +125,24 @@ def run_build():
     git = subprocess.run(['git', 'rev-parse', 'HEAD'], cwd=root, text=True,
                          stdout=subprocess.PIPE, stderr=subprocess.DEVNULL)
     manifest = {
-        'schema_version': 2,
+        'schema_version': 3,
         'run_id': run_id,
         'git_revision': git.stdout.strip() if git.returncode == 0 else None,
         'python': platform.python_version(),
         'dependencies': {'duckdb': duckdb.__version__},
         'parameters': {'fx_policy': 'unknown_no_estimates', 'first_month': str(FIRST_MONTH),
                        'dataset_end': str(DATASET_END),
-                       'pattern_policy': 'same_company_direction_prior_months'},
+                       'pattern_policy': 'same_company_direction_prior_months',
+                       'view_contract_version': VIEW_CONTRACT_VERSION,
+                       'cash_product_types': list(CASH_PRODUCTS),
+                       'target_version': TARGET_VERSION,
+                       'target_horizon_months': TARGET_HORIZON_MONTHS,
+                       'min_deficit_months': MIN_DEFICIT_MONTHS,
+                       'collection_horizon_days': COLLECTION_HORIZON_DAYS,
+                       'baseline_cohort_months': BASELINE_COHORT_MONTHS,
+                       'evidence_min_history_months': MIN_HISTORY_MONTHS,
+                       'evidence_min_cohort_invoices': MIN_COHORT_INVOICES,
+                       'evidence_max_cohort_age_days': MAX_COHORT_AGE_DAYS},
         'inputs': inputs,
         'source': {file.relative_to(source).as_posix(): digest(file)
                    for file in sorted(source.rglob('*')) if file.is_file()},
