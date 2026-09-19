@@ -15,8 +15,15 @@ const { createElement } = requireApp("react");
 const { renderToStaticMarkup } = requireApp("react-dom/server");
 const login = renderToStaticMarkup(createElement(LoginForm));
 assert.ok(login.includes('name="email"') && login.includes('type="password"'), "The normal sign-in form stays visible");
+assert.match(login, /<form\b[^>]*method="post"/, "A submit before hydration must never put credentials in the URL");
 assert.match(login, /<a href="\/demo"[^>]*>Access demo/, "Demo must always be a direct link, independent of credentials and server flags");
 assert.ok(login.indexOf('href="/demo"') > login.indexOf("</form>"), "Demo entry belongs below the sign-in form");
+assert.ok(login.includes('href="/register?returnTo=%2Fdashboard"'), "Sign-in must offer account registration");
+const registration = renderToStaticMarkup(createElement(LoginForm, { register: true, returnTo: "/connect?state=keep-me" }));
+assert.ok(registration.includes('autoComplete="new-password"') && registration.includes('minLength="12"') && registration.includes("Create account"));
+assert.ok(registration.includes('href="/login?returnTo=%2Fconnect%3Fstate%3Dkeep-me"'), "Switching auth forms must preserve the assistant authorization flow");
+const unsafeRegistration = renderToStaticMarkup(createElement(LoginForm, { register: true, returnTo: "https://evil.example" }));
+assert.ok(!unsafeRegistration.includes("evil.example") && unsafeRegistration.includes('href="/login?returnTo=%2Fdashboard"'));
 const chart = renderToStaticMarkup(createElement(CashChart, { company: demo.company, forecast: demo.forecasts[90] }));
 assert.ok(chart.includes('<title id="cash-chart-title">Daily closing cash, history and 90-day outlook</title>'), "The chart title must survive server rendering for hydration and assistive technology");
 

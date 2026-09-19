@@ -82,6 +82,227 @@ async fn request(
 }
 
 #[tokio::test]
+async fn registration_validates_identity_and_keeps_company_access_private() {
+    let mut state = state().await;
+    state.config.app_origin = "https://app.example.com".into();
+    let origin = state.config.app_origin.clone();
+    let app = router(state.clone());
+    let password = format!("{}-cash-passphrase", "é".repeat(60));
+    let credentials = json!({"email":"  New.User@Example.com  ","password":password});
+    for origin in [None, Some("https://evil.example")] {
+        assert_eq!(
+            request(
+                app.clone(),
+                "POST",
+                "/api/auth/register",
+                credentials.clone(),
+                None,
+                origin
+            )
+            .await
+            .status(),
+            StatusCode::FORBIDDEN
+        );
+    }
+    let bearer = Request::builder()
+        .method("POST")
+        .uri("/api/auth/register")
+        .header("content-type", "application/json")
+        .header("authorization", "Bearer ignored")
+        .body(Body::from(credentials.to_string()))
+        .unwrap();
+    assert_eq!(
+        app.clone().oneshot(bearer).await.unwrap().status(),
+        StatusCode::BAD_REQUEST
+    );
+    for email in [
+        "invalid",
+        "a@@example.com",
+        ".a@example.com",
+        "a..b@example.com",
+        "a b@example.com",
+        "a@example",
+        "a@-example.com",
+        "a@example..com",
+    ] {
+        assert_eq!(
+            request(
+                app.clone(),
+                "POST",
+                "/api/auth/register",
+                json!({"email":email,"password":password}),
+                None,
+                Some(&origin)
+            )
+            .await
+            .status(),
+            StatusCode::BAD_REQUEST
+        );
+    }
+    for invalid in ["short".to_owned(), "🪴".repeat(6), "a".repeat(129)] {
+        assert_eq!(
+            request(
+                app.clone(),
+                "POST",
+                "/api/auth/register",
+                json!({"email":"new@example.com","password":invalid}),
+                None,
+                Some(&origin)
+            )
+            .await
+            .status(),
+            StatusCode::BAD_REQUEST
+        );
+    }
+    assert_eq!(
+        request(
+            app.clone(),
+            "POST",
+            "/api/auth/register",
+            json!({"email":"new@example.com","password":password,"company_ids":["DEMO_001"]}),
+            None,
+            Some(&origin)
+        )
+        .await
+        .status(),
+        StatusCode::UNPROCESSABLE_ENTITY
+    );
+    assert_eq!(
+        sqlx::query_scalar::<_, i64>("SELECT COUNT(*) FROM users")
+            .fetch_one(&state.db)
+            .await
+            .unwrap(),
+        0
+    );
+
+    let response = request(
+        app.clone(),
+        "POST",
+        "/api/auth/register",
+        credentials,
+        None,
+        Some(&origin),
+    )
+    .await;
+    assert_eq!(response.status(), StatusCode::CREATED);
+    let session = response.headers()[header::SET_COOKIE].to_str().unwrap();
+    assert!(
+        session.contains("HttpOnly")
+            && session.contains("Secure")
+            && session.contains("SameSite=Lax")
+    );
+    let cookie = session.split(';').next().unwrap().to_owned();
+    let response = request(
+        app.clone(),
+        "GET",
+        "/api/me",
+        json!(null),
+        Some(&cookie),
+        None,
+    )
+    .await;
+    let identity: serde_json::Value =
+        serde_json::from_slice(&response.into_body().collect().await.unwrap().to_bytes()).unwrap();
+    assert_eq!(identity["email"], "new.user@example.com");
+    assert_eq!(identity["company_ids"], json!([]));
+    assert_eq!(
+        request(
+            app.clone(),
+            "GET",
+            "/api/companies/DEMO_001/assessment",
+            json!(null),
+            Some(&cookie),
+            None
+        )
+        .await
+        .status(),
+        StatusCode::FORBIDDEN
+    );
+
+    for expected in [
+        StatusCode::CONFLICT,
+        StatusCode::CONFLICT,
+        StatusCode::TOO_MANY_REQUESTS,
+    ] {
+        let response = request(
+            app.clone(),
+            "POST",
+            "/api/auth/register",
+            json!({"email":"NEW.USER@example.com","password":"different-password"}),
+            None,
+            Some(&origin),
+        )
+        .await;
+        assert_eq!(response.status(), expected);
+        assert!(!response.headers().contains_key(header::SET_COOKIE));
+    }
+    assert_eq!(
+        request(
+            app.clone(),
+            "POST",
+            "/api/auth/logout",
+            json!({}),
+            Some(&cookie),
+            Some(&origin)
+        )
+        .await
+        .status(),
+        StatusCode::OK
+    );
+    assert_eq!(
+        request(
+            app.clone(),
+            "GET",
+            "/api/me",
+            json!(null),
+            Some(&cookie),
+            None
+        )
+        .await
+        .status(),
+        StatusCode::UNAUTHORIZED
+    );
+    assert_eq!(
+        request(
+            app.clone(),
+            "POST",
+            "/api/auth/login",
+            json!({"email":"new.user@example.com","password":password}),
+            None,
+            Some(&origin)
+        )
+        .await
+        .status(),
+        StatusCode::OK,
+        "Duplicate registration must not replace the password; Unicode passphrases must still sign in"
+    );
+    sqlx::query("UPDATE rate_limits SET hits = 30 WHERE key = 'register:global'")
+        .execute(&state.db)
+        .await
+        .unwrap();
+    assert_eq!(
+        request(
+            app,
+            "POST",
+            "/api/auth/register",
+            json!({"email":"another@example.com","password":password}),
+            None,
+            Some(&origin)
+        )
+        .await
+        .status(),
+        StatusCode::TOO_MANY_REQUESTS
+    );
+    assert_eq!(
+        sqlx::query_scalar::<_, i64>("SELECT COUNT(*) FROM users")
+            .fetch_one(&state.db)
+            .await
+            .unwrap(),
+        1
+    );
+}
+
+#[tokio::test]
 async fn sessions_require_sign_in_origin_and_company_membership() {
     let state = state().await;
     auth::provision(

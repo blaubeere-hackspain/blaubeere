@@ -155,6 +155,7 @@ pub fn router(state: AppState) -> Router {
     Router::new()
         .route("/health", get(|| async { Json(json!({"status": "ok"})) }))
         .route("/api/auth/login", post(auth::login))
+        .route("/api/auth/register", post(auth::register))
         .route("/api/auth/demo", post(auth::demo_login))
         .route("/api/auth/logout", post(auth::logout))
         .route("/api/me", get(auth::me))
