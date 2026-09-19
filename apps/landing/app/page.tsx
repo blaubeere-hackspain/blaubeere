@@ -4,8 +4,8 @@ import painting from "../public/cash-horizon-oil.png";
 import perspective from "../public/perspective-oil.png";
 import foundation from "../public/foundation-oil.png";
 import possibility from "../public/possibility-oil.png";
-import mcpConnection from "../public/mcp-connection-oil.png";
 import logo from "../../brand/blau.svg";
+import { AssistantSection } from "../components/assistant-section";
 import { PricingCards } from "../components/pricing-cards";
 import { SiteHeader, SiteFooter } from "../components/site-chrome";
 
@@ -32,21 +32,7 @@ export default function Home() {
           <div className="oil-gallery"><figure><Image src={perspective} alt="An oil painting of a lake winding through a wide mountain valley." sizes="(max-width: 760px) 33vw, (max-width: 1320px) 31vw, 392px" placeholder="blur"/></figure><figure><Image src={foundation} alt="An oil painting of a small farmhouse among sunlit green hills." sizes="(max-width: 760px) 33vw, (max-width: 1320px) 31vw, 392px" placeholder="blur"/></figure><figure><Image src={possibility} alt="An oil painting of a person on a bench looking toward an open horizon." sizes="(max-width: 760px) 33vw, (max-width: 1320px) 31vw, 392px" placeholder="blur"/></figure></div>
         </section>
         <section className="planning site-container" id="planning" aria-labelledby="planning-title"><div className="planning-copy"><span className="eyebrow">02 / A little possibility</span><h2 id="planning-title">“What would it take?”<br/><span>A good place to start.</span></h2><p>Protect a cash buffer. Fund the next quarter. Explore a revenue goal. Compare the trade-offs before you choose your next move.</p><a className="button" href={`${app}/dashboard`}>Explore a plan<ArrowRight size={16} aria-hidden/></a></div><div className="mini-plan"><span className="eyebrow">An example, not a promise</span><h3>Keep cash above <span>€100,000.</span></h3><p>Through 29 November · every day of the plan</p><dl><div><dt>Collection timing</dt><dd>Up to 14 days earlier</dd></div><div><dt>Discretionary spend</dt><dd>Up to 10% lower</dd></div><div><dt>Additional funding</dt><dd>Within your limit</dd></div></dl><div className="mini-plan-note"><Check size={18} aria-hidden/><p>Baseline plus two conditional plans. See the cash impact and any gap that remains.</p></div></div></section>
-        <section className="assistant-section site-container" id="assistants" aria-labelledby="assistant-title">
-          <div className="assistant-painting"><Image src={mcpConnection} alt="An oil painting of an AI chat assistant linked through an MCP connector to financial records, a cash chart and scenario plans." fill sizes="(max-width: 760px) calc(100vw - 40px), (max-width: 1000px) calc((100vw - 104px) / 2), (max-width: 1320px) calc((100vw - 176px) / 2), 572px" placeholder="blur"/></div>
-          <div className="assistant-copy">
-            <span className="eyebrow">03 / Connect with MCP</span>
-            <h2 id="assistant-title">A second perspective.<br/><span>The same clear picture.</span></h2>
-            <p>MCP connects blau to the AI assistant you already use. Bring your company’s financial context into the conversation, and ask questions in your own words.</p>
-            <ul className="assistant-features">
-              <li><span className="assistant-number" aria-hidden>01</span><div><h3>See what’s ahead.</h3><p>Ask when cash gets tight, what’s driving the gap and how much funding your company may need.</p></div></li>
-              <li><span className="assistant-number" aria-hidden>02</span><div><h3>Follow the evidence.</h3><p>Look behind an outlook at its dated sources, assumptions and missing inputs.</p></div></li>
-              <li><span className="assistant-number" aria-hidden>03</span><div><h3>Explore a different path.</h3><p>Compare “what if” plans for earlier collections, lower spending or extra funding, within limits you choose.</p></div></li>
-            </ul>
-            <a className="button" href={`${app}/dashboard`}>Connect your assistant<ArrowRight size={16} aria-hidden/></a>
-            <p className="assistant-note">For assistants that support remote MCP and OAuth. You approve access and can revoke it anytime. No source edits or payments.</p>
-          </div>
-        </section>
+        <AssistantSection/>
         <section className="trust site-container" id="built-for-finance" aria-labelledby="trust-title"><div className="section-intro"><span className="eyebrow">04 / A little confidence</span><h2 id="trust-title">Clear about what’s known.<br/><span>Honest about what isn’t.</span></h2></div><div className="trust-grid"><article><FileSearch size={26} strokeWidth={1.4} aria-hidden/><h3>Evidence you can inspect.</h3><p>Dated sources, visible assumptions and missing inputs. Understand what’s behind every projection.</p></article><article><ShieldCheck size={26} strokeWidth={1.4} aria-hidden/><h3>Access that stays yours.</h3><p>Your companies, your permissions. Connected assistants use the same access and can be disconnected at any time.</p></article><article><SlidersHorizontal size={26} strokeWidth={1.4} aria-hidden/><h3>Decisions that stay human.</h3><p>Test scenarios without changing source data or executing payments. Your team makes the call.</p></article></div></section>
         <section className="landing-pricing" id="pricing" aria-labelledby="pricing-title">
           <div className="section-intro site-container"><span className="eyebrow">05 / A plan that fits</span><h2 id="pricing-title">A clearer picture.<br/><span>One simple starting point.</span></h2><p>One fixed price. Or a conversation about what your team needs.</p></div>

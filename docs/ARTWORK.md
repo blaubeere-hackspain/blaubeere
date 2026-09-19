@@ -42,9 +42,11 @@ The product paintings were generated with the built-in image generation tool for
 
 The landing rows summarize the original generation briefs; they are not verbatim prompt transcripts.
 
+The MCP section reuses perspective, foundation and possibility for its three feature states. Hovering, focusing or tapping a feature selects the corresponding painting; keyboard and reduced-motion changes are immediate.
+
 ## MCP illustration: final prompt
 
-Asset: `apps/landing/public/mcp-connection-oil.png`. Generated with the built-in image tool. A portrait composition is preserved on both desktop and phones so the connected records and charts remain visible.
+Earlier concept: `apps/landing/public/mcp-connection-oil.png`. Generated with the built-in image tool and retained as an original concept; the landing now uses the selectable editorial paintings above.
 
 Use case: stylized-concept.
 Asset type: a large oil-painted illustration for the MCP feature section of Blaubeere, a calm finance workspace.
@@ -65,7 +67,7 @@ Use case: stylized-concept. Asset: original oil-painting illustration for the em
 
 Use case: stylized-concept. Asset: original oil-painting illustration for the empty assistant connections state in Blaubeere, a calm finance workspace. Two modest empty wooden chairs side by side overlooking a quiet lake with low green hills across the water, suggesting room for a conversation. Wide landscape composition, 3:2 aspect ratio, chairs in the lower middle, plenty of pale sky and water. Traditional oil on linen, tactile layered brushstrokes, soft diffused daylight, sage and olive greens, cream and muted blue, airy and understated. No people, no text, no logos, no interface, no border. Paint the whole image edge to edge.
 
-The open path belongs to the company-access empty state. The landing’s MCP section uses the dedicated connection illustration above, with a descriptive alternative. Empty-state paintings are decorative; their heading, instructions and action communicate the state without relying on the artwork.
+The open path belongs to the company-access empty state. Empty-state paintings are decorative; their heading, instructions and action communicate the state without relying on the artwork.
 
 ## Garden login artwork
 
