@@ -68,7 +68,7 @@ Planning compares two deterministic candidates, not every possible plan. Funding
 
 ## Published Parquet assessments in the app
 
-From the repository root, import the four published model outputs with the existing Rust API binary:
+From the repository root, import the five published model outputs with the existing Rust API binary:
 
 ```sh
 cargo run -p blaubeere-api -- import-parquet . .local/datasets "$(git rev-parse HEAD)"
@@ -76,9 +76,9 @@ cargo run -p blaubeere-api -- import-parquet . .local/datasets "$(git rev-parse 
 
 The command prints the absolute SQLite snapshot path. Add `DATASET_DATABASE_URL=sqlite:///absolute/path/printed/above` and `DATASET_TEAM_EMAIL=finance@blaubeere.local` to `.env`, then restart the Rust services. The explicitly configured existing team account receives memberships in the imported companies. Demo visitors remain restricted to `DEMO_001`.
 
-Rust streams `reports/score_v3/assessments.parquet`, `reports/cash_position/cash_position_monthly.parquet`, `reports/payment_delay/payment_delay_monthly.parquet` and `reports/transfer_resolution_v2/resolution.parquet`. It validates and indexes a private, immutable SQLite snapshot, preserves nulls and reason codes, and records file hashes and source revision. An unchanged batch reuses its snapshot; failed imports cannot replace a healthy snapshot. API and MCP share the same Rust query and access-control logic. No Redis or database service is needed on the single VM.
+Rust streams the published v4 snapshot: `reports/score_v4/assessments.parquet`, `reports/cash_backfill/cash_backfill_monthly.parquet`, `reports/payment_delay_v2/payment_delay_v2_monthly.parquet`, `reports/debt_obligation/debt_obligation_monthly.parquet` and `reports/transfer_resolution_v2/resolution.parquet`. It validates and indexes a private, immutable SQLite snapshot, preserves nulls and reason codes, and records file hashes and source revision. An unchanged batch reuses its snapshot; failed imports cannot replace a healthy snapshot. API and MCP share the same Rust query and access-control logic. No Redis or database service is needed on the single VM. Reimport after pulling v4 and update `DATASET_DATABASE_URL`: dataset schema 3 rejects older snapshots rather than serving mixed model versions. The identity database can stay in place.
 
-`GET /api/companies/:id/assessment` returns `kind: "model"`, monthly `records` joined with cash/payment evidence, and provenance for imported companies. Model amounts are EUR values, unlike the integer-cent forecast contract. The UI links each monthly score to its own dated explanation; it does not interpolate daily scores. Relative cumulative cash movement is not a bank balance. Planning is unavailable for these companies until verified opening cash and future obligations are supplied. The independent `/demo` remains an illustrative, frontend-only experience.
+`GET /api/companies/:id/assessment` returns `kind: "model"`, monthly `records` joined with cash/payment/debt evidence, and provenance for imported companies. Model amounts are EUR values, unlike the integer-cent forecast contract. The UI links each monthly score to its own dated explanation; it does not interpolate daily scores. The cash series is reconstructed backwards from the 1 September 2026 anchor; it is not a bank balance observed at each historical cutoff. v4 includes debt-service shortfalls, overdue obligations counted once, robust arrears and the debt multiplier. Published exclusions retain their company records with null scores. Planning is unavailable for these companies until verified opening cash and future obligations are supplied. The read-only `/demo` uses this same v4 snapshot.
 
 ## Challenge dataset pipeline
 

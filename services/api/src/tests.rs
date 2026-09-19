@@ -9,11 +9,30 @@ async fn parquet_snapshot_preserves_model_data_and_requires_membership() {
     let root = std::path::Path::new(env!("CARGO_MANIFEST_DIR")).join("../..");
     let source = tempfile::tempdir().unwrap();
     let output = tempfile::tempdir().unwrap();
+    let legacy = output.path().join("legacy.sqlite");
+    let old_pool = sqlx::SqlitePool::connect_with(
+        sqlx::sqlite::SqliteConnectOptions::new()
+            .filename(&legacy)
+            .create_if_missing(true),
+    )
+    .await
+    .unwrap();
+    sqlx::raw_sql("CREATE TABLE dataset_metadata(payload TEXT NOT NULL);
+        INSERT INTO dataset_metadata VALUES ('{\"schema_version\":2,\"model_summary\":{\"model_version\":\"healthscore_v3\"}}');")
+        .execute(&old_pool).await.unwrap();
+    old_pool.close().await;
+    assert!(
+        dataset::connect(&format!("sqlite://{}", legacy.display()))
+            .await
+            .is_err(),
+        "Old snapshots must be reimported, never mixed with v4 field names"
+    );
     for path in [
-        "reports/score_v3/assessments.parquet",
-        "reports/score_v3/summary.json",
-        "reports/cash_position/cash_position_monthly.parquet",
-        "reports/payment_delay/payment_delay_monthly.parquet",
+        "reports/score_v4/assessments.parquet",
+        "reports/score_v4/summary.json",
+        "reports/cash_backfill/cash_backfill_monthly.parquet",
+        "reports/payment_delay_v2/payment_delay_v2_monthly.parquet",
+        "reports/debt_obligation/debt_obligation_monthly.parquet",
         "reports/transfer_resolution_v2/resolution.parquet",
     ] {
         let destination = source.path().join(path);
@@ -198,11 +217,28 @@ async fn parquet_snapshot_preserves_model_data_and_requires_membership() {
         .iter()
         .find(|row| row["as_of"] == missing["as_of"])
         .unwrap();
+    assert_eq!(records.len(), 24);
+    assert!(records.iter().all(|row| row["version"] == "healthscore_v4"));
+    assert_eq!(
+        result["provenance"]["model_summary"]["model_version"],
+        "healthscore_v4"
+    );
+    assert_eq!(result["provenance"]["schema_version"], 3);
+    assert!(record.get("t6_efectivo").is_some() && record.get("t6").is_none());
+    assert!(record["cash"].get("saldo_reversa_eur").is_some());
+    assert!(record["payment"].get("mora_indice").is_some());
+    assert!(record["debt"].get("obligacion_vencida_eur").is_some());
+    let excluded: (i64, i64) = sqlx::query_as("SELECT count(DISTINCT company_id),count(json_extract(payload, '$.health_score')) FROM parquet_records WHERE source='scores' AND json_extract(payload,'$.excluida')=1").fetch_one(pool).await.unwrap();
+    assert_eq!(
+        excluded,
+        (33, 0),
+        "Retain excluded companies and their missing scores"
+    );
     assert!(record["health_score"].is_null());
     assert_eq!(record["reasons"], missing["reasons"]);
     assert_eq!(result["provenance"]["source_revision"], "test-revision");
     for row in records {
-        for field in ["cash", "payment"] {
+        for field in ["cash", "payment", "debt"] {
             if !row[field].is_null() {
                 assert_eq!(
                     row[field]["month"].as_str().unwrap()[..10],
@@ -252,7 +288,7 @@ async fn parquet_snapshot_preserves_model_data_and_requires_membership() {
             .is_err()
     );
     std::fs::write(
-        source.path().join("reports/score_v3/assessments.parquet"),
+        source.path().join("reports/score_v4/assessments.parquet"),
         b"invalid parquet",
     )
     .unwrap();

@@ -22,6 +22,11 @@ for (const company of [companies[0], companies.at(-1)]) {
   const assessment = await (await read(`${app}/api/demo/companies/${company.id}/assessment`)).json();
   assert.equal(assessment.kind, "model");
   assert.equal(assessment.company.id, company.id);
+  assert.equal(assessment.provenance.model_summary.model_version, "healthscore_v4");
+  assert.equal(assessment.provenance.schema_version, 3);
+  assert.ok(assessment.records.every((row: { version: string; health_score: number | null; excluida: boolean }) => row.version === "healthscore_v4" && (!row.excluida || row.health_score === null)), "Serve only v4 ratings and preserve exclusions");
+  const sources = assessment.provenance.files.map((file: { path: string }) => file.path);
+  for (const path of ["reports/score_v4/assessments.parquet", "reports/cash_backfill/cash_backfill_monthly.parquet", "reports/payment_delay_v2/payment_delay_v2_monthly.parquet", "reports/debt_obligation/debt_obligation_monthly.parquet"]) assert.ok(sources.includes(path), `Missing v4 source: ${path}`);
   assert.ok(assessment.records.length > 1 && assessment.provenance.files.length >= 3);
   const latest = assessment.records.at(-1);
   const health = await (await read(`${app}/demo/health/${latest.as_of}?company=${company.id}`)).text();

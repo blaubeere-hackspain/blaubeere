@@ -42,14 +42,16 @@ export type Comparison = {
 
 export type ModelRecord = {
   version: string; company_id: string; group_id: string; month: string; as_of: string;
-  health_score: number | null; confidence: string; n_meses_ventana: number; n_meses_con_actividad: number;
-  c6: number | null; p6: number | null; d6: number | null; t6: number | null;
-  r_hist: number | null; colchon_bruto: number | null; colchon_aplicable: number | null;
-  mora_ratio: number | null; h_antes_de_mora: number | null; penalizacion_mora_puntos: number | null;
+  health_score: number | null; excluida: boolean; confidence: string; n_meses_ventana: number; n_meses_con_actividad: number;
+  c6: number | null; p6: number | null; d6: number | null; t6_efectivo: number | null;
+  deficit_servicio_6: number | null; obligacion_vencida_m: number | null;
+  r_hist: number | null; colchon_v4: number | null; colchon_aplicable: number | null;
+  mora_indice: number | null; multiplicador_deuda: number | null; h_antes_de_ajustes: number | null;
+  penalizacion_mora_puntos: number | null; penalizacion_multiplicador_puntos: number | null;
   volumen_ambiguo_eur: number | null; volumen_ambiguo_pct: number | null;
   k: number; alpha: number; beta: number; reasons: string[];
   cash: {
-    posicion_acumulada: number | null; flujo_neto: number | null; meses_de_cobertura: number | null; mes_origen: string; confidence: string;
+    saldo_reversa_eur: number | null; flujo_neto: number | null; meses_de_cobertura_reversa: number | null; saldo_ancla_eur: number | null; confidence: string;
     flujo_operating_in: number | null; flujo_operating_out: number | null;
     flujo_financing_in: number | null; flujo_financing_out: number | null;
     flujo_investment_in: number | null; flujo_investment_out: number | null;
@@ -57,10 +59,14 @@ export type ModelRecord = {
     flags: string[];
   } | null;
   payment: {
-    debido_eur: number | null; en_mora_en_el_corte_eur: number | null; retraso_medio_dias_pagado: number | null; confidence: string;
-    mora_ratio: number | null; cobro_debido_eur: number | null; cobro_en_mora_en_el_corte_eur: number | null;
-    cobro_mora_ratio: number | null; cobro_retraso_medio_dias_pagado: number | null;
-    n_huecos_eur: number; n_vencimiento_desconocido: number;
+    pago_exposicion_eur: number | null; pago_vencido_eur: number | null; mora_pago_robusta: number | null;
+    cobro_exposicion_eur: number | null; cobro_vencido_eur: number | null; mora_cobro_robusta: number | null;
+    mora_indice: number | null; confidence: string; confidence_pago: string; confidence_cobro: string;
+    pago_n_huecos_eur: number; cobro_n_huecos_eur: number; n_vencimiento_desconocido: number;
+  } | null;
+  debt: {
+    servicio_esperado_eur: number | null; servicio_observado_eur: number | null; deficit_servicio_eur: number | null;
+    obligacion_vencida_eur: number | null; multiplicador_deuda: number | null; confidence: string;
   } | null;
 };
 export type ModelAssessment = {

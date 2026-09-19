@@ -20,9 +20,11 @@ pub async fn connect(url: &str) -> anyhow::Result<SqlitePool> {
     let metadata: String = sqlx::query_scalar("SELECT payload FROM dataset_metadata")
         .fetch_one(&pool)
         .await?;
+    let metadata: Value = serde_json::from_str(&metadata)?;
     anyhow::ensure!(
-        serde_json::from_str::<Value>(&metadata)?["schema_version"] == 2,
-        "Unsupported dataset schema"
+        metadata["schema_version"] == 3
+            && metadata["model_summary"]["model_version"] == "healthscore_v4",
+        "Dataset requires a fresh v4 import; run the API import-parquet command"
     );
     Ok(pool)
 }
@@ -81,17 +83,19 @@ pub async fn assessment(state: &AppState, id: &str) -> ApiResult<Option<Value>> 
             .fetch_optional(pool)
             .await?;
     let Some(group) = group else { return Ok(None) };
-    let rows: Vec<(String, Option<String>, Option<String>)> = sqlx::query_as(
-        "SELECT s.payload,c.payload,p.payload FROM parquet_records s \
+    type JoinedRecord = (String, Option<String>, Option<String>, Option<String>);
+    let rows: Vec<JoinedRecord> = sqlx::query_as(
+        "SELECT s.payload,c.payload,p.payload,d.payload FROM parquet_records s \
          LEFT JOIN parquet_records c ON c.source='cash' AND c.record_key=s.record_key \
          LEFT JOIN parquet_records p ON p.source='payments' AND p.record_key=s.record_key \
+         LEFT JOIN parquet_records d ON d.source='debt' AND d.record_key=s.record_key \
          WHERE s.source='scores' AND s.company_id=? ORDER BY s.period",
     )
     .bind(id)
     .fetch_all(pool)
     .await?;
     let mut records = Vec::with_capacity(rows.len());
-    for (score, cash, payment) in rows {
+    for (score, cash, payment, debt) in rows {
         let mut row = decode(&score)?;
         row["cash"] = cash
             .as_deref()
@@ -99,6 +103,11 @@ pub async fn assessment(state: &AppState, id: &str) -> ApiResult<Option<Value>> 
             .transpose()?
             .unwrap_or(Value::Null);
         row["payment"] = payment
+            .as_deref()
+            .map(decode)
+            .transpose()?
+            .unwrap_or(Value::Null);
+        row["debt"] = debt
             .as_deref()
             .map(decode)
             .transpose()?

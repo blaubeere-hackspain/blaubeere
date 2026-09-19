@@ -18,11 +18,12 @@ const { createElement } = requireApp("react");
 const { renderToStaticMarkup } = requireApp("react-dom/server");
 const demo = { company: companies[0] as Company };
 const record: ModelRecord = {
-  version: "healthscore_v3", company_id: "COMP_TEST", group_id: "GROUP_TEST", month: "2026-08-01", as_of: "2026-08-31",
-  health_score: null, confidence: "ninguna", n_meses_ventana: 6, n_meses_con_actividad: 0,
-  c6: null, p6: null, d6: null, t6: null, r_hist: null, colchon_bruto: null, colchon_aplicable: null,
-  mora_ratio: null, h_antes_de_mora: null, penalizacion_mora_puntos: null, volumen_ambiguo_eur: null, volumen_ambiguo_pct: null,
-  k: 4178.45, alpha: 3, beta: 0.25, reasons: ["sin_actividad_en_ventana"], cash: null, payment: null,
+  version: "healthscore_v4", company_id: "COMP_TEST", group_id: "GROUP_TEST", month: "2026-08-01", as_of: "2026-08-31",
+  health_score: null, excluida: false, confidence: "ninguna", n_meses_ventana: 6, n_meses_con_actividad: 0,
+  c6: null, p6: null, d6: null, t6_efectivo: null, r_hist: null, colchon_v4: null, colchon_aplicable: null,
+  mora_indice: null, h_antes_de_ajustes: null, penalizacion_mora_puntos: null, volumen_ambiguo_eur: null, volumen_ambiguo_pct: null,
+  deficit_servicio_6: null, obligacion_vencida_m: null, multiplicador_deuda: null, penalizacion_multiplicador_puntos: null,
+  k: 4178.45, alpha: 3, beta: 0.25, reasons: ["sin_actividad_en_ventana"], cash: null, payment: null, debt: null,
 };
 const model: ModelAssessment = { kind: "model", company: { id: record.company_id, name: record.company_id, group: record.group_id, currency: "EUR", data_mode: "challenge" }, records: [record], provenance: { batch_id: "test", source_revision: "test", imported_at: "2026-09-19", files: [], model_summary: { advertencia: "Provisional", limitaciones: [] } } };
 const modelOverview = renderToStaticMarkup(createElement(ModelDashboard, { data: model }));
@@ -46,13 +47,20 @@ assert.ok(!modelDetail.includes("NaN") && !modelDetail.includes("€0"), "Missin
 assert.equal(modelNumber(null), "Not available");
 assert.equal(modelNumber(0), "0");
 assert.match(modelReason("p_eur_desconocido_en_2_meses"), /Operating payments.*2 month/);
-const cashRecord: ModelRecord = { ...record, d6: 60.25, p6: 1234.56, t6: 1294.81,
-  cash: { posicion_acumulada: -321.09, flujo_neto: 678.12, meses_de_cobertura: null, mes_origen: "2026-06-01", confidence: "baja", flujo_operating_in: 1000, flujo_operating_out: -321.88, flujo_financing_in: 0, flujo_financing_out: 0, flujo_investment_in: 0, flujo_investment_out: 0, flujo_transfer: null, flujo_non_economic: 0, flujo_unknown: null, flags: ["agujeros_en_tramo"] },
-  payment: { debido_eur: 500.44, en_mora_en_el_corte_eur: 123.45, retraso_medio_dias_pagado: 4.5, mora_ratio: null, confidence: "baja", cobro_debido_eur: 2000, cobro_en_mora_en_el_corte_eur: 876.54, cobro_mora_ratio: 0.43827, cobro_retraso_medio_dias_pagado: 12, n_huecos_eur: 2, n_vencimiento_desconocido: 3 },
+const scoredV4 = { ...record, health_score: 54, c6: 300, p6: 100, d6: 20, deficit_servicio_6: 30, obligacion_vencida_m: 50, t6_efectivo: 200, colchon_v4: 60, colchon_aplicable: 60, mora_indice: 0.4, multiplicador_deuda: 0.75, h_antes_de_ajustes: 80, penalizacion_mora_puntos: 8, penalizacion_multiplicador_puntos: 18, reasons: [] };
+const v4Detail = renderToStaticMarkup(createElement(ModelDashboard, { data: { ...model, records: [scoredV4] }, scoreDate: record.as_of }));
+for (const text of ["healthscore_v4", "Effective obligations (T6)", "€200", "Debt-service shortfall", "€30", "Debt multiplier reduction", "18 points", "0.4 / 1", "0.75×", "× debt multiplier"]) assert.ok(v4Detail.includes(text), text);
+assert.ok(!v4Detail.includes("NaN") && !v4Detail.includes("including 100") && !v4Detail.includes("published v3"));
+const excludedV4 = renderToStaticMarkup(createElement(ModelDashboard, { data: { ...model, records: [{ ...record, excluida: true, confidence: "excluida", reasons: ["excluida_nota_cero_persistente"] }] } }));
+assert.ok(excludedV4.includes("Excluded") && excludedV4.includes("uneven data coverage"), "Exclusion is a published data rule, not a zero score or evidence of poor financial health");
+
+const cashRecord: ModelRecord = { ...record, d6: 60.25, p6: 1234.56, t6_efectivo: 1294.81,
+  cash: { saldo_reversa_eur: -321.09, flujo_neto: 678.12, meses_de_cobertura_reversa: null, saldo_ancla_eur: 900, confidence: "baja", flujo_operating_in: 1000, flujo_operating_out: -321.88, flujo_financing_in: 0, flujo_financing_out: 0, flujo_investment_in: 0, flujo_investment_out: 0, flujo_transfer: null, flujo_non_economic: 0, flujo_unknown: null, flags: ["agujeros_en_tramo"] },
+  payment: { pago_exposicion_eur: 500.44, pago_vencido_eur: 123.45, mora_pago_robusta: null, cobro_exposicion_eur: 2000, cobro_vencido_eur: 876.54, mora_cobro_robusta: 0.43827, mora_indice: 0.43827, confidence: "baja", confidence_pago: "baja", confidence_cobro: "baja", pago_n_huecos_eur: 1, cobro_n_huecos_eur: 1, n_vencimiento_desconocido: 3 },
 };
 const cashRecords = [{ ...cashRecord, as_of: "2026-06-30" }, { ...record, as_of: "2026-07-31" }, cashRecord];
 const dataOverview = renderToStaticMarkup(createElement(ModelDashboard, { data: { ...model, records: cashRecords } }));
-for (const text of ["Cash movements over time", "Payments and collections", "Debt service in the model window", "Monthly source records", "€678.12", "-€321.88", "€123.45", "€876.54", "€60.25", "2 invoice(s) with unknown EUR amounts"]) assert.ok(dataOverview.includes(text), `Display the published amount or explanation: ${text}`);
+for (const text of ["Cash movements over time", "Reconstructed cash", "Payments and collections", "Debt and overdue obligations", "Monthly source records", "€678.12", "-€321.88", "€123.45", "€876.54", "€60.25", "2 invoice(s) with unknown EUR amounts"]) assert.ok(dataOverview.includes(text), `Display the published amount or explanation: ${text}`);
 assert.match(dataOverview, /id="model-date"/, "The overview must let users select any published month");
 assert.ok(dataOverview.includes("not the outstanding debt balance") && dataOverview.includes("not a bank balance"));
 const cashSvg = dataOverview.match(/<svg[^>]*aria-labelledby="monthly-chart-title monthly-chart-description"[\s\S]*?<\/svg>/)![0];

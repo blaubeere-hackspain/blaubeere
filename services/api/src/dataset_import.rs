@@ -12,22 +12,26 @@ use std::{
     path::{Path, PathBuf},
 };
 
-const SOURCES: [(&str, &str); 4] = [
-    ("scores", "reports/score_v3/assessments.parquet"),
+const SOURCES: [(&str, &str); 5] = [
+    ("scores", "reports/score_v4/assessments.parquet"),
     (
         "cash",
-        "reports/cash_position/cash_position_monthly.parquet",
+        "reports/cash_backfill/cash_backfill_monthly.parquet",
     ),
     (
         "payments",
-        "reports/payment_delay/payment_delay_monthly.parquet",
+        "reports/payment_delay_v2/payment_delay_v2_monthly.parquet",
+    ),
+    (
+        "debt",
+        "reports/debt_obligation/debt_obligation_monthly.parquet",
     ),
     (
         "transfers",
         "reports/transfer_resolution_v2/resolution.parquet",
     ),
 ];
-const SUMMARY: &str = "reports/score_v3/summary.json";
+const SUMMARY: &str = "reports/score_v4/summary.json";
 
 fn hash(path: &Path) -> anyhow::Result<String> {
     let mut file = File::open(path).with_context(|| format!("Read {}", path.display()))?;
@@ -57,7 +61,7 @@ pub async fn build(root: &Path, directory: &Path, revision: &str) -> anyhow::Res
     let summary_hash = hash(&root.join(SUMMARY))?;
     let batch = format!(
         "{:x}",
-        Sha256::digest(serde_json::to_vec(&json!([2, files, summary_hash]))?)
+        Sha256::digest(serde_json::to_vec(&json!([3, files, summary_hash]))?)
     );
     std::fs::create_dir_all(directory)?;
     let target = directory
@@ -122,7 +126,7 @@ pub async fn build(root: &Path, directory: &Path, revision: &str) -> anyhow::Res
                             "Score must be dated at month end"
                         );
                         ensure!(
-                            row["version"] == "healthscore_v3",
+                            row["version"] == "healthscore_v4",
                             "Unexpected score version"
                         );
                         ensure!(
@@ -144,6 +148,27 @@ pub async fn build(root: &Path, directory: &Path, revision: &str) -> anyhow::Res
                                 .is_some_and(|reasons| reasons.iter().all(Value::is_string)),
                             "Invalid model reason codes"
                         );
+                        ensure!(
+                            row["excluida"].is_boolean()
+                                && (row["excluida"] != true || row["health_score"].is_null()),
+                            "Excluded companies must not have a score"
+                        );
+                        for field in [
+                            "t6_efectivo",
+                            "deficit_servicio_6",
+                            "obligacion_vencida_m",
+                            "colchon_v4",
+                            "mora_indice",
+                            "multiplicador_deuda",
+                            "h_antes_de_ajustes",
+                            "penalizacion_multiplicador_puntos",
+                        ] {
+                            ensure!(
+                                row.get(field).is_some_and(|value| value.is_null()
+                                    || value.as_f64().is_some_and(f64::is_finite)),
+                                "Missing or invalid v4 input: {field}"
+                            );
+                        }
                         let group = text(&row, "group_id")?;
                         let previous = companies.insert(company.to_owned(), group.to_owned());
                         ensure!(
@@ -188,10 +213,12 @@ pub async fn build(root: &Path, directory: &Path, revision: &str) -> anyhow::Res
     ensure!(unknown == 0, "Supporting data contains unknown companies");
     let summary: Value = serde_json::from_slice(&std::fs::read(root.join(SUMMARY))?)?;
     ensure!(
-        summary["limitaciones"].is_array() && summary["advertencia"].is_string(),
-        "Missing model limitations"
+        summary["model_version"] == "healthscore_v4"
+            && summary["limitaciones"].is_array()
+            && summary["advertencia"].is_string(),
+        "Missing v4 model summary or limitations"
     );
-    let metadata = json!({"schema_version":2,"batch_id":batch,"source_revision":revision,"imported_at":Utc::now().to_rfc3339(),"files":files,"summary_sha256":summary_hash,"model_summary":summary});
+    let metadata = json!({"schema_version":3,"batch_id":batch,"source_revision":revision,"imported_at":Utc::now().to_rfc3339(),"files":files,"summary_sha256":summary_hash,"model_summary":summary});
     sqlx::query("INSERT INTO dataset_metadata VALUES (?)")
         .bind(metadata.to_string())
         .execute(&mut *tx)

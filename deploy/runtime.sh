@@ -46,7 +46,7 @@ git -C "$root/repo" -c protocol.version=2 fetch --depth=1 --filter=blob:none ori
 # Export runtime sources and the published model outputs only. Raw datasets and secrets stay out.
 release="$(mktemp -d "$root/releases/$revision.XXXXXX")"
 chmod 755 "$release"
-git -C "$root/repo" archive "$revision" Cargo.toml Cargo.lock package.json bun.lock apps services fixtures scripts reports/score_v3/assessments.parquet reports/score_v3/summary.json reports/cash_position/cash_position_monthly.parquet reports/payment_delay/payment_delay_monthly.parquet reports/transfer_resolution_v2/resolution.parquet | tar -x -C "$release"
+git -C "$root/repo" archive "$revision" Cargo.toml Cargo.lock package.json bun.lock apps services fixtures scripts reports/score_v4/assessments.parquet reports/score_v4/summary.json reports/cash_backfill/cash_backfill_monthly.parquet reports/payment_delay_v2/payment_delay_v2_monthly.parquet reports/debt_obligation/debt_obligation_monthly.parquet reports/transfer_resolution_v2/resolution.parquet | tar -x -C "$release"
 cd "$release"
 export NEXT_TELEMETRY_DISABLED=1 API_INTERNAL_URL=http://127.0.0.1:4000 MCP_INTERNAL_URL=http://127.0.0.1:4001
 export NEXT_PUBLIC_APP_URL="$app" NEXT_PUBLIC_LANDING_URL="$landing"
