@@ -23,7 +23,7 @@ Use case: stylized-concept. Asset: original oil-painting illustration for the em
 
 Use case: stylized-concept. Asset: original oil-painting illustration for the empty assistant connections state in Blaubeere, a calm finance workspace. Two modest empty wooden chairs side by side overlooking a quiet lake with low green hills across the water, suggesting room for a conversation. Wide landscape composition, 3:2 aspect ratio, chairs in the lower middle, plenty of pale sky and water. Traditional oil on linen, tactile layered brushstrokes, soft diffused daylight, sage and olive greens, cream and muted blue, airy and understated. No people, no text, no logos, no interface, no border. Paint the whole image edge to edge.
 
-The open path belongs to the company-access empty state. The chairs belong to assistant connections. Both images are decorative; the accompanying heading, instructions and action communicate the state without relying on the artwork.
+The open path belongs to the company-access empty state. The lake-chair painting is imported by the landing’s MCP section, reusing the original file, with a descriptive alternative. Empty-state paintings are decorative; their heading, instructions and action communicate the state without relying on the artwork.
 
 ## Garden login artwork
 
