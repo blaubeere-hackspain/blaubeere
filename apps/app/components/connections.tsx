@@ -1,10 +1,10 @@
 "use client";
 import { useEffect, useState } from "react";
-import Image from "next/image";
-import conversation from "../public/conversation-oil.png";
 import { Check, Copy, LoaderCircle, Plug, X } from "lucide-react";
 import { api } from "../lib/api";
 import { Dialog } from "./dialog";
+import { PaintedEmptyState } from "./painted-empty-state";
+import garden from "../public/garden-chairs-oil.png";
 
 export function Connections({ endpoint, open, onClose }: { endpoint: string; open: boolean; onClose: () => void }) {
   const [clients, setClients] = useState<{ id: string; name: string }[] | null>(null);
@@ -49,7 +49,7 @@ export function Connections({ endpoint, open, onClose }: { endpoint: string; ope
       <h3 className="mt-6 mb-4">Connected assistants</h3>
       {error && <div className="error mb-4" role="alert"><p>{error}</p><button className="button ghost" onClick={() => setRetry(retry + 1)}>Refresh connection list</button></div>}
       {!clients && !error && <p className="status-line" role="status"><LoaderCircle className="spinner" size={16} aria-hidden/>Loading connections…</p>}
-      {clients?.length === 0 && <div className="empty-connections"><div className="empty-painting"><Image src={conversation} alt="" fill sizes="(max-width: 600px) 85vw, 480px" placeholder="blur"/></div><div className="empty-copy"><strong>Room for a second perspective.</strong><p className="small muted">No assistants connected yet. Add this endpoint to your assistant, then approve its access. You can disconnect it here at any time.</p><button className="button secondary" onClick={copyEndpoint}><span className="icon-swap" aria-hidden><Copy data-visible={!copied}/><Check data-visible={copied}/></span>{copied ? "Endpoint copied" : "Copy endpoint"}</button></div></div>}
+      {clients?.length === 0 && <PaintedEmptyState image={garden} title="Better with a second perspective."><p>No assistants connected yet. Copy the endpoint above to get started. Once you approve an assistant, you can manage its access here.</p><button className="button secondary" onClick={copyEndpoint}><span className="icon-swap" aria-hidden><Copy data-visible={!copied}/><Check data-visible={copied}/></span>{copied ? "Endpoint copied" : "Copy endpoint"}</button></PaintedEmptyState>}
       {clients?.map(client => <div className="client-row" key={client.id} aria-busy={busy === client.id}><span><Plug size={18} aria-hidden/><strong>{client.name}</strong></span><button className="button secondary danger" disabled={Boolean(busy)} onClick={() => disconnect(client.id)}>{busy === client.id ? <><LoaderCircle className="spinner" size={16} aria-hidden/>Disconnecting…</> : "Disconnect"}</button></div>)}
     </div>
   </Dialog>;

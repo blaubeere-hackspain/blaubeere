@@ -32,3 +32,11 @@ The open path belongs to the company-access empty state. The chairs belong to as
 Use case: stylized-concept. Asset type: original oil painting for one half of a 50/50 finance app login screen, portrait 4:5 composition. Paint a sunlit garden with an open weathered pale wooden gate, a narrow stone path continuing through it into lush grasses, flowering borders, a mature olive tree and soft distant countryside. Gentle afternoon sunlight and dappled shadows. Tactile painterly brush strokes, visible canvas grain, softly blended atmospheric depth, elegant fine-art oil painting, warm cream, sage green, muted olive, touches of dusty blue and butter yellow. Full bleed, no frame, no lettering, no logo, no UI, no watermark. A quiet welcoming scene, believable natural garden, subject beautifully legible at a tall crop. Original image, distinct from a lake or alpine landscape.
 
 A built-in image edit removed an unintended signature: “Remove only the tiny dark signature or lettering at the extreme bottom-right corner of this oil painting. Fill that small area seamlessly with the existing painted stone path and garden ground texture. Keep the entire rest of the image exactly the same: open gate, garden, lighting, brushwork, palette, composition and portrait dimensions. No signature, no watermark, no text anywhere.”
+
+## Garden assistant artwork
+
+`apps/app/public/garden-chairs-oil.png` was generated with the built-in image generation tool. Final prompt:
+
+Use case: stylized-concept. Asset type: original wide oil painting for an app empty-state illustration. Two empty weathered wooden garden chairs beside one another under a leafy tree in a sunlit garden, facing a softly distant meadow. A modest terracotta pot nearby. Pale warm cream and sage green atmosphere, olive foliage, small dusty blue and yellow flowers. Tactile fine-art oil paint with visible brush strokes and canvas texture. Quiet, intimate, welcoming, lots of soft light, gently imperfect. Landscape 3:2 composition, chairs centered in the middle lower half so they remain legible in a wide crop. Full bleed, no text, no logo, no UI, no border or frame, no watermark.
+
+This new garden illustration is used in the assistant empty state. The earlier lake-chair artwork remains available to the landing page. The company empty state continues to use the open-path painting.

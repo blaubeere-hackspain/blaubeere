@@ -15,7 +15,7 @@ const paintings = new Set([...homepage.matchAll(/<img[^>]+src="([^"]+)"/g)].map(
 assert.ok(paintings.size >= 4, "Landing must include the hero and three editorial paintings");
 const artworkUrls = [...paintings].map(path => new URL(path.replaceAll("&amp;", "&"), landing).href);
 for (const match of login.matchAll(/<img[^>]+src="([^"]+)"/g)) artworkUrls.push(new URL(match[1].replaceAll("&amp;", "&"), app).href);
-for (const file of ["open-path-oil.png", "conversation-oil.png"]) artworkUrls.push(`${app}/_next/image?url=%2F${file}&w=640&q=75`);
+for (const file of ["open-path-oil.png", "conversation-oil.png", "garden-chairs-oil.png"]) artworkUrls.push(`${app}/_next/image?url=%2F${file}&w=640&q=75`);
 for (const path of artworkUrls) {
   const artwork = await read(path);
   assert.ok(artwork.headers.get("content-type")?.startsWith("image/"), "Painting must be served as an image");

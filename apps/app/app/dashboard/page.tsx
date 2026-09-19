@@ -9,8 +9,8 @@ import { Planner } from "../../components/planner";
 import { Connections } from "../../components/connections";
 import { Sidebar } from "../../components/sidebar";
 import { Dialog } from "../../components/dialog";
-import Image from "next/image";
-import openPath from "../../public/open-path-oil.png";
+import { PaintedEmptyState } from "../../components/painted-empty-state";
+import garden from "../../public/open-path-oil.png";
 
 export default function Dashboard() {
   const [identity, setIdentity] = useState<Identity | null>(null);
@@ -77,7 +77,7 @@ export default function Dashboard() {
         {error && <div className="error error-retry" role="alert"><span>{error}</span><button className="button secondary" onClick={() => setRetry(retry + 1)}>Try again</button></div>}
         <p className="refresh-status small" role="status">{loading && company && <><LoaderCircle className="spinner" size={14} aria-hidden/>Updating outlook… Showing the previous assessment.</>}{error && company && !loading && `Showing the last available ${forecast?.horizon_days}-day outlook.`}</p>
         {loading && !company && <div className="dashboard-skeleton" role="status"><span className="sr-only">Loading company cash outlook…</span><div className="skeleton-stats">{[1,2,3,4].map(n => <div key={n}/>)}</div><div className="skeleton-chart"/></div>}
-        {!loading && companies?.length === 0 && <div className="empty-workspace"><div className="empty-painting"><Image src={openPath} alt="" fill sizes="(max-width: 700px) 90vw, 760px" placeholder="blur"/></div><div className="empty-copy"><span className="eyebrow">Your workspace is ready</span><h2>A clearer picture starts here.</h2><p className="muted">No company assessments yet. Ask your administrator to grant company access and load an assessment, then refresh to see your outlook.</p><button className="button secondary" onClick={() => setRetry(retry + 1)}>Refresh access</button></div></div>}
+        {!loading && companies?.length === 0 && <PaintedEmptyState image={garden} title="Your next chapter starts here."><p>Your workspace is ready. Ask your administrator to grant company access and load your first assessment.</p><button className="button secondary" onClick={() => setRetry(retry + 1)}>Refresh company access<ArrowRight size={16} aria-hidden/></button></PaintedEmptyState>}
         {company && forecast && <div aria-busy={loading}>
           <section className="stats-grid" aria-label="Cash outlook summary"><Stat label="Usable cash today" value={format(company.opening_cash_cents)} caption={`Observed at ${date(company.assessment_date)}`} icon={<Wallet size={17} aria-hidden/>}/><Stat label="Funding needed" value={format(forecast.funding_needed_cents)} caption={`Above a ${format(forecast.buffer_cents)} cash floor`} tone={forecast.funding_needed_cents > 0 ? "warn" : "good"} icon={<TriangleAlert size={17} aria-hidden/>}/><Stat label="First cash floor breach" value={forecast.first_shortfall ? date(forecast.first_shortfall.date) : "None forecast"} caption={forecast.first_shortfall ? `${format(forecast.first_shortfall.cash_cents)} projected cash` : `Within ${forecast.horizon_days} days`} tone={forecast.first_shortfall ? "bad" : "good"} icon={<CalendarDays size={17} aria-hidden/>}/><Stat label="Minimum projected cash" value={format(forecast.minimum.cash_cents)} caption={`On ${date(forecast.minimum.date)}`} tone={forecast.minimum.cash_cents < 0 ? "bad" : "neutral"} icon={<ArrowDownRight size={17} aria-hidden/>}/></section>
           <section className="card chart-card"><div className="card-heading"><div><h2>Cash over time</h2><p className="muted small mt-1">Cash history and your {forecast.horizon_days}-day baseline forecast</p></div><span className="badge">{company.history_mode === "reconstructed" ? "Reconstructed history" : "As known at the cutoff"}</span></div>
