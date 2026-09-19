@@ -204,4 +204,6 @@ async fn protect_browser(State(state): State<AppState>, request: Request, next: 
 }
 
 #[cfg(test)]
+mod proxy_tests;
+#[cfg(test)]
 mod tests;

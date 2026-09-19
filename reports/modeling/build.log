@@ -1,0 +1,159 @@
+Construccion aislada: /home/mikel/.herdr/worktrees/predictive-models/feat-training-devin/data/runs/20260919T124814Z-e5302b58
+
+INGESTA
+------------------------------------------------------------------------
+tabla                       filas_in   filas_out  flags
+------------------------------------------------------------------------
+balances                        7996        7996  -
+banking_products                5987        5987  -
+companies                       1286        1286  -
+debt_products                   2239        2239  -
+debt_schedule_config              87          87  -
+groups                           250         250  -
+invoices                      897894      897894  -
+transactions                 2556437     2556437  -
+------------------------------------------------------------------------
+
+DIMENSIONES
+------------------------------------------------------------------------
+tabla                       filas_in   filas_out  flags
+------------------------------------------------------------------------
+balances                        7996        7996  fk_orphan=29, sentinel_hidden_balance=6
+banking_products                5987        5987  -
+companies                       1286        1286  country_normalized=36
+debt_products                   2239        2239  amount_missing=169
+debt_schedule_config              87          87  fk_orphan=10
+groups                           250         250  -
+------------------------------------------------------------------------
+
+HECHOS
+------------------------------------------------------------------------
+tabla                       filas_in   filas_out  flags
+------------------------------------------------------------------------
+invoices                      897894      897894  amount_extreme=10, date_order_invalid=34310, date_out_of_range=223, fx_not_convertible=108445, fx_rate_invalid=3841, open_month=5233, paid_with_pending=300
+transactions                 2556437     2556437  amount_extreme=24, category_missing=635530, date_out_of_range=8, fk_orphan=1314, fx_not_convertible=160207, fx_rate_invalid=77, open_month=9242, status_missing=29839
+------------------------------------------------------------------------
+
+tx_flow_class
+------------------------------------------------------------------------
+tabla                       filas_in   filas_out  flags
+------------------------------------------------------------------------
+tx_flow_class                2556437     2556437  -
+------------------------------------------------------------------------
+
+fx_rates
+------------------------------------------------------------------------
+tabla                       filas_in   filas_out  flags
+------------------------------------------------------------------------
+fx_rates                       91261         429  monedas_con_10_observaciones=22, monedas_con_pocas_observaciones=1, rows_identidad_eur=24, rows_unknown=405
+------------------------------------------------------------------------
+
+panel_cobro
+------------------------------------------------------------------------
+tabla                       filas_in   filas_out  flags
+------------------------------------------------------------------------
+panel_cobro                   897894       30864  amount_cero=967, excluidas_cancel=13699, excluidas_tipo_no_invoice=135879, pagos_parciales_marcados=261, sin_amount_eur=90454
+------------------------------------------------------------------------
+
+observabilidad
+------------------------------------------------------------------------
+tabla                       filas_in   filas_out  flags
+------------------------------------------------------------------------
+observabilidad                 30864       30864  calentamiento=3772, horizonte_incompleto=613, sin_actividad=9708, sin_horizonte=3545
+------------------------------------------------------------------------
+
+panel_flujos
+------------------------------------------------------------------------
+tabla                       filas_in   filas_out  flags
+------------------------------------------------------------------------
+panel_flujos                 2510869       30864  -
+------------------------------------------------------------------------
+
+panel_deuda
+------------------------------------------------------------------------
+tabla                       filas_in   filas_out  flags
+------------------------------------------------------------------------
+panel_deuda                  2510869       30864  -
+------------------------------------------------------------------------
+
+panel_evidencia
+------------------------------------------------------------------------
+tabla                       filas_in   filas_out  flags
+------------------------------------------------------------------------
+panel_evidencia                30864       30864  -
+------------------------------------------------------------------------
+
+targets_proxy
+------------------------------------------------------------------------
+tabla                       filas_in   filas_out  flags
+------------------------------------------------------------------------
+targets_proxy                  30864       30864  -
+------------------------------------------------------------------------
+Verificando artefactos y regresiones antes de publicar
+test_lfs_pointer_is_unavailable_and_oid_not_content_hash (test_audit_inventory.InventoryTests.test_lfs_pointer_is_unavailable_and_oid_not_content_hash) ... ok
+test_manifest_and_outputs_are_deterministic (test_audit_inventory.InventoryTests.test_manifest_and_outputs_are_deterministic) ... ok
+test_materialized_csv_is_profiled_and_hashed (test_audit_inventory.InventoryTests.test_materialized_csv_is_profiled_and_hashed) ... ok
+test_missing_auxiliary_sources_are_explicit (test_audit_inventory.InventoryTests.test_missing_auxiliary_sources_are_explicit) ... ok
+test_centinelas_balances (test_contracts.ContractTest.test_centinelas_balances) ... ok
+test_fechas_dentro_de_ventana (test_contracts.ContractTest.test_fechas_dentro_de_ventana) ... ok
+test_fx_coherente (test_contracts.ContractTest.test_fx_coherente) ... ok
+test_importes_no_modificados (test_contracts.ContractTest.test_importes_no_modificados) ... ok
+test_original_fields_and_business_keys (test_contracts.ContractTest.test_original_fields_and_business_keys) ... ok
+test_product_source_valido (test_contracts.ContractTest.test_product_source_valido) ... ok
+test_row_counts (test_contracts.ContractTest.test_row_counts) ... ok
+test_src_row_integro (test_contracts.ContractTest.test_src_row_integro) ... ok
+test_vocabulario_de_flags_cerrado (test_contracts.ContractTest.test_vocabulario_de_flags_cerrado) ... ok
+test_aging_reconciles (test_marts.MartContractTest.test_aging_reconciles) ... ok
+test_ambiguous_fx_is_unknown (test_marts.MartContractTest.test_ambiguous_fx_is_unknown) ... ok
+test_cash_ambiguity_bounds_and_missingness (test_marts.MartContractTest.test_cash_ambiguity_bounds_and_missingness) ... ok
+test_cash_totals_match_direct_bank_account_aggregation (test_marts.MartContractTest.test_cash_totals_match_direct_bank_account_aggregation) ... ok
+test_cohort_availability_and_censoring (test_marts.MartContractTest.test_cohort_availability_and_censoring) ... ok
+test_cohorts_are_monotone (test_marts.MartContractTest.test_cohorts_are_monotone) ... ok
+test_debt_reconciles_to_financing_without_reusing_product_ledgers (test_marts.MartContractTest.test_debt_reconciles_to_financing_without_reusing_product_ledgers) ... ok
+test_evidence_does_not_consume_future_collection_results (test_marts.MartContractTest.test_evidence_does_not_consume_future_collection_results) ... ok
+test_flow_direction (test_marts.MartContractTest.test_flow_direction) ... ok
+test_fx_registry_has_no_estimates (test_marts.MartContractTest.test_fx_registry_has_no_estimates) ... ok
+test_grain_and_flow_keys (test_marts.MartContractTest.test_grain_and_flow_keys) ... ok
+test_native_eur_identity (test_marts.MartContractTest.test_native_eur_identity) ... ok
+test_new_feature_availability_and_coverages (test_marts.MartContractTest.test_new_feature_availability_and_coverages) ... ok
+test_no_negative_dso (test_marts.MartContractTest.test_no_negative_dso) ... ok
+test_no_pre_observation_balances (test_marts.MartContractTest.test_no_pre_observation_balances) ... ok
+test_observability_looks_forward (test_marts.MartContractTest.test_observability_looks_forward) ... ok
+test_percentages_have_valid_units (test_marts.MartContractTest.test_percentages_have_valid_units) ... ok
+test_targets_are_mature_and_robust (test_marts.MartContractTest.test_targets_are_mature_and_robust) ... ok
+test_transferred_categories_have_past_evidence (test_marts.MartContractTest.test_transferred_categories_have_past_evidence) ... ok
+test_unknown_currency_is_not_zero_balance (test_marts.MartContractTest.test_unknown_currency_is_not_zero_balance) ... ok
+test_zero_overdue_has_zero_ratio (test_marts.MartContractTest.test_zero_overdue_has_zero_ratio) ... ok
+test_lfs_pointer_separates_expected_oid_from_pointer_bytes (test_model_audit.ModelAuditTest.test_lfs_pointer_separates_expected_oid_from_pointer_bytes) ... ok
+test_logical_comparison_ignores_byte_order_and_tiny_float_noise (test_model_audit.ModelAuditTest.test_logical_comparison_ignores_byte_order_and_tiny_float_noise) ... ok
+test_manifest_hashes_detect_changes_and_reject_escaping_paths (test_model_audit.ModelAuditTest.test_manifest_hashes_detect_changes_and_reject_escaping_paths) ... ok
+test_recheck_stops_on_build_failure_and_cannot_retry (test_model_audit.ModelAuditTest.test_recheck_stops_on_build_failure_and_cannot_retry) ... ok
+test_target_comparison_does_not_consume_outcomes (test_model_audit.ModelAuditTest.test_target_comparison_does_not_consume_outcomes) ... ok
+test_clean_passes_a_connection_and_closes_it (test_pipeline.PublicationTest.test_clean_passes_a_connection_and_closes_it) ... ok
+test_failed_pointer_publication_restores_portable_manifest (test_pipeline.PublicationTest.test_failed_pointer_publication_restores_portable_manifest) ... ok
+test_failed_publication_restores_previous_files (test_pipeline.PublicationTest.test_failed_publication_restores_previous_files) ... ok
+test_modified_artifact_is_not_published (test_pipeline.PublicationTest.test_modified_artifact_is_not_published) ... ok
+test_publication_keeps_previous_files_and_commits_pointer (test_pipeline.PublicationTest.test_publication_keeps_previous_files_and_commits_pointer) ... ok
+test_build_snapshot_includes_test_dependencies_without_private_files (test_pipeline.SnapshotTest.test_build_snapshot_includes_test_dependencies_without_private_files) ... ok
+test_inventory_tests_run_from_snapshot_without_repository_dependencies (test_pipeline.SnapshotTest.test_inventory_tests_run_from_snapshot_without_repository_dependencies) ... ok
+test_bad_dates_are_preserved_but_not_used_as_settlement (test_regressions.PipelineRegressionTest.test_bad_dates_are_preserved_but_not_used_as_settlement) ... ok
+test_cash_panel_does_not_turn_missing_fx_or_activity_into_zero (test_regressions.PipelineRegressionTest.test_cash_panel_does_not_turn_missing_fx_or_activity_into_zero) ... ok
+test_cash_panel_reconciles_without_double_counting_ledgers (test_regressions.PipelineRegressionTest.test_cash_panel_reconciles_without_double_counting_ledgers) ... ok
+test_cash_panel_rejects_misaligned_classification (test_regressions.PipelineRegressionTest.test_cash_panel_rejects_misaligned_classification) ... ok
+test_classification_uses_only_company_past_and_preserves_direction (test_regressions.PipelineRegressionTest.test_classification_uses_only_company_past_and_preserves_direction) ... ok
+test_collection_target_uses_mature_baseline_and_future_cohorts (test_regressions.PipelineRegressionTest.test_collection_target_uses_mature_baseline_and_future_cohorts) ... ok
+test_debt_service_keeps_refunds_and_product_entries_separate (test_regressions.PipelineRegressionTest.test_debt_service_keeps_refunds_and_product_entries_separate) ... ok
+test_debt_service_unknown_is_not_no_debt (test_regressions.PipelineRegressionTest.test_debt_service_unknown_is_not_no_debt) ... ok
+test_deficit_targets_respect_uncertainty_outliers_and_missing_months (test_regressions.PipelineRegressionTest.test_deficit_targets_respect_uncertainty_outliers_and_missing_months) ... ok
+test_evidence_keeps_available_erp_dimension_without_cash (test_regressions.PipelineRegressionTest.test_evidence_keeps_available_erp_dimension_without_cash) ... ok
+test_future_records_do_not_change_historical_feature_panels (test_regressions.PipelineRegressionTest.test_future_records_do_not_change_historical_feature_panels) ... ok
+test_invoice_fx_preserves_identity_and_unknown (test_regressions.PipelineRegressionTest.test_invoice_fx_preserves_identity_and_unknown) ... ok
+test_observability_uses_calendar_future_not_past (test_regressions.PipelineRegressionTest.test_observability_uses_calendar_future_not_past) ... ok
+test_panel_currency_dates_and_availability (test_regressions.PipelineRegressionTest.test_panel_currency_dates_and_availability) ... ok
+test_transaction_fx_marks_ambiguity (test_regressions.PipelineRegressionTest.test_transaction_fx_marks_ambiguity) ... ok
+
+----------------------------------------------------------------------
+Ran 61 tests in 8.793s
+
+OK
+Publicada 20260919T124814Z-e5302b58; originales conservados en /home/mikel/.herdr/worktrees/predictive-models/feat-training-devin/data/runs/20260919T124814Z-e5302b58/before

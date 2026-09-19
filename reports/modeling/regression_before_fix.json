@@ -1,0 +1,20 @@
+{
+  "command": [".venv/bin/python", "-B", "-m", "unittest", "tests.test_pipeline.SnapshotTest", "-v"],
+  "exit_code": 1,
+  "tests_run": 1,
+  "failures": 4,
+  "observation": "Executed before changing xray/pipeline.py. Three dependency subtests and the exact snapshot-file-set assertion failed.",
+  "missing_dependencies": [
+    "scripts/audit_financial_data.py",
+    "tests/fixtures/financial_audit/materialized/balances.csv",
+    "tests/fixtures/financial_audit/materialized/companies.csv"
+  ],
+  "targeted_after_fix": {
+    "command": [".venv/bin/python", "-B", "-m", "unittest", "tests.test_pipeline", "tests.test_model_audit", "-v"],
+    "exit_code": 0,
+    "tests_run": 12,
+    "observation": "Includes an isolated subprocess running all four real inventory tests from the copied snapshot, and a mocked one-attempt build-stop test."
+  },
+  "prior_failed_build": "data/runs/20260919T124113Z-d6362f50",
+  "budget": "One focused source-snapshot correction and one build recheck; no repeated build attempt."
+}

@@ -1,0 +1,54 @@
+{
+  "C5_scope": "Preparation, protocols and invented mocks only; execution, independent human evaluation and adoption not performed.",
+  "adopted": false,
+  "authorizations": {
+    "budget": false,
+    "external_data": false,
+    "privacy": false,
+    "promotion": false
+  },
+  "execution_performed": false,
+  "external_budgets": {
+    "calls": 0,
+    "inputs": 0,
+    "spend_usd": 0
+  },
+  "external_inference_performed": false,
+  "full_queue": {
+    "completeness": "All 1286 last-month evidence rows retained, including controls without alerts; source evidence unchanged.",
+    "critical_cases": 744,
+    "dropped_cases": 0,
+    "month": "2026-08-01",
+    "priority": "Critical controls first, then separate exposure lanes; within lane known EUR descending, unavailable values separate. Cross-lane order is operational, not a monetary comparison. Missing FX is never zero; currencies never mixed.",
+    "priority_lane_counts": {
+      "critical:known_eur": 490,
+      "critical:missing_fx_unknown": 122,
+      "critical:unobserved_exposure": 132,
+      "review:known_eur": 542
+    },
+    "reviewed_cases": 0,
+    "rows": 1286,
+    "source_snapshot_sha256": {
+      "data/marts/panel_evidencia.parquet": "79f7052b2356391c0c02a1a5edc4010267491d47c40bac54b3551567661d7e85",
+      "data/marts/panel_flujos.parquet": "af5cf4be59d9e3e1a98841208b69b029127345cd9c02a47a553e986dc0c7ebd7"
+    },
+    "unique_companies": 1286,
+    "unit": "company-month; source IDs are composite panel keys, not invented transaction IDs"
+  },
+  "human_metrics": null,
+  "human_reference": "absent",
+  "limitations": [
+    "No authorization to transmit challenge data; anonymization is not permission.",
+    "No independent human reference, acceptance values, approved model/router or budget.",
+    "Queue counts are descriptive rule-only counts, not human-reference evaluation or proxy accuracy.",
+    "Snapshot panels do not prove historical known-at; no raw text or original evidence altered.",
+    "No live HTTP/Gateway transport, retries or fallback; fast provider/model/ZDR guarantees absent.",
+    "Optional branch only; frozen model, baseline, features, targets and export untouched."
+  ],
+  "network_calls": 0,
+  "observed_cost": null,
+  "reproduce": ".venv/bin/python -B scripts/jev_pilot.py prepare --offline",
+  "sampling_recommendation": "Full queue retained. For future human annotation stratify by critical control, exposure lane, rule route, company/group, month, language and description-template family. Unknown language/template remain unmeasured. Separate group/time and equivalent templates across development/evaluation; no human labels simulated.",
+  "status": "prepared_not_evaluated",
+  "version": "jev-pilot-v1"
+}

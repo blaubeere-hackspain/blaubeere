@@ -1,0 +1,105 @@
+{
+  "status": "passed",
+  "scope": "T4 sealed assessment export, API/MCP proxy-only contracts and real-browser UI validation",
+  "artifacts": {
+    "companies": "reports/modeling/assessment-v1/companies.json",
+    "manifest": "reports/modeling/assessment-v1/manifest.json",
+    "browser_summary": "reports/modeling/assessment-v1/browser-summary.json",
+    "companies_sha256": "77fc696af57781dbd5e06205c56923ed04d40f89ad17d5a3a546b689cf7e707f",
+    "sealed_predictions_sha256": "ec6b3d3f813238412420a0627dabf56e1ee7ef38111f92aadb2415d98a770cec",
+    "exporter_sha256": "6876c07cf2a954c6f8097b21704e57f418d76624c39b97dad4a22590447d0325",
+    "model_manifest_sha256": "9b30c24feeb75fb0c2f17bca9a2eb178a508dd3e24759ac53c713424dd531dc8",
+    "final_report_sha256": "2b248e2c798e869ca41d540a601662ee9dcbad83d3b0dd30d813e245d786c9a2"
+  },
+  "commands": [
+    {
+      "command": "bun add --dev --exact @playwright/test@1.55.1",
+      "exit_code": 0,
+      "result": "Pinned development dependency; used installed /usr/bin/chromium, no system or browser package installation"
+    },
+    {
+      "command": ".venv/bin/python -B scripts/export_assessments.py",
+      "exit_code": 0,
+      "result": "1286 companies, 1010 estimates, 276 abstentions; verified sealed JSON, integrity sidecars and model/report/artifact links; no training/evaluation/inference"
+    },
+    {
+      "command": ".venv/bin/python -B scripts/export_assessments.py --check",
+      "exit_code": 0,
+      "result": "Recomputed export and provenance match existing immutable files byte-for-byte"
+    },
+    {
+      "command": ".venv/bin/python -B -m unittest tests.test_export_assessments -v",
+      "exit_code": 0,
+      "result": "5 tests passed: row/probability/feature preservation, abstention, calendar horizon, sealed integrity, invalid probabilities and immutable reproducibility"
+    },
+    {
+      "command": "bun run check:rust",
+      "expanded": "cargo fmt --check && cargo clippy --workspace --all-targets -- -D warnings && cargo test --workspace",
+      "exit_code": 0,
+      "result": "Formatting and clippy clean; 9 API and 1 MCP tests passed; 2 explicit-file tests ignored here and run separately below"
+    },
+    {
+      "command": "EXPORTED_ASSESSMENT_FILE=\"$PWD/reports/modeling/assessment-v1/companies.json\" cargo test --workspace actual_export -- --ignored",
+      "exit_code": 0,
+      "result": "2 tests passed: finance::load validates all 1286 actual exported rows and rejects cash planning; authenticated MCP returns null forecasts and rejects proxy plans for eligible and abstained examples, preserving company isolation"
+    },
+    {
+      "command": "bun run test:web",
+      "exit_code": 0,
+      "result": "Existing browser-independent assertions plus accepted/eligible/finite-probability display guard cases passed"
+    },
+    {
+      "command": "bun run typecheck",
+      "exit_code": 0,
+      "result": "Both Next workspaces passed route type generation and tsc --noEmit"
+    },
+    {
+      "command": "bun run build",
+      "environment": { "NEXT_TELEMETRY_DISABLED": "1" },
+      "exit_code": 0,
+      "result": "Both application and landing production builds passed"
+    },
+    {
+      "command": "cargo build --workspace",
+      "exit_code": 0,
+      "result": "API and MCP binaries built successfully"
+    },
+    {
+      "command": "bun run test:assessments:e2e",
+      "exit_code": 0,
+      "result": "11 browser steps passed with system Chromium 152.0.7977.82, headless with sandbox enabled; UI login, 56.8% eligible proxy, keyboard evidence and company switching, unavailable reason, 390px layout, no fake cash/health charts, disabled planning, HTTP 400 plan rejection, company isolation and original demo regression; zero page errors"
+    },
+    {
+      "command": "git diff --check -- scripts tests apps services fixtures package.json bun.lock readme.md",
+      "exit_code": 0,
+      "result": "No whitespace errors; existing repository CRLF policy warnings only; no ignore/Git configuration changes"
+    }
+  ],
+  "focused_corrections": [
+    {
+      "failure": "TypeScript detected a redundant proxy discriminant comparison inside an already cash-only horizon branch",
+      "correction": "Removed redundant comparison; typecheck and both builds passed"
+    },
+    {
+      "failure": "Large inline Rust test json macro exceeded default recursion depth",
+      "correction": "Parsed the local fixture from a raw JSON string rather than changing crate recursion limits; tests passed"
+    },
+    {
+      "failure": "First browser run detected one-ULP changes in observed features after Rust JSON deserialization",
+      "correction": "Enabled existing serde_json float_roundtrip feature in services/api/Cargo.toml and added IEEE754 preservation regression; kept strict browser equality assertions; one focused browser recheck passed"
+    }
+  ],
+  "boundaries": {
+    "retrained_or_reevaluated": false,
+    "existing_inference_command_executed": false,
+    "raw_or_target_tables_read_by_exporter": false,
+    "frozen_model_sources_or_artifacts_modified": false,
+    "authentication_or_authorization_logic_modified": false,
+    "shared_environment_files_used": false,
+    "screenshots_or_sessions_saved": false,
+    "commits_pushes_or_deployments": false,
+    "optional_prediction_replay_implemented": false,
+    "runtime_cleanup": "Only test-owned process groups and fresh temporary SQLite directories cleaned up"
+  },
+  "blockers": []
+}

@@ -51,6 +51,43 @@ The upstream Data/Model workstreams own challenge CSV reconciliation, currency c
 
 Planning compares two deterministic candidates, not every possible plan. Funding is conditional on availability, assumed on day one at 8% annual interest, with principal repayment after the horizon. Growth applies only to incremental revenue and associated costs. Plans are held in the current browser session and are not saved to the database.
 
+## Sealed operating-deficit proxy assessments
+
+The approved synthetic model can be displayed separately from cash planning. It estimates `target_deficit_3m`: operating deficit in at least two of the next three **calendar months**, within the observed perimeter. This is a retrospective, uncalibrated proxy, not a default probability, official health score, cash balance, or causal diagnosis. The current snapshot closes on 2026-08-31 and covers 2026-09-01 through 2026-11-30; it is not a rolling 90-day forecast.
+
+```sh
+python3 scripts/export_assessments.py
+python3 scripts/export_assessments.py --check
+python3 -B -m unittest tests.test_export_assessments -v
+```
+
+The standard-library exporter reads only the sealed `reports/modeling/experiment-v1/latest_predictions.json` and linked experiment artifacts. It pins the approved prediction SHA, verifies integrity sidecars, report/model/selection links and model artifact hashes, and never trains, evaluates, loads a pickle, or reads raw data/target tables. It writes `reports/modeling/assessment-v1/companies.json` and `manifest.json`. Repeating the export is byte-identical; existing different output is rejected, never overwritten. `--check` verifies both output files without writing.
+
+For a read-only inference replay, use the pinned optional model environment (`requirements-model.txt`, Python 3.13.15), the sealed local model and its bound `data/runs` snapshot:
+
+```sh
+.venv/bin/python -B scripts/replay_model.py --check
+.venv/bin/python -B -m unittest tests.test_replay_model -v
+```
+
+Replay first verifies the exporter's approved prediction SHA and linked seals, then the fixed local model's source/dependency hashes and the bound run manifest/panel hashes. It projects only approved `panel_flujos` columns, rebuilds August 2026 features and compares every company, metadata field, feature, eligibility flag and missing reason exactly. Unknowns remain null and missing current months remain abstentions. Probabilities allow only an absolute `1e-12` difference; the JSON result reports the maximum error and exact-equality status. It does not train, query targets, reevaluate the held-out test, consult the live G-DATA gate, modify predictions, or accept external pickle paths. `--check` writes nothing; final verification evidence is recorded separately in `reports/modeling/final-verification/`.
+
+All 1,286 companies are preserved: 1,010 estimates and 276 explicit abstentions. Names are `Synthetic company <id>`. Each `kind: "proxy_only"` company has typed `predictive` evidence, eligibility and missing reasons, observed features, validation limits and provenance hashes. `opening_cash_cents`, `buffer_cents` and `health` are null; empty history/flows mean **unknown**, not no activity. EUR is an analytical source basis, not a claim about native reporting currency. The unchanged demo fixture defaults to `kind: "cash"` when kind is omitted.
+
+Pass the absolute exported path as the process environment `ASSESSMENT_FILE` to both API and MCP, and authorise the desired IDs using existing provisioning. For example, `COMP_0001` has an estimate and `COMP_0002` abstains. Existing accounts retain their memberships; use a fresh local SQLite database and a newly provisioned account for isolated verification. No shared configuration or `.env` change is needed. The dashboard displays the proxy scope and missing evidence instead of cash charts, health points or planning controls. API/MCP assessments return `forecast: null`, `cash_planning_available: false` and a reason; plan comparisons reject proxy-only inputs even if callers supply cash-floor assumptions.
+
+Validation is conditional on 131 observed labels out of 299 prospective rows across 31 groups. Average precision is 0.816 against prevalence 0.511; Brier is 0.188 against baseline 0.252. Relative Brier skill is 25.1% with a grouped fixed-fit 95% interval of 12.0–38.1%. This interval is not uncertainty on an individual probability and does not establish calibration or reliability for censored outcomes.
+
+To verify the actual export in Rust and a real local browser (requires an installed Chromium; optionally set `CHROMIUM_PATH`):
+
+```sh
+cargo build --workspace
+EXPORTED_ASSESSMENT_FILE="$PWD/reports/modeling/assessment-v1/companies.json" cargo test --workspace actual_export -- --ignored
+bun run test:assessments:e2e
+```
+
+The browser script launches only local API/Next processes on free ports, uses fresh temporary SQLite databases and random unlogged passwords, signs in through the UI, checks eligible and unavailable states, keyboard controls, mobile layout, plan rejection, company isolation, and the original demo. It cleans up its own processes/databases and writes a secret-free `reports/modeling/assessment-v1/browser-summary.json`; it does not require manual browser interaction or take screenshots. Run `bun run test:web`, `bun run typecheck`, `bun run build`, and `bun run check:rust` for the remaining application regressions.
+
 ## Challenge dataset pipeline
 
 The Python/DuckDB pipeline is separate from the Rust planning services: publishing its Parquet tables does not replace the app's illustrative assessment snapshot or provide an official challenge score. The source dataset is described in [data_dictionary.md](data_dictionary.md); the current analytical contracts and limitations are in [reports/vistas_y_hallazgos.md](reports/vistas_y_hallazgos.md).
@@ -102,6 +139,8 @@ bun run check
 # With bun run dev running against the default demo snapshot:
 bun run test:integration
 ```
+
+`bun run check` includes deployment **validation only**, never a deployment: it runs `bash -n` separately on both shell files after normalizing CRLF to LF in memory, rejects malformed LF/CRLF fixtures, and exercises existing account/auth/origin checks against mocked tools and temporary script copies. Repository deployment scripts and policies are not rewritten.
 
 Checks cover TypeScript, production builds, Rust formatting/lints, authentication, company isolation, PKCE and token rotation, MCP transport, dated shortfalls and plan constraints. The integration check signs in through the app proxy, exercises OAuth and all three tools, then revokes its grant and signs out.
 

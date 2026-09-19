@@ -1,0 +1,18 @@
+{
+  "abstentions": 276,
+  "as_of": "2026-08-31",
+  "cash_history_semantics": "Unknown, not zero and not no activity",
+  "companies": 1286,
+  "companies_sha256": "77fc696af57781dbd5e06205c56923ed04d40f89ad17d5a3a546b689cf7e707f",
+  "estimates": 1010,
+  "exporter_sha256": "6876c07cf2a954c6f8097b21704e57f418d76624c39b97dad4a22590447d0325",
+  "final_report_sha256": "2b248e2c798e869ca41d540a601662ee9dcbad83d3b0dd30d813e245d786c9a2",
+  "kind": "proxy_only",
+  "model_manifest_sha256": "9b30c24feeb75fb0c2f17bca9a2eb178a508dd3e24759ac53c713424dd531dc8",
+  "model_version": "experiment-v1:hgb_leaf15",
+  "reproduction": "python3 scripts/export_assessments.py --check",
+  "schema_version": 1,
+  "scope": "Synthetic retrospective probability estimate of target_deficit_3m proxy only; not calibrated, default, official health score, cash balance or causal diagnosis",
+  "source": "reports/modeling/experiment-v1/latest_predictions.json",
+  "source_sha256": "ec6b3d3f813238412420a0627dabf56e1ee7ef38111f92aadb2415d98a770cec"
+}

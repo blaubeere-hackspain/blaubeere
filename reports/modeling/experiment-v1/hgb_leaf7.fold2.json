@@ -1,0 +1,22 @@
+{
+  "average_precision": 0.8562336397530739,
+  "baseline": {
+    "average_precision": 0.5657142857142857,
+    "brier": 0.25939621917323785,
+    "train_prevalence": 0.4486049926578561
+  },
+  "brier": 0.18608174333744062,
+  "false_alerts": 14,
+  "missed_positives": 37,
+  "passed": true,
+  "precision": 0.8157894736842105,
+  "prevalence": 0.5657142857142857,
+  "recall": 0.6262626262626263,
+  "relative_brier_skill": 0.2826350980344634,
+  "roc_auc_diagnostic": 0.8260233918128654,
+  "rows": 175,
+  "split": "fold2_validation",
+  "threshold": 0.5,
+  "true_alerts": 62,
+  "true_negatives": 62
+}

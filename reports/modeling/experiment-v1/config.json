@@ -1,0 +1,98 @@
+{
+  "baseline": "mean(observed training labels), no evaluation fit",
+  "bootstrap": {
+    "resamples": 300,
+    "seed": 1729,
+    "unit": "group_id"
+  },
+  "candidates": [
+    {
+      "C": 0.1,
+      "family": "logistic",
+      "id": "logistic_c0.1"
+    },
+    {
+      "C": 1.0,
+      "family": "logistic",
+      "id": "logistic_c1"
+    },
+    {
+      "family": "hgb",
+      "id": "hgb_leaf7",
+      "max_leaf_nodes": 7
+    },
+    {
+      "family": "hgb",
+      "id": "hgb_leaf15",
+      "max_leaf_nodes": 15
+    }
+  ],
+  "experiment_version": "experiment-v1",
+  "feature_order": [
+    "operating_min_ratio",
+    "operating_max_ratio",
+    "net_ratio",
+    "operating_in_ratio",
+    "operating_out_ratio",
+    "financing_in_ratio",
+    "financing_out_ratio",
+    "uncertainty_ratio",
+    "log_gross",
+    "log_tx",
+    "log_accounts",
+    "operating_identified_ratio",
+    "net_ratio_mean_3m",
+    "net_ratio_std_3m",
+    "net_ratio_slope_3m",
+    "operating_min_ratio_mean_3m",
+    "operating_max_ratio_mean_3m",
+    "log_gross_mean_3m",
+    "log_gross_std_3m",
+    "deficit_frequency_3m",
+    "net_ratio_delta_prior_3m",
+    "log_gross_delta_prior_3m",
+    "net_ratio_mean_6m",
+    "net_ratio_std_6m",
+    "net_ratio_slope_6m",
+    "operating_min_ratio_mean_6m",
+    "operating_max_ratio_mean_6m",
+    "log_gross_mean_6m",
+    "log_gross_std_6m",
+    "deficit_frequency_6m",
+    "net_ratio_delta_prior_6m",
+    "log_gross_delta_prior_6m"
+  ],
+  "hgb": {
+    "early_stopping": false,
+    "l2_regularization": 5.0,
+    "learning_rate": 0.05,
+    "max_depth": 3,
+    "max_iter": 150,
+    "missing": "native"
+  },
+  "horizon_months": 3,
+  "latest_origin": "2026-08-01",
+  "logistic": {
+    "add_indicator": true,
+    "imputer": "median",
+    "keep_empty_features": true,
+    "max_iter": 2000,
+    "scaler": "StandardScaler",
+    "solver": "lbfgs"
+  },
+  "runtime": {
+    "cloudpickle": "3.1.2",
+    "duckdb": "1.5.5",
+    "joblib": "1.6.0",
+    "numpy": "2.5.3",
+    "python": "3.13.15",
+    "scikit-learn": "1.7.2",
+    "scipy": "1.18.1",
+    "threadpoolctl": "3.6.0"
+  },
+  "scope": "Synthetic retrospective probability estimate of target_deficit_3m proxy only; not calibrated, default, official health score, cash balance or causal diagnosis",
+  "seed": 1729,
+  "selection": "Both folds AP > prevalence and Brier <= 0.95 * train-prevalence baseline; minimum mean Brier; exact ties logistic then candidate ID",
+  "threads": 2,
+  "threshold": 0.5
+}

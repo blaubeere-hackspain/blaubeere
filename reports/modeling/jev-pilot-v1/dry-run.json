@@ -1,0 +1,370 @@
+{
+  "adopted": false,
+  "data_origin": "invented_only",
+  "fixture_threshold_note": "0.8 and invented-model-v1 exist only in unit/mock fixtures; not approved thresholds, models or measured performance.",
+  "human_metrics": null,
+  "mock": true,
+  "mock_calls": 8,
+  "network_calls": 0,
+  "observed_cost": null,
+  "snapshots": [
+    {
+      "adopted": false,
+      "decision": "proposal_for_review",
+      "effective_model_version": null,
+      "input_index": 0,
+      "input_ref": "invented:movement_proposal",
+      "input_sha256": "620d19a4504acdf5691525dca1f8851393183829f4e02189c22cf7a314d24aa1",
+      "instructions_version": "jev-pilot-v1:movimientos",
+      "mock": true,
+      "model_version_limit": "No inference executed; mock model identifier only, aliases do not pin weights.",
+      "observed_at": null,
+      "observed_cost": null,
+      "order_basis": "API input order; local refs never sent; remote reorder not independently detectable",
+      "proposal": "operating_in",
+      "reason": "human_review_required",
+      "request_sha256": "a64bcda7a425abc350da52458d5baaef93168b8f51bc47be65018ac86dd05914",
+      "requested_model_allowlist": [
+        "invented-model-v1"
+      ],
+      "response": {
+        "confidence": 0.99,
+        "label": "operating_in",
+        "model": "invented-model-v1",
+        "modelsUsed": [
+          "invented-model-v1"
+        ],
+        "scores": {
+          "evidencia_insuficiente": 0.0,
+          "financing_in": 0.0,
+          "financing_out": 0.0,
+          "investment_in": 0.0,
+          "investment_out": 0.0,
+          "non_economic": 0.0,
+          "operating_in": 1.0,
+          "operating_out": 0.0,
+          "transfer": 0.0,
+          "unknown": 0.0
+        }
+      },
+      "retain_case": true,
+      "route": "classifier.dev",
+      "taxonomy_version": "jev-pilot-v1:movimientos",
+      "transport": "mock_only",
+      "use": "movimientos",
+      "version": "jev-pilot-v1"
+    },
+    {
+      "adopted": false,
+      "decision": "abstain",
+      "effective_model_version": null,
+      "input_index": 0,
+      "input_ref": "invented:movement_direction",
+      "input_sha256": "f8e84f2db99a4939bdc56e4d884b05974e7fd06d4bc64c003deb435b7f96d0a7",
+      "instructions_version": "jev-pilot-v1:movimientos",
+      "mock": true,
+      "model_version_limit": "No inference executed; mock model identifier only, aliases do not pin weights.",
+      "observed_at": null,
+      "observed_cost": null,
+      "order_basis": "API input order; local refs never sent; remote reorder not independently detectable",
+      "proposal": null,
+      "reason": "direction_conflict",
+      "request_sha256": "098bff800b9e67ca866c9ff6d43ebe93631eee239e3fea5a8ff8945dce35a62f",
+      "requested_model_allowlist": [
+        "invented-model-v1"
+      ],
+      "response": {
+        "confidence": 0.99,
+        "label": "operating_in",
+        "model": "invented-model-v1",
+        "modelsUsed": [
+          "invented-model-v1"
+        ],
+        "scores": {
+          "evidencia_insuficiente": 0.0,
+          "financing_in": 0.0,
+          "financing_out": 0.0,
+          "investment_in": 0.0,
+          "investment_out": 0.0,
+          "non_economic": 0.0,
+          "operating_in": 1.0,
+          "operating_out": 0.0,
+          "transfer": 0.0,
+          "unknown": 0.0
+        }
+      },
+      "retain_case": true,
+      "route": "classifier.dev",
+      "taxonomy_version": "jev-pilot-v1:movimientos",
+      "transport": "mock_only",
+      "use": "movimientos",
+      "version": "jev-pilot-v1"
+    },
+    {
+      "adopted": false,
+      "decision": "abstain",
+      "effective_model_version": null,
+      "input_index": 0,
+      "input_ref": "invented:movement_ambiguity",
+      "input_sha256": "f79a312a0586327b0474510737685c7aa6b5a241c35feb80ec705174732931a4",
+      "instructions_version": "jev-pilot-v1:movimientos",
+      "mock": true,
+      "model_version_limit": "No inference executed; mock model identifier only, aliases do not pin weights.",
+      "observed_at": null,
+      "observed_cost": null,
+      "order_basis": "API input order; local refs never sent; remote reorder not independently detectable",
+      "proposal": null,
+      "reason": "economic_ambiguity",
+      "request_sha256": "b2d5188a079c4df9d4d5bf3dd95ea933d7ff7d01cd101259b3535f5d25236a34",
+      "requested_model_allowlist": [
+        "invented-model-v1"
+      ],
+      "response": {
+        "confidence": 0.99,
+        "label": "transfer",
+        "model": "invented-model-v1",
+        "modelsUsed": [
+          "invented-model-v1"
+        ],
+        "scores": {
+          "evidencia_insuficiente": 0.0,
+          "financing_in": 0.0,
+          "financing_out": 0.0,
+          "investment_in": 0.0,
+          "investment_out": 0.0,
+          "non_economic": 0.0,
+          "operating_in": 0.0,
+          "operating_out": 0.0,
+          "transfer": 1.0,
+          "unknown": 0.0
+        }
+      },
+      "retain_case": true,
+      "route": "classifier.dev",
+      "taxonomy_version": "jev-pilot-v1:movimientos",
+      "transport": "mock_only",
+      "use": "movimientos",
+      "version": "jev-pilot-v1"
+    },
+    {
+      "adopted": false,
+      "decision": "abstain",
+      "effective_model_version": null,
+      "input_index": 0,
+      "input_ref": "invented:movement_low_confidence",
+      "input_sha256": "3e14133a6037db31c19558ac68f4452b6b13e5d6a020314b5587d14f8e4f3cef",
+      "instructions_version": "jev-pilot-v1:movimientos",
+      "mock": true,
+      "model_version_limit": "No inference executed; mock model identifier only, aliases do not pin weights.",
+      "observed_at": null,
+      "observed_cost": null,
+      "order_basis": "API input order; local refs never sent; remote reorder not independently detectable",
+      "proposal": null,
+      "reason": "low_confidence",
+      "request_sha256": "69e417ffe3d05194403b9d5664c36977fe57cf9bd24955269b422c66a8e47ef4",
+      "requested_model_allowlist": [
+        "invented-model-v1"
+      ],
+      "response": {
+        "confidence": 0.1,
+        "label": "operating_out",
+        "model": "invented-model-v1",
+        "modelsUsed": [
+          "invented-model-v1"
+        ],
+        "scores": {
+          "evidencia_insuficiente": 0.0,
+          "financing_in": 0.0,
+          "financing_out": 0.0,
+          "investment_in": 0.0,
+          "investment_out": 0.0,
+          "non_economic": 0.0,
+          "operating_in": 0.0,
+          "operating_out": 1.0,
+          "transfer": 0.0,
+          "unknown": 0.0
+        }
+      },
+      "retain_case": true,
+      "route": "classifier.dev",
+      "taxonomy_version": "jev-pilot-v1:movimientos",
+      "transport": "mock_only",
+      "use": "movimientos",
+      "version": "jev-pilot-v1"
+    },
+    {
+      "adopted": false,
+      "decision": "abstain",
+      "effective_model_version": null,
+      "input_index": 0,
+      "input_ref": "invented:document_credit_note",
+      "input_sha256": "9189f0210a93884c0c8d494d485d867c42b4a2eb22703eef810df1d6b7ad8321",
+      "instructions_version": "jev-pilot-v1:documentos",
+      "mock": true,
+      "model_version_limit": "No inference executed; mock model identifier only, aliases do not pin weights.",
+      "observed_at": null,
+      "observed_cost": null,
+      "order_basis": "API input order; local refs never sent; remote reorder not independently detectable",
+      "proposal": null,
+      "reason": "document_type_conflict",
+      "request_sha256": "1a649ab10af9d4bfcc228f1c55cb757d2a5fd1e8dc0c2a30c1604c34a72bfea8",
+      "requested_model_allowlist": [
+        "invented-model-v1"
+      ],
+      "response": {
+        "confidence": 0.99,
+        "label": "invoice",
+        "model": "invented-model-v1",
+        "modelsUsed": [
+          "invented-model-v1"
+        ],
+        "scores": {
+          "credit_note": 0.0,
+          "delivery_note": 0.0,
+          "evidencia_insuficiente": 0.0,
+          "invoice": 1.0,
+          "order": 0.0,
+          "unknown": 0.0
+        }
+      },
+      "retain_case": true,
+      "route": "classifier.dev",
+      "taxonomy_version": "jev-pilot-v1:documentos",
+      "transport": "mock_only",
+      "use": "documentos",
+      "version": "jev-pilot-v1"
+    },
+    {
+      "adopted": false,
+      "decision": "abstain",
+      "effective_model_version": null,
+      "input_index": 0,
+      "input_ref": "invented:semantic_missing_reference",
+      "input_sha256": "0d0b33b26d4527b9a469fae541dcf50e9a3790f6957d26c7aecef4352961da92",
+      "instructions_version": "jev-pilot-v1:explicaciones",
+      "mock": true,
+      "model_version_limit": "No inference executed; mock model identifier only, aliases do not pin weights.",
+      "observed_at": null,
+      "observed_cost": null,
+      "order_basis": "API input order; local refs never sent; remote reorder not independently detectable",
+      "proposal": null,
+      "reason": "insufficient_evidence",
+      "request_sha256": "fac7e2049b4e082b1a418088d2e122d8dd6a8c7ad14bfad30421e9bfe76683b1",
+      "requested_model_allowlist": [
+        "invented-model-v1"
+      ],
+      "response": {
+        "confidence": 0.99,
+        "label": "respaldada",
+        "model": "invented-model-v1",
+        "modelsUsed": [
+          "invented-model-v1"
+        ],
+        "scores": {
+          "contradictoria": 0.0,
+          "evidencia_insuficiente": 0.0,
+          "respaldada": 1.0,
+          "unknown": 0.0
+        }
+      },
+      "retain_case": true,
+      "route": "classifier.dev",
+      "taxonomy_version": "jev-pilot-v1:explicaciones",
+      "transport": "mock_only",
+      "use": "explicaciones",
+      "version": "jev-pilot-v1"
+    },
+    {
+      "adopted": false,
+      "decision": "abstain",
+      "effective_model_version": null,
+      "input_index": 0,
+      "input_ref": "invented:review_critical",
+      "input_sha256": "1bc958f1afb875fbc6a10602bd62aa1e245741382b2709ad4e7815f3b150abee",
+      "instructions_version": "jev-pilot-v1:revision_humana",
+      "mock": true,
+      "model_version_limit": "No inference executed; mock model identifier only, aliases do not pin weights.",
+      "observed_at": null,
+      "observed_cost": null,
+      "order_basis": "API input order; local refs never sent; remote reorder not independently detectable",
+      "proposal": null,
+      "reason": "critical_case_cannot_be_removed",
+      "request_sha256": "b530d86d66eea71b08bf94eae6ed45fcd2de810a1cefc4740362aeb532dbc8c6",
+      "requested_model_allowlist": [
+        "invented-model-v1"
+      ],
+      "response": {
+        "confidence": 0.99,
+        "label": "control_sin_alerta",
+        "model": "invented-model-v1",
+        "modelsUsed": [
+          "invented-model-v1"
+        ],
+        "scores": {
+          "atipicos": 0.0,
+          "clasificacion_ambigua": 0.0,
+          "conflicto_direccion": 0.0,
+          "control_sin_alerta": 1.0,
+          "evidencia_insuficiente": 0.0,
+          "falta_cobertura": 0.0,
+          "fx_pendiente": 0.0,
+          "revision_evidencia": 0.0,
+          "unknown": 0.0
+        }
+      },
+      "retain_case": true,
+      "route": "classifier.dev",
+      "taxonomy_version": "jev-pilot-v1:revision_humana",
+      "transport": "mock_only",
+      "use": "revision_humana",
+      "version": "jev-pilot-v1"
+    },
+    {
+      "adopted": false,
+      "decision": "abstain",
+      "effective_model_version": null,
+      "input_index": 0,
+      "input_ref": "invented:unknown",
+      "input_sha256": "f6121fbb2f7a5732b3ed091161c396f9ac10a259f74cc4f02ec1ce90ba3401f7",
+      "instructions_version": "jev-pilot-v1:movimientos",
+      "mock": true,
+      "model_version_limit": "No inference executed; mock model identifier only, aliases do not pin weights.",
+      "observed_at": null,
+      "observed_cost": null,
+      "order_basis": "API input order; local refs never sent; remote reorder not independently detectable",
+      "proposal": null,
+      "reason": "unknown_or_insufficient",
+      "request_sha256": "9e23a8e5be22368bb03ef2c1f7e69dbbf616d596e222f6d5f9fd76f1c07aead6",
+      "requested_model_allowlist": [
+        "invented-model-v1"
+      ],
+      "response": {
+        "confidence": 0.99,
+        "label": "unknown",
+        "model": "invented-model-v1",
+        "modelsUsed": [
+          "invented-model-v1"
+        ],
+        "scores": {
+          "evidencia_insuficiente": 0.0,
+          "financing_in": 0.0,
+          "financing_out": 0.0,
+          "investment_in": 0.0,
+          "investment_out": 0.0,
+          "non_economic": 0.0,
+          "operating_in": 0.0,
+          "operating_out": 0.0,
+          "transfer": 0.0,
+          "unknown": 1.0
+        }
+      },
+      "retain_case": true,
+      "route": "classifier.dev",
+      "taxonomy_version": "jev-pilot-v1:movimientos",
+      "transport": "mock_only",
+      "use": "movimientos",
+      "version": "jev-pilot-v1"
+    }
+  ],
+  "status": "prepared_not_evaluated"
+}

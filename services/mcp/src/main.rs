@@ -79,7 +79,7 @@ impl FinanceTools {
         Ok(result(json!(self.state.companies.iter().filter(|c| identity.company_ids.contains(&c.id)).map(|c|json!({"id":c.id,"name":c.name,"currency":c.currency,"data_mode":c.data_mode})).collect::<Vec<_>>())))
     }
     #[tool(
-        description = "Read a dated cash outlook, evidence, missing inputs and observed health for an authorised company. Demo fixtures and reconstructed history are labelled. Amounts are integer cents.",
+        description = "Read an authorised company assessment. Cash-mode amounts are integer cents. Proxy-only assessments return forecast null and cash_planning_available false, with synthetic reconstructed operating-deficit probability evidence over three calendar months. Display estimates only when accepted and eligible; this is not calibrated, default risk or health. Empty proxy cash history means unknown, not no activity.",
         annotations(
             read_only_hint = true,
             destructive_hint = false,
@@ -102,16 +102,12 @@ impl FinanceTools {
             .find(|c| c.id == input.company_id)
             .ok_or_else(|| ErrorData::invalid_params("Assessment unavailable.", None))?;
         Ok(result(
-            finance::assess(
-                company,
-                input.days.unwrap_or(90),
-                input.buffer_cents.unwrap_or(company.buffer_cents),
-            )
-            .map_err(failure)?,
+            finance::assess(company, input.days.unwrap_or(90), input.buffer_cents)
+                .map_err(failure)?,
         ))
     }
     #[tool(
-        description = "Compare a baseline with two bounded, conditional financial plans. Does not save changes or modify source records. Supported metrics: min_cash, ending_cash, monthly_revenue (requires explicit business inputs). Targets and amounts are integer cents; deadlines are ISO dates 7–180 days after assessment.",
+        description = "Compare a baseline with two bounded, conditional financial plans. Rejects proxy-only assessments even if callers supply cash assumptions. Does not save changes or modify source records. Supported metrics: min_cash, ending_cash, monthly_revenue (requires explicit business inputs). Targets and amounts are integer cents; deadlines are ISO dates 7–180 days after assessment.",
         annotations(
             read_only_hint = true,
             destructive_hint = false,
@@ -241,6 +237,9 @@ async fn main() -> anyhow::Result<()> {
         .await?;
     Ok(())
 }
+
+#[cfg(test)]
+mod proxy_tests;
 
 #[cfg(test)]
 mod tests {

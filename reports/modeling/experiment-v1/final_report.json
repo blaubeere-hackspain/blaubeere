@@ -1,0 +1,1985 @@
+{
+  "accepted": true,
+  "calibrated": false,
+  "coverage": {
+    "label_observation_fraction": 0.43812709030100333,
+    "labeled_rows": 131,
+    "prospective_rows": 299
+  },
+  "diagnostics": {
+    "cohort_definition": "Count of valid months in the last six calendar months; not company age. Six-month feature missingness reported separately.",
+    "company_id": [
+      {
+        "baseline_brier": null,
+        "brier": null,
+        "label_observation_fraction": 0.0,
+        "labeled_rows": 0,
+        "prevalence": null,
+        "prospective_rows": 2,
+        "value": "COMP_0003"
+      },
+      {
+        "baseline_brier": 0.2826840910988168,
+        "brier": 0.06226922192322002,
+        "label_observation_fraction": 0.5,
+        "labeled_rows": 1,
+        "prevalence": 1.0,
+        "prospective_rows": 2,
+        "value": "COMP_0006"
+      },
+      {
+        "baseline_brier": null,
+        "brier": null,
+        "label_observation_fraction": 0.0,
+        "labeled_rows": 0,
+        "prevalence": null,
+        "prospective_rows": 2,
+        "value": "COMP_0008"
+      },
+      {
+        "baseline_brier": 0.21932320955611714,
+        "brier": 0.20830807423359549,
+        "label_observation_fraction": 0.5,
+        "labeled_rows": 1,
+        "prevalence": 0.0,
+        "prospective_rows": 2,
+        "value": "COMP_0019"
+      },
+      {
+        "baseline_brier": null,
+        "brier": null,
+        "label_observation_fraction": 0.0,
+        "labeled_rows": 0,
+        "prevalence": null,
+        "prospective_rows": 2,
+        "value": "COMP_0033"
+      },
+      {
+        "baseline_brier": 0.2826840910988168,
+        "brier": 0.023972493152916705,
+        "label_observation_fraction": 1.0,
+        "labeled_rows": 2,
+        "prevalence": 1.0,
+        "prospective_rows": 2,
+        "value": "COMP_0071"
+      },
+      {
+        "baseline_brier": 0.21932320955611714,
+        "brier": 0.04909141926171564,
+        "label_observation_fraction": 1.0,
+        "labeled_rows": 2,
+        "prevalence": 0.0,
+        "prospective_rows": 2,
+        "value": "COMP_0076"
+      },
+      {
+        "baseline_brier": null,
+        "brier": null,
+        "label_observation_fraction": 0.0,
+        "labeled_rows": 0,
+        "prevalence": null,
+        "prospective_rows": 1,
+        "value": "COMP_0110"
+      },
+      {
+        "baseline_brier": 0.21932320955611714,
+        "brier": 0.08383786880774714,
+        "label_observation_fraction": 0.5,
+        "labeled_rows": 1,
+        "prevalence": 0.0,
+        "prospective_rows": 2,
+        "value": "COMP_0114"
+      },
+      {
+        "baseline_brier": null,
+        "brier": null,
+        "label_observation_fraction": 0.0,
+        "labeled_rows": 0,
+        "prevalence": null,
+        "prospective_rows": 2,
+        "value": "COMP_0115"
+      },
+      {
+        "baseline_brier": 0.2826840910988168,
+        "brier": 0.277476222524475,
+        "label_observation_fraction": 0.5,
+        "labeled_rows": 1,
+        "prevalence": 1.0,
+        "prospective_rows": 2,
+        "value": "COMP_0116"
+      },
+      {
+        "baseline_brier": null,
+        "brier": null,
+        "label_observation_fraction": 0.0,
+        "labeled_rows": 0,
+        "prevalence": null,
+        "prospective_rows": 2,
+        "value": "COMP_0124"
+      },
+      {
+        "baseline_brier": null,
+        "brier": null,
+        "label_observation_fraction": 0.0,
+        "labeled_rows": 0,
+        "prevalence": null,
+        "prospective_rows": 2,
+        "value": "COMP_0134"
+      },
+      {
+        "baseline_brier": 0.2826840910988168,
+        "brier": 0.02019780777654406,
+        "label_observation_fraction": 1.0,
+        "labeled_rows": 2,
+        "prevalence": 1.0,
+        "prospective_rows": 2,
+        "value": "COMP_0143"
+      },
+      {
+        "baseline_brier": 0.25100365032746697,
+        "brier": 0.23108895022397805,
+        "label_observation_fraction": 1.0,
+        "labeled_rows": 2,
+        "prevalence": 0.5,
+        "prospective_rows": 2,
+        "value": "COMP_0156"
+      },
+      {
+        "baseline_brier": 0.2826840910988168,
+        "brier": 0.29197554553425314,
+        "label_observation_fraction": 1.0,
+        "labeled_rows": 2,
+        "prevalence": 1.0,
+        "prospective_rows": 2,
+        "value": "COMP_0157"
+      },
+      {
+        "baseline_brier": 0.2826840910988168,
+        "brier": 0.23563253590171768,
+        "label_observation_fraction": 1.0,
+        "labeled_rows": 2,
+        "prevalence": 1.0,
+        "prospective_rows": 2,
+        "value": "COMP_0159"
+      },
+      {
+        "baseline_brier": 0.21932320955611714,
+        "brier": 0.21327038572650336,
+        "label_observation_fraction": 0.5,
+        "labeled_rows": 1,
+        "prevalence": 0.0,
+        "prospective_rows": 2,
+        "value": "COMP_0162"
+      },
+      {
+        "baseline_brier": 0.25100365032746697,
+        "brier": 0.24407600478365798,
+        "label_observation_fraction": 1.0,
+        "labeled_rows": 2,
+        "prevalence": 0.5,
+        "prospective_rows": 2,
+        "value": "COMP_0172"
+      },
+      {
+        "baseline_brier": null,
+        "brier": null,
+        "label_observation_fraction": 0.0,
+        "labeled_rows": 0,
+        "prevalence": null,
+        "prospective_rows": 2,
+        "value": "COMP_0173"
+      },
+      {
+        "baseline_brier": 0.21932320955611714,
+        "brier": 0.1886677113070796,
+        "label_observation_fraction": 1.0,
+        "labeled_rows": 2,
+        "prevalence": 0.0,
+        "prospective_rows": 2,
+        "value": "COMP_0184"
+      },
+      {
+        "baseline_brier": null,
+        "brier": null,
+        "label_observation_fraction": 0.0,
+        "labeled_rows": 0,
+        "prevalence": null,
+        "prospective_rows": 2,
+        "value": "COMP_0185"
+      },
+      {
+        "baseline_brier": null,
+        "brier": null,
+        "label_observation_fraction": 0.0,
+        "labeled_rows": 0,
+        "prevalence": null,
+        "prospective_rows": 2,
+        "value": "COMP_0196"
+      },
+      {
+        "baseline_brier": 0.2826840910988168,
+        "brier": 0.21563883607327416,
+        "label_observation_fraction": 1.0,
+        "labeled_rows": 2,
+        "prevalence": 1.0,
+        "prospective_rows": 2,
+        "value": "COMP_0204"
+      },
+      {
+        "baseline_brier": 0.2826840910988168,
+        "brier": 0.6442707429637691,
+        "label_observation_fraction": 1.0,
+        "labeled_rows": 2,
+        "prevalence": 1.0,
+        "prospective_rows": 2,
+        "value": "COMP_0233"
+      },
+      {
+        "baseline_brier": 0.2826840910988168,
+        "brier": 0.23556700535676944,
+        "label_observation_fraction": 1.0,
+        "labeled_rows": 2,
+        "prevalence": 1.0,
+        "prospective_rows": 2,
+        "value": "COMP_0244"
+      },
+      {
+        "baseline_brier": null,
+        "brier": null,
+        "label_observation_fraction": 0.0,
+        "labeled_rows": 0,
+        "prevalence": null,
+        "prospective_rows": 2,
+        "value": "COMP_0248"
+      },
+      {
+        "baseline_brier": 0.2826840910988168,
+        "brier": 0.10488547035212674,
+        "label_observation_fraction": 1.0,
+        "labeled_rows": 2,
+        "prevalence": 1.0,
+        "prospective_rows": 2,
+        "value": "COMP_0258"
+      },
+      {
+        "baseline_brier": 0.25100365032746697,
+        "brier": 0.17729388706261123,
+        "label_observation_fraction": 1.0,
+        "labeled_rows": 2,
+        "prevalence": 0.5,
+        "prospective_rows": 2,
+        "value": "COMP_0282"
+      },
+      {
+        "baseline_brier": 0.2826840910988168,
+        "brier": 0.013407577692314595,
+        "label_observation_fraction": 1.0,
+        "labeled_rows": 2,
+        "prevalence": 1.0,
+        "prospective_rows": 2,
+        "value": "COMP_0296"
+      },
+      {
+        "baseline_brier": null,
+        "brier": null,
+        "label_observation_fraction": 0.0,
+        "labeled_rows": 0,
+        "prevalence": null,
+        "prospective_rows": 2,
+        "value": "COMP_0305"
+      },
+      {
+        "baseline_brier": null,
+        "brier": null,
+        "label_observation_fraction": 0.0,
+        "labeled_rows": 0,
+        "prevalence": null,
+        "prospective_rows": 2,
+        "value": "COMP_0312"
+      },
+      {
+        "baseline_brier": 0.2826840910988168,
+        "brier": 0.23731709050871846,
+        "label_observation_fraction": 1.0,
+        "labeled_rows": 2,
+        "prevalence": 1.0,
+        "prospective_rows": 2,
+        "value": "COMP_0313"
+      },
+      {
+        "baseline_brier": null,
+        "brier": null,
+        "label_observation_fraction": 0.0,
+        "labeled_rows": 0,
+        "prevalence": null,
+        "prospective_rows": 2,
+        "value": "COMP_0316"
+      },
+      {
+        "baseline_brier": 0.2826840910988168,
+        "brier": 0.256904471913378,
+        "label_observation_fraction": 1.0,
+        "labeled_rows": 2,
+        "prevalence": 1.0,
+        "prospective_rows": 2,
+        "value": "COMP_0318"
+      },
+      {
+        "baseline_brier": null,
+        "brier": null,
+        "label_observation_fraction": 0.0,
+        "labeled_rows": 0,
+        "prevalence": null,
+        "prospective_rows": 2,
+        "value": "COMP_0319"
+      },
+      {
+        "baseline_brier": null,
+        "brier": null,
+        "label_observation_fraction": 0.0,
+        "labeled_rows": 0,
+        "prevalence": null,
+        "prospective_rows": 2,
+        "value": "COMP_0327"
+      },
+      {
+        "baseline_brier": 0.25100365032746697,
+        "brier": 0.1607915066092948,
+        "label_observation_fraction": 1.0,
+        "labeled_rows": 2,
+        "prevalence": 0.5,
+        "prospective_rows": 2,
+        "value": "COMP_0328"
+      },
+      {
+        "baseline_brier": null,
+        "brier": null,
+        "label_observation_fraction": 0.0,
+        "labeled_rows": 0,
+        "prevalence": null,
+        "prospective_rows": 2,
+        "value": "COMP_0335"
+      },
+      {
+        "baseline_brier": null,
+        "brier": null,
+        "label_observation_fraction": 0.0,
+        "labeled_rows": 0,
+        "prevalence": null,
+        "prospective_rows": 2,
+        "value": "COMP_0341"
+      },
+      {
+        "baseline_brier": 0.25100365032746697,
+        "brier": 0.2854357311547062,
+        "label_observation_fraction": 1.0,
+        "labeled_rows": 2,
+        "prevalence": 0.5,
+        "prospective_rows": 2,
+        "value": "COMP_0345"
+      },
+      {
+        "baseline_brier": null,
+        "brier": null,
+        "label_observation_fraction": 0.0,
+        "labeled_rows": 0,
+        "prevalence": null,
+        "prospective_rows": 2,
+        "value": "COMP_0351"
+      },
+      {
+        "baseline_brier": null,
+        "brier": null,
+        "label_observation_fraction": 0.0,
+        "labeled_rows": 0,
+        "prevalence": null,
+        "prospective_rows": 2,
+        "value": "COMP_0352"
+      },
+      {
+        "baseline_brier": 0.2826840910988168,
+        "brier": 0.02263043742398296,
+        "label_observation_fraction": 1.0,
+        "labeled_rows": 1,
+        "prevalence": 1.0,
+        "prospective_rows": 1,
+        "value": "COMP_0355"
+      },
+      {
+        "baseline_brier": 0.21932320955611714,
+        "brier": 0.2385659088941029,
+        "label_observation_fraction": 1.0,
+        "labeled_rows": 2,
+        "prevalence": 0.0,
+        "prospective_rows": 2,
+        "value": "COMP_0357"
+      },
+      {
+        "baseline_brier": null,
+        "brier": null,
+        "label_observation_fraction": 0.0,
+        "labeled_rows": 0,
+        "prevalence": null,
+        "prospective_rows": 2,
+        "value": "COMP_0364"
+      },
+      {
+        "baseline_brier": null,
+        "brier": null,
+        "label_observation_fraction": 0.0,
+        "labeled_rows": 0,
+        "prevalence": null,
+        "prospective_rows": 2,
+        "value": "COMP_0365"
+      },
+      {
+        "baseline_brier": null,
+        "brier": null,
+        "label_observation_fraction": 0.0,
+        "labeled_rows": 0,
+        "prevalence": null,
+        "prospective_rows": 2,
+        "value": "COMP_0367"
+      },
+      {
+        "baseline_brier": null,
+        "brier": null,
+        "label_observation_fraction": 0.0,
+        "labeled_rows": 0,
+        "prevalence": null,
+        "prospective_rows": 2,
+        "value": "COMP_0371"
+      },
+      {
+        "baseline_brier": 0.21932320955611714,
+        "brier": 0.21207487915856746,
+        "label_observation_fraction": 1.0,
+        "labeled_rows": 2,
+        "prevalence": 0.0,
+        "prospective_rows": 2,
+        "value": "COMP_0383"
+      },
+      {
+        "baseline_brier": 0.25100365032746697,
+        "brier": 0.22835545950185654,
+        "label_observation_fraction": 1.0,
+        "labeled_rows": 2,
+        "prevalence": 0.5,
+        "prospective_rows": 2,
+        "value": "COMP_0384"
+      },
+      {
+        "baseline_brier": 0.25100365032746697,
+        "brier": 0.25074007710882,
+        "label_observation_fraction": 1.0,
+        "labeled_rows": 2,
+        "prevalence": 0.5,
+        "prospective_rows": 2,
+        "value": "COMP_0388"
+      },
+      {
+        "baseline_brier": null,
+        "brier": null,
+        "label_observation_fraction": 0.0,
+        "labeled_rows": 0,
+        "prevalence": null,
+        "prospective_rows": 2,
+        "value": "COMP_0389"
+      },
+      {
+        "baseline_brier": null,
+        "brier": null,
+        "label_observation_fraction": 0.0,
+        "labeled_rows": 0,
+        "prevalence": null,
+        "prospective_rows": 2,
+        "value": "COMP_0403"
+      },
+      {
+        "baseline_brier": null,
+        "brier": null,
+        "label_observation_fraction": 0.0,
+        "labeled_rows": 0,
+        "prevalence": null,
+        "prospective_rows": 2,
+        "value": "COMP_0413"
+      },
+      {
+        "baseline_brier": 0.2826840910988168,
+        "brier": 0.29399187108282565,
+        "label_observation_fraction": 1.0,
+        "labeled_rows": 2,
+        "prevalence": 1.0,
+        "prospective_rows": 2,
+        "value": "COMP_0427"
+      },
+      {
+        "baseline_brier": 0.21932320955611714,
+        "brier": 0.09518863763977481,
+        "label_observation_fraction": 0.5,
+        "labeled_rows": 1,
+        "prevalence": 0.0,
+        "prospective_rows": 2,
+        "value": "COMP_0431"
+      },
+      {
+        "baseline_brier": 0.2826840910988168,
+        "brier": 0.15185876451123345,
+        "label_observation_fraction": 1.0,
+        "labeled_rows": 2,
+        "prevalence": 1.0,
+        "prospective_rows": 2,
+        "value": "COMP_0432"
+      },
+      {
+        "baseline_brier": null,
+        "brier": null,
+        "label_observation_fraction": 0.0,
+        "labeled_rows": 0,
+        "prevalence": null,
+        "prospective_rows": 2,
+        "value": "COMP_0437"
+      },
+      {
+        "baseline_brier": null,
+        "brier": null,
+        "label_observation_fraction": 0.0,
+        "labeled_rows": 0,
+        "prevalence": null,
+        "prospective_rows": 2,
+        "value": "COMP_0438"
+      },
+      {
+        "baseline_brier": 0.21932320955611714,
+        "brier": 0.05853801672799932,
+        "label_observation_fraction": 1.0,
+        "labeled_rows": 2,
+        "prevalence": 0.0,
+        "prospective_rows": 2,
+        "value": "COMP_0447"
+      },
+      {
+        "baseline_brier": null,
+        "brier": null,
+        "label_observation_fraction": 0.0,
+        "labeled_rows": 0,
+        "prevalence": null,
+        "prospective_rows": 2,
+        "value": "COMP_0458"
+      },
+      {
+        "baseline_brier": 0.2826840910988168,
+        "brier": 0.1786898976561565,
+        "label_observation_fraction": 0.5,
+        "labeled_rows": 1,
+        "prevalence": 1.0,
+        "prospective_rows": 2,
+        "value": "COMP_0462"
+      },
+      {
+        "baseline_brier": null,
+        "brier": null,
+        "label_observation_fraction": 0.0,
+        "labeled_rows": 0,
+        "prevalence": null,
+        "prospective_rows": 1,
+        "value": "COMP_0464"
+      },
+      {
+        "baseline_brier": null,
+        "brier": null,
+        "label_observation_fraction": 0.0,
+        "labeled_rows": 0,
+        "prevalence": null,
+        "prospective_rows": 2,
+        "value": "COMP_0472"
+      },
+      {
+        "baseline_brier": null,
+        "brier": null,
+        "label_observation_fraction": 0.0,
+        "labeled_rows": 0,
+        "prevalence": null,
+        "prospective_rows": 2,
+        "value": "COMP_0485"
+      },
+      {
+        "baseline_brier": 0.21932320955611714,
+        "brier": 0.026960307351862365,
+        "label_observation_fraction": 1.0,
+        "labeled_rows": 2,
+        "prevalence": 0.0,
+        "prospective_rows": 2,
+        "value": "COMP_0491"
+      },
+      {
+        "baseline_brier": null,
+        "brier": null,
+        "label_observation_fraction": 0.0,
+        "labeled_rows": 0,
+        "prevalence": null,
+        "prospective_rows": 1,
+        "value": "COMP_0514"
+      },
+      {
+        "baseline_brier": null,
+        "brier": null,
+        "label_observation_fraction": 0.0,
+        "labeled_rows": 0,
+        "prevalence": null,
+        "prospective_rows": 2,
+        "value": "COMP_0523"
+      },
+      {
+        "baseline_brier": null,
+        "brier": null,
+        "label_observation_fraction": 0.0,
+        "labeled_rows": 0,
+        "prevalence": null,
+        "prospective_rows": 2,
+        "value": "COMP_0531"
+      },
+      {
+        "baseline_brier": 0.21932320955611714,
+        "brier": 0.15912900740062885,
+        "label_observation_fraction": 0.5,
+        "labeled_rows": 1,
+        "prevalence": 0.0,
+        "prospective_rows": 2,
+        "value": "COMP_0534"
+      },
+      {
+        "baseline_brier": null,
+        "brier": null,
+        "label_observation_fraction": 0.0,
+        "labeled_rows": 0,
+        "prevalence": null,
+        "prospective_rows": 2,
+        "value": "COMP_0535"
+      },
+      {
+        "baseline_brier": 0.2826840910988168,
+        "brier": 0.011333674104697315,
+        "label_observation_fraction": 1.0,
+        "labeled_rows": 2,
+        "prevalence": 1.0,
+        "prospective_rows": 2,
+        "value": "COMP_0539"
+      },
+      {
+        "baseline_brier": null,
+        "brier": null,
+        "label_observation_fraction": 0.0,
+        "labeled_rows": 0,
+        "prevalence": null,
+        "prospective_rows": 2,
+        "value": "COMP_0541"
+      },
+      {
+        "baseline_brier": 0.21932320955611714,
+        "brier": 0.17299848393634717,
+        "label_observation_fraction": 0.5,
+        "labeled_rows": 1,
+        "prevalence": 0.0,
+        "prospective_rows": 2,
+        "value": "COMP_0544"
+      },
+      {
+        "baseline_brier": 0.25100365032746697,
+        "brier": 0.19243790087305096,
+        "label_observation_fraction": 1.0,
+        "labeled_rows": 2,
+        "prevalence": 0.5,
+        "prospective_rows": 2,
+        "value": "COMP_0546"
+      },
+      {
+        "baseline_brier": 0.21932320955611714,
+        "brier": 0.2994917027989152,
+        "label_observation_fraction": 1.0,
+        "labeled_rows": 1,
+        "prevalence": 0.0,
+        "prospective_rows": 1,
+        "value": "COMP_0551"
+      },
+      {
+        "baseline_brier": null,
+        "brier": null,
+        "label_observation_fraction": 0.0,
+        "labeled_rows": 0,
+        "prevalence": null,
+        "prospective_rows": 2,
+        "value": "COMP_0554"
+      },
+      {
+        "baseline_brier": 0.21932320955611714,
+        "brier": 0.16099499762951297,
+        "label_observation_fraction": 1.0,
+        "labeled_rows": 1,
+        "prevalence": 0.0,
+        "prospective_rows": 1,
+        "value": "COMP_0558"
+      },
+      {
+        "baseline_brier": 0.2826840910988168,
+        "brier": 0.3571174995387286,
+        "label_observation_fraction": 0.5,
+        "labeled_rows": 1,
+        "prevalence": 1.0,
+        "prospective_rows": 2,
+        "value": "COMP_0564"
+      },
+      {
+        "baseline_brier": 0.21932320955611714,
+        "brier": 0.02827356761481089,
+        "label_observation_fraction": 1.0,
+        "labeled_rows": 2,
+        "prevalence": 0.0,
+        "prospective_rows": 2,
+        "value": "COMP_0567"
+      },
+      {
+        "baseline_brier": null,
+        "brier": null,
+        "label_observation_fraction": 0.0,
+        "labeled_rows": 0,
+        "prevalence": null,
+        "prospective_rows": 2,
+        "value": "COMP_0568"
+      },
+      {
+        "baseline_brier": 0.2826840910988168,
+        "brier": 0.17256060035358178,
+        "label_observation_fraction": 0.5,
+        "labeled_rows": 1,
+        "prevalence": 1.0,
+        "prospective_rows": 2,
+        "value": "COMP_0569"
+      },
+      {
+        "baseline_brier": 0.21932320955611714,
+        "brier": 0.35855578049589565,
+        "label_observation_fraction": 1.0,
+        "labeled_rows": 1,
+        "prevalence": 0.0,
+        "prospective_rows": 1,
+        "value": "COMP_0570"
+      },
+      {
+        "baseline_brier": null,
+        "brier": null,
+        "label_observation_fraction": 0.0,
+        "labeled_rows": 0,
+        "prevalence": null,
+        "prospective_rows": 2,
+        "value": "COMP_0576"
+      },
+      {
+        "baseline_brier": null,
+        "brier": null,
+        "label_observation_fraction": 0.0,
+        "labeled_rows": 0,
+        "prevalence": null,
+        "prospective_rows": 1,
+        "value": "COMP_0580"
+      },
+      {
+        "baseline_brier": null,
+        "brier": null,
+        "label_observation_fraction": 0.0,
+        "labeled_rows": 0,
+        "prevalence": null,
+        "prospective_rows": 1,
+        "value": "COMP_0585"
+      },
+      {
+        "baseline_brier": 0.2826840910988168,
+        "brier": 0.35440482453974675,
+        "label_observation_fraction": 0.5,
+        "labeled_rows": 1,
+        "prevalence": 1.0,
+        "prospective_rows": 2,
+        "value": "COMP_0596"
+      },
+      {
+        "baseline_brier": null,
+        "brier": null,
+        "label_observation_fraction": 0.0,
+        "labeled_rows": 0,
+        "prevalence": null,
+        "prospective_rows": 1,
+        "value": "COMP_0611"
+      },
+      {
+        "baseline_brier": null,
+        "brier": null,
+        "label_observation_fraction": 0.0,
+        "labeled_rows": 0,
+        "prevalence": null,
+        "prospective_rows": 2,
+        "value": "COMP_0622"
+      },
+      {
+        "baseline_brier": null,
+        "brier": null,
+        "label_observation_fraction": 0.0,
+        "labeled_rows": 0,
+        "prevalence": null,
+        "prospective_rows": 2,
+        "value": "COMP_0633"
+      },
+      {
+        "baseline_brier": null,
+        "brier": null,
+        "label_observation_fraction": 0.0,
+        "labeled_rows": 0,
+        "prevalence": null,
+        "prospective_rows": 2,
+        "value": "COMP_0665"
+      },
+      {
+        "baseline_brier": null,
+        "brier": null,
+        "label_observation_fraction": 0.0,
+        "labeled_rows": 0,
+        "prevalence": null,
+        "prospective_rows": 2,
+        "value": "COMP_0672"
+      },
+      {
+        "baseline_brier": 0.21932320955611714,
+        "brier": 0.1652135447306368,
+        "label_observation_fraction": 1.0,
+        "labeled_rows": 2,
+        "prevalence": 0.0,
+        "prospective_rows": 2,
+        "value": "COMP_0687"
+      },
+      {
+        "baseline_brier": 0.21932320955611714,
+        "brier": 0.31949457815214816,
+        "label_observation_fraction": 1.0,
+        "labeled_rows": 2,
+        "prevalence": 0.0,
+        "prospective_rows": 2,
+        "value": "COMP_0706"
+      },
+      {
+        "baseline_brier": null,
+        "brier": null,
+        "label_observation_fraction": 0.0,
+        "labeled_rows": 0,
+        "prevalence": null,
+        "prospective_rows": 2,
+        "value": "COMP_0710"
+      },
+      {
+        "baseline_brier": null,
+        "brier": null,
+        "label_observation_fraction": 0.0,
+        "labeled_rows": 0,
+        "prevalence": null,
+        "prospective_rows": 2,
+        "value": "COMP_0720"
+      },
+      {
+        "baseline_brier": null,
+        "brier": null,
+        "label_observation_fraction": 0.0,
+        "labeled_rows": 0,
+        "prevalence": null,
+        "prospective_rows": 2,
+        "value": "COMP_0730"
+      },
+      {
+        "baseline_brier": 0.2826840910988168,
+        "brier": 0.010319656904276681,
+        "label_observation_fraction": 1.0,
+        "labeled_rows": 2,
+        "prevalence": 1.0,
+        "prospective_rows": 2,
+        "value": "COMP_0736"
+      },
+      {
+        "baseline_brier": 0.2826840910988168,
+        "brier": 0.17454850012994477,
+        "label_observation_fraction": 1.0,
+        "labeled_rows": 2,
+        "prevalence": 1.0,
+        "prospective_rows": 2,
+        "value": "COMP_0739"
+      },
+      {
+        "baseline_brier": 0.21932320955611714,
+        "brier": 0.09281140052133134,
+        "label_observation_fraction": 0.5,
+        "labeled_rows": 1,
+        "prevalence": 0.0,
+        "prospective_rows": 2,
+        "value": "COMP_0740"
+      },
+      {
+        "baseline_brier": null,
+        "brier": null,
+        "label_observation_fraction": 0.0,
+        "labeled_rows": 0,
+        "prevalence": null,
+        "prospective_rows": 2,
+        "value": "COMP_0758"
+      },
+      {
+        "baseline_brier": 0.21932320955611714,
+        "brier": 0.16971394102267023,
+        "label_observation_fraction": 1.0,
+        "labeled_rows": 2,
+        "prevalence": 0.0,
+        "prospective_rows": 2,
+        "value": "COMP_0763"
+      },
+      {
+        "baseline_brier": 0.2826840910988168,
+        "brier": 0.2454959655817379,
+        "label_observation_fraction": 1.0,
+        "labeled_rows": 2,
+        "prevalence": 1.0,
+        "prospective_rows": 2,
+        "value": "COMP_0766"
+      },
+      {
+        "baseline_brier": null,
+        "brier": null,
+        "label_observation_fraction": 0.0,
+        "labeled_rows": 0,
+        "prevalence": null,
+        "prospective_rows": 2,
+        "value": "COMP_0782"
+      },
+      {
+        "baseline_brier": 0.2826840910988168,
+        "brier": 0.1452810040135531,
+        "label_observation_fraction": 1.0,
+        "labeled_rows": 1,
+        "prevalence": 1.0,
+        "prospective_rows": 1,
+        "value": "COMP_0787"
+      },
+      {
+        "baseline_brier": 0.2826840910988168,
+        "brier": 0.06356205221668244,
+        "label_observation_fraction": 1.0,
+        "labeled_rows": 2,
+        "prevalence": 1.0,
+        "prospective_rows": 2,
+        "value": "COMP_0796"
+      },
+      {
+        "baseline_brier": 0.21932320955611714,
+        "brier": 0.031040462316820575,
+        "label_observation_fraction": 0.5,
+        "labeled_rows": 1,
+        "prevalence": 0.0,
+        "prospective_rows": 2,
+        "value": "COMP_0812"
+      },
+      {
+        "baseline_brier": 0.21932320955611714,
+        "brier": 0.016404327873570927,
+        "label_observation_fraction": 0.5,
+        "labeled_rows": 1,
+        "prevalence": 0.0,
+        "prospective_rows": 2,
+        "value": "COMP_0825"
+      },
+      {
+        "baseline_brier": 0.2826840910988168,
+        "brier": 0.2571003177189869,
+        "label_observation_fraction": 1.0,
+        "labeled_rows": 2,
+        "prevalence": 1.0,
+        "prospective_rows": 2,
+        "value": "COMP_0827"
+      },
+      {
+        "baseline_brier": 0.25100365032746697,
+        "brier": 0.2515631303086764,
+        "label_observation_fraction": 1.0,
+        "labeled_rows": 2,
+        "prevalence": 0.5,
+        "prospective_rows": 2,
+        "value": "COMP_0841"
+      },
+      {
+        "baseline_brier": null,
+        "brier": null,
+        "label_observation_fraction": 0.0,
+        "labeled_rows": 0,
+        "prevalence": null,
+        "prospective_rows": 2,
+        "value": "COMP_0859"
+      },
+      {
+        "baseline_brier": 0.21932320955611714,
+        "brier": 0.3123166344554882,
+        "label_observation_fraction": 1.0,
+        "labeled_rows": 2,
+        "prevalence": 0.0,
+        "prospective_rows": 2,
+        "value": "COMP_0861"
+      },
+      {
+        "baseline_brier": 0.21932320955611714,
+        "brier": 0.031172722153478275,
+        "label_observation_fraction": 1.0,
+        "labeled_rows": 2,
+        "prevalence": 0.0,
+        "prospective_rows": 2,
+        "value": "COMP_0866"
+      },
+      {
+        "baseline_brier": null,
+        "brier": null,
+        "label_observation_fraction": 0.0,
+        "labeled_rows": 0,
+        "prevalence": null,
+        "prospective_rows": 2,
+        "value": "COMP_0889"
+      },
+      {
+        "baseline_brier": null,
+        "brier": null,
+        "label_observation_fraction": 0.0,
+        "labeled_rows": 0,
+        "prevalence": null,
+        "prospective_rows": 2,
+        "value": "COMP_0920"
+      },
+      {
+        "baseline_brier": 0.2826840910988168,
+        "brier": 0.021898543739753668,
+        "label_observation_fraction": 1.0,
+        "labeled_rows": 2,
+        "prevalence": 1.0,
+        "prospective_rows": 2,
+        "value": "COMP_0934"
+      },
+      {
+        "baseline_brier": null,
+        "brier": null,
+        "label_observation_fraction": 0.0,
+        "labeled_rows": 0,
+        "prevalence": null,
+        "prospective_rows": 2,
+        "value": "COMP_0974"
+      },
+      {
+        "baseline_brier": null,
+        "brier": null,
+        "label_observation_fraction": 0.0,
+        "labeled_rows": 0,
+        "prevalence": null,
+        "prospective_rows": 2,
+        "value": "COMP_0986"
+      },
+      {
+        "baseline_brier": 0.21932320955611714,
+        "brier": 0.2092722787648723,
+        "label_observation_fraction": 1.0,
+        "labeled_rows": 2,
+        "prevalence": 0.0,
+        "prospective_rows": 2,
+        "value": "COMP_0993"
+      },
+      {
+        "baseline_brier": 0.2826840910988168,
+        "brier": 0.4503079469128724,
+        "label_observation_fraction": 1.0,
+        "labeled_rows": 2,
+        "prevalence": 1.0,
+        "prospective_rows": 2,
+        "value": "COMP_1016"
+      },
+      {
+        "baseline_brier": 0.2826840910988168,
+        "brier": 0.33823151750650526,
+        "label_observation_fraction": 0.5,
+        "labeled_rows": 1,
+        "prevalence": 1.0,
+        "prospective_rows": 2,
+        "value": "COMP_1020"
+      },
+      {
+        "baseline_brier": 0.21932320955611714,
+        "brier": 0.0913017502393224,
+        "label_observation_fraction": 1.0,
+        "labeled_rows": 2,
+        "prevalence": 0.0,
+        "prospective_rows": 2,
+        "value": "COMP_1024"
+      },
+      {
+        "baseline_brier": 0.2826840910988168,
+        "brier": 0.7568033733739886,
+        "label_observation_fraction": 0.5,
+        "labeled_rows": 1,
+        "prevalence": 1.0,
+        "prospective_rows": 2,
+        "value": "COMP_1027"
+      },
+      {
+        "baseline_brier": 0.2826840910988168,
+        "brier": 0.16437343234746013,
+        "label_observation_fraction": 0.5,
+        "labeled_rows": 1,
+        "prevalence": 1.0,
+        "prospective_rows": 2,
+        "value": "COMP_1028"
+      },
+      {
+        "baseline_brier": 0.2826840910988168,
+        "brier": 0.03699858069725015,
+        "label_observation_fraction": 1.0,
+        "labeled_rows": 2,
+        "prevalence": 1.0,
+        "prospective_rows": 2,
+        "value": "COMP_1031"
+      },
+      {
+        "baseline_brier": null,
+        "brier": null,
+        "label_observation_fraction": 0.0,
+        "labeled_rows": 0,
+        "prevalence": null,
+        "prospective_rows": 2,
+        "value": "COMP_1039"
+      },
+      {
+        "baseline_brier": null,
+        "brier": null,
+        "label_observation_fraction": 0.0,
+        "labeled_rows": 0,
+        "prevalence": null,
+        "prospective_rows": 2,
+        "value": "COMP_1040"
+      },
+      {
+        "baseline_brier": 0.21932320955611714,
+        "brier": 0.1529116465545317,
+        "label_observation_fraction": 1.0,
+        "labeled_rows": 2,
+        "prevalence": 0.0,
+        "prospective_rows": 2,
+        "value": "COMP_1064"
+      },
+      {
+        "baseline_brier": 0.21932320955611714,
+        "brier": 0.07704479256278808,
+        "label_observation_fraction": 0.5,
+        "labeled_rows": 1,
+        "prevalence": 0.0,
+        "prospective_rows": 2,
+        "value": "COMP_1097"
+      },
+      {
+        "baseline_brier": null,
+        "brier": null,
+        "label_observation_fraction": 0.0,
+        "labeled_rows": 0,
+        "prevalence": null,
+        "prospective_rows": 2,
+        "value": "COMP_1106"
+      },
+      {
+        "baseline_brier": null,
+        "brier": null,
+        "label_observation_fraction": 0.0,
+        "labeled_rows": 0,
+        "prevalence": null,
+        "prospective_rows": 2,
+        "value": "COMP_1111"
+      },
+      {
+        "baseline_brier": null,
+        "brier": null,
+        "label_observation_fraction": 0.0,
+        "labeled_rows": 0,
+        "prevalence": null,
+        "prospective_rows": 2,
+        "value": "COMP_1116"
+      },
+      {
+        "baseline_brier": 0.21932320955611714,
+        "brier": 0.49774468413017875,
+        "label_observation_fraction": 1.0,
+        "labeled_rows": 2,
+        "prevalence": 0.0,
+        "prospective_rows": 2,
+        "value": "COMP_1119"
+      },
+      {
+        "baseline_brier": null,
+        "brier": null,
+        "label_observation_fraction": 0.0,
+        "labeled_rows": 0,
+        "prevalence": null,
+        "prospective_rows": 2,
+        "value": "COMP_1128"
+      },
+      {
+        "baseline_brier": 0.21932320955611714,
+        "brier": 0.23900738849532632,
+        "label_observation_fraction": 1.0,
+        "labeled_rows": 2,
+        "prevalence": 0.0,
+        "prospective_rows": 2,
+        "value": "COMP_1147"
+      },
+      {
+        "baseline_brier": null,
+        "brier": null,
+        "label_observation_fraction": 0.0,
+        "labeled_rows": 0,
+        "prevalence": null,
+        "prospective_rows": 2,
+        "value": "COMP_1155"
+      },
+      {
+        "baseline_brier": null,
+        "brier": null,
+        "label_observation_fraction": 0.0,
+        "labeled_rows": 0,
+        "prevalence": null,
+        "prospective_rows": 2,
+        "value": "COMP_1157"
+      },
+      {
+        "baseline_brier": 0.25100365032746697,
+        "brier": 0.18676703023172647,
+        "label_observation_fraction": 1.0,
+        "labeled_rows": 2,
+        "prevalence": 0.5,
+        "prospective_rows": 2,
+        "value": "COMP_1164"
+      },
+      {
+        "baseline_brier": 0.21932320955611714,
+        "brier": 0.11803550006141424,
+        "label_observation_fraction": 0.5,
+        "labeled_rows": 1,
+        "prevalence": 0.0,
+        "prospective_rows": 2,
+        "value": "COMP_1167"
+      },
+      {
+        "baseline_brier": null,
+        "brier": null,
+        "label_observation_fraction": 0.0,
+        "labeled_rows": 0,
+        "prevalence": null,
+        "prospective_rows": 2,
+        "value": "COMP_1169"
+      },
+      {
+        "baseline_brier": null,
+        "brier": null,
+        "label_observation_fraction": 0.0,
+        "labeled_rows": 0,
+        "prevalence": null,
+        "prospective_rows": 2,
+        "value": "COMP_1176"
+      },
+      {
+        "baseline_brier": null,
+        "brier": null,
+        "label_observation_fraction": 0.0,
+        "labeled_rows": 0,
+        "prevalence": null,
+        "prospective_rows": 2,
+        "value": "COMP_1177"
+      },
+      {
+        "baseline_brier": null,
+        "brier": null,
+        "label_observation_fraction": 0.0,
+        "labeled_rows": 0,
+        "prevalence": null,
+        "prospective_rows": 2,
+        "value": "COMP_1188"
+      },
+      {
+        "baseline_brier": null,
+        "brier": null,
+        "label_observation_fraction": 0.0,
+        "labeled_rows": 0,
+        "prevalence": null,
+        "prospective_rows": 2,
+        "value": "COMP_1215"
+      },
+      {
+        "baseline_brier": null,
+        "brier": null,
+        "label_observation_fraction": 0.0,
+        "labeled_rows": 0,
+        "prevalence": null,
+        "prospective_rows": 2,
+        "value": "COMP_1220"
+      },
+      {
+        "baseline_brier": null,
+        "brier": null,
+        "label_observation_fraction": 0.0,
+        "labeled_rows": 0,
+        "prevalence": null,
+        "prospective_rows": 2,
+        "value": "COMP_1221"
+      },
+      {
+        "baseline_brier": null,
+        "brier": null,
+        "label_observation_fraction": 0.0,
+        "labeled_rows": 0,
+        "prevalence": null,
+        "prospective_rows": 2,
+        "value": "COMP_1225"
+      },
+      {
+        "baseline_brier": null,
+        "brier": null,
+        "label_observation_fraction": 0.0,
+        "labeled_rows": 0,
+        "prevalence": null,
+        "prospective_rows": 1,
+        "value": "COMP_1226"
+      },
+      {
+        "baseline_brier": 0.21932320955611714,
+        "brier": 0.48104230850803875,
+        "label_observation_fraction": 0.5,
+        "labeled_rows": 1,
+        "prevalence": 0.0,
+        "prospective_rows": 2,
+        "value": "COMP_1228"
+      },
+      {
+        "baseline_brier": 0.21932320955611714,
+        "brier": 0.03503978261057451,
+        "label_observation_fraction": 0.5,
+        "labeled_rows": 1,
+        "prevalence": 0.0,
+        "prospective_rows": 2,
+        "value": "COMP_1233"
+      },
+      {
+        "baseline_brier": null,
+        "brier": null,
+        "label_observation_fraction": 0.0,
+        "labeled_rows": 0,
+        "prevalence": null,
+        "prospective_rows": 2,
+        "value": "COMP_1242"
+      },
+      {
+        "baseline_brier": 0.21932320955611714,
+        "brier": 0.15778373959379466,
+        "label_observation_fraction": 1.0,
+        "labeled_rows": 2,
+        "prevalence": 0.0,
+        "prospective_rows": 2,
+        "value": "COMP_1258"
+      },
+      {
+        "baseline_brier": null,
+        "brier": null,
+        "label_observation_fraction": 0.0,
+        "labeled_rows": 0,
+        "prevalence": null,
+        "prospective_rows": 1,
+        "value": "COMP_1262"
+      },
+      {
+        "baseline_brier": 0.21932320955611714,
+        "brier": 0.016447434243700803,
+        "label_observation_fraction": 1.0,
+        "labeled_rows": 2,
+        "prevalence": 0.0,
+        "prospective_rows": 2,
+        "value": "COMP_1267"
+      },
+      {
+        "baseline_brier": 0.2826840910988168,
+        "brier": 0.2553081927798203,
+        "label_observation_fraction": 1.0,
+        "labeled_rows": 2,
+        "prevalence": 1.0,
+        "prospective_rows": 2,
+        "value": "COMP_1269"
+      }
+    ],
+    "company_id_macro_brier": 0.19061553188153652,
+    "diagnostic_only": "No subgroup acceptance claims or tuning; Brier conditional on observed labels.",
+    "group_id": [
+      {
+        "baseline_brier": null,
+        "brier": null,
+        "label_observation_fraction": 0.0,
+        "labeled_rows": 0,
+        "prevalence": null,
+        "prospective_rows": 3,
+        "value": "GROUP_0004"
+      },
+      {
+        "baseline_brier": 0.25100365032746697,
+        "brier": 0.2515631303086764,
+        "label_observation_fraction": 1.0,
+        "labeled_rows": 2,
+        "prevalence": 0.5,
+        "prospective_rows": 2,
+        "value": "GROUP_0005"
+      },
+      {
+        "baseline_brier": 0.2826840910988168,
+        "brier": 0.1452810040135531,
+        "label_observation_fraction": 0.2,
+        "labeled_rows": 1,
+        "prevalence": 1.0,
+        "prospective_rows": 5,
+        "value": "GROUP_0008"
+      },
+      {
+        "baseline_brier": 0.2826840910988168,
+        "brier": 0.2553081927798203,
+        "label_observation_fraction": 0.5,
+        "labeled_rows": 2,
+        "prevalence": 1.0,
+        "prospective_rows": 4,
+        "value": "GROUP_0019"
+      },
+      {
+        "baseline_brier": 0.21932320955611714,
+        "brier": 0.16099499762951297,
+        "label_observation_fraction": 0.5,
+        "labeled_rows": 1,
+        "prevalence": 0.0,
+        "prospective_rows": 2,
+        "value": "GROUP_0026"
+      },
+      {
+        "baseline_brier": 0.21932320955611714,
+        "brier": 0.2385659088941029,
+        "label_observation_fraction": 1.0,
+        "labeled_rows": 2,
+        "prevalence": 0.0,
+        "prospective_rows": 2,
+        "value": "GROUP_0036"
+      },
+      {
+        "baseline_brier": null,
+        "brier": null,
+        "label_observation_fraction": 0.0,
+        "labeled_rows": 0,
+        "prevalence": null,
+        "prospective_rows": 2,
+        "value": "GROUP_0041"
+      },
+      {
+        "baseline_brier": 0.21932320955611714,
+        "brier": 0.016404327873570927,
+        "label_observation_fraction": 0.5,
+        "labeled_rows": 1,
+        "prevalence": 0.0,
+        "prospective_rows": 2,
+        "value": "GROUP_0043"
+      },
+      {
+        "baseline_brier": 0.21932320955611714,
+        "brier": 0.12620589690120515,
+        "label_observation_fraction": 0.22727272727272727,
+        "labeled_rows": 5,
+        "prevalence": 0.0,
+        "prospective_rows": 22,
+        "value": "GROUP_0044"
+      },
+      {
+        "baseline_brier": 0.25100365032746697,
+        "brier": 0.25183637296601086,
+        "label_observation_fraction": 0.6666666666666666,
+        "labeled_rows": 2,
+        "prevalence": 0.5,
+        "prospective_rows": 3,
+        "value": "GROUP_0049"
+      },
+      {
+        "baseline_brier": 0.2826840910988168,
+        "brier": 0.21563883607327416,
+        "label_observation_fraction": 0.5,
+        "labeled_rows": 2,
+        "prevalence": 1.0,
+        "prospective_rows": 4,
+        "value": "GROUP_0052"
+      },
+      {
+        "baseline_brier": 0.21932320955611714,
+        "brier": 0.15534769307416318,
+        "label_observation_fraction": 0.5,
+        "labeled_rows": 4,
+        "prevalence": 0.0,
+        "prospective_rows": 8,
+        "value": "GROUP_0056"
+      },
+      {
+        "baseline_brier": 0.2700119147902769,
+        "brier": 0.32717215769652347,
+        "label_observation_fraction": 0.8333333333333334,
+        "labeled_rows": 5,
+        "prevalence": 0.8,
+        "prospective_rows": 6,
+        "value": "GROUP_0069"
+      },
+      {
+        "baseline_brier": 0.2615637972512503,
+        "brier": 0.19135355574322702,
+        "label_observation_fraction": 1.0,
+        "labeled_rows": 6,
+        "prevalence": 0.6666666666666666,
+        "prospective_rows": 6,
+        "value": "GROUP_0078"
+      },
+      {
+        "baseline_brier": null,
+        "brier": null,
+        "label_observation_fraction": 0.0,
+        "labeled_rows": 0,
+        "prevalence": null,
+        "prospective_rows": 2,
+        "value": "GROUP_0085"
+      },
+      {
+        "baseline_brier": 0.2700119147902769,
+        "brier": 0.22078114007494634,
+        "label_observation_fraction": 0.8333333333333334,
+        "labeled_rows": 5,
+        "prevalence": 0.8,
+        "prospective_rows": 6,
+        "value": "GROUP_0094"
+      },
+      {
+        "baseline_brier": 0.2457235768655753,
+        "brier": 0.2003769917387713,
+        "label_observation_fraction": 0.6,
+        "labeled_rows": 12,
+        "prevalence": 0.4166666666666667,
+        "prospective_rows": 20,
+        "value": "GROUP_0095"
+      },
+      {
+        "baseline_brier": null,
+        "brier": null,
+        "label_observation_fraction": 0.0,
+        "labeled_rows": 0,
+        "prevalence": null,
+        "prospective_rows": 1,
+        "value": "GROUP_0099"
+      },
+      {
+        "baseline_brier": 0.25552942758051694,
+        "brier": 0.0966777342937143,
+        "label_observation_fraction": 0.875,
+        "labeled_rows": 7,
+        "prevalence": 0.5714285714285714,
+        "prospective_rows": 8,
+        "value": "GROUP_0102"
+      },
+      {
+        "baseline_brier": null,
+        "brier": null,
+        "label_observation_fraction": 0.0,
+        "labeled_rows": 0,
+        "prevalence": null,
+        "prospective_rows": 2,
+        "value": "GROUP_0120"
+      },
+      {
+        "baseline_brier": null,
+        "brier": null,
+        "label_observation_fraction": 0.0,
+        "labeled_rows": 0,
+        "prevalence": null,
+        "prospective_rows": 10,
+        "value": "GROUP_0122"
+      },
+      {
+        "baseline_brier": 0.21932320955611714,
+        "brier": 0.35855578049589565,
+        "label_observation_fraction": 1.0,
+        "labeled_rows": 1,
+        "prevalence": 0.0,
+        "prospective_rows": 1,
+        "value": "GROUP_0123"
+      },
+      {
+        "baseline_brier": null,
+        "brier": null,
+        "label_observation_fraction": 0.0,
+        "labeled_rows": 0,
+        "prevalence": null,
+        "prospective_rows": 18,
+        "value": "GROUP_0130"
+      },
+      {
+        "baseline_brier": 0.25100365032746697,
+        "brier": 0.1607915066092948,
+        "label_observation_fraction": 0.5,
+        "labeled_rows": 2,
+        "prevalence": 0.5,
+        "prospective_rows": 4,
+        "value": "GROUP_0136"
+      },
+      {
+        "baseline_brier": 0.25100365032746697,
+        "brier": 0.0970562699810938,
+        "label_observation_fraction": 0.6666666666666666,
+        "labeled_rows": 8,
+        "prevalence": 0.5,
+        "prospective_rows": 12,
+        "value": "GROUP_0146"
+      },
+      {
+        "baseline_brier": 0.2826840910988168,
+        "brier": 0.6442707429637691,
+        "label_observation_fraction": 0.1,
+        "labeled_rows": 2,
+        "prevalence": 1.0,
+        "prospective_rows": 20,
+        "value": "GROUP_0150"
+      },
+      {
+        "baseline_brier": 0.2615637972512503,
+        "brier": 0.052721522250061825,
+        "label_observation_fraction": 0.6,
+        "labeled_rows": 3,
+        "prevalence": 0.6666666666666666,
+        "prospective_rows": 5,
+        "value": "GROUP_0160"
+      },
+      {
+        "baseline_brier": null,
+        "brier": null,
+        "label_observation_fraction": 0.0,
+        "labeled_rows": 0,
+        "prevalence": null,
+        "prospective_rows": 2,
+        "value": "GROUP_0168"
+      },
+      {
+        "baseline_brier": null,
+        "brier": null,
+        "label_observation_fraction": 0.0,
+        "labeled_rows": 0,
+        "prevalence": null,
+        "prospective_rows": 14,
+        "value": "GROUP_0169"
+      },
+      {
+        "baseline_brier": 0.21932320955611714,
+        "brier": 0.23900738849532632,
+        "label_observation_fraction": 1.0,
+        "labeled_rows": 2,
+        "prevalence": 0.0,
+        "prospective_rows": 2,
+        "value": "GROUP_0181"
+      },
+      {
+        "baseline_brier": 0.2615637972512503,
+        "brier": 0.08717618524793412,
+        "label_observation_fraction": 0.35294117647058826,
+        "labeled_rows": 6,
+        "prevalence": 0.6666666666666666,
+        "prospective_rows": 17,
+        "value": "GROUP_0184"
+      },
+      {
+        "baseline_brier": 0.26005520483356687,
+        "brier": 0.1971069076367829,
+        "label_observation_fraction": 0.875,
+        "labeled_rows": 14,
+        "prevalence": 0.6428571428571429,
+        "prospective_rows": 16,
+        "value": "GROUP_0187"
+      },
+      {
+        "baseline_brier": 0.21932320955611714,
+        "brier": 0.05853801672799932,
+        "label_observation_fraction": 1.0,
+        "labeled_rows": 2,
+        "prevalence": 0.0,
+        "prospective_rows": 2,
+        "value": "GROUP_0190"
+      },
+      {
+        "baseline_brier": 0.2404435034036837,
+        "brier": 0.07841234429525942,
+        "label_observation_fraction": 0.5,
+        "labeled_rows": 3,
+        "prevalence": 0.3333333333333333,
+        "prospective_rows": 6,
+        "value": "GROUP_0194"
+      },
+      {
+        "baseline_brier": 0.2826840910988168,
+        "brier": 0.2259923206514001,
+        "label_observation_fraction": 0.25,
+        "labeled_rows": 3,
+        "prevalence": 1.0,
+        "prospective_rows": 12,
+        "value": "GROUP_0195"
+      },
+      {
+        "baseline_brier": 0.2826840910988168,
+        "brier": 0.013407577692314595,
+        "label_observation_fraction": 0.3333333333333333,
+        "labeled_rows": 2,
+        "prevalence": 1.0,
+        "prospective_rows": 6,
+        "value": "GROUP_0199"
+      },
+      {
+        "baseline_brier": null,
+        "brier": null,
+        "label_observation_fraction": 0.0,
+        "labeled_rows": 0,
+        "prevalence": null,
+        "prospective_rows": 2,
+        "value": "GROUP_0201"
+      },
+      {
+        "baseline_brier": 0.21932320955611714,
+        "brier": 0.10401913327346085,
+        "label_observation_fraction": 0.5,
+        "labeled_rows": 2,
+        "prevalence": 0.0,
+        "prospective_rows": 4,
+        "value": "GROUP_0208"
+      },
+      {
+        "baseline_brier": 0.2510036503274669,
+        "brier": 0.2469685782559561,
+        "label_observation_fraction": 0.7,
+        "labeled_rows": 14,
+        "prevalence": 0.5,
+        "prospective_rows": 20,
+        "value": "GROUP_0212"
+      },
+      {
+        "baseline_brier": 0.2826840910988168,
+        "brier": 0.29399187108282565,
+        "label_observation_fraction": 0.3333333333333333,
+        "labeled_rows": 2,
+        "prevalence": 1.0,
+        "prospective_rows": 6,
+        "value": "GROUP_0214"
+      },
+      {
+        "baseline_brier": null,
+        "brier": null,
+        "label_observation_fraction": 0.0,
+        "labeled_rows": 0,
+        "prevalence": null,
+        "prospective_rows": 2,
+        "value": "GROUP_0223"
+      },
+      {
+        "baseline_brier": 0.23516342994179207,
+        "brier": 0.21744878384326521,
+        "label_observation_fraction": 1.0,
+        "labeled_rows": 8,
+        "prevalence": 0.25,
+        "prospective_rows": 8,
+        "value": "GROUP_0226"
+      }
+    ],
+    "group_id_macro_brier": 0.19125718934076488,
+    "history_cohort": [
+      {
+        "baseline_brier": 0.24600147546883283,
+        "brier": 0.2220070603266866,
+        "label_observation_fraction": 0.2923076923076923,
+        "labeled_rows": 19,
+        "prevalence": 0.42105263157894735,
+        "prospective_rows": 65,
+        "value": "3to5_valid_months"
+      },
+      {
+        "baseline_brier": 0.2527008167973607,
+        "brier": 0.1827329316674185,
+        "label_observation_fraction": 0.47863247863247865,
+        "labeled_rows": 112,
+        "prevalence": 0.5267857142857143,
+        "prospective_rows": 234,
+        "value": "6plus_valid_months"
+      }
+    ],
+    "missing_6m_features": [
+      {
+        "baseline_brier": 0.25311567971222365,
+        "brier": 0.17806214188960834,
+        "label_observation_fraction": 0.7758620689655172,
+        "labeled_rows": 45,
+        "prevalence": 0.5333333333333333,
+        "prospective_rows": 58,
+        "value": "false"
+      },
+      {
+        "baseline_brier": 0.25100365032746685,
+        "brier": 0.19385379195262256,
+        "label_observation_fraction": 0.35684647302904565,
+        "labeled_rows": 86,
+        "prevalence": 0.5,
+        "prospective_rows": 241,
+        "value": "true"
+      }
+    ]
+  },
+  "evaluation_receipt_sha256": "96916854a53c8933f36a12b40d057044e670b1beb4484d7553bce2f07584ae95",
+  "grouped_bootstrap": {
+    "intervals_95": {
+      "average_precision": [
+        0.7205525761527909,
+        0.8984829366799918
+      ],
+      "brier": [
+        0.15437067266147664,
+        0.22209498278435327
+      ],
+      "relative_brier_skill": [
+        0.12025993468083153,
+        0.3807192648045509
+      ],
+      "roc_auc_diagnostic": [
+        0.6878148286140089,
+        0.8811620009201224
+      ]
+    },
+    "method": "percentile_2.5_97.5_conditional_on_fixed_fit",
+    "resamples": 300,
+    "sampling_unit": "group_id_with_replacement_all_rows",
+    "seed": 1729,
+    "single_class_resamples_skipped": 0
+  },
+  "metrics": {
+    "average_precision": 0.8156032515457942,
+    "baseline": {
+      "average_precision": 0.5114503816793893,
+      "brier": 0.25172915660467343,
+      "train_prevalence": 0.46831955922865015
+    },
+    "brier": 0.1884291793355566,
+    "false_alerts": 15,
+    "missed_positives": 24,
+    "passed": true,
+    "precision": 0.7413793103448276,
+    "prevalence": 0.5114503816793893,
+    "recall": 0.6417910447761194,
+    "relative_brier_skill": 0.2514606497034664,
+    "roc_auc_diagnostic": 0.7901119402985074,
+    "rows": 131,
+    "threshold": 0.5,
+    "true_alerts": 43,
+    "true_negatives": 49
+  },
+  "model_manifest_sha256": "9b30c24feeb75fb0c2f17bca9a2eb178a508dd3e24759ac53c713424dd531dc8",
+  "predictions_sha256": "4fa8e2a34f57840543ac955484d7eca7e15c30a15d1e983572072d5c11abf873",
+  "reliability_bins": [
+    {
+      "lower": 0.0,
+      "mean_probability": null,
+      "observed_fraction": null,
+      "rows": 0,
+      "upper": 0.1
+    },
+    {
+      "lower": 0.1,
+      "mean_probability": 0.1498994919980845,
+      "observed_fraction": 0.15384615384615385,
+      "rows": 13,
+      "upper": 0.2
+    },
+    {
+      "lower": 0.2,
+      "mean_probability": 0.2522674103437449,
+      "observed_fraction": 0.18181818181818182,
+      "rows": 11,
+      "upper": 0.3
+    },
+    {
+      "lower": 0.3,
+      "mean_probability": 0.3610222706975396,
+      "observed_fraction": 0.23076923076923078,
+      "rows": 13,
+      "upper": 0.4
+    },
+    {
+      "lower": 0.4,
+      "mean_probability": 0.4471280814548088,
+      "observed_fraction": 0.4722222222222222,
+      "rows": 36,
+      "upper": 0.5
+    },
+    {
+      "lower": 0.5,
+      "mean_probability": 0.5508748355988182,
+      "observed_fraction": 0.6071428571428571,
+      "rows": 28,
+      "upper": 0.6
+    },
+    {
+      "lower": 0.6,
+      "mean_probability": 0.6531353573721528,
+      "observed_fraction": 0.6666666666666666,
+      "rows": 9,
+      "upper": 0.7
+    },
+    {
+      "lower": 0.7,
+      "mean_probability": 0.7338570987598457,
+      "observed_fraction": 0.75,
+      "rows": 4,
+      "upper": 0.8
+    },
+    {
+      "lower": 0.8,
+      "mean_probability": 0.8586525032289853,
+      "observed_fraction": 1.0,
+      "rows": 16,
+      "upper": 0.9
+    },
+    {
+      "lower": 0.9,
+      "mean_probability": 0.9023504309569179,
+      "observed_fraction": 1.0,
+      "rows": 1,
+      "upper": 1.0
+    }
+  ],
+  "scope": "Synthetic retrospective probability estimate of target_deficit_3m proxy only; not calibrated, default, official health score, cash balance or causal diagnosis",
+  "status": "accepted_proxy_only",
+  "support": {
+    "censored": 168,
+    "classes": {
+      "0": {
+        "groups": 24,
+        "rows": 64
+      },
+      "1": {
+        "groups": 22,
+        "rows": 67
+      }
+    },
+    "groups": 31,
+    "minimum": {
+      "groups_per_class": 5,
+      "groups_total": 10,
+      "rows_per_class": 20
+    },
+    "passed": true,
+    "prospective_rows": 299
+  }
+}

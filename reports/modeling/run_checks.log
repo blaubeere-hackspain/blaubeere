@@ -1,0 +1,1 @@
+scripts/run_checks.sh: line 3: set: pipefail: invalid option name

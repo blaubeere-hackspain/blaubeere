@@ -3,6 +3,7 @@ import { api, ApiError, returnPath } from "../apps/app/lib/api";
 import { addDays, cents } from "../apps/app/lib/format";
 import { cashScale } from "../apps/app/components/cash-chart";
 import { outsideDialog } from "../apps/app/components/dialog";
+import { hasProxyEstimate, type Predictive } from "../apps/app/lib/types";
 
 for (const value of [null, "https://evil.example", "//evil.example", "javascript:alert(1)", "/\\evil.example", "/login"]) assert.equal(returnPath(value), "/dashboard");
 assert.equal(returnPath("/connect?state=example"), "/connect?state=example");
@@ -26,4 +27,10 @@ try {
     await assert.rejects(api("/companies/DEMO_001/plans"), error => error instanceof ApiError && error.status === status && error.message.includes("input format"));
   }
 } finally { globalThis.fetch = originalFetch; }
-console.log("Web checks passed: redirects, exact money input, dated horizons, chart scales, dialog boundaries and validation errors.");
+for (const accepted of [true, false]) for (const eligible of [true, false]) {
+  for (const probability_estimate of [null, NaN, Infinity, -0.1, 1.1, 0, 0.5675, 1]) {
+    const p = { accepted, eligible, probability_estimate } as Predictive;
+    assert.equal(hasProxyEstimate(p), accepted && eligible && probability_estimate !== null && Number.isFinite(probability_estimate) && probability_estimate >= 0 && probability_estimate <= 1);
+  }
+}
+console.log("Web checks passed: redirects, exact money input, dated horizons, chart scales, dialog boundaries, validation errors and proxy display guards.");

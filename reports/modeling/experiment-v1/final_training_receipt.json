@@ -1,0 +1,13 @@
+{
+  "artifacts_sha256": {
+    "config.json": "6429b306683f37a4a3076711d0c8c4780a5c61ddef25a0ebdfe57529ef62f418",
+    "freeze.json": "15fc94f99b4016f326cebebb5a47c11c138ee325b28f6e0bbeb2fae0a4d2011c",
+    "selection.json": "e1f641bcdf6b3dc0e5d68b3657661f7b3f68bb4d23f0ab7ef2c4b3596949edb7"
+  },
+  "candidate": {
+    "family": "hgb",
+    "id": "hgb_leaf15",
+    "max_leaf_nodes": 15
+  },
+  "status": "started_before_final_fit"
+}

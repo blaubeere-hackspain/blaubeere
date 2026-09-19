@@ -1,0 +1,299 @@
+{
+  "automatic_correction": false,
+  "candidates": [
+    {
+      "C": 0.1,
+      "family": "logistic",
+      "folds": [
+        {
+          "average_precision": 0.6915189784629063,
+          "baseline": {
+            "average_precision": 0.5,
+            "brier": 0.2505260499957916,
+            "train_prevalence": 0.47706422018348627
+          },
+          "brier": 0.21700106365349825,
+          "false_alerts": 32,
+          "missed_positives": 25,
+          "passed": true,
+          "precision": 0.6404494382022472,
+          "prevalence": 0.5,
+          "recall": 0.6951219512195121,
+          "relative_brier_skill": 0.13381836476828057,
+          "roc_auc_diagnostic": 0.7132659131469363,
+          "rows": 164,
+          "split": "fold1_validation",
+          "threshold": 0.5,
+          "true_alerts": 57,
+          "true_negatives": 50
+        },
+        {
+          "average_precision": 0.780278768082498,
+          "baseline": {
+            "average_precision": 0.5657142857142857,
+            "brier": 0.25939621917323785,
+            "train_prevalence": 0.4486049926578561
+          },
+          "brier": 0.22266648725936278,
+          "false_alerts": 11,
+          "missed_positives": 54,
+          "passed": true,
+          "precision": 0.8035714285714286,
+          "prevalence": 0.5657142857142857,
+          "recall": 0.45454545454545453,
+          "relative_brier_skill": 0.1415970210781874,
+          "roc_auc_diagnostic": 0.7305954279638489,
+          "rows": 175,
+          "split": "fold2_validation",
+          "threshold": 0.5,
+          "true_alerts": 45,
+          "true_negatives": 65
+        }
+      ],
+      "id": "logistic_c0.1"
+    },
+    {
+      "C": 1.0,
+      "family": "logistic",
+      "folds": [
+        {
+          "average_precision": 0.6760595176408358,
+          "baseline": {
+            "average_precision": 0.5,
+            "brier": 0.2505260499957916,
+            "train_prevalence": 0.47706422018348627
+          },
+          "brier": 0.21736227387085483,
+          "false_alerts": 32,
+          "missed_positives": 23,
+          "passed": true,
+          "precision": 0.6483516483516484,
+          "prevalence": 0.5,
+          "recall": 0.7195121951219512,
+          "relative_brier_skill": 0.13237655774915968,
+          "roc_auc_diagnostic": 0.7165377751338489,
+          "rows": 164,
+          "split": "fold1_validation",
+          "threshold": 0.5,
+          "true_alerts": 59,
+          "true_negatives": 50
+        },
+        {
+          "average_precision": 0.7757585364565653,
+          "baseline": {
+            "average_precision": 0.5657142857142857,
+            "brier": 0.25939621917323785,
+            "train_prevalence": 0.4486049926578561
+          },
+          "brier": 0.2236984029298949,
+          "false_alerts": 10,
+          "missed_positives": 53,
+          "passed": true,
+          "precision": 0.8214285714285714,
+          "prevalence": 0.5657142857142857,
+          "recall": 0.46464646464646464,
+          "relative_brier_skill": 0.13761887647060167,
+          "roc_auc_diagnostic": 0.7323232323232322,
+          "rows": 175,
+          "split": "fold2_validation",
+          "threshold": 0.5,
+          "true_alerts": 46,
+          "true_negatives": 66
+        }
+      ],
+      "id": "logistic_c1"
+    },
+    {
+      "family": "hgb",
+      "folds": [
+        {
+          "average_precision": 0.7057009500184905,
+          "baseline": {
+            "average_precision": 0.5,
+            "brier": 0.2505260499957916,
+            "train_prevalence": 0.47706422018348627
+          },
+          "brier": 0.20175149090465386,
+          "false_alerts": 34,
+          "missed_positives": 25,
+          "passed": true,
+          "precision": 0.6263736263736264,
+          "prevalence": 0.5,
+          "recall": 0.6951219512195121,
+          "relative_brier_skill": 0.19468857267320927,
+          "roc_auc_diagnostic": 0.7437537180249851,
+          "rows": 164,
+          "split": "fold1_validation",
+          "threshold": 0.5,
+          "true_alerts": 57,
+          "true_negatives": 48
+        },
+        {
+          "average_precision": 0.8562336397530739,
+          "baseline": {
+            "average_precision": 0.5657142857142857,
+            "brier": 0.25939621917323785,
+            "train_prevalence": 0.4486049926578561
+          },
+          "brier": 0.18608174333744062,
+          "false_alerts": 14,
+          "missed_positives": 37,
+          "passed": true,
+          "precision": 0.8157894736842105,
+          "prevalence": 0.5657142857142857,
+          "recall": 0.6262626262626263,
+          "relative_brier_skill": 0.2826350980344634,
+          "roc_auc_diagnostic": 0.8260233918128654,
+          "rows": 175,
+          "split": "fold2_validation",
+          "threshold": 0.5,
+          "true_alerts": 62,
+          "true_negatives": 62
+        }
+      ],
+      "id": "hgb_leaf7",
+      "max_leaf_nodes": 7
+    },
+    {
+      "family": "hgb",
+      "folds": [
+        {
+          "average_precision": 0.698764302431361,
+          "baseline": {
+            "average_precision": 0.5,
+            "brier": 0.2505260499957916,
+            "train_prevalence": 0.47706422018348627
+          },
+          "brier": 0.20285122619288717,
+          "false_alerts": 34,
+          "missed_positives": 24,
+          "passed": true,
+          "precision": 0.6304347826086957,
+          "prevalence": 0.5,
+          "recall": 0.7073170731707317,
+          "relative_brier_skill": 0.19029886833606835,
+          "roc_auc_diagnostic": 0.7403331350386675,
+          "rows": 164,
+          "split": "fold1_validation",
+          "threshold": 0.5,
+          "true_alerts": 58,
+          "true_negatives": 48
+        },
+        {
+          "average_precision": 0.8644413400754631,
+          "baseline": {
+            "average_precision": 0.5657142857142857,
+            "brier": 0.25939621917323785,
+            "train_prevalence": 0.4486049926578561
+          },
+          "brier": 0.18465713655934182,
+          "false_alerts": 13,
+          "missed_positives": 36,
+          "passed": true,
+          "precision": 0.8289473684210527,
+          "prevalence": 0.5657142857142857,
+          "recall": 0.6363636363636364,
+          "relative_brier_skill": 0.28812710860670454,
+          "roc_auc_diagnostic": 0.828548644338118,
+          "rows": 175,
+          "split": "fold2_validation",
+          "threshold": 0.5,
+          "true_alerts": 63,
+          "true_negatives": 63
+        }
+      ],
+      "id": "hgb_leaf15",
+      "max_leaf_nodes": 15
+    }
+  ],
+  "config_sha256": "6429b306683f37a4a3076711d0c8c4780a5c61ddef25a0ebdfe57529ef62f418",
+  "scope": "Synthetic retrospective probability estimate of target_deficit_3m proxy only; not calibrated, default, official health score, cash balance or causal diagnosis",
+  "selected_candidate": "hgb_leaf15",
+  "status": "selected",
+  "support": {
+    "fold1_train": {
+      "censored": 555,
+      "classes": {
+        "0": {
+          "groups": 43,
+          "rows": 342
+        },
+        "1": {
+          "groups": 41,
+          "rows": 312
+        }
+      },
+      "groups": 49,
+      "minimum": {
+        "groups_per_class": 5,
+        "groups_total": 10,
+        "rows_per_class": 20
+      },
+      "passed": true,
+      "prospective_rows": 1209
+    },
+    "fold1_validation": {
+      "censored": 194,
+      "classes": {
+        "0": {
+          "groups": 18,
+          "rows": 82
+        },
+        "1": {
+          "groups": 15,
+          "rows": 82
+        }
+      },
+      "groups": 21,
+      "minimum": {
+        "groups_per_class": 5,
+        "groups_total": 10,
+        "rows_per_class": 20
+      },
+      "passed": true,
+      "prospective_rows": 358
+    },
+    "fold2_train": {
+      "censored": 1145,
+      "classes": {
+        "0": {
+          "groups": 63,
+          "rows": 751
+        },
+        "1": {
+          "groups": 55,
+          "rows": 611
+        }
+      },
+      "groups": 70,
+      "minimum": {
+        "groups_per_class": 5,
+        "groups_total": 10,
+        "rows_per_class": 20
+      },
+      "passed": true,
+      "prospective_rows": 2507
+    },
+    "fold2_validation": {
+      "censored": 211,
+      "classes": {
+        "0": {
+          "groups": 16,
+          "rows": 76
+        },
+        "1": {
+          "groups": 19,
+          "rows": 99
+        }
+      },
+      "groups": 23,
+      "minimum": {
+        "groups_per_class": 5,
+        "groups_total": 10,
+        "rows_per_class": 20
+      },
+      "passed": true,
+      "prospective_rows": 386
+    }
+  }
+}

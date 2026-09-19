@@ -10,9 +10,26 @@ use serde_json::{Value, json};
 use std::collections::{BTreeMap, HashSet};
 
 const MAX_MONEY: i64 = 1_000_000_000_000;
+pub const CASH_UNAVAILABLE: &str = "Cash planning is unavailable: proxy-only assessments have no verified opening cash or dated cash flows. Empty history and flows mean unknown, not no activity.";
+
+#[path = "predictive.rs"]
+mod predictive;
+pub use predictive::Predictive;
+
+#[derive(Clone, Copy, Default, PartialEq, Eq, Serialize, Deserialize)]
+#[serde(rename_all = "snake_case")]
+pub enum AssessmentKind {
+    #[default]
+    Cash,
+    ProxyOnly,
+}
 
 #[derive(Clone, Serialize, Deserialize)]
+#[serde(deny_unknown_fields)]
 pub struct Company {
+    #[serde(default)]
+    pub kind: AssessmentKind,
+    pub predictive: Option<Predictive>,
     pub id: String,
     pub name: String,
     pub group: String,
@@ -21,8 +38,8 @@ pub struct Company {
     pub model_version: String,
     pub history_mode: String,
     pub data_mode: String,
-    pub opening_cash_cents: i64,
-    pub buffer_cents: i64,
+    pub opening_cash_cents: Option<i64>,
+    pub buffer_cents: Option<i64>,
     pub health: Value,
     pub history: Vec<Value>,
     pub drivers: Vec<Value>,
@@ -54,10 +71,20 @@ pub fn load(input: &str) -> anyhow::Result<Vec<Company>> {
             c.currency.len() == 3 && c.currency.bytes().all(|b| b.is_ascii_uppercase()),
             "Use ISO currency codes"
         );
+        if c.kind == AssessmentKind::ProxyOnly {
+            predictive::validate(c)?;
+            continue;
+        }
         anyhow::ensure!(
-            (-MAX_MONEY..=MAX_MONEY).contains(&c.opening_cash_cents)
-                && (0..=MAX_MONEY).contains(&c.buffer_cents),
-            "Cash outside supported bounds"
+            c.predictive.is_none(),
+            "Cash mode cannot contain proxy evidence"
+        );
+        anyhow::ensure!(
+            c.opening_cash_cents
+                .is_some_and(|cash| (-MAX_MONEY..=MAX_MONEY).contains(&cash))
+                && c.buffer_cents
+                    .is_some_and(|buffer| (0..=MAX_MONEY).contains(&buffer)),
+            "Cash missing or outside supported bounds"
         );
         anyhow::ensure!(
             matches!(c.history_mode.as_str(), "as_known" | "reconstructed"),
@@ -164,7 +191,9 @@ fn forecast(
                 .or_default() += extra;
         }
     }
-    let mut cash = company.opening_cash_cents;
+    let mut cash = company
+        .opening_cash_cents
+        .expect("validated cash-mode assessment");
     let points: Vec<Point> = (0..=days)
         .map(|day| {
             let date = cutoff + Duration::days(day);
@@ -276,6 +305,12 @@ fn validate_goal(company: &Company, goal: &Goal) -> ApiResult<i64> {
 }
 
 pub fn compare(company: &Company, goal: &Goal) -> ApiResult<Value> {
+    if company.kind == AssessmentKind::ProxyOnly
+        || company.opening_cash_cents.is_none()
+        || company.buffer_cents.is_none()
+    {
+        return Err(ApiError::bad(CASH_UNAVAILABLE));
+    }
     let days = validate_goal(company, goal)?;
     let baseline = forecast(
         company,
@@ -360,11 +395,22 @@ pub async fn assessment(
     Ok(Json(assess(
         company,
         query.days.unwrap_or(90),
-        query.buffer_cents.unwrap_or(company.buffer_cents),
+        query.buffer_cents,
     )?))
 }
 
-pub fn assess(company: &Company, days: i64, buffer: i64) -> ApiResult<Value> {
+pub fn assess(company: &Company, days: i64, buffer: Option<i64>) -> ApiResult<Value> {
+    if company.kind == AssessmentKind::ProxyOnly
+        || company.opening_cash_cents.is_none()
+        || company.buffer_cents.is_none()
+    {
+        return Ok(
+            json!({"company":company,"forecast":null,"cash_planning_available":false,"cash_planning_reason":CASH_UNAVAILABLE}),
+        );
+    }
+    let buffer = buffer
+        .or(company.buffer_cents)
+        .ok_or_else(|| ApiError::bad(CASH_UNAVAILABLE))?;
     if !(7..=180).contains(&days) || !(0..=MAX_MONEY).contains(&buffer) {
         return Err(ApiError::bad(
             "Use a 7–180 day horizon and a non-negative buffer.",
@@ -375,7 +421,7 @@ pub fn assess(company: &Company, days: i64, buffer: i64) -> ApiResult<Value> {
         .flows
         .retain(|flow| flow.known_on <= company.assessment_date);
     Ok(
-        json!({"company":snapshot,"forecast":forecast(company,days,buffer,&Changes::default(),None)}),
+        json!({"company":snapshot,"forecast":forecast(company,days,buffer,&Changes::default(),None),"cash_planning_available":true,"cash_planning_reason":null}),
     )
 }
 

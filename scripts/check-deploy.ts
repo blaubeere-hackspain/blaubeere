@@ -1,11 +1,35 @@
 import assert from "node:assert/strict";
-import { mkdtempSync, writeFileSync, readFileSync, rmSync } from "node:fs";
+import { mkdirSync, mkdtempSync, writeFileSync, readFileSync, rmSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
+
+function shellText(source: string) {
+  return source.replace(/\r\n/g, "\n");
+}
+
+function checkSyntax(name: string, source: string) {
+  const result = Bun.spawnSync(["bash", "-n"], { stdin: Buffer.from(shellText(source), "utf8") });
+  assert.equal(result.exitCode, 0, `${name}: ${result.stderr.toString()}`);
+}
+
+const scripts = ["deploy/jio.sh", "deploy/runtime.sh"] as const;
+const checked: string[] = [];
+for (const name of scripts) {
+  const source = readFileSync(name, "utf8");
+  checkSyntax(name, source);
+  for (const newline of ["\n", "\r\n"]) {
+    assert.throws(() => checkSyntax(name, shellText(source).replace(/\n/g, newline) + `${newline}if true; then${newline}`), /AssertionError/);
+  }
+  checked.push(name);
+}
+assert.deepEqual(checked, ["deploy/jio.sh", "deploy/runtime.sh"]);
+console.log("Shell syntax checks passed: deploy/jio.sh and deploy/runtime.sh; invalid LF/CRLF shell rejected for both.");
 
 const directory = mkdtempSync(join(tmpdir(), "blaubeere-deploy-"));
 const vm = "a".repeat(32), revision = "b".repeat(40);
 try {
+  mkdirSync(join(directory, "deploy"));
+  for (const name of scripts) writeFileSync(join(directory, name), shellText(readFileSync(name, "utf8")), "utf8");
   writeFileSync(join(directory, "jio"), `#!/usr/bin/env bash
 set -eu
 printf '%s\\n' "$1" >> "$DEPLOY_TEST/log"
@@ -29,7 +53,7 @@ esac
   writeFileSync(join(directory, "bun"), "#!/bin/sh\nexit 0\n", { mode: 0o700 });
   for (const scenario of ["wrong_account", "auth", "bad_url", "stopped"]) {
     writeFileSync(join(directory, "log"), "");
-    const result = Bun.spawnSync(["bash", "deploy/jio.sh"], { env: { ...process.env, PATH: `${directory}:${process.env.PATH}`, DEPLOY_TEST: directory, CASE: scenario, JIO_VM_ID: vm, GIT_REF: revision, GITHUB_STEP_SUMMARY: "" } });
+    const result = Bun.spawnSync(["bash", join(directory, "deploy/jio.sh")], { env: { ...process.env, PATH: `${directory}:${process.env.PATH}`, DEPLOY_TEST: directory, CASE: scenario, JIO_VM_ID: vm, GIT_REF: revision, GITHUB_STEP_SUMMARY: "" } });
     const commands = readFileSync(join(directory, "log"), "utf8");
     if (scenario === "stopped") {
       assert.equal(result.exitCode, 0, result.stderr.toString());
@@ -37,6 +61,7 @@ esac
       const payload = readFileSync(join(directory, "payload"), "utf8");
       assert.ok(payload.startsWith(`bash -s -- '${revision}' 'https://app.example' 'https://landing.example'`));
       assert.ok(payload.endsWith("BLAUBEERE_DEPLOY_SCRIPT\n"));
+      assert.ok(payload.includes(shellText(readFileSync("deploy/runtime.sh", "utf8"))));
     } else {
       assert.notEqual(result.exitCode, 0);
       assert.ok(!commands.includes("start\n") && !commands.includes("connect\n"), "Wrong accounts, invalid credentials and origins must fail before deployment");

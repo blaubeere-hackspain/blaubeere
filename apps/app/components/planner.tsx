@@ -4,13 +4,13 @@ import { ArrowRight, Check, ChevronDown, FlaskConical, LoaderCircle, X } from "l
 import { Dialog } from "./dialog";
 import { api } from "../lib/api";
 import { addDays, cents, date, money } from "../lib/format";
-import type { Company, Comparison, Goal, Plan } from "../lib/types";
+import type { CashCompany, Comparison, Goal, Plan } from "../lib/types";
 
 const amountPattern = "[0-9]+(\\.[0-9]{1,2})?";
 function Amount({ label, name, value, hint, max, integer }: { label: string; name: string; value: string; hint?: string; max?: number; integer?: boolean }) {
   return <div className="field"><label htmlFor={name}>{label}</label><input id={name} name={name} defaultValue={value} type={max === undefined ? "text" : "number"} min={max === undefined ? undefined : 0} max={max} step={integer ? 1 : "any"} inputMode={integer ? "numeric" : "decimal"} pattern={max === undefined ? amountPattern : undefined} aria-describedby={hint ? `${name}-hint` : undefined} required/>{hint && <small id={`${name}-hint`}>{hint}</small>}</div>;
 }
-export function Planner({ company, open, onClose, onCompare, onPreview }: { company: Company; open: boolean; onClose: () => void; onCompare: (c: Comparison) => void; onPreview: (p?: Plan) => void }) {
+export function Planner({ company, open, onClose, onCompare, onPreview }: { company: CashCompany; open: boolean; onClose: () => void; onCompare: (c: Comparison) => void; onPreview: (p?: Plan) => void }) {
   const request = useRef<AbortController | null>(null);
   const [metric, setMetric] = useState("min_cash");
   const [target, setTarget] = useState(String(company.buffer_cents / 100));
