@@ -1,10 +1,13 @@
 import assert from "node:assert/strict";
 import "./check-welcome";
 import "./check-scroll-reveals";
+import "./check-dev-proxy";
 import { createRequire } from "node:module";
 import { LoginForm } from "../apps/app/components/login-form";
+import { CompanyPicker } from "../apps/app/components/company-picker";
+import { DailyCashPlot, MonthlyCashChart } from "../apps/app/components/monthly-cash-chart";
 import { api, ApiError, returnPath } from "../apps/app/lib/api";
-import { addDays, cents, money } from "../apps/app/lib/format";
+import { addDays, cents, money, monthlyTimeline } from "../apps/app/lib/format";
 import { cashScale } from "../apps/app/components/cash-chart";
 import companies from "../fixtures/companies.json";
 import { HealthExplanation } from "../apps/app/components/health-explanation";
@@ -12,7 +15,8 @@ import { healthHref, healthTimeline, validHealthDate } from "../apps/app/lib/hea
 import type { Company } from "../apps/app/lib/types";
 import { outsideDialog } from "../apps/app/components/dialog";
 import { ModelDashboard, modelNumber, modelReason } from "../apps/app/components/model-dashboard";
-import type { ModelAssessment, ModelRecord } from "../apps/app/lib/types";
+import { agingAmounts, DebtServiceCard } from "../apps/app/components/financial-cards";
+import type { CashMonth, ModelAssessment, ModelRecord } from "../apps/app/lib/types";
 
 const requireApp = createRequire(new URL("../apps/app/package.json", import.meta.url));
 const { createElement } = requireApp("react");
@@ -27,21 +31,33 @@ const record: ModelRecord = {
   k: 4178.45, alpha: 3, beta: 0.25, reasons: ["sin_actividad_en_ventana"], cash: null, payment: null, debt: null,
 };
 const model: ModelAssessment = { kind: "model", company: { id: record.company_id, name: record.company_id, group: record.group_id, currency: "EUR", data_mode: "challenge" }, records: [record], provenance: { batch_id: "test", source_revision: "test", imported_at: "2026-09-19", files: [], model_summary: { advertencia: "Provisional", limitaciones: [] } } };
+for (const [list, label, disabled] of [[null, "Loading companies…", true], [[], "No companies available", true], [[model.company], "COMP_TEST", false]] as const) {
+  const picker = renderToStaticMarkup(createElement(CompanyPicker, { id: "test-company", companies: list, selected: model.company.id, onSelect: () => {} }));
+  assert.ok(picker.includes(label) && picker.includes('aria-haspopup="dialog"') && !picker.includes("<select"), "Use the styled company picker in every loading state");
+  assert.equal(picker.includes('disabled=""'), disabled, "Only available companies can open the picker");
+}
 const modelOverview = renderToStaticMarkup(createElement(ModelDashboard, { data: model }));
+const company48 = renderToStaticMarkup(createElement(ModelDashboard, { data: { ...model, company: { ...model.company, name: "COMP_0048" } } }));
+const companyHeader = company48.match(/<header[\s\S]*?<\/header>/)![0];
+assert.ok(companyHeader.includes("COMP 48") && companyHeader.includes("Financial health and the movements behind it.") && companyHeader.includes('id="model-date"') && companyHeader.includes('aria-haspopup="dialog"'), "Company title and calendar share one header");
+assert.ok(!company48.includes("Imported company data") && !company48.includes("monthly assessments") && !companyHeader.includes("GROUP_TEST"), "The company heading stays free of dataset metadata");
 assert.ok(modelOverview.includes("No score") && modelOverview.includes("Monthly observations") && !modelOverview.includes("Usable cash today"));
 assert.ok(modelOverview.includes('/dashboard/health/2026-08-31?company=COMP_TEST'));
 assert.ok(!modelOverview.includes('id="model-company"'), "Company selection belongs only in the sidebar");
 assert.ok(modelOverview.indexOf('id="health"') < modelOverview.indexOf('id="cash"'), "Health history must lead the dashboard");
+assert.ok(modelOverview.includes('class="stats-grid model-stats"') && modelOverview.indexOf('class="stats-grid model-stats"') < modelOverview.indexOf('id="health"'), "The four source metrics belong above the health chart");
 const publicOverview = renderToStaticMarkup(createElement(ModelDashboard, { data: model, demo: true }));
 assert.ok(publicOverview.includes('/demo/health/2026-08-31?company=COMP_TEST') && !publicOverview.includes('/dashboard/health/'), "Public score links must stay in the company demo");
 const publicDetail = renderToStaticMarkup(createElement(ModelDashboard, { data: model, demo: true, scoreDate: record.as_of }));
 assert.ok(publicDetail.includes('/demo?company=COMP_TEST'), "Returning from an explanation must retain the demo company");
-const chartRecords = Array.from({ length: 24 }, (_, index) => ({ ...record, as_of: new Date(Date.UTC(2024, index + 1, 0)).toISOString().slice(0, 10), health_score: index === 12 ? null : 50 + index }));
+const chartRecords = Array.from({ length: 24 }, (_, index) => ({ ...record, as_of: new Date(Date.UTC(2024, index + 1, 0)).toISOString().slice(0, 10), health_score: index === 16 ? null : 50 + index }));
 const modelHistory = renderToStaticMarkup(createElement(ModelDashboard, { data: { ...model, records: chartRecords } }));
 const modelSvg = modelHistory.match(/<svg[^>]*aria-labelledby="model-chart-title model-chart-description"[\s\S]*?<\/svg>/)![0];
 assert.equal([...modelSvg.matchAll(/<text /g)].length, 8, "Keep five score ticks and three readable date labels in the desktop chart");
-assert.equal([...modelSvg.matchAll(/<circle /g)].length, 23, "Missing ratings remain gaps, never plotted as zero");
+assert.equal([...modelSvg.matchAll(/<circle /g)].length, 11, "Only ratings from 2025 onward are plotted, and missing ratings remain gaps");
+assert.ok(!modelSvg.includes("2024") && modelSvg.includes("31 Jan 2025"), "Health history starts in 2025");
 assert.equal((modelSvg.match(/<path d="([^"]*)"/)![1].match(/M/g) ?? []).length, 2, "Do not join the line across a missing rating");
+assert.ok(modelSvg.includes("Today"), "Extend the time axis through today without adding score points");
 const modelDetail = renderToStaticMarkup(createElement(ModelDashboard, { data: model, scoreDate: record.as_of }));
 assert.ok(modelDetail.includes("Not available") && modelDetail.includes("No cash activity was observed") && modelDetail.includes("not a bank balance"));
 assert.ok(!modelDetail.includes("NaN") && !modelDetail.includes("€0"), "Missing source values must not become zero-valued cash");
@@ -50,24 +66,58 @@ assert.equal(modelNumber(0), "0");
 assert.match(modelReason("p_eur_desconocido_en_2_meses"), /Operating payments.*2 month/);
 const scoredV4 = { ...record, health_score: 54, c6: 300, p6: 100, d6: 20, deficit_servicio_6: 30, obligacion_vencida_m: 50, t6_efectivo: 200, colchon_v4: 60, colchon_aplicable: 60, mora_indice: 0.4, multiplicador_deuda: 0.75, h_antes_de_ajustes: 80, penalizacion_mora_puntos: 8, penalizacion_multiplicador_puntos: 18, reasons: [] };
 const v4Detail = renderToStaticMarkup(createElement(ModelDashboard, { data: { ...model, records: [scoredV4] }, scoreDate: record.as_of }));
-for (const text of ["healthscore_v4", "Effective obligations (T6)", "€200", "Debt-service shortfall", "€30", "Debt multiplier reduction", "18 points", "0.4 / 1", "0.75×", "× debt multiplier"]) assert.ok(v4Detail.includes(text), text);
+assert.equal((v4Detail.match(/class="health-score-gauge"[\s\S]*?<\/svg>/)![0].match(/stroke="var\(--accent\)"/g) ?? []).length, 19, "The gauge reflects the returned score on a 0–100 scale");
+assert.ok(!modelOverview.match(/class="health-score-gauge"[\s\S]*?<\/svg>/)![0].includes('stroke="var(--accent)"'), "Missing evidence must not fill the score gauge");
+for (const text of ["Effective obligations (T6)", "€200", "Debt-service shortfall", "€30", "Debt multiplier reduction", "18 points", "0.4 / 1", "0.75×", "× debt multiplier"]) assert.ok(v4Detail.includes(text), text);
 assert.ok(!v4Detail.includes("NaN") && !v4Detail.includes("including 100") && !v4Detail.includes("published v3"));
-const excludedV4 = renderToStaticMarkup(createElement(ModelDashboard, { data: { ...model, records: [{ ...record, excluida: true, confidence: "excluida", reasons: ["excluida_nota_cero_persistente"] }] } }));
+const excludedV4 = renderToStaticMarkup(createElement(ModelDashboard, { data: { ...model, records: [{ ...record, excluida: true, confidence: "excluida", reasons: ["excluida_nota_cero_persistente"] }] }, scoreDate: record.as_of }));
 assert.ok(excludedV4.includes("Excluded") && excludedV4.includes("uneven data coverage"), "Exclusion is a published data rule, not a zero score or evidence of poor financial health");
 
 const cashRecord: ModelRecord = { ...record, d6: 60.25, p6: 1234.56, t6_efectivo: 1294.81,
-  cash: { saldo_reversa_eur: -321.09, flujo_neto: 678.12, meses_de_cobertura_reversa: null, saldo_ancla_eur: 900, confidence: "baja", flujo_operating_in: 1000, flujo_operating_out: -321.88, flujo_financing_in: 0, flujo_financing_out: 0, flujo_investment_in: 0, flujo_investment_out: 0, flujo_transfer: null, flujo_non_economic: 0, flujo_unknown: null, flags: ["agujeros_en_tramo"] },
-  payment: { pago_exposicion_eur: 500.44, pago_vencido_eur: 123.45, mora_pago_robusta: null, cobro_exposicion_eur: 2000, cobro_vencido_eur: 876.54, mora_cobro_robusta: 0.43827, mora_indice: 0.43827, confidence: "baja", confidence_pago: "baja", confidence_cobro: "baja", pago_n_huecos_eur: 1, cobro_n_huecos_eur: 1, n_vencimiento_desconocido: 3 },
+  cash: { saldo_reversa_eur: -321.09, flujo_neto: 678.12, volumen_conocido: 1321.88, meses_de_cobertura_reversa: null, saldo_ancla_eur: 900, confidence: "baja", flujo_operating_in: 1000, flujo_operating_out: -321.88, flujo_financing_in: 0, flujo_financing_out: 0, flujo_investment_in: 0, flujo_investment_out: 0, flujo_transfer: null, flujo_non_economic: 0, flujo_unknown: null, flags: ["agujeros_en_tramo"] },
+  payment: { pago_vencido_1_30_eur: 23.45, pago_vencido_31_60_eur: 100, pago_vencido_61_90_eur: 0, pago_vencido_91_180_eur: 0, pago_vencido_180_mas_eur: 0, pago_n_facturas: 5,
+    cobro_vencido_1_30_eur: 76.54, cobro_vencido_31_60_eur: 800, cobro_vencido_61_90_eur: 0, cobro_vencido_91_180_eur: 0, cobro_vencido_180_mas_eur: 0, cobro_n_facturas: 8,
+    pago_exposicion_eur: 500.44, pago_vencido_eur: 123.45, mora_pago_robusta: null, cobro_exposicion_eur: 2000, cobro_vencido_eur: 876.54, mora_cobro_robusta: 0.43827, mora_indice: 0.43827, confidence: "baja", confidence_pago: "baja", confidence_cobro: "baja", pago_n_huecos_eur: 1, cobro_n_huecos_eur: 1, n_vencimiento_desconocido: 3 },
 };
-const cashRecords = [{ ...cashRecord, as_of: "2026-06-30" }, { ...record, as_of: "2026-07-31" }, cashRecord];
+const daily: CashMonth = { currency: "EUR", anchor_date: "2026-09-01", income: 1000, expense: 321.88, closing_balance: -321.09, days: [
+  { date: "2026-08-01", income: 1000, expense: 321.88, balance: -321.09, unknown_movements: 0 },
+  { date: "2026-08-02", income: null, expense: null, balance: null, unknown_movements: 1 },
+  { date: "2026-08-03", income: 0, expense: 0, balance: -321.09, unknown_movements: 0 },
+] };
+const cashRecords = [{ ...cashRecord, as_of: "2026-06-30" }, { ...record, as_of: "2026-07-31" }, { ...cashRecord, daily_cash: [daily] }];
 const dataOverview = renderToStaticMarkup(createElement(ModelDashboard, { data: { ...model, records: cashRecords } }));
-for (const text of ["Cash movements over time", "Reconstructed cash", "Payments and collections", "Debt and overdue obligations", "Monthly source records", "€678.12", "-€321.88", "€123.45", "€876.54", "€60.25", "2 invoice(s) with unknown EUR amounts"]) assert.ok(dataOverview.includes(text), `Display the published amount or explanation: ${text}`);
-assert.match(dataOverview, /id="model-date"/, "The overview must let users select any published month");
-assert.ok(dataOverview.includes("not the outstanding debt balance") && dataOverview.includes("not a bank balance"));
-const cashSvg = dataOverview.match(/<svg[^>]*aria-labelledby="monthly-chart-title monthly-chart-description"[\s\S]*?<\/svg>/)![0];
-assert.equal((cashSvg.match(/<path d="([^"]*)"/)![1].match(/M/g) ?? []).length, 2, "Missing cash months split the plotted series");
-assert.ok(!cashSvg.includes("NaN") && !cashSvg.includes("undefined"));
-assert.ok(modelOverview.includes("No cash movements were published"), "An empty cash history needs a clear state without suppressing other datasets");
+for (const text of ["Cash flow", "Income", "Expenses", "Reconstructed cash", "Overdue collections", "Overdue payments", "Debt service", "Debt and overdue obligations", "Monthly source records", "€678.12", "-€321.88", "€123.45", "€876.54", "€60.25", "1 invoice(s) with unknown EUR amounts"]) assert.ok(dataOverview.includes(text), `Display the published amount or explanation: ${text}`);
+assert.ok(dataOverview.includes('id="model-date"') && dataOverview.includes("August 2026"));
+assert.ok(!dataOverview.includes("healthscore_v4") && !dataOverview.includes("Shared scale"));
+const metricCaptions = [...dataOverview.match(/<section class="stats-grid model-stats"[\s\S]*?<\/section>/)![0].matchAll(/<p>(.*?)<\/p>/g)];
+assert.equal(metricCaptions.length, 4);
+assert.ok(metricCaptions.every(caption => caption[1].includes("2026")), "All metric periods include the selected year");
+const cashSvg = dataOverview.match(/<svg[^>]*aria-labelledby="daily-chart-title daily-chart-description"[\s\S]*?<\/svg>/)![0];
+assert.equal((cashSvg.match(/<path[^>]* d="([^"]*)"/)![1].match(/M/g) ?? []).length, 2, "Missing daily balances split the line");
+for (const series of ["income", "expense"]) assert.equal([...cashSvg.matchAll(new RegExp(`<rect[^>]*data-series="${series}"`, "g"))].length, 2, "Daily bars preserve gaps instead of fabricating movements");
+assert.ok(!cashSvg.includes("NaN") && !cashSvg.includes("Jun") && !cashSvg.includes("Jul") && !cashSvg.includes("Today"), "Cash chart contains only the selected month");
+const sameScale: CashMonth = { ...daily, days: [{ ...daily.days[0], income: 1000, expense: 1000, balance: 1000 }] };
+const sharedScaleChart = renderToStaticMarkup(createElement(DailyCashPlot, { series: sameScale }));
+const balanceY = sharedScaleChart.match(/<circle[^>]* cy="([^"]+)"/)![1];
+for (const series of ["income", "expense"]) assert.equal(sharedScaleChart.match(new RegExp(`<rect[^>]*data-series="${series}"[^>]* y="([^"]+)"`))![1], balanceY, "Equal amounts use exactly the same height for all three series");
+const zeroChart = renderToStaticMarkup(createElement(DailyCashPlot, { series: { ...sameScale, days: [{ ...sameScale.days[0], balance: 0 }] } }));
+assert.ok(zeroChart.includes("Reconstructed cash · €0"));
+const nativeChart = renderToStaticMarkup(createElement(MonthlyCashChart, { row: { ...cashRecord, daily_cash: [{ ...daily, currency: "GBP" }] } }));
+assert.ok(nativeChart.includes("Original GBP accounts") && nativeChart.includes("£1,000") && !nativeChart.includes("€"), "Currency labels must follow the original-currency amounts");
+const aged = agingAmounts(cashRecord.payment, "pago");
+assert.ok(aged.complete && Math.abs(aged.buckets.reduce((sum, bucket) => sum + bucket.fraction!, 0) - 1) < 1e-9);
+assert.ok(agingAmounts(null, "pago").buckets.every(bucket => bucket.fraction === null));
+assert.ok(!agingAmounts({ ...cashRecord.payment!, pago_vencido_1_30_eur: null }, "pago").complete);
+assert.ok(!agingAmounts({ ...cashRecord.payment!, pago_vencido_eur: 999 }, "pago").complete, "Inconsistent aging must not produce fabricated shares");
+const debtMarkup = renderToStaticMarkup(createElement(DebtServiceCard, { row: { ...record, debt: { servicio_esperado_eur: 100, servicio_observado_eur: 40, deficit_servicio_eur: 60, obligacion_vencida_eur: null, multiplicador_deuda: null, confidence: "alta" } } }));
+assert.ok(debtMarkup.includes("€60") && debtMarkup.includes("width:100%") && debtMarkup.includes("width:40%") && debtMarkup.includes("not a contractual amount due"));
+assert.deepEqual(monthlyTimeline(["2026-08-31"], "2026-09-19"), ["2026-08-31", "2026-09-19"]);
+assert.deepEqual(monthlyTimeline(["2024-01-31"], "2024-04-10"), ["2024-01-31", "2024-02-29", "2024-03-31", "2024-04-10"]);
+assert.deepEqual(monthlyTimeline(["2026-08-31"], "2026-09-30"), ["2026-08-31", "2026-09-30"]);
+assert.deepEqual(monthlyTimeline(["2026-08-31"], "2026-08-31"), ["2026-08-31"]);
+assert.deepEqual(monthlyTimeline(["2026-08-31"], "2026-07-01"), ["2026-08-31"]);
+assert.deepEqual(monthlyTimeline([], "2026-09-19"), []);
+assert.ok(modelOverview.includes("Daily cash movements have not been imported"), "An empty cash history needs a clear state without suppressing other datasets");
 const login = renderToStaticMarkup(createElement(LoginForm));
 assert.ok(login.includes('name="email"') && login.includes('type="password"'), "The normal sign-in form stays visible");
 assert.match(login, /<form\b[^>]*method="post"/, "A submit before hydration must never put credentials in the URL");
@@ -108,6 +158,7 @@ for (const value of ["2026-02-30", "2026-08-31T12:00:00Z", "invalid", "2026-13-0
 assert.equal(validHealthDate("2026-08-31"), true);
 assert.equal(returnPath("/dashboard/health/2026-08-31?company=DEMO_001"), "/dashboard/health/2026-08-31?company=DEMO_001");
 assert.equal(money(1, "EUR", false, true), "€0.01");
+assert.equal(money(-0, "EUR", false, true), "€0", "Rounded balances must not display a negative zero");
 assert.equal(money(100_029, "EUR", false, true), "€1,000.29");
 
 for (const value of [null, "https://evil.example", "//evil.example", "javascript:alert(1)", "/\\evil.example", "/login"]) assert.equal(returnPath(value), "/dashboard");

@@ -1,6 +1,6 @@
 "use client";
 import { useEffect, useState } from "react";
-import { Activity, ArrowRight, Database, LoaderCircle, PanelLeft, PanelLeftClose, ShieldCheck, X } from "lucide-react";
+import { Activity, ArrowRight, LoaderCircle, PanelLeft, PanelLeftClose, ShieldCheck, X } from "lucide-react";
 import { ApiError, api } from "../lib/api";
 import type { CompanySummary, Identity, ModelAssessment } from "../lib/types";
 import { ModelDashboard } from "./model-dashboard";
@@ -72,10 +72,8 @@ export function Dashboard({ demo = false, scoreDate }: { demo?: boolean; scoreDa
       <button className="icon-button desktop-sidebar-toggle" aria-label={sidebarCollapsed ? "Show sidebar" : "Hide sidebar"} aria-expanded={!sidebarCollapsed} aria-controls="workspace-sidebar" onClick={() => setSidebarCollapsed(!sidebarCollapsed)}><span className="icon-swap" aria-hidden><PanelLeft data-visible={sidebarCollapsed}/><PanelLeftClose data-visible={!sidebarCollapsed}/></span></button>
       <button className="icon-button mobile-sidebar-toggle" aria-label="Open navigation" aria-haspopup="dialog" onClick={() => setMobileNavigation(true)}><PanelLeft/></button>
       <span className="current-view"><Activity size={16} aria-hidden/>{scoreDate ? "Health assessment" : "Financial health"}</span>
-      {model && <a className="topbar-link" href={scoreDate ? `${overviewHref}#evidence` : "#evidence"}>Sources &amp; evidence</a>}
-    </div><div className="topbar-actions">{companies !== null && (identity || demo) && <WelcomeOnboarding scope={demo ? "demo" : identity!.email} hasCompanies={companies.length > 0} demo={demo} autoOpen={!scoreDate}/>}<span className="private-label"><ShieldCheck size={14} aria-hidden/>{demo ? "Read-only demo" : "Private workspace"}</span>{demo ? <a className="topbar-link" href="/login">Sign in<ArrowRight size={14} aria-hidden/></a> : <span className="user-avatar" aria-label="Finance team">FT</span>}</div></header>
+    </div><div className="topbar-actions">{companies !== null && (identity || demo) && <WelcomeOnboarding scope={demo ? "demo" : identity!.email} hasCompanies={companies.length > 0} demo={demo} autoOpen={!scoreDate}/>}{!demo && <span className="private-label"><ShieldCheck size={14} aria-hidden/>Private workspace</span>}{demo ? <a className="topbar-link" href="/login">Sign in<ArrowRight size={14} aria-hidden/></a> : <span className="user-avatar" aria-label="Finance team">FT</span>}</div></header>
       <main id="main" className="dashboard-main" tabIndex={-1}>
-        {demo && <p className="demo-notice"><Database size={16} aria-hidden/>Published challenge dataset{companies ? ` · ${companies.length.toLocaleString("en-GB")} companies` : ""}. Select a company in the sidebar to explore its recorded results.</p>}
         {error && <div className="error error-retry" role="alert"><span>{error}</span><button className="button secondary" onClick={() => setRetry(retry + 1)}>Try again</button></div>}
         <p className="refresh-status small" role="status">{loading && model && <><LoaderCircle className="spinner" size={14} aria-hidden/>Updating… Showing the previous assessment.</>}</p>
         {loading && !model && <div className="dashboard-skeleton" role="status"><span className="sr-only">Loading company health and source records…</span><div className="skeleton-chart"/><div className="skeleton-stats">{[1,2,3,4].map(n => <div key={n}/>)}</div></div>}

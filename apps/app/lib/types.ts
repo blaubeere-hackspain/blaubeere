@@ -40,7 +40,15 @@ export type Comparison = {
   any_qualifies: boolean; explanation: string; assumptions: string[];
 };
 
+export type DailyCash = {
+  date: string; income: number | null; expense: number | null; balance: number | null; unknown_movements: number;
+};
+export type CashMonth = {
+  currency: string; anchor_date: string; income: number | null; expense: number | null;
+  closing_balance: number | null; days: DailyCash[];
+};
 export type ModelRecord = {
+  daily_cash?: CashMonth[] | null;
   version: string; company_id: string; group_id: string; month: string; as_of: string;
   health_score: number | null; excluida: boolean; confidence: string; n_meses_ventana: number; n_meses_con_actividad: number;
   c6: number | null; p6: number | null; d6: number | null; t6_efectivo: number | null;
@@ -51,7 +59,7 @@ export type ModelRecord = {
   volumen_ambiguo_eur: number | null; volumen_ambiguo_pct: number | null;
   k: number; alpha: number; beta: number; reasons: string[];
   cash: {
-    saldo_reversa_eur: number | null; flujo_neto: number | null; meses_de_cobertura_reversa: number | null; saldo_ancla_eur: number | null; confidence: string;
+    saldo_reversa_eur: number | null; flujo_neto: number | null; volumen_conocido: number | null; meses_de_cobertura_reversa: number | null; saldo_ancla_eur: number | null; confidence: string;
     flujo_operating_in: number | null; flujo_operating_out: number | null;
     flujo_financing_in: number | null; flujo_financing_out: number | null;
     flujo_investment_in: number | null; flujo_investment_out: number | null;
@@ -61,6 +69,10 @@ export type ModelRecord = {
   payment: {
     pago_exposicion_eur: number | null; pago_vencido_eur: number | null; mora_pago_robusta: number | null;
     cobro_exposicion_eur: number | null; cobro_vencido_eur: number | null; mora_cobro_robusta: number | null;
+    pago_vencido_1_30_eur: number | null; pago_vencido_31_60_eur: number | null; pago_vencido_61_90_eur: number | null;
+    pago_vencido_91_180_eur: number | null; pago_vencido_180_mas_eur: number | null; pago_n_facturas: number;
+    cobro_vencido_1_30_eur: number | null; cobro_vencido_31_60_eur: number | null; cobro_vencido_61_90_eur: number | null;
+    cobro_vencido_91_180_eur: number | null; cobro_vencido_180_mas_eur: number | null; cobro_n_facturas: number;
     mora_indice: number | null; confidence: string; confidence_pago: string; confidence_cobro: string;
     pago_n_huecos_eur: number; cobro_n_huecos_eur: number; n_vencimiento_desconocido: number;
   } | null;

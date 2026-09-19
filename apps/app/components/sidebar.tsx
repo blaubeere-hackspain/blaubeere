@@ -2,8 +2,9 @@
 import Image from "next/image";
 import { useEffect, useState } from "react";
 import logo from "../../brand/blau.svg";
-import { Activity, ChartNoAxesCombined, FileText, LayoutGrid, LoaderCircle, LogOut, Plug, ReceiptText, ShieldCheck, Wallet } from "lucide-react";
+import { Activity, ChartNoAxesCombined, LayoutGrid, LoaderCircle, LogOut, Plug, ReceiptText, ShieldCheck, Wallet } from "lucide-react";
 import type { CompanySummary, Identity } from "../lib/types";
+import { CompanyPicker } from "./company-picker";
 
 type Props = {
   companies: CompanySummary[] | null; recentCompanies: CompanySummary[]; selected: string; identity: Identity | null;
@@ -22,7 +23,7 @@ export function Sidebar({ overviewHref, demo = false, selectorId, companies, rec
   const navProps = (hash: string) => ({ className: `nav-link ${current === hash ? "active" : ""}`, "aria-current": current === hash ? "location" as const : undefined });
   return <>
     <a className="brand sidebar-brand" href={demo ? "/demo" : "/dashboard"} aria-label="blau workspace"><Image className="brand-logo" src={logo} alt="blau"/></a>
-    <div className="sidebar-company-picker"><label htmlFor={selectorId}>Company<span>{companies?.length.toLocaleString("en-GB") ?? "—"}</span></label><select className="control" id={selectorId} value={selected} disabled={!companies?.length} onChange={event => onCompany(event.target.value)}><option value="" disabled>{companies === null ? "Loading companies…" : companies.length ? "Choose a company" : "No companies available"}</option>{companies?.map(company => <option key={company.id} value={company.id}>{company.name}</option>)}</select></div>
+    <CompanyPicker id={selectorId} companies={companies} selected={selected} onSelect={onCompany}/>
     <div className="sidebar-scroll">
       <nav className="sidebar-section sidebar-primary" aria-label="Financial overview">
         <a {...navProps("")} href={overviewHref ?? "#main"} onClick={onNavigate}><LayoutGrid aria-hidden/>Overview</a>
@@ -34,7 +35,6 @@ export function Sidebar({ overviewHref, demo = false, selectorId, companies, rec
       <nav className="sidebar-section" aria-label="Workspace">
         <span className="nav-label">Workspace</span>
         <a {...navProps("#history")} href={`${overviewHref ?? ""}#history`} onClick={onNavigate} aria-disabled={!canInspect} tabIndex={canInspect ? undefined : -1}><Activity aria-hidden/>Monthly records</a>
-        <a {...navProps("#evidence")} href={`${overviewHref ?? ""}#evidence`} onClick={onNavigate} aria-disabled={!canInspect} tabIndex={canInspect ? undefined : -1}><FileText aria-hidden/>Source evidence</a>
       </nav>
       {recentCompanies.length > 0 && <nav className="sidebar-section sidebar-recents" aria-label="Recent companies"><span className="nav-label">Recents</span>{recentCompanies.map(company => <button key={company.id} className="nav-link" onClick={() => onCompany(company.id)} aria-pressed={company.id === selected}>{company.name}{company.id === selected && <span className="recent-current" aria-hidden/>}</button>)}</nav>}
     </div>
