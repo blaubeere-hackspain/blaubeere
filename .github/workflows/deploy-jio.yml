@@ -1,0 +1,60 @@
+name: Deploy Blaubeere
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: blaubeere-production
+  cancel-in-progress: false
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          persist-credentials: false
+          sparse-checkout-cone-mode: false
+          sparse-checkout: |
+            /*
+            !/data/
+            !/reports/
+      - uses: oven-sh/setup-bun@v2
+        with:
+          bun-version: 1.3.12
+      - name: Check deployment scripts
+        run: |
+          bash -n deploy/jio.sh deploy/runtime.sh
+          bun scripts/check-deploy.ts
+      - name: Install Jio
+        run: |
+          curl -fsSL https://github.com/jiovannish/client/releases/download/v0.3.1/install.sh -o "$RUNNER_TEMP/install-jio.sh"
+          JIO_INSTALL_DIR="$RUNNER_TEMP/bin" sh "$RUNNER_TEMP/install-jio.sh"
+          echo "$RUNNER_TEMP/bin" >> "$GITHUB_PATH"
+      - name: Deploy and verify production
+        env:
+          JIO_API_KEY: ${{ secrets.JIO_API_KEY }}
+          JIO_SSH_KEY: ${{ secrets.JIO_SSH_KEY }}
+          JIO_ENDPOINT: ${{ vars.JIO_ENDPOINT }}
+          JIO_VM_ID: ${{ vars.JIO_VM_ID }}
+          JIO_STATE_DIR: ${{ runner.temp }}/jio
+          GIT_REF: ${{ github.sha }}
+        run: |
+          set -Eeuo pipefail
+          umask 077
+          [[ -n "$JIO_API_KEY" && -n "$JIO_SSH_KEY" && "$JIO_VM_ID" =~ ^[0-9a-f]{32}$ ]] || { echo 'Configure JIO_API_KEY, JIO_SSH_KEY and JIO_VM_ID'; exit 1; }
+          [[ -n "$JIO_ENDPOINT" ]] || unset JIO_ENDPOINT
+          session="$JIO_STATE_DIR/sessions/$JIO_VM_ID"
+          install -d -m 700 "$JIO_STATE_DIR" "$JIO_STATE_DIR/sessions" "$session"
+          printf '%s\n' "$JIO_SSH_KEY" > "$session/id_ed25519"
+          ssh-keygen -y -f "$session/id_ed25519" > "$session/id_ed25519.pub"
+          printf 'medium\n' > "$session/requested-size"
+          # Jio pins the current host key through its authenticated API.
+          unset JIO_SSH_KEY
+          bash deploy/jio.sh

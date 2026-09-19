@@ -1,14 +1,15 @@
-# Este repo versiona SOLO datos e informes.
-# El codigo del pipeline vive fuera de este repositorio.
+node_modules/
+.next/
+target/
+.local/
+.env
+.env.*
+!.env.example
+*.tsbuildinfo
+next-env.d.ts
+.DS_Store
+test-results/
+playwright-report/
 
-# Ignorar todo por defecto
-/*
-
-# Excepciones: unicamente data/ y reports/
-!/.gitignore
-!/.gitattributes
-!/data/
-!/reports/
-
-# data/interim/ es un paso intermedio regenerable: no se versiona (cuota LFS)
+# Regenerable intermediate data (upstream LFS policy).
 /data/interim/
