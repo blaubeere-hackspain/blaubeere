@@ -11,6 +11,8 @@ const login = await (await read(`${app}/login`)).text();
 assert.ok(login.includes("blau"));
 const homepage = await (await read(landing)).text();
 assert.ok(homepage.includes(app), "Landing must link to the deployed app");
+const pricing = await (await read(`${landing}/pricing`)).text();
+assert.ok(pricing.includes("$99") && pricing.includes("Enterprise") && pricing.includes("Contact sales"), "Pricing must display both plans and the sales CTA");
 const images = new Set([...homepage.matchAll(/<img[^>]+src="([^"]+)"/g)].map(match => match[1]));
 assert.ok([...images].filter(path => path.includes("-oil.")).length >= 5, "Landing must include the hero, three editorial paintings and assistant painting");
 const artworkUrls = [...images].map(path => new URL(path.replaceAll("&amp;", "&"), landing).href);
@@ -34,6 +36,7 @@ for (const [origin, html] of [[app, login], [landing, homepage]]) {
 const meta = (html: string, key: string) => html.match(new RegExp(`<meta (?:name|property)="${key}" content="([^"]+)"`))?.[1] ?? "";
 const pages = [
   { origin: landing, path: "/", html: homepage, private: false },
+  { origin: landing, path: "/pricing", html: pricing, private: false },
   { origin: app, path: "/login", html: login, private: true },
   { origin: app, path: "/dashboard", html: await (await read(`${app}/dashboard`)).text(), private: true },
   { origin: app, path: "/connect", html: await (await read(`${app}/connect`)).text(), private: true },

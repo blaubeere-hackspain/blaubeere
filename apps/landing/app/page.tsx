@@ -6,14 +6,13 @@ import foundation from "../public/foundation-oil.png";
 import possibility from "../public/possibility-oil.png";
 import mcpConnection from "../public/mcp-connection-oil.png";
 import logo from "../../brand/blau.svg";
+import { SiteHeader, SiteFooter } from "../components/site-chrome";
 
 const app = process.env.NEXT_PUBLIC_APP_URL ?? "http://localhost:3100";
-function Brand() { return <a className="brand" href="/" aria-label="blau home"><Image className="brand-logo" src={logo} alt="blau"/></a>; }
 
 export default function Home() {
   return <>
-    <a href="#main" className="skip-link">Skip to content</a>
-    <header className="site-header site-container"><Brand/><nav aria-label="Main navigation"><a href="#outlook">The workspace</a><a href="#planning">Planning</a><a href="#built-for-finance">Our approach</a></nav><a className="button secondary" href={`${app}/login`}>Open workspace<ArrowRight size={16} aria-hidden/></a></header>
+    <SiteHeader/>
     <main id="main">
       <div className="painted-intro">
         <div className="painting" aria-hidden><Image src={painting} alt="" fill sizes="100vw" preload placeholder="blur"/></div>
@@ -51,7 +50,7 @@ export default function Home() {
         <section className="closing site-container"><span className="eyebrow">Make room for what’s next</span><h2>Good decisions start<br/><span>with a clearer picture.</span></h2><a className="button" href={`${app}/dashboard`}>Open your workspace<ArrowRight size={16} aria-hidden/></a></section>
       </div>
     </main>
-    <footer className="site-footer site-container"><Brand/><span>A little foresight goes a long way. · HackSpain 2026</span><a className="text-link" href={`${app}/login`}>Sign in<ArrowRight size={16} aria-hidden/></a></footer>
+    <SiteFooter/>
   </>;
 }
 
