@@ -1,6 +1,6 @@
 # Plan de desarrollo: scoring financiero y predicción temporal
 
-**Estado: PROPUESTA.** Diagnóstico inicial de los CSV realizado en solo lectura. No se han corregido datos, construido un panel, elegido un target definitivo ni entrenado modelos. Este documento no certifica preparación de datos ni promete precisión.
+**Estado: PROPUESTA.** Los 23 artefactos de datos versionados (ocho raw, ocho clean y siete marts) son punteros Git LFS no materializados. El pipeline ejecutable `xray` y sus siete marts existen; informes y `reports/build_manifest.json` registran una ejecución histórica `20260919T022951Z-83143e8d` en revisión `86439b6`, no una reproducción local del `HEAD` actual. No hay modelo predictivo entrenado ni target oficial aceptado; los targets proxy existentes son candidatos que requieren aprobación/evaluación.
 
 **Recomendación:** validar fuentes y semántica → producir datos derivados auditables → aprobar preparación para un alcance concreto → congelar target y validación → baseline → un modelo competidor → explicación y entrega. Si una fuente opcional no es fiable, reducir alcance; no inventar información para conservarla.
 
@@ -10,13 +10,15 @@
 
 | Tema | Propuesta |
 |---|---|
-| Fuente | `dataset/output/*.csv` y `dataset/output/data_dictionary.md`; no descargar LFS para empezar |
-| Repositorio | `.gitignore` establece versionado solo de datos e informes; guardar este plan en `reports/planning/`. Acordar ubicación del código antes de implementar |
-| Procesamiento | Pipeline batch reproducible, con originales inmutables y tablas derivadas |
+| Fuente | Ocho raw, ocho clean y siete marts son punteros Git LFS no materializados; `data_dictionary.md` sí existe. El manifest de readiness que enumera 16 es histórico y no prueba ausencia actual |
+| Repositorio | Monorepo Bun/Rust con aplicaciones/servicios Next/Axum; `.gitignore` es un ignore habitual, no una política de ubicación. `reports/planning/` conserva este plan; ubicación de código queda como decisión de diseño |
+| Procesamiento | Pipeline batch ejecutable (`xray`) con ingesta, limpieza, clasificación, evidencia FX y siete marts; su manifest histórico no prueba reproducción local en `HEAD` actual |
 | Unidad provisional | Empresa × mes cerrado × moneda, hasta justificar consolidación |
+| Moneda | Features internas por empresa × mes × moneda; consolidar solo moneda de reporte por empresa con contrato FX verificado |
 | Núcleo candidato | Flujos transaccionales, con clasificación y cobertura verificadas |
 | Fuentes complementarias | Facturas, deuda y saldos solo para usos que superen sus controles |
 | Salidas diferentes | Índice descriptivo actual, trayectoria y predicción de un desenlace futuro |
+| Validación interna principal | Generalización a grupos retenidos y fechas posteriores; forecasting de empresas conocidas es diagnóstico secundario |
 | Modelo | Un modelo conjunto sobre filas elegibles; no una red por empresa |
 | Calidad | Cobertura y límites visibles; falta de fuente no equivale a mala salud |
 | Fuera de alcance inicial | Decisiones de crédito/pagos, predicción de quiebra sin labels, streaming, microservicios, LLM calculando score |
@@ -25,60 +27,59 @@ No confundir millones de movimientos con millones de ejemplos independientes: ex
 
 ## 2. Evidencia inicial y límites
 
-**Medido:** perfiles locales de CSV mediante Python en solo lectura, con comprobación de claves, fechas, distribuciones y cobertura. **Diccionario:** significado declarado por la fuente. **Informe previo:** evidencia auxiliar, no reproducción de esta auditoría. **Pendiente:** semántica o comprobación aún sin resolver.
+**Informe existente/histórico:** afirmación extraída de `reports/quality/` y manifest de ejecución `20260919T022951Z-83143e8d` (`86439b6`); inputs y Parquet actuales no están materializados, así que no es reproducción del `HEAD` actual. **Borrador anterior no verificado:** número solo de versiones previas. **Pendiente:** semántica o comprobación aún sin resolver. `data_dictionary.md` describe dataset sintético, IDs y campos; no resuelve interpretación económica ni disponibilidad histórica.
 
 | Hallazgo | Evidencia / implicación |
 |---|---|
-| Filas: grupos 250; empresas 1.286; productos bancarios 5.987; deuda 2.239; schedules 87; saldos 7.996; transacciones 2.556.437; facturas 897.894 | Medido en los ocho CSV |
-| Sin claves primarias vacías ni duplicadas en los perfiles ejecutados | Medido; saldos usa `(product_id, date)`. No descarta duplicación económica entre documentos/fuentes |
-| Empresas con transacciones 1.286; facturas 785; deuda 378; schedules 40 | Medido; falta de registros no significa importe cero |
-| Historia mensual cerrada: mínimo 1, mediana 18, máximo 24; ocho empresas con menos de seis meses | Medido sobre todos los estados transaccionales. Recalcular tras filtros y comprobar continuidad |
-| Booking: 2024-09-01 a 2026-09-01; septiembre de 2026 contiene 9.242 transacciones | Medido; mes parcial no comparable con meses completos |
-| Saldos fechados entre 2026-08-25 y 2026-09-01 | Medido; foto por producto, no serie histórica |
-| Transacciones: `booked` 2.520.019; `pending` 6.579; estado ausente 29.839 | Medido; estados finales no prueban disponibilidad histórica |
-| Categoría `-`: 635.530; vacíos: 330; total sin categoría: 635.860 | Medido; explica diferencia entre conteos del informe previo, no una contradicción |
-| Contraparte ausente en 2.305.659 transacciones | Medido; concentración transaccional no puede ser una señal universal |
-| Producto sin resolver: 1.314 transacciones y 29 saldos | Medido; excluir o resolver joins afectados con trazabilidad |
-| `value_date` llega a 2099; vencimientos a 7025-07-31; pagos a 6913-11-20 | Medido; sintaxis válida no implica fecha financieramente válida |
-| Facturas: vencimiento anterior a emisión 20.704; pago anterior a emisión 25.827 | Medido; anomalías para revisión, no correcciones automáticas; pueden existir anticipos |
-| `payment_date` presente en 897.888 de 897.894 documentos | Medido; aparece también en estados pendientes/vencidos |
-| 187.239 documentos `overdue` tienen pago fechado hasta el corte; 19.504 `paid` tienen pago posterior; 300 `paid` tienen pendiente distinto de cero | Medido; significado de pago realizado frente a planificado sigue pendiente |
-| Tipos observados: invoice, paymentDocument, note, deposit, invoiceGroup, deliveryNote, refund, purchaseOrder, other, cheque | Medido; no sumar todo como facturas de venta ni cuentas por cobrar |
-| 118.055 documentos tienen moneda contable distinta de EUR; 77 transacciones tienen tipo de cambio cero | Medido; conversión universal a EUR no demostrada |
-| Dirección de FX y significado del signo de facturas/deuda | Pendiente. Diccionario no basta para demostrar EUR ni cliente/proveedor |
-| Deuda: saldo al extraer, tipo actual/último; `created_at` es conexión | Diccionario; no constituye historial contractual ni prueba de producto activo |
-| Saldo `-999999999` aparece dos veces | Medido; candidato a centinela, no motivo para eliminar todo saldo negativo |
-| No se encontró label empresarial oficial en los ocho esquemas ni diccionario | Inspección acotada; confirmar si se entrega por otro canal |
+| Filas: grupos 250; empresas 1.286; productos bancarios 5.987; deuda 2.239; schedules 87; saldos 7.996; transacciones 2.556.437; facturas 897.894 | Informe existente: `reports/quality/summary.md`, «Recuento de filas por tabla»; reproducir con fuentes materializadas |
+| Empresas con transacciones 1.286; facturas 785; deuda 378 | Informe existente: `reports/quality/summary.md`, «Cobertura cruzada de empresas»; falta de registros no significa importe cero |
+| Historia mensual cerrada: mínimo 1, mediana 18, máximo 24; ocho empresas con menos de seis meses | Informe existente: `reports/quality/summary.md`, «Distribucion de meses de historia por empresa»; recalcular tras filtros y comprobar continuidad |
+| Meses cerrados: 2024-09-01 a 2026-08-01; septiembre de 2026 es abierto y tiene 9.242 transacciones | Informe existente: `reports/quality/summary.md`, «Distribucion de meses…», y `reports/quality/facts.json`, `transactions.flag_counts.open_month`; mes parcial no comparable |
+| Producto sin resolver: 1.314 transacciones y 29 saldos | Informe existente: `reports/quality/facts.json`, `transactions.flag_counts.fk_orphan` y `dimensions.json`, `balances.flag_counts.fk_orphan`; aislar joins afectados con trazabilidad |
+| Estado ausente en 29.839 transacciones | Informe existente: `reports/quality/facts.json`, `transactions.flag_counts.status_missing`; estados no prueban disponibilidad histórica |
+| Sin categoría: 635.530 (`category_missing`) y 635.860 (`category_norm` nulo) | Informes existentes: `facts.json`, `transactions.flag_counts.category_missing`, y `summary.md`, «Huecos de datos»; reproducir antes de adoptar una definición |
+| Facturas: flag `fx_not_convertible` 108.445; notes: 118.055 `acct_no_eur` + 0 `currency_ausente` + 91 `rate_invalido_cross` = 118.146 | Informe histórico: `reports/quality/facts.json`; notes no descomponen flag: un nominal EUR puede convertirse por identidad aunque moneda contable no sea EUR |
+| Transacciones: flag `fx_not_convertible` 160.207; notes: 1.314 huérfanos + 20 rate inválido no EUR | Informe histórico: `reports/quality/facts.json`; notas incompletas, no reconciliación exacta actual |
+| Deuda: 1.351 saldos negativos, 145 positivos y 743 cero | Informe histórico: `reports/quality/dimensions.json`; conteos no resuelven significado económico del signo |
+| Seis saldos con flag `sentinel_hidden_balance`: `-999999999` dos veces y cuatro positivos distintos una vez | Informe existente: `reports/quality/dimensions.json`, `balances.flag_counts.sentinel_hidden_balance` y `balances.notes`; positivos no están confirmados independientemente como centinelas frente a outliers |
+| Claves, fechas extremas, estados de documentos, contraparte, tipos de factura y presencia de labels | Borrador anterior no verificado; conservar como preguntas de auditoría, no como resultados de inspección actual |
+| Semántica de deuda (`saldo`, fecha, tipo), facturas y disponibilidad histórica | Pendiente pese al diccionario: confirmar con propietario/fuente, sin inferir cliente/proveedor ni historial contractual |
 
-Rutas auxiliares: `reports/quality/summary.md`, `summary.json`, `facts.json`, `dimensions.json`. `data/*.csv` y `data/clean/*.parquet` son punteros LFS locales. No hay aquí pipeline de limpieza reproducible ni linaje verificado hacia esos Parquet. Los conteos existentes no sustituyen hashes, reglas ni reconciliación.
+**FX implementado, evidencia histórica:** el limpiador conserva identidad para nominal EUR de factura aunque `accounting_currency` difiera, e identidad misma-moneda; tipo contradictorio queda marcado. Entre monedas distintas, tipo `1`, no finito, nulo o inválido deja EUR desconocido; no estima FX. Para transacciones aplica `amount_eur = amount / exchange_rate`; para facturas `amount_acct = amount / exchange_rate`. Q1/Q2/Q5 en `reports/quality/facts.json` son evidencia histórica del informe, no pruebas reproducidas aquí. La pregunta económica del signo de deuda sigue separada de facturas.
 
-**Limitación del diagnóstico:** los perfiles fueron ad hoc. Todavía no se produjo manifest de hashes ni informe automático durable; estos son entregables de la primera fase. Algunas definiciones de flags difieren entre perfiles e informes: comparar solo métricas con igual definición.
+Rutas de evidencia: `reports/quality/{summary.md,facts.json,dimensions.json}`, `reports/build_manifest.json`, `xray/{cli.py,pipeline.py}` y `reports/vistas_y_hallazgos.md`. El manifest de readiness enumera históricamente 16 punteros; hoy hay 23 punteros LFS. El build manifest registra hashes, dependencias, código, outputs, parámetros y tests de aquella ejecución, pero no prueba reproducción local en `HEAD` actual. Inventario/script de readiness son inventario separado, no auditoría raw completa.
+
+**Limitación del diagnóstico:** reutilizar primero pipeline, contratos y documentación existentes; recuperar solo metadata faltante o confirmación del autor para semántica/materialidad. Tras materializar snapshot autorizado, comparar identidad, conteos, reglas y outputs con el manifest histórico. `reports/readiness/{manifest.json,inventory.md,schema_contract.json}` y `scripts/audit_financial_data.py` registran disponibilidad/contrato provisional e inventario; no sustituyen auditoría raw ni linaje reproducido actual. Mantener métricas con definiciones distintas.
 
 ## 3. Fases, puertas de avance y alternativas
 
 | Fase | Trabajo y entregable previsto | Criterio para avanzar | Si no se cumple |
 |---|---|---|---|
-| P0. Contrato e inventario | Manifest de fuentes; preguntas de unidad, target, horizonte y disponibilidad | Fuentes identificadas; usos provisionales y dudas registrados | Inspeccionar sin entrenar ni fijar semántica por intuición |
-| P1. Auditoría reproducible | Perfil estructural, financiero y temporal; informe de calidad | Problemas clasificados, cuantificados y localizables | Ampliar comprobaciones del problema concreto |
-| P2. Datos derivados | Limpieza determinista, cuarentena y ledger de correcciones | Reglas justificadas; ninguna modificación silenciosa | Excluir campo/fuente o pedir confirmación |
-| P3. Panel as-of | `as_of_panel.parquet`, contrato de features y cobertura | Pruebas temporales, reconciliación y elegibilidad aprobadas | Reducir features, cohortes u horizonte |
+| P0. Contrato e inventario | Revisar pipeline, contratos, diccionario, readiness histórico y contrato del reto; registrar unidad, target, horizonte y disponibilidad | Fuentes/uso provisional identificados; reglas, input y salida verificables | Pedir confirmación acotada sin fijar semántica por intuición |
+| P1. Auditoría reproducible | Tras materializar, verificación focalizada de snapshot, conteos, reglas, outputs y manifest histórico | Problemas clasificados, cuantificados y localizables | Ampliar solo comprobación del problema concreto |
+| P2. Datos derivados | Reutilizar limpieza existente tras verificación; cuarentena y ledger solo si hace falta | Reglas justificadas; ninguna modificación silenciosa | Excluir campo/fuente o demo honesta |
+| P3. Panel as-of | Verificar/reutilizar `panel_flujos`, `panel_deuda`, `panel_cobro`, `panel_evidencia`, observabilidad y contrato de features | Pruebas temporales, reconciliación y elegibilidad aprobadas | Reducir features, cohortes u horizonte |
 | G-DATA. Aprobación | Informe de preparación del alcance elegido | Todos los controles críticos de esa ruta pasan | No ajustar modelos |
-| P4. Target y split | `TARGET.md`, `future_outcomes.parquet`, índices de partición | Desenlace defendible; soporte maduro y evaluación congelada | Proxy aprobado, menor horizonte o índice descriptivo |
-| P5. Baseline | Predicciones simples y métricas reproducibles | Referencia en unidades correctas y errores entendidos | Corregir protocolo antes de complejidad |
+| P4. Target y split | Aprobar/evaluar `targets_proxy` existente o fijar `TARGET.md`/índices | Desenlace defendible, maduro y evaluación congelada | Índice descriptivo o proxy explícitamente aprobado |
+| P5. Baseline | Predicciones simples y métricas reproducibles | Referencia equivalente y errores entendidos | Corregir protocolo antes de complejidad |
 | P6. Modelo | Modelo candidato, comparación y explicaciones de casos | Mejora relevante y estable bajo protocolo congelado | Conservar baseline o abstenerse |
-| P7. Entrega | Export, evidencia, versión y recorrido de demo | Contrato de salida validado; resultado reproducible | Export interno provisional, no envío oficial válido |
+| P7. Entrega | JSON validado para `ASSESSMENT_FILE`, evidencia y demo | Contrato interno validado; resultado reproducible | Demo interna etiquetada, no envío oficial válido |
 | P8. Extensiones | Ensemble, forecast auxiliar, explicaciones amplias y alertas | Necesidad concreta y beneficio comprobado | No construirlas |
 
-El contrato provisional de uso se discute en P0: determina qué significa preparar datos correctamente. La generación final de labels y el ajuste estadístico esperan los controles aplicables. No fijar plazos de 3–4 horas para limpieza antes de conocer correcciones y dependencias del mentor; estimar cada fase después de P1.
+P0–P8 son mapa, no aprobaciones seriales. El contrato provisional de uso se discute en P0; labels y ajuste esperan controles aplicables. Reloj histórico: 19 sep. 2026 (+02); evento: 18–20 sep. Referencias: vault «HackSpain - Fuentes X Ray», F0, para alcance del reto; «HackSpain - Estudio X Ray», §§12.2–12.4, para checkpoints, stop rules y freeze. Esos checkpoints son horas productivas relativas, no agenda oficial.
+
+**Timeboxes propuestos tras corte 19 Sep:** 30–60 min para confirmar inputs/contrato e inspeccionar pipeline existente; checkpoint: si materialización o semántica bloquea, elegir ruta elegible o fallback fixture etiquetado. Siguientes 60–90 min: producir/validar mínimo JSON app usando marts existentes solo si elegibles; no prometer completar datos. Confirmar deadline exacto del evento por separado; reducir alcance, no controles.
+
+Stop rules: sin labels oficiales, no target oficial supervisado (solo baseline descriptivo/proxy); sin stock de caja reconstruido, no ratios históricos; sin mapping, descartar contraparte; si modelo no mejora, baseline; sin FX, no mezclar monedas; salida oficial desconocida, producir muestra y preguntar, no optimizar leaderboard.
 
 ## 4. P0–P1: validar antes de corregir
 
 ### Inventario y reproducibilidad
 
-- Registrar ruta, bytes, hash, encoding, delimitador, esquema, filas, versión y fecha de extracción conocida. Separar fecha de descarga de fecha de disponibilidad del dato.
-- Mantener raw inmutable. Comparar fuentes actuales con informes previos por identidad y definición, no solo por número de filas.
+- Usar `reports/readiness/manifest.json` como inventario histórico de 16 rutas, no prueba de ausencia actual. Confirmar 23 punteros LFS actuales; tras materializar, registrar bytes, SHA-256, encoding, delimitador, esquema, filas, versión y fecha de extracción conocida; comparar SHA-256 calculado con OID LFS. Separar descarga de disponibilidad del dato.
+- Mantener raw inmutable. Comparar fuentes materializadas con informes previos por identidad y definición, no solo por número de filas.
 - Congelar snapshot de trabajo. No publicar datos ni subirlos a servicios externos; confirmar licencia y política del reto.
-- Elegir Python y un motor tabular según entorno disponible; DuckDB es candidato, no requisito para empezar ni motivo para instalar un stack completo.
+- Reutilizar Python/DuckDB del pipeline `xray` y sus dependencias documentadas; no elegir otro stack ni reconstruir limpieza sin un problema demostrado.
 
 ### Auditoría obligatoria
 
@@ -106,7 +107,7 @@ Informar número de filas y exposición monetaria afectada cuando sea calculable
 | `payment_date` ambiguo | Bloquear aging histórico exacto y labels de pago | Admitir aproximación solo con supuesto explícito y aceptación humana |
 | Facturas con tipos mezclados | Contrato de inclusión por tipo y relación entre documentos | No sumar pedidos, albaranes y facturas como hechos independientes |
 | Signos de factura/deuda ambiguos | Preservar signo y pedir convención | No aplicar `abs()` indiscriminadamente ni inferir cliente/proveedor |
-| FX no probado | Confirmar por fuente moneda destino y operación mediante casos/invariantes | Mantener moneda separada; excluir agregados que requieran conversión |
+| Convención FX reportada, semántica pendiente | Reproducir casos/invariantes y confirmar por fuente moneda destino y operación | Mantener moneda separada; excluir agregados que requieran conversión |
 | Producto huérfano | Resolver con referencia autorizada o aislar joins afectados | No inventar entidad ni moneda |
 | Duplicado técnico/económico | Deducir identidad y precedencia antes de deduplicar | Preservar si puede representar eventos diferentes |
 | Saldo centinela/outlier | Confirmar centinela o marcar dato no utilizable | No borrar saldos negativos legítimos ni winsorizar con test |
@@ -129,7 +130,7 @@ Una fila representa información disponible en corte `t`, no lo que sabemos hoy 
 | Productos | Número de productos observados en ventana | No llamarlos activos contractualmente a partir de `created_at` |
 | Calidad | Cobertura, historia disponible, porcentaje sin categoría/moneda/resolución | Calcular as-of; no convertirlo directamente en penalización de salud |
 | Concentración | Peso de principales contrapartes observadas | Denominador, cobertura y lado económico definidos; no universal |
-| Facturas | Retrasos y overdue reconstruidos | Pago efectivo, pagos parciales, dirección y tipos demostrados; actualmente bloqueado |
+| Facturas | Cohortes de conversión a 60 días existentes; stock/aging retrospectivo solo diagnóstico | Cohortes maduras y elegibles; pago, tipos y dirección demostrados. Historial contractual/final ERP sigue limitado |
 | Deuda | Obligaciones conocidas a fecha de corte | Vigencia contractual demostrada; datos actuales no retroceden en tiempo |
 | Caja | Foto de saldo disponible en corte real | Histórico solo con reconstrucción completa por cuenta/moneda y reconciliada |
 
@@ -178,20 +179,19 @@ Estas pruebas detectan errores del pipeline; no demuestran por sí solas disponi
 | Sin labels, desenlace operacional medible | Proxy futuro aprobado, con alcance y censura | Que equivale a salud integral o default |
 | Sin desenlace defendible | Índice descriptivo trazable y trayectoria | Precisión predictiva o probabilidad de insolvencia |
 
-### Candidato de proxy transaccional, no seleccionado
+### Candidatos implementados, aún no aprobados
 
-Para ventana `W` en moneda comparable: `B(W) = (sum(inflows) - sum(outflows)) / (sum(inflows) + sum(outflows))`. Posible target: `B(t+1…t+3) - B(t-2…t)`.
+`xray/marts/targets.py` ya construye `targets_proxy` versión 1, separado de predictores. **Déficit:** neto operativo negativo en al menos dos de tres meses futuros, con maduración, actividad, ambigüedad material y sensibilidad a outliers tratadas conservadoramente. **Cobro:** cambio en conversión a 60 días entre tres cohortes maduras base y cohortes `m+1..m+3`, ponderado por EUR emitido; `targets_available_at` filtra labels ya maduros. Son proxies versionados seleccionados por implementación, no outcomes oficiales aceptados ni evidencia de default; requieren aprobación y evaluación por grupos/tiempo. Límites: contrato/default y versiones históricas finales de ERP siguen sin probarse.
 
-Denominador debe superar mínimo de actividad previamente justificado; de lo contrario target no disponible. No arreglarlo con epsilon arbitrario. Exigir cobertura estable y horizonte completamente observado. Esta razón limita explosiones por netflow cercano a cero, pero no elimina estacionalidad, cambios de fuentes ni confusión económica.
+**Alternativa opcional no implementada, sin prioridad:** para `B(W) = (sum(inflows)-sum(outflows))/(sum(inflows)+sum(outflows))`, evaluar `Δ = B(t+1…t+3)-B(t-2…t)` solo si se aprueba. `Cov(X,Y-X)=Cov(X,Y)-Var(X)` puede sesgar asociación negativa; no prueba reversión universal. Persistencia de nivel `Ŷ=X` y delta cero `Δ̂=0` son mismo baseline. Comparar nivel/delta equivalentes con splits y métricas iguales.
 
-Si clasificación es fiable, estudiar flujos operativos; si no, denominarlo explícitamente equilibrio de flujos observados. Financiación/transferencias pueden mejorar caja sin mejorar negocio. Comparar horizontes candidatos de uno y tres meses según soporte, no por cuál queda mejor en test. Proxy de facturas sigue bloqueado hasta resolver pagos/dirección; no hay soporte actual suficiente para default o incumplimiento de deuda.
-
-`TARGET.md` debe fijar unidad, fórmula, ventanas, elegibilidad, disponibilidad del label, censura, denominador, umbrales, casos límite y métricas. Elegir umbrales en desarrollo/train; no mirar distribución de outcomes del holdout final. Final de historia sin desenlace maduro es censurado/desconocido, nunca negativo. Entrenar para copiar nuestro propio score contemporáneo no valida salud financiera.
+`TARGET.md` fija unidad, fórmula, ventanas, elegibilidad, disponibilidad, maduración/censura, denominador, umbrales, casos límite y métricas. Umbrales en desarrollo/train; no mirar outcomes de holdout final. Final de historia sin desenlace maduro es censurado/desconocido, nunca negativo. Entrenar para copiar score contemporáneo no valida salud.
 
 ### Particiones y métricas
 
-- Alinear test con uso real: grupos nuevos, empresas conocidas hacia futuro o empresas nuevas al mismo corte son tareas distintas. Mientras se confirma, proponer evaluación conservadora temporal y por grupos; reportar escenarios separados.
-- En evaluación de grupos nuevos, `group_id` de train y validación son disjuntos. En forecasting de empresas conocidas, distinguir explícitamente ese protocolo.
+F0 del vault «HackSpain - Fuentes X Ray» menciona 60–80 empresas ocultas; split oficial, disjunción por grupo, target, métrica y formato siguen desconocidos. Objetivo interno: generalizar a empresas no vistas mediante validación conservadora grupos-disjuntos + forward-date, con target maduro, purge de ventanas invasoras y gates as-of/anti-leakage. No confundir grupos con empresas ni atribuir al reto esa disjunción. Forecasting de empresas conocidas es diagnóstico secundario, no intercambiable.
+
+- En evaluación de grupos nuevos, `group_id` de train y validación son disjuntos; reportar por separado empresas conocidas a futuro.
 - Para cada fila de train, label debe estar observable antes del corte de entrenamiento; purgar ventanas cuyo horizonte invade validación. `GroupKFold` por sí solo no lo hace.
 - Guardar índices/versiones/cortes. Usar 4–5 folds solo con suficientes grupos, eventos y ventanas maduras; reducir folds/horizonte si no hay soporte.
 - Imputación, escalado, selección, caps, calibración, umbrales y pesos de ensemble se aprenden solo en train/validación interna. Reservar test final sin tuning.
@@ -201,7 +201,7 @@ Si clasificación es fiable, estudiar flujos operativos; si no, denominarlo expl
 
 ## 9. P5–P6: baseline, modelo y criterio de precisión
 
-1. **Baseline compatible:** persistencia o valor central aprendido en train para nivel futuro; cero cambio para delta; prevalencia para evento. Índice de reglas se evalúa por coherencia/trazabilidad, no como predictor de otra magnitud sin puente validado.
+1. **Baselines equivalentes:** para nivel futuro, persistencia, media train-only o nivel autorregresivo; su delta convertido equivale a cero cambio para persistencia. Para evento, prevalencia. Índice de reglas se evalúa por coherencia/trazabilidad, no como predictor de otra magnitud sin puente validado.
 2. **Modelo pequeño:** regresión regularizada, logística u ordinal según target. Analizar errores y estabilidad antes de aumentar complejidad.
 3. **Un competidor:** árboles con gradient boosting; LightGBM es candidato, no dependencia obligatoria. Seleccionar implementación según entorno y soporte, con búsqueda acotada.
 4. **Selección:** mejora en métrica principal bajo particiones congeladas, estabilidad por cohortes y coste de explicación. Definir umbral práctico de mejora antes de comparar, no después de ver test.
@@ -223,7 +223,9 @@ Un índice 80/100 no significa 80 % de probabilidad. Explicaciones deben referir
 
 ## 11. P7–P8: explicación, entrega y anticipación
 
-Exportar identificador, corte, versión de datos/modelo/target, predicción, unidad, cobertura, warnings y evidencia. Acordar formato con mentor: `predictions.parquet` interno es provisional, no una entrega oficial válida por sí misma. Mantener train/predict reproducibles y salida desacoplada de UI; demo puede usar resultados precalculados.
+P7 usa contrato interno de app, distinto del contrato oficial del reto. `readme.md`, `services/api/src/{main.rs,finance.rs}` y `fixtures/companies.json` muestran que `ASSESSMENT_FILE` carga al inicio un array JSON y reemplaza fixture; no hay recarga runtime. `Company` requiere `id`, `name`, `group`, `currency`, `assessment_date`, `model_version`, `history_mode`, `data_mode`, `opening_cash_cents`, `buffer_cents`, `health`, `history`, `drivers`, `coverage`, `flows`; cada flow requiere `id`, `label`, `amount_cents`, `settled_cents`, `date`, `known_on`, `kind`, `timing`, `source`. Validación: IDs empresa únicos/no vacíos; IDs flow únicos **por empresa**; moneda solo tres ASCII mayúsculas (no registro ISO real); importes enteros acotados; `settled_cents` entre 0 y `abs(amount_cents)`; `history_mode` `as_known|reconstructed`; `kind`/`timing` enumerados; fechas deserializables. No valida semántica de `source`, forma de `health` ni score oficial. Un importe es céntimo firmado; versión asume dos decimales y una moneda de reporte por empresa.
+
+Preservar provenance, as-of y coverage. Conservar features internas por moneda; consolidar solo salida de empresa si contrato FX lo verifica, o reducir elegibilidad/demo etiquetada. No fabricar stock histórico, `known_on` ni score para poblar campos requeridos. Parquet es interno opcional; evidencia se incorpora conforme contrato soportado, no como archivo de entrada separado. Reconciliación CSV y score oficial siguen upstream; formato oficial es desconocido. Para aceptar P7, el JSON debe pasar `finance::load` y un recorrido de integración en la app que compruebe los campos consumidos por UI, fechas, cobertura y etiquetas de demo; parsear JSON no basta. Estas comprobaciones quedan pendientes: no se afirma ejecución verificada de app.
 
 `direction` y `alert_state` tienen contrato aparte del score. Histéresis de dos meses es candidata, no regla fijada: medir sensibilidad/latencia en desarrollo. Una alerta confirmada en segundo mes se registra entonces, no se retrofecha al primero.
 
@@ -231,21 +233,21 @@ Bonus de anticipación: definir evento independiente, inicio frente a confirmaci
 
 ## 12. Entregables previstos y aprobación
 
-**Solo este plan existe como nuevo entregable.** Los siguientes son propuestas, no archivos generados ni controles aprobados:
+**Ya existen** pipeline `xray` (ingesta, limpieza, clasificación FX y siete marts), `data_dictionary.md`, `reports/vistas_y_hallazgos.md`, `reports/build_manifest.json`, `scripts/audit_financial_data.py` y `reports/readiness/{manifest.json,inventory.md,schema_contract.json}`. El script/readiness son inventario separado; manifest e informes son evidencia histórica, no reproducción actual. Los siguientes son propuestas o ampliaciones, no controles aprobados:
 
 | Entregable futuro | Contenido |
 |---|---|
-| Manifest de fuentes | Identidad, hashes, esquemas, versiones y disponibilidad |
-| `reports/readiness/` | Calidad reproducible, cobertura, decisiones semánticas, impacto de exclusiones y aprobación G-DATA |
-| Datos derivados y ledger | Parquet canónico, cuarentena y trazabilidad; originales intactos |
-| `as_of_panel.parquet` | Features temporales elegibles y metadatos |
-| `TARGET.md` y `future_outcomes.parquet` | Objetivo congelado, labels, maduración y censura |
+| Actualización de inventario/manifest | Identidad, hashes tras materialización, esquemas, versiones y disponibilidad |
+| Informe G-DATA | Calidad reproducible, cobertura, decisiones semánticas e impacto de exclusiones |
+| Ledger o derivados adicionales | Solo si verificación del pipeline existente revela hueco; originales intactos |
+| Contrato de features as-of | Elegibilidad y metadatos sobre marts existentes |
+| Aprobación de `targets_proxy` o `TARGET.md` | Objetivo, maduración, censura y límites explícitos |
 | Índices de split y métricas | Cortes/grupos, baseline, cohortes, selección y test final |
-| Modelo y `predictions.parquet` | Artefacto reproducible y predicción en contrato acordado |
-| `evidence.json` y guía de ejecución | Razones, fuentes, versiones, límites y regeneración de demo |
+| Modelo y JSON `ASSESSMENT_FILE` | Artefacto reproducible, predicción y campos app validados |
+| Evidencia y guía de ejecución | Razones, fuentes, versiones, límites y regeneración de demo; no input app separado |
 
-Preguntas prioritarias al mentor: unidad y objetivo evaluados; métrica/formato; labels y cuándo se conocen; historia del test; significado de `payment_date` y estados; dirección de facturas/tipos/FX; snapshots frente a historial; licencia y uso externo. Cambios en unidad, semántica, disponibilidad o moneda pueden invalidar limpieza, panel, target y splits: versionar decisiones y repetir puertas afectadas.
+Preguntas prioritarias al mentor: entidad/unidad/target oficiales, métrica/formato/submission, labels y disponibilidad, historia/split del test; semántica/exclusiones de `payment_date`, facturas, tipos y FX; snapshots/historial; licencia. Cambios en semántica, exclusión, target, protocolo o moneda pueden invalidar limpieza, panel y splits: versionar decisiones y repetir puertas afectadas.
 
-**Aprobaciones humanas:** inicio de implementación; reglas financieras ambiguas/exclusiones relevantes; alcance G-DATA; target proxy si no hay oficial; protocolo de evaluación; modelo y claims de entrega. No convertir una respuesta del mentor en permiso automático para cambiar todo.
+**Decisiones humanas pendientes:** semántica/exclusiones financieras materiales; target oficial o proxy; protocolo/split y formato de salida oficial; alcance material G-DATA y claims de demo. No hay aprobaciones ya obtenidas ni permiso automático para cambiar todo.
 
-**Siguiente unidad de trabajo:** acordar repositorio/ruta del código conforme política actual —o aprobar explícitamente cambiarla— y después implementar exclusivamente auditor reproducible y reporte de preparación propuesto, con casos pequeños que fallen ante errores y ejecución sobre CSV reales. Revisar hallazgos antes de aprobar correcciones materiales. No arrancar modelos, ensemble ni forecast mientras preparación de la ruta elegida siga bloqueada.
+**Siguiente unidad de trabajo propuesta:** 30–60 min P0: confirmar inputs/contrato e inspeccionar pipeline/marts existentes. Checkpoint: si materialización o semántica bloquea, elegir ruta elegible o fixture etiquetado. En siguientes 60–90 min, producir/validar JSON mínimo de app desde marts existentes solo si elegibles; baseline/export antes de modelo nuevo. No ejecutar modelado ahora ni prometer completar datos; deadline exacto se confirma aparte.
