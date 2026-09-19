@@ -253,6 +253,7 @@ mod tests {
             "sqlite::memory:",
             Config {
                 demo_login: false,
+                dataset_demo: false,
                 app_origin: "http://localhost:3100".into(),
                 api_origin: "http://localhost:8080".into(),
                 mcp_resource: "http://localhost:8081/mcp".into(),

@@ -57,6 +57,101 @@ async fn parquet_snapshot_preserves_model_data_and_requires_membership() {
     .unwrap();
     let app = router(state.clone());
     let path = format!("/api/companies/{id}/assessment");
+    let public_path = format!("/api/demo/companies/{id}/assessment");
+    assert_eq!(
+        request(app.clone(), "GET", &public_path, json!(null), None, None)
+            .await
+            .status(),
+        StatusCode::NOT_FOUND
+    );
+    let mut published = state.clone();
+    published.config.dataset_demo = true;
+    let public_app = router(published.clone());
+    let list = request(
+        public_app.clone(),
+        "GET",
+        "/api/demo/companies",
+        json!(null),
+        None,
+        None,
+    )
+    .await;
+    assert_eq!(list.status(), StatusCode::OK);
+    let list: Value =
+        serde_json::from_slice(&list.into_body().collect().await.unwrap().to_bytes()).unwrap();
+    assert_eq!(list.as_array().unwrap().len(), 1286);
+    assert!(
+        list.as_array()
+            .unwrap()
+            .iter()
+            .all(|company| company["data_mode"] == "challenge" && company["id"] != "DEMO_001")
+    );
+    let public_result = request(
+        public_app.clone(),
+        "GET",
+        &public_path,
+        json!(null),
+        None,
+        None,
+    )
+    .await;
+    assert_eq!(public_result.status(), StatusCode::OK);
+    assert!(!public_result.headers().contains_key(header::SET_COOKIE));
+    let public_result: Value = serde_json::from_slice(
+        &public_result
+            .into_body()
+            .collect()
+            .await
+            .unwrap()
+            .to_bytes(),
+    )
+    .unwrap();
+    assert_eq!(
+        request(
+            public_app.clone(),
+            "GET",
+            "/api/demo/companies/DEMO_001/assessment",
+            json!(null),
+            None,
+            None
+        )
+        .await
+        .status(),
+        StatusCode::NOT_FOUND
+    );
+    assert_eq!(
+        request(public_app.clone(), "GET", &path, json!(null), None, None)
+            .await
+            .status(),
+        StatusCode::UNAUTHORIZED
+    );
+    assert_eq!(
+        request(
+            public_app,
+            "POST",
+            &public_path,
+            json!({}),
+            None,
+            Some(&state.config.app_origin)
+        )
+        .await
+        .status(),
+        StatusCode::METHOD_NOT_ALLOWED
+    );
+    published.dataset = None;
+    assert_eq!(
+        request(
+            router(published),
+            "GET",
+            "/api/demo/companies",
+            json!(null),
+            None,
+            None
+        )
+        .await
+        .status(),
+        StatusCode::SERVICE_UNAVAILABLE
+    );
     assert_eq!(
         request(app.clone(), "GET", &path, json!(null), None, None)
             .await
@@ -93,6 +188,10 @@ async fn parquet_snapshot_preserves_model_data_and_requires_membership() {
     let result: Value =
         serde_json::from_slice(&response.into_body().collect().await.unwrap().to_bytes()).unwrap();
     assert_eq!(result["kind"], "model");
+    assert_eq!(
+        public_result, result,
+        "Public demo uses the same published data as the authenticated dashboard"
+    );
     assert!(result.get("forecast").is_none());
     let records = result["records"].as_array().unwrap();
     let record = records
@@ -177,6 +276,7 @@ async fn parquet_snapshot_preserves_model_data_and_requires_membership() {
 fn origins_match_the_served_oauth_endpoints() {
     let valid = Config {
         demo_login: false,
+        dataset_demo: false,
         app_origin: "http://localhost:3100".into(),
         api_origin: "https://api.example.com".into(),
         mcp_resource: "https://mcp.example.com/mcp".into(),
@@ -220,6 +320,7 @@ pub(crate) async fn state() -> AppState {
         "sqlite::memory:",
         Config {
             demo_login: false,
+            dataset_demo: false,
             app_origin: "http://localhost:3100".into(),
             api_origin: "http://localhost:8080".into(),
             mcp_resource: "http://localhost:8081/mcp".into(),

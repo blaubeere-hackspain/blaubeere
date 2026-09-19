@@ -73,6 +73,7 @@ dataset_file="$(sudo -n -u blaubeere "$release/bin/blaubeere-api" import-parquet
 
 cat > "$root/runtime.env" <<EOF
 DEMO_LOGIN=true
+DATASET_DEMO=true
 DATABASE_URL=sqlite://$root/data/blaubeere.db
 DATASET_DATABASE_URL=sqlite://$dataset_file
 DATASET_TEAM_EMAIL=finance@blaubeere.local

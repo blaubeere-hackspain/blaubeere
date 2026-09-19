@@ -1,5 +1,10 @@
 //! Read published model outputs from the immutable, indexed Parquet import.
 use crate::{ApiError, ApiResult, AppState};
+use axum::{
+    Json,
+    extract::{Path, State},
+    http::StatusCode,
+};
 use serde_json::{Value, json};
 use sqlx::{
     SqlitePool,
@@ -36,6 +41,35 @@ pub async fn companies(pool: &SqlitePool) -> ApiResult<Vec<Value>> {
             .fetch_all(pool)
             .await?;
     Ok(rows.into_iter().map(|(id, group)| json!({"id":id,"name":id,"group":group,"currency":"EUR","data_mode":"challenge"})).collect())
+}
+
+// Public demo reads only the explicitly published challenge snapshot. Private
+// company fixtures, memberships and OAuth grants never participate in this path.
+fn demo_pool(state: &AppState) -> ApiResult<&SqlitePool> {
+    if !state.config.dataset_demo {
+        return Err(ApiError(
+            StatusCode::NOT_FOUND,
+            "The company demo is not enabled on this server.".into(),
+        ));
+    }
+    state.dataset.as_ref().ok_or_else(|| ApiError(StatusCode::SERVICE_UNAVAILABLE, "The company dataset has not been imported yet. Please retry after the import finishes.".into()))
+}
+
+pub async fn demo_companies(State(state): State<AppState>) -> ApiResult<Json<Vec<Value>>> {
+    Ok(Json(companies(demo_pool(&state)?).await?))
+}
+
+pub async fn demo_assessment(
+    State(state): State<AppState>,
+    Path(id): Path<String>,
+) -> ApiResult<Json<Value>> {
+    demo_pool(&state)?;
+    assessment(&state, &id).await?.map(Json).ok_or_else(|| {
+        ApiError(
+            StatusCode::NOT_FOUND,
+            "This company is not in the published dataset.".into(),
+        )
+    })
 }
 pub async fn assessment(state: &AppState, id: &str) -> ApiResult<Option<Value>> {
     let Some(pool) = &state.dataset else {
