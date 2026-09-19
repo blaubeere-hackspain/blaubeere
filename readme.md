@@ -115,12 +115,14 @@ Repository configuration:
 
 | Kind | Name | Value |
 | --- | --- | --- |
-| Secret | `JIO_API_KEY` | Jio API key for the deployment account |
+| Secret | `JIO_API_KEY` | Jio API key for the `blaubeere` account |
 | Secret | `JIO_SSH_KEY` | Private SSH key created for this VM |
 | Variable | `JIO_VM_ID` | Dedicated persistent VM ID |
 | Variable | `JIO_ENDPOINT` | Jio endpoint; omit to use the CLI default |
 
 Jio publishes port 8080 for the app, API, OAuth and MCP, and port 3102 for the landing. Deployment URLs appear in the Actions run summary. Nginx forwards to private listeners; systemd runs the four application services as an unprivileged `blaubeere` user.
+
+Deployment verifies that the key belongs to `blaubeere` before touching a VM. For local commands, `JIO_API_KEY` overrides `jio login`; unset a stale environment key to use the saved login. GitHub Actions uses the repository secret.
 
 State lives under `/var/lib/blaubeere`: `data/blaubeere.db` persists across releases, `bootstrap.env` contains the initial finance account credentials, and `deployed-revision` records the healthy commit. Retrieve credentials through an authorised Jio SSH session with `sudo cat /var/lib/blaubeere/bootstrap.env`; never commit them. Provisioning and assessment overrides follow the rules above; service settings are in `runtime.env`. Retained releases permit manual rollback and should be pruned as disk usage grows. A destroyed VM needs explicit reprovisioning and a database restore; the workflow will not silently replace it.
 
