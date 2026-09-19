@@ -47,3 +47,16 @@ Code inspected: all shared Dialog callers, native modal semantics, pointer backd
 Not verified: animation replay at 10% speed, visual loading/error transitions, reduced-motion device setting, complete Tab/Shift-Tab traversal, Safari/Firefox, physical mobile devices or screen-reader hardware. Browser focus inspection did not conclusively verify the full tab sequence.
 
 Approve for inspected code and the desktop/mobile browser coverage above.
+
+
+## Edge-to-edge dashboard follow-up
+
+| Severity | Location | Before | After | Why |
+| --- | --- | --- | --- | --- |
+| MEDIUM, fixed | `apps/app/app/globals.css:56` | Rounded outer frame with a 12px margin and an inset, outlined content panel | Full-height dashboard with no outer margin, rounding or shadow; sidebar anchored to the screen edge | Follows the user’s request for a full-screen dashboard. Expanded, collapsed and mobile layouts share the same edge-to-edge shell. |
+
+This supersedes the original inset-shell design above. Internal cards and the planning drawer retain their own surfaces.
+
+Passed: web checks, TypeScript checks, app production build and a desktop Chrome visual check of the frame removal. Responsive and collapsed rules were inspected in code. No new animation was introduced. Mobile and collapsed visual checks were not rerun for this CSS-only change.
+
+Approve for the inspected coverage.
