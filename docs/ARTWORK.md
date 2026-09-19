@@ -13,6 +13,19 @@ The product paintings were generated with the built-in image generation tool for
 
 The landing rows summarize the original generation briefs; they are not verbatim prompt transcripts.
 
+## MCP illustration: final prompt
+
+Asset: `apps/landing/public/mcp-connection-oil.png`. Generated with the built-in image tool. A portrait composition is preserved on both desktop and phones so the connected records and charts remain visible.
+
+Use case: stylized-concept.
+Asset type: a large oil-painted illustration for the MCP feature section of Blaubeere, a calm finance workspace.
+Primary request: make MCP's purpose immediately understandable: an AI chat assistant connected through MCP to company financial records, a cash outlook and scenario planning. This must show the actual connection, not a landscape or a vague metaphor.
+Scene and subject: a carefully composed, hand-painted technical still life on warm ivory linen. At the top, an open dark sage laptop seen almost straight on, its pale screen showing two unmistakable conversational speech bubbles. Below the laptop, a small brass connector hub with a cream faceplate bearing only the clearly legible letters "MCP". A single visible cable runs from the laptop to this hub, then branches into three visible cables leading to three separate cream financial sheets across the lower half: a ledger with tidy rows of entries, a cash-flow line chart that dips and recovers, and a scenario chart with three distinct diverging lines. The physical connections should be easy to follow. Give each sheet enough breathing room; all three are equally prominent.
+Style and medium: sophisticated traditional oil painting on linen, rich tactile brushstrokes, softly scumbled edges, layered cream paint, convincing material and soft natural shadows. Painterly objects and charts, not a vector infographic, glossy 3D render, stock illustration or screenshot.
+Composition: portrait 3:4 aspect ratio, complete objects within an 8% safe margin, balanced centered arrangement filling the image. Keep the laptop, connector and all three financial sheets clearly visible and large enough to read at website size. No border, paint edge to edge.
+Palette and mood: muted sage, olive, pale blue, warm ivory, small brass accents; calm daylight and the handmade quality of a quiet editorial oil painting.
+Text: only "MCP" on the central hub. No other text or numbers, no logos, no people, no robots, no landscapes, no floating sparkles.
+
 ## Empty states: final prompts
 
 ### `apps/app/public/open-path-oil.png`
@@ -23,7 +36,7 @@ Use case: stylized-concept. Asset: original oil-painting illustration for the em
 
 Use case: stylized-concept. Asset: original oil-painting illustration for the empty assistant connections state in Blaubeere, a calm finance workspace. Two modest empty wooden chairs side by side overlooking a quiet lake with low green hills across the water, suggesting room for a conversation. Wide landscape composition, 3:2 aspect ratio, chairs in the lower middle, plenty of pale sky and water. Traditional oil on linen, tactile layered brushstrokes, soft diffused daylight, sage and olive greens, cream and muted blue, airy and understated. No people, no text, no logos, no interface, no border. Paint the whole image edge to edge.
 
-The open path belongs to the company-access empty state. The lake-chair painting is imported by the landing’s MCP section, reusing the original file, with a descriptive alternative. Empty-state paintings are decorative; their heading, instructions and action communicate the state without relying on the artwork.
+The open path belongs to the company-access empty state. The landing’s MCP section uses the dedicated connection illustration above, with a descriptive alternative. Empty-state paintings are decorative; their heading, instructions and action communicate the state without relying on the artwork.
 
 ## Garden login artwork
 
@@ -39,4 +52,4 @@ A built-in image edit removed an unintended signature: “Remove only the tiny d
 
 Use case: stylized-concept. Asset type: original wide oil painting for an app empty-state illustration. Two empty weathered wooden garden chairs beside one another under a leafy tree in a sunlit garden, facing a softly distant meadow. A modest terracotta pot nearby. Pale warm cream and sage green atmosphere, olive foliage, small dusty blue and yellow flowers. Tactile fine-art oil paint with visible brush strokes and canvas texture. Quiet, intimate, welcoming, lots of soft light, gently imperfect. Landscape 3:2 composition, chairs centered in the middle lower half so they remain legible in a wide crop. Full bleed, no text, no logo, no UI, no border or frame, no watermark.
 
-This new garden illustration is used in the assistant empty state. The earlier lake-chair artwork remains available to the landing page. The company empty state continues to use the open-path painting.
+This new garden illustration is used in the assistant empty state. The earlier lake-chair artwork is retained as an original concept. The company empty state continues to use the open-path painting.

@@ -4,7 +4,7 @@ import painting from "../public/cash-horizon-oil.png";
 import perspective from "../public/perspective-oil.png";
 import foundation from "../public/foundation-oil.png";
 import possibility from "../public/possibility-oil.png";
-import conversation from "../../app/public/conversation-oil.png";
+import mcpConnection from "../public/mcp-connection-oil.png";
 
 const app = process.env.NEXT_PUBLIC_APP_URL ?? "http://localhost:3100";
 function Brand() { return <a className="brand" href="/" aria-label="Blaubeere home"><span className="brand-mark" aria-hidden><i/><i/><i/><i/></span>blaubeere</a>; }
@@ -32,7 +32,7 @@ export default function Home() {
         </section>
         <section className="planning site-container" id="planning" aria-labelledby="planning-title"><div className="planning-copy"><span className="eyebrow">02 / A little possibility</span><h2 id="planning-title">“What would it take?”<br/><span>A good place to start.</span></h2><p>Protect a cash buffer. Fund the next quarter. Explore a revenue goal. Compare the trade-offs before you choose your next move.</p><a className="button" href={`${app}/dashboard`}>Explore a plan<ArrowRight size={16} aria-hidden/></a></div><div className="mini-plan"><span className="eyebrow">An example, not a promise</span><h3>Keep cash above <span>€100,000.</span></h3><p>Through 29 November · every day of the plan</p><dl><div><dt>Collection timing</dt><dd>Up to 14 days earlier</dd></div><div><dt>Discretionary spend</dt><dd>Up to 10% lower</dd></div><div><dt>Additional funding</dt><dd>Within your limit</dd></div></dl><div className="mini-plan-note"><Check size={18} aria-hidden/><p>Baseline plus two conditional plans. See the cash impact and any gap that remains.</p></div></div></section>
         <section className="assistant-section site-container" id="assistants" aria-labelledby="assistant-title">
-          <div className="assistant-painting"><Image src={conversation} alt="An oil painting of two wooden chairs overlooking a quiet lake, with room for a conversation." fill sizes="(max-width: 760px) calc(100vw - 40px), (max-width: 1000px) calc((100vw - 104px) / 2), (max-width: 1320px) calc((100vw - 176px) / 2), 572px" placeholder="blur"/></div>
+          <div className="assistant-painting"><Image src={mcpConnection} alt="An oil painting of an AI chat assistant linked through an MCP connector to financial records, a cash chart and scenario plans." fill sizes="(max-width: 760px) calc(100vw - 40px), (max-width: 1000px) calc((100vw - 104px) / 2), (max-width: 1320px) calc((100vw - 176px) / 2), 572px" placeholder="blur"/></div>
           <div className="assistant-copy">
             <span className="eyebrow">03 / Connect with MCP</span>
             <h2 id="assistant-title">A second perspective.<br/><span>The same clear picture.</span></h2>
