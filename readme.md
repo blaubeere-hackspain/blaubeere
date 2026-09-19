@@ -12,7 +12,7 @@ bun run setup
 bun run dev
 ```
 
-Setup creates an ignored `.env` with demo entry enabled. Choose **Enter demo workspace** to join without a password. Existing configuration is preserved; add `DEMO_LOGIN=true` to an older `.env` and restart both the app and API to enable demo entry. **Use a team account** still accepts `finance@blaubeere.local` with the generated `BOOTSTRAP_PASSWORD`.
+Setup creates an ignored `.env` with demo entry enabled. Choose **Enter demo workspace** to join without a password. Existing configuration is preserved; add `DEMO_LOGIN=true` to an older `.env` and restart both the app and API to enable demo entry. The regular sign-in form above the demo button accepts `finance@blaubeere.local` with the generated `BOOTSTRAP_PASSWORD`.
 
 | Workspace | Address | Purpose |
 | --- | --- | --- |

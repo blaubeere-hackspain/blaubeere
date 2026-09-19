@@ -10,8 +10,9 @@ const requireApp = createRequire(new URL("../apps/app/package.json", import.meta
 const { createElement } = requireApp("react");
 const { renderToStaticMarkup } = requireApp("react-dom/server");
 const demoLogin = renderToStaticMarkup(createElement(LoginForm, { demo: true }));
-assert.ok(demoLogin.includes("Enter demo workspace") && demoLogin.includes("Use a team account"));
-assert.ok(!demoLogin.includes("<input"), "Demo entry must not require credentials");
+assert.ok(demoLogin.includes('name="email"') && demoLogin.includes('type="password"'), "The normal sign-in form stays visible with demo enabled");
+const demoButton = demoLogin.match(/<button[^>]*name="demo"[^>]*>/)?.[0];
+assert.ok(demoLogin.includes("Enter demo workspace") && demoButton?.toLowerCase().includes("formnovalidate"), "Demo entry must bypass credential validation");
 const teamLogin = renderToStaticMarkup(createElement(LoginForm, { demo: false }));
 assert.ok(teamLogin.includes('name="email"') && teamLogin.includes('type="password"'));
 assert.ok(!teamLogin.includes("Enter demo workspace"), "Disabled demo entry must show team sign-in");
