@@ -1,5 +1,7 @@
 "use client";
 import { useEffect, useState } from "react";
+import Image from "next/image";
+import conversation from "../public/conversation-oil.png";
 import { Check, Copy, LoaderCircle, Plug, X } from "lucide-react";
 import { api } from "../lib/api";
 import { Dialog } from "./dialog";
@@ -23,6 +25,11 @@ export function Connections({ endpoint, open, onClose }: { endpoint: string; ope
     const timer = setTimeout(() => setCopied(false), 2000);
     return () => clearTimeout(timer);
   }, [copied]);
+  async function copyEndpoint() {
+    setError("");
+    try { await navigator.clipboard.writeText(endpoint); setCopied(true); }
+    catch { setError("Select and copy the endpoint from the field."); }
+  }
   async function disconnect(id: string) {
     setBusy(id); setError(""); setStatus("");
     try {
@@ -36,13 +43,13 @@ export function Connections({ endpoint, open, onClose }: { endpoint: string; ope
     <div className="panel-head"><div><span className="eyebrow">Your tools, connected</span><h2 id="connections-title">Bring your finance assistant</h2></div><button className="icon-button" aria-label="Close connections" onClick={onClose}><X size={20}/></button></div>
     <div className="panel-body">
       <ol className="connection-steps"><li>Add a custom MCP server in your assistant’s settings.</li><li>Paste the endpoint below and connect.</li><li>Sign in to Blaubeere and review the requested access.</li></ol>
-      <div className="field mt-6"><label htmlFor="mcp-endpoint">MCP endpoint</label><div className="copy-field"><input id="mcp-endpoint" value={endpoint} readOnly onFocus={e => e.target.select()} aria-describedby="endpoint-help"/><button className="icon-button" aria-label={copied ? "Endpoint copied" : "Copy MCP endpoint"} onClick={async () => { try { await navigator.clipboard.writeText(endpoint); setCopied(true); } catch { setError("Select and copy the endpoint from the field."); } }}><span className="icon-swap" aria-hidden><Copy data-visible={!copied}/><Check data-visible={copied}/></span></button></div></div>
+      <div className="field mt-6"><label htmlFor="mcp-endpoint">MCP endpoint</label><div className="copy-field"><input id="mcp-endpoint" value={endpoint} readOnly onFocus={e => e.target.select()} aria-describedby="endpoint-help"/><button className="icon-button" aria-label={copied ? "Endpoint copied" : "Copy MCP endpoint"} onClick={copyEndpoint}><span className="icon-swap" aria-hidden><Copy data-visible={!copied}/><Check data-visible={copied}/></span></button></div></div>
       <p id="endpoint-help" className="small muted mt-3">Requires an assistant that supports remote MCP and OAuth. It can read outlooks and compare plans; it cannot edit source data or execute payments.</p>
       <p className="copy-status small" role="status">{copied ? "Endpoint copied to clipboard." : status}</p>
       <h3 className="mt-6 mb-4">Connected assistants</h3>
       {error && <div className="error mb-4" role="alert"><p>{error}</p><button className="button ghost" onClick={() => setRetry(retry + 1)}>Refresh connection list</button></div>}
       {!clients && !error && <p className="status-line" role="status"><LoaderCircle className="spinner" size={16} aria-hidden/>Loading connections…</p>}
-      {clients?.length === 0 && <div className="empty-connections"><span className="connection-icon"><Plug size={22} aria-hidden/></span><strong>No assistants connected yet</strong><p className="small muted">Once you approve an assistant, it appears here. You can revoke its access at any time.</p></div>}
+      {clients?.length === 0 && <div className="empty-connections"><div className="empty-painting"><Image src={conversation} alt="" fill sizes="(max-width: 600px) 85vw, 480px" placeholder="blur"/></div><div className="empty-copy"><strong>Room for a second perspective.</strong><p className="small muted">No assistants connected yet. Add this endpoint to your assistant, then approve its access. You can disconnect it here at any time.</p><button className="button secondary" onClick={copyEndpoint}><span className="icon-swap" aria-hidden><Copy data-visible={!copied}/><Check data-visible={copied}/></span>{copied ? "Endpoint copied" : "Copy endpoint"}</button></div></div>}
       {clients?.map(client => <div className="client-row" key={client.id} aria-busy={busy === client.id}><span><Plug size={18} aria-hidden/><strong>{client.name}</strong></span><button className="button secondary danger" disabled={Boolean(busy)} onClick={() => disconnect(client.id)}>{busy === client.id ? <><LoaderCircle className="spinner" size={16} aria-hidden/>Disconnecting…</> : "Disconnect"}</button></div>)}
     </div>
   </Dialog>;

@@ -159,7 +159,7 @@
 .dashboard-footer { display: flex; justify-content: space-between; gap: 16px; padding: 24px 0 0; color: var(--subtle); font-size: 12px; }
 .dashboard-footer > span:first-child { display: flex; align-items: center; gap: 6px; }
 .error-retry { display: flex; align-items: center; justify-content: space-between; gap: 16px; margin-bottom: 24px; }
-.empty-workspace { padding: 64px 24px; display: grid; justify-items: center; gap: 20px; background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius); text-align: center; }
+.empty-workspace { max-width: 780px; margin: 32px auto; }
 .skeleton-stats { display: grid; grid-template-columns: repeat(4,1fr); gap: 16px; margin-bottom: 24px; }
 .skeleton-stats > div, .skeleton-chart { background: var(--line); border-radius: var(--radius); height: 140px; }
 .skeleton-chart { height: 420px; }
@@ -206,8 +206,7 @@
 .plan-overlay-banner > span { display: flex; align-items: center; gap: 8px; }
 .copy-field { display: flex; gap: 8px; }
 .copy-field input { min-width: 0; font-size: 12px; }
-.empty-connections { border: 1px dashed var(--line); padding: 24px; border-radius: var(--radius); display: grid; gap: 8px; justify-items: center; text-align: center; }
-.empty-connections svg { color: var(--accent); }
+
 .client-row { display: flex; align-items: center; justify-content: space-between; gap: 16px; padding: 12px 0; border-bottom: 1px solid var(--line); }
 @media (min-width: 1600px) { .dashboard-main { padding: 44px 48px; } }
 @media (max-width: 1200px) { .sidebar { width: 212px; padding-left: 12px; padding-right: 12px; } .app-content { margin-left: 212px; } .dashboard-main { padding: 28px 24px; } .topbar { padding-inline: 24px; } .stat-card { padding: 16px; } .stat-card > div { font-size: 12px; } .stat-card > div svg { display: none; } .coverage-grid { grid-template-columns: 1fr 1fr; } .health-number .badge { display: inline-flex; } }
@@ -226,9 +225,15 @@
 .connection-steps li::marker { color: var(--accent); font-weight: 500; }
 .copy-field .icon-button { background: var(--canvas); }
 .copy-status { min-height: 36px; padding-top: 10px; color: var(--good); }
-.connection-icon { width: 44px; height: 44px; display: grid; place-items: center; border-radius: 12px; background: var(--accent-soft); margin-bottom: 4px; }
-.empty-connections { border: 0; background: var(--canvas); padding: 28px; }
-.empty-connections strong { font-weight: 500; }
+.empty-workspace, .empty-connections { padding: 8px; border-radius: 28px; background: #fafbf8; box-shadow: var(--shadow-border); text-align: center; }
+.empty-painting { position: relative; height: 168px; overflow: hidden; border-radius: 20px; outline: 1px solid oklch(0 0 0 / 0.1); outline-offset: -1px; }
+.empty-painting img { object-fit: cover; object-position: center 64%; }
+.empty-workspace .empty-painting { height: clamp(180px, 24vw, 280px); }
+.empty-copy { padding: 24px 20px; display: grid; gap: 16px; justify-items: center; }
+.empty-copy h2, .empty-copy > strong { font-family: "Times New Roman", Times, serif; font-size: clamp(28px, 3vw, 36px); line-height: 1.06; letter-spacing: -.03em; font-weight: 400; }
+.empty-connections .empty-copy > strong { font-size: 28px; }
+.empty-copy p { max-width: 440px; line-height: 1.6; }
+.empty-copy .button { border-radius: 999px; }
 .client-row > span { display: flex; align-items: center; gap: 10px; min-width: 0; }
 .client-row strong { overflow-wrap: anywhere; font-weight: 500; font-size: 13px; }
 .client-row > span svg { color: var(--accent); }
