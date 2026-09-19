@@ -119,6 +119,73 @@ Cada cambio registra `source_id`, campo, valor original, valor derivado, regla/v
 
 No hace falta resolver todo el dataset para avanzar: un problema de facturas puede bloquear solo esa rama. La ruta transaccional requiere igualmente controles propios de estados, moneda, clasificación, cobertura y disponibilidad histórica. Si solo disponemos de extracción final, documentar supuesto retrospectivo y no presentarlo como reconstrucción probada de lo conocido en tiempo real.
 
+### 5.1. Piloto Jev: clasificación y apoyo a revisión para reporting (P2–P3)
+
+**Estado:** incorporado al planning; no implementado ni evaluado. Piloto opcional, fuera del camino crítico de baseline/export. Jev propone clases de movimientos a partir de descripciones y contexto autorizado; no sustituye al predictor de P6, no calcula salud financiera ni resuelve por sí mismo semántica contable, FX, signos, ownership o disponibilidad histórica. No se ajusta un modelo antes de G-DATA: esta rama evalúa inferencia de un modelo preentrenado para preparar datos, con controles propios de fuentes y clasificación.
+
+**Oportunidad, no resultado esperado:** `reports/quality/flows.json` registra históricamente 498.080 movimientos `unknown` (19,84 % de filas; 5,12 % del volumen absoluto convertible a EUR), en meses cerrados y estado booked. No es una medición local reproducida ni una estimación de cuánto resolverá Jev. Mayor cobertura nominal no prueba mayor exactitud.
+
+Flujo propuesto: **reglas verificadas → casos sin resolver → propuesta Jev → controles/abstención → revisión → promoción explícita**. Conservar originales y reglas actuales. Usar las clases de `xray/flows.py`, incluido `unknown`; signo/dirección y restricciones económicas se validan en código. Una salida tipada válida puede ser económicamente incorrecta. No deducir transferencia interna únicamente de una descripción genérica ni fabricar contrapartes.
+
+#### Extensión prioritaria: clasificar casos para revisión humana
+
+Reutilizar flags, conflictos y `motivos_*` de `xray/marts/evidencia.py` para construir una cola local de revisión enlazada a las fuentes. Las reglas resuelven el enrutamiento evidente y la prioridad por materialidad, sin mezclar monedas; Jev solo propone una categoría de revisión aprobada para descripciones o conceptos que sigan siendo ambiguos. No puede cambiar estados de evidencia, eliminar casos críticos de la cola ni aprobar correcciones o publicación.
+
+Comparar contra la cola basada únicamente en reglas/materialidad: casos accionables por hora de revisión, errores de enrutamiento, casos críticos omitidos y abstención, con referencia humana independiente. Activar solo si existe un cuello de botella y mejora comprobable; si bastan las reglas, omitir Jev. Esta es la primera extensión propuesta, no un requisito adicional para baseline/export.
+
+#### Experimento de movimientos y puerta de promoción
+
+1. Confirmar autorización de tratamiento externo y materializar la muestra permitida; hasta entonces, solo ejemplos inventados sin datos del reto. Anonimizar no sustituye autorización. Minimizar texto/contexto enviado y no enviar identificadores, cuentas o importes exactos innecesarios.
+2. Etiquetar manualmente una muestra estratificada por clase, empresa/grupo, idioma, patrón de descripción y materialidad, con casos desconocidos y controles ya resueltos. Separar desarrollo y evaluación por grupos/tiempo y evitar que descripciones repetidas equivalentes contaminen ambas partes. La etiqueta de referencia no puede ser simplemente la propia predicción o regla que se pretende evaluar.
+3. Congelar taxonomía, instrucciones, contexto as-of, muestra, criterios de aceptación y umbrales por clase antes del conjunto de evaluación. Medir precisión/recall por clase, abstención, cobertura aceptada, errores ponderados por importe por moneda y confusiones transferencia/operativo/financiación. Comprobar calibración local; no interpretar `confidence` como probabilidad de acierto sin validación ni fijar un umbral universal.
+4. Ejecutar en paralelo sin modificar los marts, targets ni reporting publicado. Comparar reglas frente a reglas + propuestas aceptables, mostrando impacto en neto operativo y límites de incertidumbre. Mantener `unknown` cuando falte evidencia, haya contradicciones o falle el servicio; baja confianza y entradas no puntuables no son clasificaciones aceptadas.
+5. Promover solo con mejora material, errores de alto impacto aceptables y aprobación humana explícita. Reconciliación, integridad de filas/importes y controles as-of deben seguir pasando. Si cambia la clasificación utilizada por features o `targets_proxy`, versionar y regenerar ambos y repetir puertas/evaluaciones afectadas; no presentar labels derivados del propio clasificador como validación independiente de salud financiera.
+
+Registrar por propuesta referencia local al origen, hash del input autorizado, versión de taxonomía/instrucciones, ruta/proveedor, modelo solicitado y versión efectiva si está expuesta, fecha, respuesta, probabilidades, confianza, decisión de aceptación/rechazo y motivo. Guardar resultados en almacenamiento local controlado para reproducir sin nuevas llamadas; no versionar textos sensibles ni respuestas que los contengan. Un alias de modelo no garantiza pesos inmutables: si no se puede fijar versión, declarar el límite y conservar el snapshot de resultados. Acotar concurrencia, reintentos, cuota y presupuesto; ningún fallback silencioso a otro modelo o proveedor.
+
+#### Controles compartidos, aceptación independiente por uso
+
+Clasificación de movimientos, revisión humana, normalización documental (§5.2) y control semántico (§11.1) requieren muestras, referencias humanas, taxonomías, métricas y criterios de aceptación propios. Aprobar un uso no aprueba los demás. Reutilizar autorización de datos aplicable, auditoría, presupuesto, separación desarrollo/evaluación y abstención; registrar también el uso evaluado. Si cambia cualquier derivado usado por features o targets, aplicar la regeneración y reevaluación del punto 5. Jev selecciona salidas tipadas predefinidas; no redacta informes libres ni sustituye aritmética, validación contable o aprobación G-DATA.
+
+#### Acceso y configuración prevista
+
+**Ruta acordada: `classifier.dev` como principal; Vercel AI Gateway → Jev como fallback explícito.** No llamar a ambas rutas para cada entrada. Las referencias previas de Gateway se consultaron el **19-09-2026**; tarifas, catálogo y límites de ambas rutas deben reconfirmarse antes de ejecutar.
+
+| Ruta | Uso propuesto | Requisitos y límites |
+|---|---|---|
+| `https://classifier.dev/` | Principal para los pilotos autorizados, con `tier: "fast"` | API HTTP sin cuenta, clave ni SDK; 3.000 clasificaciones/minuto y 20.000/día por IP, hasta 1.000 inputs/request. No autoriza reclasificar todo el dataset ni elimina controles de privacidad |
+| Vercel AI Gateway → Jev | Fallback previamente habilitado y autorizado | Modelo `typesafe-ai/jev`; tarifa publicada 0,042 USD/millón de tokens de entrada. Elegibilidad de Jev para créditos gratuitos y saldo de nuestra cuenta pendientes; exige credencial, presupuesto y política de datos aprobados |
+
+**Skill del agente:** `bulk-classify`, instalada globalmente en `~/.agents/skills/bulk-classify/SKILL.md` desde [classifier.dev/skill.md](https://classifier.dev/skill.md). Es apoyo para operar la API, no una dependencia del pipeline ni permiso para enviar datos. Para esta ruta basta HTTP; CLI `classifier-dev` y MCP son opcionales, no requisitos de instalación.
+
+**Principal — configuración prevista:**
+
+1. Usar `POST https://classifier.dev` con JSON (`labels`, `inputs`, `tier: "fast"` e `instructions` cuando corresponda), `Content-Type: application/json` y un `User-Agent` identificable. Evitar textos en URLs; mantener llamadas fuera del dashboard y del build determinista `xray`. Probar conectividad con ejemplos inventados antes de cualquier muestra autorizada.
+2. Definir 2–100 etiquetas semánticas, incluida salida explícita `unknown`/«ninguna de estas» cuando corresponda; una elección forzada con confianza alta no demuestra pertenencia. Validar orden, número y esquema de resultados. `unscored`, confianza nula o insuficiente y evidencia contradictoria implican abstención; no adoptar los umbrales de ejemplo de la skill como criterios financieros.
+3. Acotar lotes a cuota restante y 1.000 entradas, cada una de hasta 32.000 caracteres. Limitar concurrencia, tiempos de espera y reintentos; respetar `Retry-After` y cabeceras de cuota. Registrar modelo por resultado, `modelsUsed`, ruta y decisión junto con la trazabilidad existente; conservar snapshot local para evitar nuevas llamadas al reproducir.
+
+**Política de fallback:** tras timeout o errores transitorios `429`/`5xx` que persistan después de reintentos acotados, o respuesta de un modelo no aprobado, usar Gateway solo para entradas sin resultado elegible y si esa ruta ya cumple permisos, acceso y presupuesto. Registrar motivo, intentos y ruta efectiva; conservar respuestas aceptadas sin reclasificarlas. Baja confianza, `unknown`, `unscored` o errores de entrada no disparan cambios de proveedor para forzar una etiqueta. Si Gateway no está habilitado o falla, mantener abstención y revisión humana, nunca inventar resultado ni bloquear baseline/export.
+
+**Fallback — configuración previa a su habilitación:** Vercel Gateway se puede consumir desde local/Jio; no requiere desplegar la app en Vercel ni alojar `classifier.dev`.
+
+1. En el equipo Vercel, comprobar acceso al modelo, crédito elegible y presupuesto autorizado. Crear una clave dedicada de AI Gateway con límite de gasto; no comprar créditos ni activar recargas sin aprobación.
+2. Inyectar `AI_GATEWAY_API_KEY` solo en el entorno del proceso servidor/batch mediante almacenamiento de secretos; nunca en Git, navegador, `NEXT_PUBLIC_*` o logs. No es necesaria una clave propia de TypeSafe para la ruta gestionada de Gateway.
+3. Solo al habilitar el fallback, añadir un adaptador batch TypeScript/Bun aislado del dashboard y del build determinista `xray`. La documentación requiere AI SDK 7 y `experimental_evaluate` (soporte anunciado desde `ai` 7.0.105), con `model: 'typesafe-ai/jev'`, `state` y preguntas `choice` con criterios explícitos. La dependencia `ai` no existe actualmente: seleccionar y fijar una versión compatible revisada, preferentemente con al menos siete días de publicación; no instalar `latest` ni exigir este SDK a la ruta HTTP principal. No usar `generateText` ni endpoints compatibles con OpenAI para esta modalidad.
+4. Revisar la política de datos de toda la ruta. Vercel documenta ZDR por solicitud mediante `providerOptions.gateway.zeroDataRetention: true` para planes Pro/Enterprise, sin recargo por solicitud; el plan puede tener coste. Si ZDR es requisito, bloquear ejecución cuando no esté disponible, nunca desactivarlo para continuar. ZDR no elimina la transmisión a terceros ni sustituye el permiso del reto.
+5. Verificar credenciales, respuesta y consumo con ejemplos inventados; conservar artefactos separados de los marts oficiales. Gateway expone probabilidades en las respuestas y confianza separada en `providerMetadata.typesafe.confidence`; adaptar cada respuesta al contrato local sin asumir equivalencia de scores, confianza o versiones entre rutas. Evaluar aceptación y calibración por ruta con la misma taxonomía congelada; probar también caída de ambas y ausencia de credenciales.
+
+En `classifier.dev`, incluso `fast` admite sustituciones de modelo y fallback interno: registrar y rechazar resultados de modelos no aprobados. No activar `smart` en este piloto: puede sustituir la etiqueta por otra de un LLM manteniendo confianza/scores originales de Jev. El servicio declara no guardar textos localmente y registrar una huella con clave del conjunto de etiquetas, además de metadatos; reenvía textos a proveedores. No introducir datos sensibles tampoco en etiquetas. Si el contrato exige fijar proveedor/modelo o ZDR que el servicio no garantiza, no enviar datos por esta ruta: usar únicamente una alternativa previamente autorizada que cumpla esas condiciones, o abstenerse. Rechazar una respuesta después no deshace la transmisión; la API pública no equivale a inferencia privada.
+
+**Entregable del piloto:** muestra y referencia autorizadas, configuración/versiones, propuestas auditables, métricas y coste observado, comparación de agregados y decisión documentada de adoptar, limitar o descartar. Sin mejora o permisos, mantener clasificación actual y reporting con incertidumbre visible.
+
+Fuentes: [classifier.dev](https://classifier.dev/), [presentación Jev](https://typesafe.ai/blog/introducing-system-one-models-and-jev), [Jev en Gateway](https://vercel.com/ai-gateway/models/jev), [anuncio y versión mínima SDK](https://vercel.com/changelog/typesafe-ai-jev-now-available-on-ai-gateway), [Evaluation](https://vercel.com/docs/ai-gateway/modalities/evaluation), [precios](https://vercel.com/docs/ai-gateway/pricing), [autenticación](https://vercel.com/docs/ai-gateway/authentication-and-byok), [ZDR](https://vercel.com/docs/ai-gateway/security-and-compliance/zdr).
+
+### 5.2. Jev condicionado: normalización de tipos documentales (P2)
+
+Activar solo si la auditoría encuentra variantes reales de `document_type` que la normalización existente de `xray/clean/facts.py` no resuelve. Jev puede proponer equivalencias usando el tipo original y `concept` como apoyo; un responsable valida la equivalencia y las variantes recurrentes pasan a un diccionario determinista. Conservar original, propuesta y decisión; los tipos desconocidos siguen desconocidos.
+
+`xray/marts/cobro.py` admite `invoice`: el volumen excluido no demuestra errores de etiquetado ni cobertura recuperable. No reclasificar abonos, pedidos o albaranes como facturas por semejanza textual, inferir cliente/proveedor ni resolver signos con Jev. Evaluar precisión por tipo, falsas inclusiones e impacto monetario por moneda con referencia experta independiente; aplicar controles de §5.1 y repetir puertas afectadas antes de cambiar agregados o targets. Sin vocabulario observado, necesidad material y permiso, mantener esta rama pospuesta.
+
 ## 6. P3: panel temporal y contrato de features
 
 Una fila representa información disponible en corte `t`, no lo que sabemos hoy sobre aquella fecha. `company_id` y `group_id` sirven para identidad y particiones; no deben memorizarse como predictores. Metadatos de grupos, ERP y productos también pueden ser snapshots finales.
@@ -220,6 +287,7 @@ Un índice 80/100 no significa 80 % de probabilidad. Explicaciones deben referir
 | Detector no supervisado | Necesidad de señalar observaciones raras | Anomalía no equivale a mala salud ni reemplaza validación de outcomes |
 | Modelo secuencial complejo | Evidencia de que modelos simples fallan y más historia útil lo justifica | No prioridad con mediana de 18 meses y grupos correlacionados |
 | Reconstrucción de saldos | Historia completa por cuenta/moneda y conciliación independiente | Si faltan movimientos, no fabricar stock histórico |
+| Jev: etiquetas temáticas de drivers (P8, pospuesto) | Necesidad demostrada de búsqueda o agrupación que categorías y motivos existentes no cubran | Solo navegación; taxonomía aprobada y evaluación propia bajo §5.1. No modificar puntos, score, suficiencia de evidencia ni atribuir causalidad; no convertir etiquetas en features sin validación aparte |
 
 ## 11. P7–P8: explicación, entrega y anticipación
 
@@ -231,6 +299,14 @@ Preservar provenance, as-of y coverage. Conservar features internas por moneda; 
 
 Bonus de anticipación: definir evento independiente, inicio frente a confirmación, primera alerta real, ventana de matching, un match por evento/signo, misses, falsas alarmas, ambas direcciones, censura y distribución de lead time. Un agregado de tres meses no identifica automáticamente fecha exacta de inicio; sin evidencia, no prometer meses de anticipación precisos.
 
+### 11.1. Jev opcional: coherencia semántica de explicaciones (P7)
+
+Primero validar fechas, importes, IDs y cobertura en código y generar textos simples desde hechos estructurados. Si persisten explicaciones libres en `drivers` o `coverage`, evaluar Jev para contrastar cada afirmación con evidencia enlazada y disponible en el corte: `respaldada`, `contradictoria` o `evidencia insuficiente`. Una referencia ausente no permite declarar respaldo; el texto evaluado es dato, no instrucción que pueda cambiar los criterios.
+
+Evaluar con pares afirmación/evidencia etiquetados por humanos, incluidos casos correctos, contradicciones y fuentes insuficientes; evitar compartir plantillas equivalentes entre desarrollo y evaluación. Medir falsos respaldos, contradicciones detectadas, falsas alarmas y abstención frente a controles deterministas. Aplicar controles de §5.1; una salida tipada no certifica veracidad ni causalidad. Jev no debe redactar o reescribir explicaciones, alterar scores ni certificar salud financiera.
+
+Guardar observaciones para revisión humana, fuera del JSON publicado; fallo o abstención significa no evaluado, nunca aprobado. Mantener validación determinista y revisión humana de afirmaciones materiales como alternativa sin Jev. Piloto separado, no dependencia de export ni reemplazo de `finance::load` o pruebas de integración.
+
 ## 12. Entregables previstos y aprobación
 
 **Ya existen** pipeline `xray` (ingesta, limpieza, clasificación FX y siete marts), `data_dictionary.md`, `reports/vistas_y_hallazgos.md`, `reports/build_manifest.json`, `scripts/audit_financial_data.py` y `reports/readiness/{manifest.json,inventory.md,schema_contract.json}`. El script/readiness son inventario separado; manifest e informes son evidencia histórica, no reproducción actual. Los siguientes son propuestas o ampliaciones, no controles aprobados:
@@ -240,6 +316,7 @@ Bonus de anticipación: definir evento independiente, inicio frente a confirmaci
 | Actualización de inventario/manifest | Identidad, hashes tras materialización, esquemas, versiones y disponibilidad |
 | Informe G-DATA | Calidad reproducible, cobertura, decisiones semánticas e impacto de exclusiones |
 | Ledger o derivados adicionales | Solo si verificación del pipeline existente revela hueco; originales intactos |
+| Pilotos Jev opcionales (§§5.1, 5.2 y 11.1) | Movimientos y apoyo a revisión; normalización documental condicionada; coherencia semántica opcional. Por uso: muestra autorizada, propuestas separadas, métricas, coste y decisión independiente de adoptar, limitar o descartar; `classifier.dev` principal y Gateway fallback sujeto a acceso, presupuesto y privacidad |
 | Contrato de features as-of | Elegibilidad y metadatos sobre marts existentes |
 | Aprobación de `targets_proxy` o `TARGET.md` | Objetivo, maduración, censura y límites explícitos |
 | Índices de split y métricas | Cortes/grupos, baseline, cohortes, selección y test final |
@@ -248,6 +325,6 @@ Bonus de anticipación: definir evento independiente, inicio frente a confirmaci
 
 Preguntas prioritarias al mentor: entidad/unidad/target oficiales, métrica/formato/submission, labels y disponibilidad, historia/split del test; semántica/exclusiones de `payment_date`, facturas, tipos y FX; snapshots/historial; licencia. Cambios en semántica, exclusión, target, protocolo o moneda pueden invalidar limpieza, panel y splits: versionar decisiones y repetir puertas afectadas.
 
-**Decisiones humanas pendientes:** semántica/exclusiones financieras materiales; target oficial o proxy; protocolo/split y formato de salida oficial; alcance material G-DATA y claims de demo. No hay aprobaciones ya obtenidas ni permiso automático para cambiar todo.
+**Decisiones humanas pendientes:** semántica/exclusiones financieras materiales; target oficial o proxy; protocolo/split y formato de salida oficial; alcance material G-DATA y claims de demo; autorización de tratamiento externo por ruta, presupuesto, habilitación del fallback Gateway y promoción independiente de cada uso de Jev. La incorporación de estos usos opcionales y el orden `classifier.dev` → Gateway al planning están acordados; no aprueban esas decisiones ni autorizan envíos de datos del reto, gastos o cambios automáticos en los datos. Ningún piloto sustituye controles financieros ni se convierte en dependencia obligatoria de baseline/export.
 
 **Siguiente unidad de trabajo propuesta:** 30–60 min P0: confirmar inputs/contrato e inspeccionar pipeline/marts existentes. Checkpoint: si materialización o semántica bloquea, elegir ruta elegible o fixture etiquetado. En siguientes 60–90 min, producir/validar JSON mínimo de app desde marts existentes solo si elegibles; baseline/export antes de modelo nuevo. No ejecutar modelado ahora ni prometer completar datos; deadline exacto se confirma aparte.

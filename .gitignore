@@ -32,3 +32,5 @@ __pycache__/
 /plan_scoring_hackathon.md
 /reto_y_dataset.md
 /x-ray-reto-embat.html
+# Local Pi runtime state
+.atl/
