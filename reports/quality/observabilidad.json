@@ -1,0 +1,121 @@
+{
+  "mart": "observabilidad",
+  "grano": "(company_id, month) — empresas x meses cerrados 2024-09..2026-08",
+  "total_filas_empresa_mes": 30864,
+  "filas_objetivo_observable": 13226,
+  "pct_objetivo_observable": 42.85,
+  "empresas_totales": 1286,
+  "empresas_con_alguna_fila_observable": 1248,
+  "reparto_motivo_no_observable": {
+    "calentamiento": 3772,
+    "horizonte_incompleto": 613,
+    "sin_actividad": 9708,
+    "sin_horizonte": 3545
+  },
+  "serie_mensual_empresas_observables": [
+    {
+      "mes": "2024-09",
+      "empresas_observables": 0
+    },
+    {
+      "mes": "2024-10",
+      "empresas_observables": 0
+    },
+    {
+      "mes": "2024-11",
+      "empresas_observables": 0
+    },
+    {
+      "mes": "2024-12",
+      "empresas_observables": 421
+    },
+    {
+      "mes": "2025-01",
+      "empresas_observables": 456
+    },
+    {
+      "mes": "2025-02",
+      "empresas_observables": 459
+    },
+    {
+      "mes": "2025-03",
+      "empresas_observables": 494
+    },
+    {
+      "mes": "2025-04",
+      "empresas_observables": 621
+    },
+    {
+      "mes": "2025-05",
+      "empresas_observables": 648
+    },
+    {
+      "mes": "2025-06",
+      "empresas_observables": 684
+    },
+    {
+      "mes": "2025-07",
+      "empresas_observables": 707
+    },
+    {
+      "mes": "2025-08",
+      "empresas_observables": 720
+    },
+    {
+      "mes": "2025-09",
+      "empresas_observables": 733
+    },
+    {
+      "mes": "2025-10",
+      "empresas_observables": 768
+    },
+    {
+      "mes": "2025-11",
+      "empresas_observables": 798
+    },
+    {
+      "mes": "2025-12",
+      "empresas_observables": 826
+    },
+    {
+      "mes": "2026-01",
+      "empresas_observables": 874
+    },
+    {
+      "mes": "2026-02",
+      "empresas_observables": 893
+    },
+    {
+      "mes": "2026-03",
+      "empresas_observables": 945
+    },
+    {
+      "mes": "2026-04",
+      "empresas_observables": 1062
+    },
+    {
+      "mes": "2026-05",
+      "empresas_observables": 1117
+    },
+    {
+      "mes": "2026-06",
+      "empresas_observables": 0
+    },
+    {
+      "mes": "2026-07",
+      "empresas_observables": 0
+    },
+    {
+      "mes": "2026-08",
+      "empresas_observables": 0
+    }
+  ],
+  "distribucion_meses_con_actividad_en_observables": {
+    "n": 13226,
+    "min": 2,
+    "p25": 6,
+    "mediana": 10,
+    "p75": 15,
+    "max": 21
+  }
+}

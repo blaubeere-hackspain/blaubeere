@@ -1,0 +1,648 @@
+{
+  "panel": {
+    "filas": 30864,
+    "empresas": 1286,
+    "meses": 24,
+    "grano": "(company_id, month), meses cerrados 2024-09..2026-08",
+    "duplicados_clave": 0
+  },
+  "empresas": {
+    "con_erp": 785,
+    "sin_erp": 501,
+    "sin_erp_nota": "metricas NULL y tiene_erp=FALSE; no se rellenan con ceros"
+  },
+  "facturas": {
+    "rows_in_dataset": 897894,
+    "universo_cartera": 748316,
+    "universo_eur_conocido_abs": 6628385477.857542,
+    "excluidas": {
+      "cancel": {
+        "n": 13699,
+        "eur_conocido_abs": 118258575.94737627,
+        "motivo": "factura cancelada: ni cobro ni deuda"
+      },
+      "tipo_no_invoice": {
+        "n": 135879,
+        "eur_conocido_abs": 2245644226.2846704,
+        "motivo": "document_type_norm <> 'invoice'"
+      },
+      "fecha_invalida": {
+        "n": 0,
+        "eur_conocido_abs": null,
+        "motivo": "issuance_date_ok NULL; otras fechas no eliminan la factura"
+      },
+      "sin_amount_eur": {
+        "n": 90454,
+        "eur_conocido_abs": null,
+        "motivo": "sin conversion demostrable; totales monetarios incompletos a NULL, subtotales conocidos y conteos separados"
+      },
+      "amount_cero": {
+        "n": 967,
+        "motivo": "amount = 0: sin lado AR/AP; solo cuenta en n_facturas_mes"
+      }
+    },
+    "pagos_parciales_marcados": {
+      "n": 261,
+      "nota": "status paid con pending_amount <> 0: fecha de liquidacion desconocida, sin inventar liquidacion unica"
+    }
+  },
+  "serie_mensual": [
+    {
+      "mes": "2024-09",
+      "ar_abierto_eur": 10866978.747551708,
+      "ar_abierto_norm_mediana": null,
+      "ar_pct_vencido": 0.2046957983206064,
+      "ap_abierto_eur": 12654329.847894825,
+      "ap_pct_vencido": 0.07177867762286774
+    },
+    {
+      "mes": "2024-10",
+      "ar_abierto_eur": 20290689.51315905,
+      "ar_abierto_norm_mediana": null,
+      "ar_pct_vencido": 0.2723240661619865,
+      "ap_abierto_eur": 27365418.946337856,
+      "ap_pct_vencido": 0.2807386380375512
+    },
+    {
+      "mes": "2024-11",
+      "ar_abierto_eur": 36367063.70963477,
+      "ar_abierto_norm_mediana": 2.098538568908278,
+      "ar_pct_vencido": 0.2303901865991113,
+      "ap_abierto_eur": 35063013.916112006,
+      "ap_pct_vencido": 0.29040636406352704
+    },
+    {
+      "mes": "2024-12",
+      "ar_abierto_eur": 41706786.86552399,
+      "ar_abierto_norm_mediana": 2.380063787191247,
+      "ar_pct_vencido": 0.38633061958520687,
+      "ap_abierto_eur": 27142412.252304785,
+      "ap_pct_vencido": 0.3038456033327307
+    },
+    {
+      "mes": "2025-01",
+      "ar_abierto_eur": 59484437.268269956,
+      "ar_abierto_norm_mediana": 2.7901336874614717,
+      "ar_pct_vencido": 0.33936060234212695,
+      "ap_abierto_eur": 33188738.480366565,
+      "ap_pct_vencido": 0.5292538040901601
+    },
+    {
+      "mes": "2025-02",
+      "ar_abierto_eur": 67283939.48078947,
+      "ar_abierto_norm_mediana": 2.7170690577729157,
+      "ar_pct_vencido": 0.35685807158566557,
+      "ap_abierto_eur": 33654725.83685872,
+      "ap_pct_vencido": 0.4808730706689138
+    },
+    {
+      "mes": "2025-03",
+      "ar_abierto_eur": 82847214.54481563,
+      "ar_abierto_norm_mediana": 2.8624044848154657,
+      "ar_pct_vencido": 0.377560341633222,
+      "ap_abierto_eur": 48954869.22964747,
+      "ap_pct_vencido": 0.38066393745469873
+    },
+    {
+      "mes": "2025-04",
+      "ar_abierto_eur": 90161960.91649611,
+      "ar_abierto_norm_mediana": 2.883359644752842,
+      "ar_pct_vencido": 0.5708894867137974,
+      "ap_abierto_eur": 37364572.63217496,
+      "ap_pct_vencido": 0.4243058117905083
+    },
+    {
+      "mes": "2025-05",
+      "ar_abierto_eur": 122275200.29598843,
+      "ar_abierto_norm_mediana": 3.0,
+      "ar_pct_vencido": 0.6113988500474397,
+      "ap_abierto_eur": 41736695.36801076,
+      "ap_pct_vencido": 0.32144865065692974
+    },
+    {
+      "mes": "2025-06",
+      "ar_abierto_eur": 132208078.5513435,
+      "ar_abierto_norm_mediana": 2.704415644316189,
+      "ar_pct_vencido": 0.6013177282407912,
+      "ap_abierto_eur": 45656395.784917906,
+      "ap_pct_vencido": 0.486761415534595
+    },
+    {
+      "mes": "2025-07",
+      "ar_abierto_eur": 143615999.32561672,
+      "ar_abierto_norm_mediana": 2.540995163966162,
+      "ar_pct_vencido": 0.646432646945798,
+      "ap_abierto_eur": 52966430.08252439,
+      "ap_pct_vencido": 0.47072311766894326
+    },
+    {
+      "mes": "2025-08",
+      "ar_abierto_eur": 143141799.23307145,
+      "ar_abierto_norm_mediana": 2.8428995212555623,
+      "ar_pct_vencido": 0.7514271359759259,
+      "ap_abierto_eur": 52169348.17573724,
+      "ap_pct_vencido": 0.49503582901862564
+    },
+    {
+      "mes": "2025-09",
+      "ar_abierto_eur": 159037120.84438014,
+      "ar_abierto_norm_mediana": 3.0,
+      "ar_pct_vencido": 0.6583371023612518,
+      "ap_abierto_eur": 57280604.523837544,
+      "ap_pct_vencido": 0.45831810470231127
+    },
+    {
+      "mes": "2025-10",
+      "ar_abierto_eur": 144691877.2263881,
+      "ar_abierto_norm_mediana": 3.0,
+      "ar_pct_vencido": 0.7075942682262648,
+      "ap_abierto_eur": 56886961.91808103,
+      "ap_pct_vencido": 0.42449934788503235
+    },
+    {
+      "mes": "2025-11",
+      "ar_abierto_eur": 167106567.00455672,
+      "ar_abierto_norm_mediana": 2.2679954022484035,
+      "ar_pct_vencido": 0.7435080270308502,
+      "ap_abierto_eur": 69090347.68703087,
+      "ap_pct_vencido": 0.5471194407268979
+    },
+    {
+      "mes": "2025-12",
+      "ar_abierto_eur": 165266869.80885795,
+      "ar_abierto_norm_mediana": 2.2488868971979663,
+      "ar_pct_vencido": 0.5398903722852977,
+      "ap_abierto_eur": 76376096.0416378,
+      "ap_pct_vencido": 0.4056177496096755
+    },
+    {
+      "mes": "2026-01",
+      "ar_abierto_eur": 162929344.87259686,
+      "ar_abierto_norm_mediana": 2.5098088162924674,
+      "ar_pct_vencido": 0.6627259660444763,
+      "ap_abierto_eur": 66798061.41299552,
+      "ap_pct_vencido": 0.4747022555664147
+    },
+    {
+      "mes": "2026-02",
+      "ar_abierto_eur": 156507329.37761644,
+      "ar_abierto_norm_mediana": 2.274558801878765,
+      "ar_pct_vencido": 0.6068608566074604,
+      "ap_abierto_eur": 50715764.44891193,
+      "ap_pct_vencido": 0.6152723077631901
+    },
+    {
+      "mes": "2026-03",
+      "ar_abierto_eur": 167577910.90600675,
+      "ar_abierto_norm_mediana": 2.5864305216174284,
+      "ar_pct_vencido": 0.5857388242742316,
+      "ap_abierto_eur": 45203397.260768436,
+      "ap_pct_vencido": 0.3606755203892868
+    },
+    {
+      "mes": "2026-04",
+      "ar_abierto_eur": 175264410.28774673,
+      "ar_abierto_norm_mediana": 2.18369103444814,
+      "ar_pct_vencido": 0.5433428938027101,
+      "ap_abierto_eur": 46999634.498666584,
+      "ap_pct_vencido": 0.27797164123643325
+    },
+    {
+      "mes": "2026-05",
+      "ar_abierto_eur": 159205264.4524148,
+      "ar_abierto_norm_mediana": 2.1352187743601703,
+      "ar_pct_vencido": 0.617120014663159,
+      "ap_abierto_eur": 55320301.25664263,
+      "ap_pct_vencido": 0.2478005954944154
+    },
+    {
+      "mes": "2026-06",
+      "ar_abierto_eur": 177257429.35442227,
+      "ar_abierto_norm_mediana": 2.6129576693735728,
+      "ar_pct_vencido": 0.5491523250815987,
+      "ap_abierto_eur": 58257257.85162523,
+      "ap_pct_vencido": 0.330326529049591
+    },
+    {
+      "mes": "2026-07",
+      "ar_abierto_eur": 180268025.7218624,
+      "ar_abierto_norm_mediana": 2.1622193343543916,
+      "ar_pct_vencido": 0.5811962970461516,
+      "ap_abierto_eur": 54258085.562675126,
+      "ap_pct_vencido": 0.4624448452120412
+    },
+    {
+      "mes": "2026-08",
+      "ar_abierto_eur": 197403287.50712296,
+      "ar_abierto_norm_mediana": 2.3507528688879082,
+      "ar_pct_vencido": 0.6022907331507907,
+      "ap_abierto_eur": 52595442.19197404,
+      "ap_pct_vencido": 0.6764307233974914
+    }
+  ],
+  "aging_ultimo_mes": {
+    "mes": "2026-08",
+    "ar": {
+      "vencido_eur": 118894170.75904143,
+      "aging_0_30_eur": 14393748.540000003,
+      "aging_0_30_pct": 0.12106353447025842,
+      "aging_31_60_eur": 11236436.461950455,
+      "aging_31_60_pct": 0.09450788369366686,
+      "aging_61_90_eur": 10020146.96,
+      "aging_61_90_pct": 0.08427786573580193,
+      "aging_91_180_eur": 22192134.401379306,
+      "aging_91_180_pct": 0.1866545202317388,
+      "aging_181_360_eur": 42369039.00201452,
+      "aging_181_360_pct": 0.3563592624560403,
+      "aging_360_mas_eur": 18682665.393697232,
+      "aging_360_mas_pct": 0.1571369334124944
+    },
+    "ap": {
+      "vencido_eur": 35577173.00932794,
+      "aging_0_30_eur": 9871807.769709576,
+      "aging_0_30_pct": 0.2774758907100712,
+      "aging_31_60_eur": 7871829.365736676,
+      "aging_31_60_pct": 0.2212606764363422,
+      "aging_61_90_eur": 6388049.971242848,
+      "aging_61_90_pct": 0.1795547377968444,
+      "aging_91_180_eur": 4787933.175714253,
+      "aging_91_180_pct": 0.13457879788421948,
+      "aging_181_360_eur": 2624444.32961687,
+      "aging_181_360_pct": 0.07376764671349154,
+      "aging_360_mas_eur": 4033108.397307703,
+      "aging_360_mas_pct": 0.11336225045903076
+    },
+    "nota": "los seis tramos de aging suman el importe VENCIDO del lado (lo no vencido no esta en ningun tramo)"
+  },
+  "cohortes_cobro": {
+    "definicion": "por (company_id, mes de emision): pct del importe emitido en m cobrado (status paid) en <= N dias desde emision; facturas de venta, doc_type invoice, no cancel",
+    "censura": "NULL si fin_de_mes(emision) + N dias > 2026-08-31 (sin horizonte completo); NULL tambien si coh_emitido_eur = 0 (sin amount_eur); NUNCA cero por censura",
+    "disponibilidad": "columnas coh_{30,60,90}d_available_at = fin_de_mes(emision) + N dias: no filtran nada, contrato para que la capa de features consuma solo lo que cumpla available_at <= fecha_de_corte; la censura al cierre se mantiene aparte",
+    "serie_mensual": [
+      {
+        "mes": "2024-09",
+        "coh_pct_cobrado_30d": 0.452141028256381,
+        "n_null_censura_30d": 0,
+        "coh_pct_cobrado_60d": 0.5244196564864609,
+        "n_null_censura_60d": 0,
+        "coh_pct_cobrado_90d": 0.5800984294677745,
+        "n_null_censura_90d": 0
+      },
+      {
+        "mes": "2024-10",
+        "coh_pct_cobrado_30d": 0.3895626585325211,
+        "n_null_censura_30d": 0,
+        "coh_pct_cobrado_60d": 0.5131829231394592,
+        "n_null_censura_60d": 0,
+        "coh_pct_cobrado_90d": 0.5484254595193173,
+        "n_null_censura_90d": 0
+      },
+      {
+        "mes": "2024-11",
+        "coh_pct_cobrado_30d": 0.45169068859366973,
+        "n_null_censura_30d": 0,
+        "coh_pct_cobrado_60d": 0.5410011848147905,
+        "n_null_censura_60d": 0,
+        "coh_pct_cobrado_90d": 0.5847260820950748,
+        "n_null_censura_90d": 0
+      },
+      {
+        "mes": "2024-12",
+        "coh_pct_cobrado_30d": 0.44749417005787034,
+        "n_null_censura_30d": 0,
+        "coh_pct_cobrado_60d": 0.5184614719770663,
+        "n_null_censura_60d": 0,
+        "coh_pct_cobrado_90d": 0.559369094065344,
+        "n_null_censura_90d": 0
+      },
+      {
+        "mes": "2025-01",
+        "coh_pct_cobrado_30d": 0.4471257853579724,
+        "n_null_censura_30d": 0,
+        "coh_pct_cobrado_60d": 0.5422469052435547,
+        "n_null_censura_60d": 0,
+        "coh_pct_cobrado_90d": 0.5858216439558612,
+        "n_null_censura_90d": 0
+      },
+      {
+        "mes": "2025-02",
+        "coh_pct_cobrado_30d": 0.4706781222719198,
+        "n_null_censura_30d": 0,
+        "coh_pct_cobrado_60d": 0.5611657891046566,
+        "n_null_censura_60d": 0,
+        "coh_pct_cobrado_90d": 0.6097633620505069,
+        "n_null_censura_90d": 0
+      },
+      {
+        "mes": "2025-03",
+        "coh_pct_cobrado_30d": 0.4756237205687164,
+        "n_null_censura_30d": 0,
+        "coh_pct_cobrado_60d": 0.5524520578045732,
+        "n_null_censura_60d": 0,
+        "coh_pct_cobrado_90d": 0.607288185980486,
+        "n_null_censura_90d": 0
+      },
+      {
+        "mes": "2025-04",
+        "coh_pct_cobrado_30d": 0.4620396237476228,
+        "n_null_censura_30d": 0,
+        "coh_pct_cobrado_60d": 0.5498631093024435,
+        "n_null_censura_60d": 0,
+        "coh_pct_cobrado_90d": 0.5964345970093683,
+        "n_null_censura_90d": 0
+      },
+      {
+        "mes": "2025-05",
+        "coh_pct_cobrado_30d": 0.48487702530322413,
+        "n_null_censura_30d": 0,
+        "coh_pct_cobrado_60d": 0.5850039786233028,
+        "n_null_censura_60d": 0,
+        "coh_pct_cobrado_90d": 0.631509051720792,
+        "n_null_censura_90d": 0
+      },
+      {
+        "mes": "2025-06",
+        "coh_pct_cobrado_30d": 0.5347128298881708,
+        "n_null_censura_30d": 0,
+        "coh_pct_cobrado_60d": 0.6103266922239116,
+        "n_null_censura_60d": 0,
+        "coh_pct_cobrado_90d": 0.6644712034458624,
+        "n_null_censura_90d": 0
+      },
+      {
+        "mes": "2025-07",
+        "coh_pct_cobrado_30d": 0.4510077687772082,
+        "n_null_censura_30d": 0,
+        "coh_pct_cobrado_60d": 0.5708942006739821,
+        "n_null_censura_60d": 0,
+        "coh_pct_cobrado_90d": 0.6464858270568314,
+        "n_null_censura_90d": 0
+      },
+      {
+        "mes": "2025-08",
+        "coh_pct_cobrado_30d": 0.4681431259641707,
+        "n_null_censura_30d": 0,
+        "coh_pct_cobrado_60d": 0.5956166476654823,
+        "n_null_censura_60d": 0,
+        "coh_pct_cobrado_90d": 0.6463209976242057,
+        "n_null_censura_90d": 0
+      },
+      {
+        "mes": "2025-09",
+        "coh_pct_cobrado_30d": 0.5377207066818872,
+        "n_null_censura_30d": 0,
+        "coh_pct_cobrado_60d": 0.6478909951105885,
+        "n_null_censura_60d": 0,
+        "coh_pct_cobrado_90d": 0.6993263417196508,
+        "n_null_censura_90d": 0
+      },
+      {
+        "mes": "2025-10",
+        "coh_pct_cobrado_30d": 0.47560987610992783,
+        "n_null_censura_30d": 0,
+        "coh_pct_cobrado_60d": 0.5779532494643158,
+        "n_null_censura_60d": 0,
+        "coh_pct_cobrado_90d": 0.6425470545250798,
+        "n_null_censura_90d": 0
+      },
+      {
+        "mes": "2025-11",
+        "coh_pct_cobrado_30d": 0.5395110250098958,
+        "n_null_censura_30d": 0,
+        "coh_pct_cobrado_60d": 0.6345140184265083,
+        "n_null_censura_60d": 0,
+        "coh_pct_cobrado_90d": 0.6776084547159515,
+        "n_null_censura_90d": 0
+      },
+      {
+        "mes": "2025-12",
+        "coh_pct_cobrado_30d": 0.497233318399932,
+        "n_null_censura_30d": 0,
+        "coh_pct_cobrado_60d": 0.6347322681362676,
+        "n_null_censura_60d": 0,
+        "coh_pct_cobrado_90d": 0.6706351790185445,
+        "n_null_censura_90d": 0
+      },
+      {
+        "mes": "2026-01",
+        "coh_pct_cobrado_30d": 0.49849618166936177,
+        "n_null_censura_30d": 0,
+        "coh_pct_cobrado_60d": 0.6159329293619435,
+        "n_null_censura_60d": 0,
+        "coh_pct_cobrado_90d": 0.670393747680154,
+        "n_null_censura_90d": 0
+      },
+      {
+        "mes": "2026-02",
+        "coh_pct_cobrado_30d": 0.5095602920763582,
+        "n_null_censura_30d": 0,
+        "coh_pct_cobrado_60d": 0.6361560935432776,
+        "n_null_censura_60d": 0,
+        "coh_pct_cobrado_90d": 0.6910139384857387,
+        "n_null_censura_90d": 0
+      },
+      {
+        "mes": "2026-03",
+        "coh_pct_cobrado_30d": 0.4678744212322384,
+        "n_null_censura_30d": 0,
+        "coh_pct_cobrado_60d": 0.6054033775257507,
+        "n_null_censura_60d": 0,
+        "coh_pct_cobrado_90d": 0.6548977401127168,
+        "n_null_censura_90d": 0
+      },
+      {
+        "mes": "2026-04",
+        "coh_pct_cobrado_30d": 0.5197647304689862,
+        "n_null_censura_30d": 0,
+        "coh_pct_cobrado_60d": 0.6106946939466602,
+        "n_null_censura_60d": 0,
+        "coh_pct_cobrado_90d": 0.6719472959034605,
+        "n_null_censura_90d": 0
+      },
+      {
+        "mes": "2026-05",
+        "coh_pct_cobrado_30d": 0.45676580832130065,
+        "n_null_censura_30d": 0,
+        "coh_pct_cobrado_60d": 0.5929578773102681,
+        "n_null_censura_60d": 0,
+        "coh_pct_cobrado_90d": 0.6694907163584137,
+        "n_null_censura_90d": 0
+      },
+      {
+        "mes": "2026-06",
+        "coh_pct_cobrado_30d": 0.4572569414004479,
+        "n_null_censura_30d": 0,
+        "coh_pct_cobrado_60d": 0.5891093211216136,
+        "n_null_censura_60d": 0,
+        "coh_pct_cobrado_90d": null,
+        "n_null_censura_90d": 487
+      },
+      {
+        "mes": "2026-07",
+        "coh_pct_cobrado_30d": 0.44417872423077803,
+        "n_null_censura_30d": 0,
+        "coh_pct_cobrado_60d": null,
+        "n_null_censura_60d": 478,
+        "coh_pct_cobrado_90d": null,
+        "n_null_censura_90d": 478
+      },
+      {
+        "mes": "2026-08",
+        "coh_pct_cobrado_30d": null,
+        "n_null_censura_30d": 462,
+        "coh_pct_cobrado_60d": null,
+        "n_null_censura_60d": 462,
+        "coh_pct_cobrado_90d": null,
+        "n_null_censura_90d": 462
+      }
+    ]
+  },
+  "disciplina_cobro": {
+    "ar_dso_dias": {
+      "n": 6362,
+      "min": 0.0,
+      "p25": 1.0,
+      "mediana": 18.0,
+      "p75": 31.0,
+      "max": 428.0
+    },
+    "ar_retraso_medio_dias": {
+      "n": 6137,
+      "min": -316.0,
+      "p25": 0.0,
+      "mediana": 0.0,
+      "p75": 6.0,
+      "max": 428.0
+    },
+    "filas_con_ar_dso_null": 24502,
+    "motivos_null": {
+      "empresa_sin_erp": 14833,
+      "menos_de_5_liquidadas_en_ventana_3m": 9669
+    }
+  },
+  "conversion": {
+    "politica": "unknown_no_estimates",
+    "coberturas": "fraccion de filas convertibles, no ponderacion entre distintas monedas",
+    "sin_eur_por_moneda_contable": [
+      {
+        "moneda": "USD",
+        "n": 25626,
+        "nominal_contable_abs": 1133193757.6648383
+      },
+      {
+        "moneda": "GBP",
+        "n": 17265,
+        "nominal_contable_abs": 393320728.9061974
+      },
+      {
+        "moneda": "CLP",
+        "n": 7883,
+        "nominal_contable_abs": 31807014944.242428
+      },
+      {
+        "moneda": "MXN",
+        "n": 6159,
+        "nominal_contable_abs": 2377848134.443469
+      },
+      {
+        "moneda": "COP",
+        "n": 5582,
+        "nominal_contable_abs": 558680440053.8306
+      },
+      {
+        "moneda": "BRL",
+        "n": 5057,
+        "nominal_contable_abs": 250361151.4311065
+      },
+      {
+        "moneda": "DKK",
+        "n": 4853,
+        "nominal_contable_abs": 110476188.33609985
+      },
+      {
+        "moneda": "CAD",
+        "n": 3092,
+        "nominal_contable_abs": 33197449.259800043
+      },
+      {
+        "moneda": "AUD",
+        "n": 2950,
+        "nominal_contable_abs": 60070280.05382766
+      },
+      {
+        "moneda": "PEN",
+        "n": 2423,
+        "nominal_contable_abs": 26438274.01953037
+      },
+      {
+        "moneda": "MYR",
+        "n": 2145,
+        "nominal_contable_abs": 3354765.7957249056
+      },
+      {
+        "moneda": "NAD",
+        "n": 1709,
+        "nominal_contable_abs": 82346262.09380427
+      },
+      {
+        "moneda": "ARS",
+        "n": 1580,
+        "nominal_contable_abs": 11852542651.34255
+      },
+      {
+        "moneda": "AED",
+        "n": 1482,
+        "nominal_contable_abs": 73477677.73748502
+      },
+      {
+        "moneda": "MZN",
+        "n": 1217,
+        "nominal_contable_abs": 252858966.7743925
+      },
+      {
+        "moneda": "SGD",
+        "n": 644,
+        "nominal_contable_abs": 117250556.57263207
+      },
+      {
+        "moneda": "NZD",
+        "n": 294,
+        "nominal_contable_abs": 1975980.1732967035
+      },
+      {
+        "moneda": "INR",
+        "n": 167,
+        "nominal_contable_abs": 99708199.41753799
+      },
+      {
+        "moneda": "MAD",
+        "n": 55,
+        "nominal_contable_abs": 3823401.6900000004
+      },
+      {
+        "moneda": "PLN",
+        "n": 10,
+        "nominal_contable_abs": 5084.93
+      },
+      {
+        "moneda": "VND",
+        "n": 8,
+        "nominal_contable_abs": 119192813.0
+      },
+      {
+        "moneda": "CHF",
+        "n": 1,
+        "nominal_contable_abs": 3916.5
+      }
+    ],
+    "sin_amount_acct": 252
+  },
+  "notas": [
+    "Totales NULL cuando hay importes o estados desconocidos; subtotales conocidos separados.",
+    "Las sumas de la serie y del aging cubren solo empresas-mes con el total observable; no son el universo completo.",
+    "Vencimiento desconocido no equivale a no vencido: invalida el total de aging, no la emision.",
+    "La continuidad de ERP tras la primera factura es inferida, no una prueba de conexion bancaria o ERP.",
+    "Reconstruccion retrospectiva: faltan versiones de cancelaciones, fecha de importacion y pagos parciales.",
+    "Los stocks historicos no se exportan como features point-in-time; las cohortes se consultan con cohort_features_at."
+  ]
+}

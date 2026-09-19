@@ -4,8 +4,8 @@
       "amount_extreme": 10,
       "date_order_invalid": 34310,
       "date_out_of_range": 223,
-      "fx_not_convertible": 118146,
-      "fx_rate_invalid": 3650,
+      "fx_not_convertible": 108445,
+      "fx_rate_invalid": 3841,
       "open_month": 5233,
       "paid_with_pending": 300
     },
@@ -13,14 +13,15 @@
       "fx_convention: amount_acct = amount / exchange_rate con rate efectivo (rate = unidades de `currency` por 1 unidad de `accounting_currency`)",
       "fx_evidence: Q5 (currency<>accounting) los rates son coherentes como 'unidades de currency por unidad de accounting' y mutuamente reciprocos entre pares (USD->EUR 1.16 vs EUR->USD 0.86; GBP->USD 0.74 vs USD->GBP 1.34), y coinciden con niveles reales (JPY 162, HKD 7.83, NOK 11.0, SEK 11.11); la lectura por division es la consistente con la elegida en transactions (PASO 1)",
       "fx_same_currency_rate_1: filas currency=accounting_currency con rate NULL o <=0 usan rate efectivo 1.0 y marcan fx_rate_invalid",
-      "fx_same_currency_rate_ne1_positivo: filas currency=accounting_currency con rate>0 y <>1 usan el rate tal cual (la regla solo prescribe el caso NULL/<=0); ver reports/quality/facts.json para el recuento",
-      "fx_sin_tabla_cambios_eur: amount_eur solo si accounting_currency='EUR'",
+      "fx_same_currency: identidad; rates contradictorios marcados fx_rate_invalid",
+      "fx_conservative: nominal EUR por identidad; conversion reportada hacia EUR solo con rate positivo finito distinto de 1; resto desconocido",
+      "settlement_date_ok: solo paid sin pendiente y pago no anterior a emision; maturity_date_ok excluye vencimientos anteriores a emision",
       "signos: flow_side es solo el signo de amount (inflow/outflow/zero); no se asume ninguna semantica de venta/compra (verificacion en PASO 2, decision del coordinador)",
       "amounts: ni `amount` ni `pending_amount` se modifican; los flags amount_missing/amount_extreme se aplican a `amount`",
       "fx_rate_invalid_counts: same_currency_null_or_le0=3553 same_currency_pos_ne1=191",
       "fx_not_convertible_reasons: acct_no_eur=118055 currency_ausente=0 rate_invalido_cross=91"
     ],
-    "output_path": "/Users/josemariaiznardosalar/Documents/embat-hack/data/clean/invoices.parquet",
+    "output_path": "data/clean/invoices.parquet",
     "rows_in": 897894,
     "rows_out": 897894
   },
@@ -30,7 +31,7 @@
       "category_missing": 635530,
       "date_out_of_range": 8,
       "fk_orphan": 1314,
-      "fx_not_convertible": 1334,
+      "fx_not_convertible": 160207,
       "fx_rate_invalid": 77,
       "open_month": 9242,
       "status_missing": 29839
@@ -42,7 +43,7 @@
       "product_source_counts: banking=2371496; debt=183627; orphan=1314",
       "fx_not_convertible_reasons: huerfano=1314 rate_invalido_no_eur=20"
     ],
-    "output_path": "/Users/josemariaiznardosalar/Documents/embat-hack/data/clean/transactions.parquet",
+    "output_path": "data/clean/transactions.parquet",
     "rows_in": 2556437,
     "rows_out": 2556437
   }

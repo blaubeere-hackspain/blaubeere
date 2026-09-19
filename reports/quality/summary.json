@@ -32,8 +32,8 @@
     "total_companies": 1286
   },
   "data_gaps": {
-    "transactions_without_amount_eur_pct": 0.05,
-    "transactions_without_amount_eur_rows": 1334,
+    "transactions_without_amount_eur_pct": 6.27,
+    "transactions_without_amount_eur_rows": 160207,
     "transactions_without_category_pct": 24.87,
     "transactions_without_category_rows": 635860
   },
@@ -57,8 +57,8 @@
       "amount_extreme": 10,
       "date_order_invalid": 34310,
       "date_out_of_range": 223,
-      "fx_not_convertible": 118146,
-      "fx_rate_invalid": 3650,
+      "fx_not_convertible": 108445,
+      "fx_rate_invalid": 3841,
       "open_month": 5233,
       "paid_with_pending": 300
     },
@@ -67,7 +67,7 @@
       "category_missing": 635530,
       "date_out_of_range": 8,
       "fk_orphan": 1314,
-      "fx_not_convertible": 1334,
+      "fx_not_convertible": 160207,
       "fx_rate_invalid": 77,
       "open_month": 9242,
       "status_missing": 29839
