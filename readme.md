@@ -124,6 +124,76 @@ Source, tests, final clean/mart Parquet files, reports, and `reports/build_manif
 
 Intermediate tables, virtual environments, caches, agent settings, local execution history, and backups stay out of Git. A local build retains its executed source and complete manifest in `data/runs/<run_id>/`, with the replaced artifacts in `before/`. The ignored `reports/current.json` is the atomic local publication pointer; `xray.paths` pins readers to that complete run. The files at the usual `data/clean`, `data/marts`, and `reports/quality` paths are compatibility copies published individually, not a joint read transaction. A fresh clone has no local pointer and uses those versioned paths until its first build.
 
+## Monthly cash-flow healthscore (v4)
+
+`healthscore_v4` measures each closed month's ability to cover what the company paid plus what it owed and did not pay, on a continuous scale. Unlike the previous `healthscore_flow_v2`, an unpaid due obligation enters the denominator as a stock of the cutoff (taken once per cutoff, never summed over the window), and the buffer is the reconstructed cash LEVEL from a real anchor balance instead of an anchor-invariant historical range:
+
+```text
+T6_efectivo = P6 + D6 + deficit_servicio_6 + obligacion_vencida_m   (stock of the cutoff, taken once)
+colchon_v4  = max(0, saldo_reversa_eur at the cutoff)               (cash level rebuilt backwards from a real snapshot)
+colchon_aplicable = min(colchon_v4, alpha * T6_efectivo)
+H       = 100 * (C6 + colchon_aplicable + k * R_hist) / (C6 + colchon_aplicable + T6_efectivo + k)
+H_final = H * (1 - beta * mora_indice) * multiplicador_deuda        (both factors only downwards, bounded)
+```
+
+Unknowns are never zeros: a NULL amount is excluded from sums and the confidence level declares it. `mora_indice` and `multiplicador_deuda` only ever lower the note.
+
+The score has four layers, each with its own module and monthly Parquet output: layer A (`xray/debt_obligation.py`) measures overdue and unattended debt point-in-time plus the debt multiplier; layer B (`xray/cash_backfill.py`) rebuilds the cash level backwards from the 2026-09-01 balance snapshot; layer C (`xray/payment_delay_v2.py`) grades arrears severity with ageing buckets, EWMA persistence and shrinkage; layer D (`xray/scoring_v4.py` with adapter `xray/scoring_io_v4.py`) applies the formula above over the six-month window (expansive up to six months, then rolling).
+
+No-note guards (no number is ever invented): no observed cash activity in the whole history; no observed flows in the window; and payments not demonstrated (`P6 <= 0`) unless there is an overdue obligation in the cutoff — if `P6 = 0` with overdue debt outstanding, that is positive evidence of owing without paying and the company receives a LOW score, not a missing one.
+
+Companies with a persistent zero score are EXCLUDED from the v4 perimeter by explicit product decision (33 companies). The exclusion never deletes rows: their rows keep `health_score = NULL`, `excluida = true` and the reason `excluida_nota_cero_persistente`. It is reversible at generation time with `--no-excluir-cero-persistente`. These companies have real activity (median 1,567 transactions and 471 money-in rows per company, 3,789,677,867.27 EUR in total): their zero comes from asymmetric observability (collections that fail to classify as operating income) combined with visible invoice debt, not necessarily from bad financial health.
+
+k, alpha and beta are UNCALIBRATED for v4 (k was measured on the v3 grid; alpha and beta are v3 defaults), and month-over-month stability is NOT yet measured; treat the score scale as provisional until recalibration.
+
+v3 (`xray/scoring_v3.py` and its adapter) coexists untouched and remains comparable: both versions score the same 30,864 company-month grid over 24 closed months, and the published comparison restricts |delta H| to the population scored by both versions (13,159 pairs; p50 8.40 / p75 29.29 / p90 55.26).
+
+Run each module with `python -m`; v4 is NOT registered in `xray/cli.py`:
+
+```sh
+.venv/bin/python -B -m xray.debt_obligation --output-dir reports/debt_obligation
+.venv/bin/python -B -m xray.cash_backfill --output reports/cash_backfill
+.venv/bin/python -B -m xray.payment_delay_v2 --output-dir reports/payment_delay_v2
+.venv/bin/python -B -m xray.scoring_io_v4 --workspace data/runs/<run_id> --output reports/score_v4
+.venv/bin/python -B -m xray.score_exclusions_v4
+.venv/bin/python -B -m xray.score_chart_v4 --output reports/score_charts/healthscore_v4/index.html
+.venv/bin/python -B -m unittest tests.test_scoring_v4 tests.test_scoring_io_v4 -v
+```
+
+Generators abort if the output path already exists, so previous reports are never overwritten; pass a new path for later exports. The chart writes a self-contained HTML comparison to `reports/score_charts/healthscore_v4/index.html` (default `--output-dir reports/score_v4`). The score is a cash-flow indicator, not a certified credit rating or an official challenge score; parameters and per-month outputs live in `reports/score_v4/summary.json`.
+
+## Label review packet and proxy benchmark
+
+There are no official labels in the dataset, and no health model has been trained. The archived `xray/label_review.py` (now under `.legacy/scorer_v2/xray/`) produces a blind human-review packet for the proxy labels plus a baseline benchmark of those proxies, so that future predictive work has a fixed reference point. The proxy labels (future sustained operating deficit, 60-day collection-conversion deterioration) are not business truth: they depend on the current flow classification and are only observable for a subset of rows.
+
+`reports/label_review/round1/` is an already-generated packet; treat it as immutable. The generator module itself is archived, not deleted: restore it before generating a new packet (see `.legacy/README.md`):
+
+```sh
+mv .legacy/scorer_v2/xray/label_review.py xray/
+mv .legacy/scorer_v2/tests/test_label_review.py tests/
+```
+
+With the module restored, generate a new packet with:
+
+```sh
+.venv/bin/python -B -m xray.label_review --output <new-path> --transactions 400 --cases 40
+```
+
+The generator aborts if the `--output` path already exists, so previous review packets are never overwritten; passing a new path is mandatory. Defaults are 400 transactions and 40 company-month cases. A returned review CSV (filled-in `transactions.csv` or `company_months.csv` columns) is checked without generating a packet:
+
+```sh
+.venv/bin/python -B -m xray.label_review --validate-review <reviewed-csv>
+```
+
+The packet distinguishes what a human reviewer may open from what must stay hidden:
+
+- Blind packet (`transactions.csv`, `company_months.csv`, `cases.json`, `index.html`): the reviewer's entry point is `index.html`; keep drafts in the tab only and download the CSV when finished. `rubric.json` is a proposal awaiting human validation.
+- Not blind (`transaction_selection.json`, `case_selection.json`, `baseline_metrics.json`): selection metadata and benchmark metrics; do not open while reviewing.
+
+`manifest.json` records the fixed seed (`health-review-20260919-v1`), the dataset end (2026-08-31), the row counts (400 transactions, 40 cases, 4200 transfer-candidate pairs), the frozen-code and source SHA256 hashes, and the review status `pending_human_review` with zero gold labels. The rubric is explicitly unvalidated (`propuesta_para_revision_humana_no_validada`).
+
+`validation_protocol.json` and `baseline_metrics.json` define the proxy benchmark, not a trained model. The objective is `target_deficit_3m`; groups are partitioned by `SHA256(seed:group_id)` (train < 70, validation < 85, test rest) with separate label cutoffs per split (train 2025-12-31, validation 2026-05-31, test 2026-08-31) and disjoint validation/test origins. Two baselines are reported: train-prevalence and persistence of the current robust deficit (abstaining when ambiguous). `proxy_inventory.json` lists the available proxy labels per name and group. These figures are a baseline for future experiments; do not use them to tune the scorer.
+
 ## Verify
 
 ```sh
