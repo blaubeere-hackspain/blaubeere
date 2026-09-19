@@ -1,5 +1,5 @@
 import type { ReactNode } from "react";
-import { ArrowDownLeft, ArrowUpRight, Landmark } from "lucide-react";
+import { ArrowDownLeft, ArrowUpRight, ClockAlert } from "lucide-react";
 import { date, money } from "../lib/format";
 import type { ModelRecord } from "../lib/types";
 
@@ -13,6 +13,11 @@ const buckets = [
 const knownAmount = (value: number | null | undefined) => value != null && Number.isFinite(value) && value >= 0 ? value : null;
 const euros = (value: number | null) => value === null ? "Not available" : money(Math.round(value * 100), "EUR", false, true);
 const percentage = (value: number) => new Intl.NumberFormat("en-GB", { style: "percent", maximumFractionDigits: 1 }).format(value);
+const knownIndex = (value: number | null | undefined) => value != null && Number.isFinite(value) && value >= 0 && value <= 1 ? value : null;
+export function formatArrearsIndex(value: number | null | undefined) {
+  const index = knownIndex(value);
+  return index === null ? "Not available" : `${new Intl.NumberFormat("en-GB", { maximumFractionDigits: 3 }).format(index)} / 1`;
+}
 
 export function SegmentedGauge({ segments, className, children }: { segments: { fraction: number; color: string }[]; className: string; children: ReactNode }) {
   let end = 0;
@@ -47,14 +52,13 @@ export function AgingCard({ row, side }: { row: ModelRecord; side: "pago" | "cob
   </section>;
 }
 
-export function DebtServiceCard({ row }: { row: ModelRecord }) {
-  const expected = knownAmount(row.debt?.servicio_esperado_eur), observed = knownAmount(row.debt?.servicio_observado_eur), shortfall = knownAmount(row.debt?.deficit_servicio_eur);
-  const comparable = expected !== null && observed !== null;
-  const maximum = Math.max(expected ?? 0, observed ?? 0);
-  return <section className="card financial-card debt-service-card" aria-labelledby="debt-service-title">
-    <header className="financial-card-heading"><Landmark size={17} aria-hidden/><div><h2 id="debt-service-title">Debt service</h2><p>Monthly comparison · {date(row.as_of, true)}</p></div></header>
-    <div className="debt-service-summary"><span>Shortfall against estimate</span><strong className="num">{euros(shortfall)}</strong><p>{shortfall === null ? "More evidence is needed to compare this month." : shortfall > 0 ? "Observed payments are below the historical estimate." : "No shortfall against the historical estimate."}</p></div>
-    <dl className="debt-service-bars">{[["Expected · historical median", expected], ["Observed this month", observed]].map(([label, value], index) => <div key={String(label)}><dt>{label}</dt><dd className="num">{euros(value as number | null)}</dd>{comparable && <div className="debt-service-track" aria-hidden><i data-series={index ? "observed" : "expected"} style={{ width: `${maximum > 0 ? Number(value) / maximum * 100 : 0}%` }}/></div>}</div>)}</dl>
-    <footer className="financial-card-note"><p>The estimate is the median of at least three earlier months with debt payments, not a contractual amount due.</p>{expected === null && <p>No historical estimate is available at this cutoff.</p>}{observed === null && <p>Debt payments this month are unknown, not zero.</p>}</footer>
+export function DefaultingCard({ row }: { row: ModelRecord }) {
+  const index = knownIndex(row.mora_indice);
+  const suppliers = knownIndex(row.payment?.mora_pago_robusta), customers = knownIndex(row.payment?.mora_cobro_robusta);
+  return <section className="card financial-card defaulting-card" aria-labelledby="defaulting-title">
+    <header className="financial-card-heading"><ClockAlert size={17} aria-hidden/><div><h2 id="defaulting-title">Defaulting</h2><p>Payment arrears · {date(row.as_of, true)}</p></div></header>
+    <div className="defaulting-summary"><span>Arrears index</span><strong className="num">{formatArrearsIndex(index)}</strong><p>{index === null ? "Insufficient payment evidence for this month." : "Late payments, weighted by age and persistence."}</p></div>
+    <dl className="defaulting-bars">{([['Supplier payments', suppliers], ['Customer collections', customers]] as const).map(([label, value]) => <div key={label}><dt>{label}</dt><dd className="num">{formatArrearsIndex(value)}</dd>{value !== null && <div className="defaulting-track" aria-hidden><i style={{ width: `${value * 100}%` }}/></div>}</div>)}</dl>
+    <footer className="financial-card-note"><p>Higher means more payment arrears. This is an observed index, not a probability of default.</p>{index !== null && (suppliers === null || customers === null) && <p>{suppliers !== null ? "Only supplier-payment evidence contributes to this index." : customers !== null ? "Only customer-collection evidence contributes to this index." : "The supplier and customer breakdown is unavailable."}</p>}</footer>
   </section>;
 }

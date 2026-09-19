@@ -15,7 +15,7 @@ import { healthHref, healthTimeline, validHealthDate } from "../apps/app/lib/hea
 import type { Company } from "../apps/app/lib/types";
 import { outsideDialog } from "../apps/app/components/dialog";
 import { ModelDashboard, modelNumber, modelReason, hasMonthlyData } from "../apps/app/components/model-dashboard";
-import { agingAmounts, DebtServiceCard } from "../apps/app/components/financial-cards";
+import { agingAmounts, DefaultingCard, formatArrearsIndex } from "../apps/app/components/financial-cards";
 import type { CashMonth, ModelAssessment, ModelRecord } from "../apps/app/lib/types";
 
 const requireApp = createRequire(new URL("../apps/app/package.json", import.meta.url));
@@ -95,7 +95,7 @@ const latestEmpty = renderToStaticMarkup(createElement(ModelDashboard, { data: {
 assert.ok(latestEmpty.includes('Selected month: July 2026'), "Default to the latest month with company evidence");
 const cashRecords = [{ ...cashRecord, as_of: "2026-06-30" }, { ...record, as_of: "2026-07-31" }, { ...cashRecord, daily_cash: [daily] }];
 const dataOverview = renderToStaticMarkup(createElement(ModelDashboard, { data: { ...model, records: cashRecords } }));
-for (const text of ["Cash flow", "Income", "Expenses", "Reconstructed cash", "Overdue collections", "Overdue payments", "Debt service", "Debt and overdue obligations", "Monthly source records", "€678.12", "-€321.88", "€123.45", "€876.54", "€60.25", "1 invoice(s) with unknown EUR amounts"]) assert.ok(dataOverview.includes(text), `Display the published amount or explanation: ${text}`);
+for (const text of ["Cash flow", "Income", "Expenses", "Reconstructed cash", "Overdue collections", "Overdue payments", "Defaulting", "Debt and overdue obligations", "Monthly source records", "€678.12", "-€321.88", "€123.45", "€876.54", "€60.25", "1 invoice(s) with unknown EUR amounts"]) assert.ok(dataOverview.includes(text), `Display the published amount or explanation: ${text}`);
 assert.ok(dataOverview.includes('id="model-date"') && dataOverview.includes("August 2026"));
 assert.ok(!dataOverview.includes("healthscore_v4") && !dataOverview.includes("Shared scale"));
 const metricCaptions = [...dataOverview.match(/<section class="stats-grid model-stats"[\s\S]*?<\/section>/)![0].matchAll(/<p>(.*?)<\/p>/g)];
@@ -118,8 +118,16 @@ assert.ok(aged.complete && Math.abs(aged.buckets.reduce((sum, bucket) => sum + b
 assert.ok(agingAmounts(null, "pago").buckets.every(bucket => bucket.fraction === null));
 assert.ok(!agingAmounts({ ...cashRecord.payment!, pago_vencido_1_30_eur: null }, "pago").complete);
 assert.ok(!agingAmounts({ ...cashRecord.payment!, pago_vencido_eur: 999 }, "pago").complete, "Inconsistent aging must not produce fabricated shares");
-const debtMarkup = renderToStaticMarkup(createElement(DebtServiceCard, { row: { ...record, debt: { servicio_esperado_eur: 100, servicio_observado_eur: 40, deficit_servicio_eur: 60, obligacion_vencida_eur: null, multiplicador_deuda: null, confidence: "alta" } } }));
-assert.ok(debtMarkup.includes("€60") && debtMarkup.includes("width:100%") && debtMarkup.includes("width:40%") && debtMarkup.includes("not a contractual amount due"));
+const defaultingRow = { ...cashRecord, mora_indice: .34, payment: { ...cashRecord.payment!, mora_pago_robusta: .4, mora_cobro_robusta: .2 } };
+const defaultingMarkup = renderToStaticMarkup(createElement(DefaultingCard, { row: defaultingRow }));
+assert.ok(defaultingMarkup.includes("0.34 / 1") && defaultingMarkup.includes("width:40%") && defaultingMarkup.includes("width:20%") && defaultingMarkup.includes("not a probability of default"), "Defaulting shows the saved index and both sides on a fixed 0–1 scale");
+for (const value of [null, undefined, NaN, Infinity, -1, 1.01]) assert.equal(formatArrearsIndex(value), "Not available");
+assert.equal(formatArrearsIndex(0), "0 / 1", "A known zero is distinct from missing arrears evidence");
+const partialDefaulting = renderToStaticMarkup(createElement(DefaultingCard, { row: { ...defaultingRow, mora_indice: 0, payment: { ...defaultingRow.payment, mora_pago_robusta: null, mora_cobro_robusta: 0 } } }));
+assert.ok(partialDefaulting.includes("Only customer-collection evidence") && partialDefaulting.includes("Not available") && (partialDefaulting.match(/class="defaulting-track"/g) ?? []).length === 1, "An unknown side stays missing while a known zero keeps its bar");
+const missingDefaulting = renderToStaticMarkup(createElement(DefaultingCard, { row: record }));
+assert.ok(missingDefaulting.includes("Insufficient payment evidence") && !missingDefaulting.includes('class="defaulting-track"') && !missingDefaulting.includes("0 / 1"));
+assert.ok(!dataOverview.match(/<section class="stats-grid model-stats"[\s\S]*?<\/section>/)![0].includes("Observed debt service") && dataOverview.includes('id="defaulting-title"') && !dataOverview.includes('id="debt-service-title"'), "The dashboard replaces the debt service metric and card with defaulting");
 assert.deepEqual(monthlyTimeline(["2026-08-31"], "2026-09-19"), ["2026-08-31", "2026-09-19"]);
 assert.deepEqual(monthlyTimeline(["2024-01-31"], "2024-04-10"), ["2024-01-31", "2024-02-29", "2024-03-31", "2024-04-10"]);
 assert.deepEqual(monthlyTimeline(["2026-08-31"], "2026-09-30"), ["2026-08-31", "2026-09-30"]);

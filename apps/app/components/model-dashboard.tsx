@@ -6,7 +6,7 @@ import { date, money, monthlyTimeline } from "../lib/format";
 import { healthHref } from "../lib/health";
 import { MonthlyCashChart } from "./monthly-cash-chart";
 import { AssessmentCalendar } from "./assessment-calendar";
-import { AgingCard, DebtServiceCard, SegmentedGauge } from "./financial-cards";
+import { AgingCard, DefaultingCard, formatArrearsIndex, SegmentedGauge } from "./financial-cards";
 import type { ModelAssessment, ModelRecord } from "../lib/types";
 
 export const modelNumber = (value: number | null | undefined, suffix = "", maximumFractionDigits = 1) => value == null ? "Not available" : `${new Intl.NumberFormat("en-GB", { maximumFractionDigits }).format(value)}${suffix}`;
@@ -58,7 +58,7 @@ function HealthScoreGauge({ row }: { row: ModelRecord }) {
 
 function MonthlyBreakdown({ row }: { row: ModelRecord }) {
   const cash = row.cash;
-  return <><div className="obligation-cards" id="payments"><AgingCard row={row} side="cobro"/><AgingCard row={row} side="pago"/><DebtServiceCard row={row}/></div><div className="monthly-breakdown">
+  return <><div className="obligation-cards" id="payments"><AgingCard row={row} side="cobro"/><AgingCard row={row} side="pago"/><DefaultingCard row={row}/></div><div className="monthly-breakdown">
     <section className="card monthly-detail"><h2>Cash movements · {date(row.as_of)}</h2><p className="small muted">Signed amounts in the published cash categories.</p><dl className="metric-equation">{[
       ["Operating inflows", cash?.flujo_operating_in], ["Operating outflows", cash?.flujo_operating_out],
       ["Financing inflows", cash?.flujo_financing_in], ["Financing outflows", cash?.flujo_financing_out],
@@ -88,7 +88,7 @@ export function ModelDashboard({ data, scoreDate, demo = false }: { data: ModelA
     <p className="sr-only" role="status">{row ? `Showing data for ${date(row.as_of, true)}` : "No assessment selected"}</p>
     <header className="page-heading company-heading"><div><h1>{scoreDate ? "The story behind this rating." : companyName}</h1><p className="muted mt-2">{scoreDate ? companyName : "Financial health and the movements behind it."}</p></div><div className="company-heading-actions"><AssessmentCalendar dates={availableDates} selected={row?.as_of ?? ""} onSelect={value => scoreDate ? window.location.assign(scoreHref(value)) : setMonth(value)}/>{scoreDate && <Link className="button secondary" href={`${demo ? "/demo" : "/dashboard"}?company=${encodeURIComponent(data.company.id)}`}><ArrowLeft size={16} aria-hidden/>Overview</Link>}</div></header>
     {!row ? <section className="card metric-intro"><h2>{availableDates.length ? "No assessment for this date" : "No recorded activity yet"}</h2><p>{availableDates.length ? "Choose an available month above." : "No cash movements, invoices or model activity were recorded for this company."}</p></section> : <>
-      <section className="stats-grid model-stats" aria-label="Source data at the selected cutoff">{[["Monthly net movement",euro(row.cash?.flujo_neto),`Month ending ${date(row.as_of, true)}`],["Overdue supplier payments",euro(row.payment?.pago_vencido_eur),`Due and unpaid at ${date(row.as_of, true)}`],["Overdue customer collections",euro(row.payment?.cobro_vencido_eur),`Due and uncollected at ${date(row.as_of, true)}`],["Observed debt service",euro(row.d6),`${row.n_meses_ventana} months ending ${date(row.as_of, true)}`]].map(([label,value,caption])=><article className="stat-card" key={label}><div><span>{label}</span></div><strong className="stat-value num">{value}</strong><p>{caption}</p></article>)}</section>
+      <section className="stats-grid model-stats" aria-label="Source data at the selected cutoff">{[["Monthly net movement",euro(row.cash?.flujo_neto),`Month ending ${date(row.as_of, true)}`],["Overdue supplier payments",euro(row.payment?.pago_vencido_eur),`Due and unpaid at ${date(row.as_of, true)}`],["Overdue customer collections",euro(row.payment?.cobro_vencido_eur),`Due and uncollected at ${date(row.as_of, true)}`],["Defaulting",formatArrearsIndex(row.mora_indice),`Arrears index at ${date(row.as_of, true)}`]].map(([label,value,caption])=><article className="stat-card" key={label}><div><span>{label}</span></div><strong className="stat-value num">{value}</strong><p>{caption}</p></article>)}</section>
       <div className={scoreDate ? undefined : "dashboard-charts"}>
       <section className="card health-overview-panel" id="health" aria-labelledby="health-title">
         <div className="health-overview-main"><div className="card-heading"><div><h2 id="health-title">Health score</h2><p className="small muted mt-1">{scoreDate ? "Published rating at this cutoff" : "How the company’s cash-flow health has changed"}</p></div></div>
