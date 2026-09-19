@@ -1,0 +1,8 @@
+import { ArrowRight, Check } from "lucide-react";
+
+export function PricingCards({ heading: Heading = "h2" }: { heading?: "h2" | "h3" }) {
+  return <section className="pricing-grid site-container" aria-label="Plans and pricing">
+        <article className="pricing-card" aria-labelledby="fixed-plan"><span className="eyebrow">For your next move</span><Heading id="fixed-plan">Fixed</Heading><p className="pricing-price"><strong>$99</strong><span>Fixed price · USD</span></p><p className="pricing-description">Bring your cash, commitments and possibilities into focus.</p><ul className="pricing-features"><li><Check size={17} aria-hidden/>Cash outlooks and funding gaps</li><li><Check size={17} aria-hidden/>Dated sources and visible assumptions</li><li><Check size={17} aria-hidden/>Conditional what-if plans</li><li><Check size={17} aria-hidden/>Connect your AI assistant with MCP</li></ul><button className="button" type="button" disabled>Contact sales<ArrowRight size={16} aria-hidden/></button></article>
+        <article className="pricing-card enterprise-card" aria-labelledby="enterprise-plan"><span className="eyebrow">For the bigger picture</span><Heading id="enterprise-plan">Enterprise</Heading><p className="pricing-price"><strong>Custom</strong></p><p className="pricing-description">Tell us how your team works. Let’s discuss a plan around it.</p><ul className="pricing-features"><li><Check size={17} aria-hidden/>Your companies and team requirements</li><li><Check size={17} aria-hidden/>Your data and planning workflow</li><li><Check size={17} aria-hidden/>Your assistant and access needs</li></ul><button className="button secondary" type="button" disabled>Contact sales<ArrowRight size={16} aria-hidden/></button></article>
+      </section>;
+}

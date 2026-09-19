@@ -6,6 +6,7 @@ import foundation from "../public/foundation-oil.png";
 import possibility from "../public/possibility-oil.png";
 import mcpConnection from "../public/mcp-connection-oil.png";
 import logo from "../../brand/blau.svg";
+import { PricingCards } from "../components/pricing-cards";
 import { SiteHeader, SiteFooter } from "../components/site-chrome";
 
 const app = process.env.NEXT_PUBLIC_APP_URL ?? "http://localhost:3100";
@@ -47,6 +48,11 @@ export default function Home() {
           </div>
         </section>
         <section className="trust site-container" id="built-for-finance" aria-labelledby="trust-title"><div className="section-intro"><span className="eyebrow">04 / A little confidence</span><h2 id="trust-title">Clear about what’s known.<br/><span>Honest about what isn’t.</span></h2></div><div className="trust-grid"><article><FileSearch size={26} strokeWidth={1.4} aria-hidden/><h3>Evidence you can inspect.</h3><p>Dated sources, visible assumptions and missing inputs. Understand what’s behind every projection.</p></article><article><ShieldCheck size={26} strokeWidth={1.4} aria-hidden/><h3>Access that stays yours.</h3><p>Your companies, your permissions. Connected assistants use the same access and can be disconnected at any time.</p></article><article><SlidersHorizontal size={26} strokeWidth={1.4} aria-hidden/><h3>Decisions that stay human.</h3><p>Test scenarios without changing source data or executing payments. Your team makes the call.</p></article></div></section>
+        <section className="landing-pricing" id="pricing" aria-labelledby="pricing-title">
+          <div className="section-intro site-container"><span className="eyebrow">05 / A plan that fits</span><h2 id="pricing-title">A clearer picture.<br/><span>One simple starting point.</span></h2><p>One fixed price. Or a conversation about what your team needs.</p></div>
+          <PricingCards heading="h3"/>
+          <p className="pricing-details"><a className="text-link" href="/pricing">Compare the plans<ArrowRight size={16} aria-hidden/></a></p>
+        </section>
         <section className="closing site-container"><span className="eyebrow">Make room for what’s next</span><h2>Good decisions start<br/><span>with a clearer picture.</span></h2><a className="button" href={`${app}/dashboard`}>Open your workspace<ArrowRight size={16} aria-hidden/></a></section>
       </div>
     </main>
