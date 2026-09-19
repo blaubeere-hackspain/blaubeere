@@ -25,6 +25,17 @@
 
 No confundir millones de movimientos con millones de ejemplos independientes: existen 1.286 empresas relacionadas en 250 grupos y ventanas temporales solapadas. Datos sintéticos permiten evaluar el experimento, no demostrar precisión en empresas reales.
 
+### Organización de la implementación: sin pi-messenger
+
+**Alternativa elegida:** una sesión coordinadora con subagentes nativos de Pi; no usar `pi-messenger` ni Crew para planificar o ejecutar este trabajo. No requiere instalar otro sistema de coordinación ni añadir dependencias al proyecto.
+
+- La sesión principal divide cada fase en unidades pequeñas con objetivo, alcance de archivos, dependencias y criterio de aceptación; mantiene una lista de tareas durante la sesión.
+- Para trabajo sustancial, delegar exploración de solo lectura a `gentle-ai-explore`, implementación acotada a `gentle-ai-worker` y comprobaciones a `gentle-ai-verify`. Resolver cambios menores directamente, sin desplegar un equipo completo.
+- Ejecutar secuencialmente, esperando el resultado de cada encargo; un único escritor activo. No lanzar ejecución autónoma de todo el plan ni escrituras paralelas.
+- Al cerrar cada unidad, registrar en este documento estado, archivos afectados, evidencia de pruebas, bloqueos y siguiente paso. La lista de sesión no sustituye ese registro para retomar el trabajo.
+
+Cambiar la coordinación no modifica P0–P8, G-DATA ni las aprobaciones humanas: ningún subagente puede aprobar semántica financiera, targets, envío de datos o gastos.
+
 ## 2. Evidencia inicial y límites
 
 **Informe existente/histórico:** afirmación extraída de `reports/quality/` y manifest de ejecución `20260919T022951Z-83143e8d` (`86439b6`); inputs y Parquet actuales no están materializados, así que no es reproducción del `HEAD` actual. **Borrador anterior no verificado:** número solo de versiones previas. **Pendiente:** semántica o comprobación aún sin resolver. `data_dictionary.md` describe dataset sintético, IDs y campos; no resuelve interpretación económica ni disponibilidad histórica.
