@@ -53,6 +53,8 @@ Planning compares two deterministic candidates, not every possible plan. Funding
 
 ## Sealed operating-deficit proxy assessments
 
+The [training report (Spanish)](reports/modeling/training-report.md) documents the dataset, target, temporal/group splits, features, candidates, selection, observed results and reproduction limits.
+
 The approved synthetic model can be displayed separately from cash planning. It estimates `target_deficit_3m`: operating deficit in at least two of the next three **calendar months**, within the observed perimeter. This is a retrospective, uncalibrated proxy, not a default probability, official health score, cash balance, or causal diagnosis. The current snapshot closes on 2026-08-31 and covers 2026-09-01 through 2026-11-30; it is not a rolling 90-day forecast.
 
 ```sh
