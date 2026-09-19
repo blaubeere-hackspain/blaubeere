@@ -39,6 +39,7 @@ assert.equal(evidence.included[0].projectedDate, "2026-09-01");
 assert.deepEqual(evidence.included.map(flow => flow.id), ["part-paid"]);
 assert.deepEqual(evidence.laterReceipts.map(flow => flow.id), ["late"]);
 assert.equal(cashEvidence(evidenceCompany, "2026-08-31", "2026-09-30").closing, demo.company.opening_cash_cents);
+assert.equal(cashEvidence(evidenceCompany, "2026-08-31", "2026-09-30").outgoing, 0, "An empty outflow total must not format as negative zero");
 for (const metric of ["cash", "funding", "shortfall", "minimum", "health"]) {
   const trigger = renderToStaticMarkup(createElement(MetricWhy, { metric, onClick() {} }));
   assert.ok(trigger.includes('aria-haspopup="dialog"') && trigger.includes("Why this"));

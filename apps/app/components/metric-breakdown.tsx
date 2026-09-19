@@ -18,7 +18,7 @@ export function cashEvidence(company: Company, through: string, end: string) {
     .filter(flow => flow.remaining !== 0).sort((a, b) => a.projectedDate.localeCompare(b.projectedDate) || a.id.localeCompare(b.id));
   const included = records.filter(flow => flow.projectedDate <= through);
   const incoming = included.filter(flow => flow.remaining > 0).reduce((sum, flow) => sum + flow.remaining, 0);
-  const outgoing = -included.filter(flow => flow.remaining < 0).reduce((sum, flow) => sum + flow.remaining, 0);
+  const outgoing = included.filter(flow => flow.remaining < 0).reduce((sum, flow) => sum - flow.remaining, 0);
   return { included, incoming, outgoing, closing: company.opening_cash_cents + incoming - outgoing,
     laterReceipts: records.filter(flow => flow.remaining > 0 && flow.projectedDate > through && flow.projectedDate <= end) };
 }
