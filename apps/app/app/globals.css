@@ -19,12 +19,13 @@ body { font-family: "Inter Variable", system-ui, sans-serif; background: #f1f1ee
 
 .auth-layout { min-height: 100svh; display: grid; grid-template-columns: minmax(0,1fr) minmax(0,1fr); padding: 16px; gap: 16px; background: #fafaf8; }
 .auth-story { position: relative; min-height: calc(100svh - 32px); padding: 32px; display: flex; flex-direction: column; align-items: flex-start; justify-content: space-between; gap: 100px; border-radius: 32px; overflow: hidden; isolation: isolate; outline: 1px solid oklch(0 0 0 / .1); outline-offset: -1px; }
-.auth-painting { object-fit: cover; object-position: 50% 55%; z-index: -1; user-select: none; }
-.auth-story > .brand { background: #fffffff2; padding: 10px 18px; border-radius: 999px; }
-.auth-story-card { padding: 32px; width: min(100%, 540px); border-radius: 28px; background: #fffffff0; }
+.auth-painting { object-fit: cover; object-position: 50% 55%; z-index: -2; user-select: none; }
+.auth-story::after { content: ""; position: absolute; inset: 0; z-index: -1; pointer-events: none; background: linear-gradient(180deg, #10231999, transparent 40%, #102319b3); }
+.auth-story .brand-logo { filter: brightness(0) invert(1); }
+.auth-story-copy { width: min(100%, 540px); color: white; }
 .auth-story .auth-story-title { font-family: "Times New Roman", Georgia, serif; font-size: clamp(34px,3.6vw,54px); line-height: 1.05; margin-bottom: 20px; letter-spacing: -.035em; font-weight: 400; }
-.auth-story-title span { color: #72766b; }
-.auth-story-card > p:last-child { font-size: 15px; line-height: 1.6; color: var(--muted); }
+.auth-story-title span { color: #ffffffd9; }
+.auth-story-copy > p:last-child { font-size: 15px; line-height: 1.6; color: #ffffffeb; }
 .auth-form-area { position: relative; min-width: 0; padding: 72px 36px; display: flex; flex-direction: column; align-items: center; justify-content: center; }
 .auth-form { width: min(100%, 380px); display: flex; flex-direction: column; gap: 20px; }
 .auth-form h1 { font-family: "Times New Roman", Georgia, serif; font-weight: 400; font-size: 44px; margin-bottom: 8px; overflow-wrap: anywhere; }
@@ -50,9 +51,10 @@ body { font-family: "Inter Variable", system-ui, sans-serif; background: #f1f1ee
 .break-word { overflow-wrap: anywhere; }
 @media (max-width: 760px) {
   .auth-layout { grid-template-columns: 1fr; padding: 10px; gap: 0; }
-  .auth-story { min-height: 210px; padding: 20px; border-radius: 24px; gap: 0; }
+  .auth-story { min-height: 320px; padding: 24px; border-radius: 24px; gap: 32px; }
   .auth-painting { object-position: 50% 42%; }
-  .auth-story-card { display: none; }
+  .auth-story .auth-story-title { font-size: 32px; margin-bottom: 12px; }
+  .auth-story-copy > p:last-child { font-size: 14px; }
   .auth-form-area { padding: 40px 20px 24px; }
   .auth-form h1 { font-size: 38px; }
   .auth-signature { position: static; margin-top: 36px; }
