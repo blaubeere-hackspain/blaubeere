@@ -129,7 +129,7 @@ body { background: #f1f1ee; }
 .horizon-select select { background: var(--surface); border: 1px solid var(--line); border-radius: 6px; color: var(--ink); padding: 8px 12px; font-size: 12px; }
 .stats-grid { display: grid; grid-template-columns: repeat(4,minmax(0,1fr)); gap: 16px; margin-bottom: 24px; }
 .stat-card { min-width: 0; background: var(--surface); border: 0; box-shadow: var(--shadow-border); border-radius: var(--radius-surface); padding: 20px; }
-.stat-card > div { display: flex; justify-content: space-between; align-items: center; gap: 8px; font-size: var(--text-caption); color: var(--muted); margin-bottom: 20px; }
+.stat-card > div { min-height: 32px; display: flex; justify-content: space-between; align-items: center; gap: 8px; font-size: var(--text-caption); color: var(--muted); margin-bottom: 20px; }
 .stat-card > div svg { color: var(--accent); background: var(--accent-soft); padding: 7px; box-sizing: content-box; border-radius: 8px; }
 .stat-card.warn > div svg { color: var(--warn); background: #f2dfbc; }
 .stat-card.bad > div svg { color: var(--bad); background: var(--bad-soft); }
@@ -448,19 +448,22 @@ body { background: #f1f1ee; }
   .metric-footnote { padding: 20px 16px; }
 }
 
+.model-dashboard .context-row .control { width: auto; min-width: 0; max-width: 100%; font-size: var(--text-ui); }
 .sidebar-company-select { margin-inline: 10px; max-width: calc(100% - 20px); min-height: 44px; font-size: 13px; }
 .model-score-link { display: flex; align-items: baseline; gap: 6px; color: var(--ink); text-decoration: none; min-height: 44px; border-radius: 8px; }
+.model-stats .stat-value { display: flex; align-items: center; min-height: 44px; }
+.model-score-link strong { min-width: 0; }
 .model-score-link svg { margin-left: auto; }
 .model-context { margin: 16px 0 24px; line-height: 1.6; }
 .model-chart { padding: 8px 24px 20px; }
 .model-chart svg { width: 100%; height: auto; min-height: 160px; }
-.model-chart text { fill: var(--muted); font-size: 12px; }
+.model-chart text { fill: var(--muted); font-family: var(--font-ui); font-size: 12px; font-variant-numeric: tabular-nums; }
 .model-chart circle { cursor: pointer; }
 .model-chart a:focus-visible circle { stroke-width: 5px; }
 .model-dates { display: grid; grid-template-columns: repeat(auto-fit,minmax(116px,1fr)); gap: 8px; padding: 0 24px 24px; }
 .model-dates a { display: grid; gap: 6px; padding: 12px; min-height: 64px; color: var(--ink); background: var(--canvas); border-radius: 10px; text-decoration: none; }
-.model-dates a strong { font-weight: 500; }
-.model-dates a span { font-size: 12px; color: var(--muted); }
+.model-dates a strong { font-size: var(--text-heading); font-weight: 500; }
+.model-dates a span { font-size: var(--text-caption); color: var(--muted); }
 .model-reasons { padding-left: 18px; margin-block: 16px; font-size: 13px; color: var(--muted); line-height: 1.7; }
 .model-reasons li + li { margin-top: 8px; }
 .model-note { background: var(--warn-soft); color: var(--warn); padding: 16px; border-radius: 12px; font-size: 13px; line-height: 1.6; }
@@ -469,10 +472,10 @@ body { background: #f1f1ee; }
 .model-provenance > p { margin-top: 12px; }
 .model-provenance summary { min-height: 44px; padding-block: 16px; font-size: 13px; }
 .model-source-list { display: grid; gap: 16px; padding-block: 16px; overflow-wrap: anywhere; }
-.model-source-list strong, .model-source-list span { display: block; font-size: 12px; }
+.model-source-list strong, .model-source-list span { display: block; font-size: var(--text-caption); }
 .model-source-list span { color: var(--muted); margin-top: 4px; }
 @media (hover:hover) and (pointer:fine) { .model-score-link:hover, .model-dates a:hover { color: var(--accent); text-decoration: underline; text-underline-offset: 4px; } }
-@media (max-width:760px) { .model-provenance { padding: 16px; } .model-chart { padding-inline: 8px; } .model-dates { padding-inline: 16px; } }
+@media (max-width:760px) { .model-dashboard .context-row .control { width: 100%; } .model-provenance { padding: 16px; } .model-chart { padding-inline: 8px; } .model-dates { padding-inline: 16px; } }
 @media (max-width: 380px) {
   .checkpoints { grid-template-columns: 1fr; }
   .checkpoints > div { display: grid; grid-template-columns: 1fr auto; align-items: baseline; gap: 4px 12px; }

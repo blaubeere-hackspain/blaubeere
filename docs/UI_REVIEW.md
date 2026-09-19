@@ -1,6 +1,6 @@
 # UI component review — 19 September 2026
 
-Scope: landing page, shared controls, sign-in and consent, existing cash-chart and planner interactions, and the two app empty states. The separate dashboard redesign is being handled in the forked session.
+Scope: landing page, shared controls, sign-in and consent, existing cash-chart and planner interactions, and the two app empty states. The initial pass left the dashboard redesign to the forked session. The final typography pass below includes that session’s merged monthly model dashboard.
 
 The visual direction follows the user’s oil-painting and Handhold screenshots: original painted landscapes, broad pale surfaces, serif display copy and quiet supporting text. The landing component review preceded the Interfaces.dev polish pass.
 
@@ -64,3 +64,30 @@ Original asset paths and generation prompts/briefs are recorded in [ARTWORK.md](
 | MEDIUM — fixed | `components/sidebar.tsx` | Company buttons assumed a small workspace. | Native labelled select for large lists; overview label follows the selected data source. | The imported company universe stays navigable without expanding the sidebar indefinitely. |
 
 Regression checks render missing-score overview/detail pages and verify source gaps, monthly labels and dated links. Existing surface styles, keyboard-accessible disclosures and links are reused. Chrome inspection passed at desktop width and 390×844: team sign-in, the imported company selector, monthly history, the score-to-explanation link, responsive metric cards, input rows and reason text. No overlap was observed in those views. The Next.js production server also passed API/OAuth/MCP integration checks using the Rust dataset snapshot. Safari/Firefox and assistive-technology checks remain unverified.
+
+## Final typography and component pass
+
+Applied [Jakub Krehel’s better-typography](https://github.com/jakubkrehel/skills/blob/main/skills/better-typography/SKILL.md) and [better-ui](https://github.com/jakubkrehel/skills/blob/main/skills/better-ui/SKILL.md), with their accessibility and layout guidance. This pass supersedes the earlier static MCP illustration and story ordering: the story now follows the dashboard preview, followed by the gallery; hover, focus or tap on the three MCP features selects the matching oil painting.
+
+### Readable type and stable numbers
+
+| Severity | Location | Before | After | Why |
+| --- | --- | --- | --- | --- |
+| HIGH — fixed | `apps/app/components/model-dashboard.tsx:17` | A 1000-unit SVG shrank 12px labels to about 4px at a 342px rendered width. | ResizeObserver matches the SVG coordinate width to its rendered width; two date labels on narrow screens, three on desktop. | Axis type remains 12px and dates do not collide. Missing ratings still break the line. |
+| MEDIUM — fixed | `apps/theme.css:18`, `apps/theme.css:71`, `apps/app/app/layout.tsx:1` | Financial values used a compressed monospace face with an unloaded 500 weight; app charts used a second sans family. | Shared type roles, the existing UI font with tabular digits, actual loaded weights, and the same font for chart labels. Monospace is retained for model identifiers. | Values stay aligned and readable without synthesized emphasis or unnecessary font downloads. |
+| MEDIUM — fixed | `apps/landing/app/globals.css:28`, `apps/landing/app/globals.css:163`, `apps/landing/app/globals.css:194` | The phone headline broke into four tightly stacked lines; story copy had tight leading and prices used the display serif. | A smaller fluid headline floor, looser display tracking, 1.4 story-heading leading, 1.6 body leading, a 65ch measure and clean tabular prices. | Preserve the painted editorial direction while making the content easier to scan. |
+| MEDIUM — fixed | `apps/app/components/painted-empty-state.tsx:4`, `apps/app/app/globals.css:230` | The assistant empty-state heading was another h2 and could overpower its dialog title. | Nested h3 and a smaller serif size, with less empty top spacing. | Heading semantics and visual hierarchy agree. |
+
+### Components and reflow
+
+| Severity | Location | Before | After | Why |
+| --- | --- | --- | --- | --- |
+| MEDIUM — fixed | `apps/app/app/globals.css:131`, `apps/app/app/globals.css:162` | Checkpoint columns pushed the 320px document to 342px; four metrics became cramped beside the sidebar. | Shrinkable grid children, compact checkpoint rows below 380px and two-column metrics where the sidebar leaves insufficient space. | Complete amounts remain available without page-level horizontal scrolling. |
+| MEDIUM — fixed | `apps/app/components/model-dashboard.tsx:42`, `apps/app/components/sidebar.tsx:27`, `apps/theme.css:111` | New selectors looked like loose text; several native selects stayed below 16px on mobile. | Reuse the shared native control surface and 16px mobile input size. | Controls read as interactive and avoid iOS focus zoom. |
+| LOW — fixed | `apps/theme.css:64`, `apps/landing/app/globals.css:197` | Secondary buttons used solid depth borders; feature lists had excess internal spacing. | Existing transparent shadow tokens, lighter regular-text icons and tighter pricing lists. | Surfaces and optical weight follow the same component language. |
+
+Verification: both frontend production builds and web checks pass. Chrome checks covered the landing hero, MCP selection, pricing cards/table, cash dashboard, dated health page, planner and assistant empty state at widths from 320px to 1800px, including the 1024px sidebar breakpoint. The monthly model overview and detail were inspected with 24 imported synthetic records in a temporary local preview; the preview was removed before build/commit. At 320px, both dashboard variants have document width equal to viewport width. At 390px the model SVG viewBox and rendered width both measure 342px, keeping text at its intended size. Keyboard focus and Escape restoration were checked in the assistant dialog; MCP changes with focus and tap. The regression check verifies readable date-label density and preserves gaps for missing model ratings.
+
+Not verified in this pass: Safari/Firefox, physical touch devices, a screen-reader session, automated accessibility audit, 200% browser zoom, RTL, and 10%-speed animation replay. Reduced-motion behavior was checked in code.
+
+**Approve** for the inspected typography/component scope; no unresolved HIGH finding.

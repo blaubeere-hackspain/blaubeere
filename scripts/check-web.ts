@@ -26,6 +26,12 @@ const model: ModelAssessment = { kind: "model", company: { id: record.company_id
 const modelOverview = renderToStaticMarkup(createElement(ModelDashboard, { data: model, companies: [model.company], onCompany: () => {} }));
 assert.ok(modelOverview.includes("No score") && modelOverview.includes("Monthly observations") && !modelOverview.includes("Usable cash today"));
 assert.ok(modelOverview.includes('/dashboard/health/2026-08-31?company=COMP_TEST'));
+const chartRecords = Array.from({ length: 24 }, (_, index) => ({ ...record, as_of: new Date(Date.UTC(2024, index + 1, 0)).toISOString().slice(0, 10), health_score: index === 12 ? null : 50 + index }));
+const modelHistory = renderToStaticMarkup(createElement(ModelDashboard, { data: { ...model, records: chartRecords }, companies: [model.company], onCompany: () => {} }));
+const modelSvg = modelHistory.match(/<svg[^>]*aria-labelledby="model-chart-title model-chart-description"[\s\S]*?<\/svg>/)![0];
+assert.equal([...modelSvg.matchAll(/<text /g)].length, 8, "Keep five score ticks and three readable date labels in the desktop chart");
+assert.equal([...modelSvg.matchAll(/<circle /g)].length, 23, "Missing ratings remain gaps, never plotted as zero");
+assert.equal((modelSvg.match(/<path d="([^"]*)"/)![1].match(/M/g) ?? []).length, 2, "Do not join the line across a missing rating");
 const modelDetail = renderToStaticMarkup(createElement(ModelDashboard, { data: model, scoreDate: record.as_of, companies: [model.company], onCompany: () => {} }));
 assert.ok(modelDetail.includes("Not available") && modelDetail.includes("No cash activity was observed") && modelDetail.includes("not a bank balance"));
 assert.ok(!modelDetail.includes("NaN") && !modelDetail.includes("€0"), "Missing source values must not become zero-valued cash");
