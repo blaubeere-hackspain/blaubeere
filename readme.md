@@ -63,4 +63,27 @@ Checks cover TypeScript, production builds, Rust formatting/lints, authenticatio
 
 For deployment, configure canonical HTTPS `APP_ORIGIN` and `API_ORIGIN` values without trailing slashes, an HTTPS `MCP_RESOURCE` ending in `/mcp`, the internal API URL and public app/landing URLs before building. Terminate TLS at the proxy and persist the database directory. SQLite supports a single deployment; multiple replicas require a shared database design.
 
-The implementation and documentation are original. The SaaS template informed the `apps/` and `services/` layout only; X-Ray informed the visual direction.
+## Jio production
+
+Every push to `main` runs `.github/workflows/deploy-jio.yml`. A manual workflow run can redeploy a selected commit. The workflow uses a dedicated Large Jio VM, builds both Next.js apps and Rust services, runs the checks, then activates the new release and verifies its public HTTPS endpoints. Builds happen before service restarts. Failed local health checks restore the previous release; database migrations are forward-only and must remain compatible with that release.
+
+Repository configuration:
+
+| Kind | Name | Value |
+| --- | --- | --- |
+| Secret | `JIO_API_KEY` | Jio API key for the deployment account |
+| Secret | `JIO_SSH_KEY` | Private SSH key created for this VM |
+| Variable | `JIO_VM_ID` | Dedicated persistent VM ID |
+| Variable | `JIO_ENDPOINT` | Jio endpoint; omit to use the CLI default |
+
+Jio publishes port 8080 for the app, API, OAuth and MCP, and port 3102 for the landing. Deployment URLs appear in the Actions run summary. Nginx forwards to private listeners; systemd runs the four application services as an unprivileged `blaubeere` user.
+
+State lives under `/var/lib/blaubeere`: `data/blaubeere.db` persists across releases, `bootstrap.env` contains the initial finance account credentials, and `deployed-revision` records the healthy commit. Retrieve credentials through an authorised Jio SSH session with `sudo cat /var/lib/blaubeere/bootstrap.env`; never commit them. Provisioning and assessment overrides follow the rules above; service settings are in `runtime.env`. Retained releases permit manual rollback and should be pruned as disk usage grows. A destroyed VM needs explicit reprovisioning and a database restore; the workflow will not silently replace it.
+
+For a manual deployment from a configured local Jio session:
+
+```sh
+JIO_VM_ID=<vm-id> GIT_REF=$(git rev-parse HEAD) bash deploy/jio.sh
+```
+
+The implementation and documentation are original. The SaaS template informed the workspace layout and native Jio deployment approach; X-Ray informed the visual direction.
