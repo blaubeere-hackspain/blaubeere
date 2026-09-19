@@ -42,7 +42,7 @@ export function Connections({ endpoint, open, onClose }: { endpoint: string; ope
   return <Dialog open={open} onClose={onClose} className="connection-dialog" titleId="connections-title">
     <div className="panel-head"><div><span className="eyebrow">Your tools, connected</span><h2 id="connections-title">Bring your finance assistant</h2></div><button className="icon-button" aria-label="Close connections" onClick={onClose}><X size={20}/></button></div>
     <div className="panel-body">
-      <ol className="connection-steps"><li>Add a custom MCP server in your assistant’s settings.</li><li>Paste the endpoint below and connect.</li><li>Sign in to Blaubeere and review the requested access.</li></ol>
+      <ol className="connection-steps"><li>Add a custom MCP server in your assistant’s settings.</li><li>Paste the endpoint below and connect.</li><li>Sign in to blau and review the requested access.</li></ol>
       <div className="field mt-6"><label htmlFor="mcp-endpoint">MCP endpoint</label><div className="copy-field"><input id="mcp-endpoint" value={endpoint} readOnly onFocus={e => e.target.select()} aria-describedby="endpoint-help"/><button className="icon-button" aria-label={copied ? "Endpoint copied" : "Copy MCP endpoint"} onClick={copyEndpoint}><span className="icon-swap" aria-hidden><Copy data-visible={!copied}/><Check data-visible={copied}/></span></button></div></div>
       <p id="endpoint-help" className="small muted mt-3">Requires an assistant that supports remote MCP and OAuth. It can read outlooks and compare plans; it cannot edit source data or execute payments.</p>
       <p className="copy-status small" role="status">{copied ? "Endpoint copied to clipboard." : status}</p>

@@ -1,5 +1,11 @@
 # Original product artwork
 
+## Vector identity
+
+`apps/brand/blau.svg` is the shared landing, sign-in and dashboard lockup. It preserves the existing four-part berry symbol and outlines the lowercase “blau” lettering from Times New Roman Bold as SVG paths, with no font dependency or SVG text nodes. The consuming images provide accessible alternatives.
+
+Both apps serve a white berry symbol on a black background through `app/icon.svg`, a multi-size `app/favicon.ico` and a 180px `app/apple-icon.png`.
+
 The product paintings were generated with the built-in image generation tool for Blaubeere. No source template assets or reference screenshots were copied into the application. Original PNGs live in the repository; Next.js serves optimized sizes.
 
 ## Landing paintings

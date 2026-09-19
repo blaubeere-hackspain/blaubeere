@@ -5,9 +5,10 @@ import perspective from "../public/perspective-oil.png";
 import foundation from "../public/foundation-oil.png";
 import possibility from "../public/possibility-oil.png";
 import mcpConnection from "../public/mcp-connection-oil.png";
+import logo from "../../brand/blau.svg";
 
 const app = process.env.NEXT_PUBLIC_APP_URL ?? "http://localhost:3100";
-function Brand() { return <a className="brand" href="/" aria-label="Blaubeere home"><span className="brand-mark" aria-hidden><i/><i/><i/><i/></span>blaubeere</a>; }
+function Brand() { return <a className="brand" href="/" aria-label="blau home"><Image className="brand-logo" src={logo} alt="blau"/></a>; }
 
 export default function Home() {
   return <>
@@ -28,7 +29,7 @@ export default function Home() {
       <div className="page-content">
         <section className="our-story site-container" aria-labelledby="story-title">
           <div className="oil-gallery"><figure><Image src={perspective} alt="An oil painting of a lake winding through a wide mountain valley." sizes="(max-width: 760px) 33vw, (max-width: 1320px) 31vw, 392px" placeholder="blur"/></figure><figure><Image src={foundation} alt="An oil painting of a small farmhouse among sunlit green hills." sizes="(max-width: 760px) 33vw, (max-width: 1320px) 31vw, 392px" placeholder="blur"/></figure><figure><Image src={possibility} alt="An oil painting of a person on a bench looking toward an open horizon." sizes="(max-width: 760px) 33vw, (max-width: 1320px) 31vw, 392px" placeholder="blur"/></figure></div>
-          <div className="story-layout"><div className="story-label"><span className="brand-mark" aria-hidden><i/><i/><i/><i/></span><span className="eyebrow">What we’re building</span></div><div className="story-copy"><h2 id="story-title">We believe a clearer view of your finances makes room for better decisions.</h2><p>We’re building Blaubeere for the people behind the numbers. A place to bring cash, commitments and possibilities into focus — so you can see a shortfall coming, understand what’s behind it and explore a way forward.</p><p>Your company’s evidence stays in view. Your assumptions stay open to question. And the next move stays yours.</p></div></div>
+          <div className="story-layout"><div className="story-label"><span className="brand-mark" aria-hidden><i/><i/><i/><i/></span><span className="eyebrow">What we’re building</span></div><div className="story-copy"><h2 id="story-title">We believe a clearer view of your finances makes room for better decisions.</h2><p>We’re building blau for the people behind the numbers. A place to bring cash, commitments and possibilities into focus — so you can see a shortfall coming, understand what’s behind it and explore a way forward.</p><p>Your company’s evidence stays in view. Your assumptions stay open to question. And the next move stays yours.</p></div></div>
         </section>
         <section className="planning site-container" id="planning" aria-labelledby="planning-title"><div className="planning-copy"><span className="eyebrow">02 / A little possibility</span><h2 id="planning-title">“What would it take?”<br/><span>A good place to start.</span></h2><p>Protect a cash buffer. Fund the next quarter. Explore a revenue goal. Compare the trade-offs before you choose your next move.</p><a className="button" href={`${app}/dashboard`}>Explore a plan<ArrowRight size={16} aria-hidden/></a></div><div className="mini-plan"><span className="eyebrow">An example, not a promise</span><h3>Keep cash above <span>€100,000.</span></h3><p>Through 29 November · every day of the plan</p><dl><div><dt>Collection timing</dt><dd>Up to 14 days earlier</dd></div><div><dt>Discretionary spend</dt><dd>Up to 10% lower</dd></div><div><dt>Additional funding</dt><dd>Within your limit</dd></div></dl><div className="mini-plan-note"><Check size={18} aria-hidden/><p>Baseline plus two conditional plans. See the cash impact and any gap that remains.</p></div></div></section>
         <section className="assistant-section site-container" id="assistants" aria-labelledby="assistant-title">
@@ -36,7 +37,7 @@ export default function Home() {
           <div className="assistant-copy">
             <span className="eyebrow">03 / Connect with MCP</span>
             <h2 id="assistant-title">A second perspective.<br/><span>The same clear picture.</span></h2>
-            <p>MCP connects Blaubeere to the AI assistant you already use. Bring your company’s financial context into the conversation, and ask questions in your own words.</p>
+            <p>MCP connects blau to the AI assistant you already use. Bring your company’s financial context into the conversation, and ask questions in your own words.</p>
             <ul className="assistant-features">
               <li><span className="assistant-number" aria-hidden>01</span><div><h3>See what’s ahead.</h3><p>Ask when cash gets tight, what’s driving the gap and how much funding your company may need.</p></div></li>
               <li><span className="assistant-number" aria-hidden>02</span><div><h3>Follow the evidence.</h3><p>Look behind an outlook at its dated sources, assumptions and missing inputs.</p></div></li>
@@ -58,7 +59,7 @@ function ProductDemo() {
   return <section className="product-demo site-container" id="outlook" aria-labelledby="demo-title">
     <h2 id="demo-title" className="sr-only">A preview of your finance workspace</h2>
     <div className="demo-window">
-      <div className="demo-topbar"><span className="demo-wordmark"><span className="brand-mark" aria-hidden><i/><i/><i/><i/></span>blaubeere</span><span className="demo-label"><span className="live-dot"/>Product preview · demo data</span></div>
+      <div className="demo-topbar"><Image className="brand-logo" src={logo} alt="blau"/><span className="demo-label"><span className="live-dot"/>Product preview · demo data</span></div>
       <div className="demo-layout">
         <aside className="demo-sidebar" aria-hidden><span className="demo-workspace"><Building2 size={18}/>Finance workspace</span><span className="eyebrow">Workspace</span><span className="demo-nav active"><Activity size={17}/>Cash outlook</span><span className="demo-nav"><ArrowDownRight size={17}/>Explore a plan</span><div className="demo-sidebar-note"><ShieldCheck size={20}/><p>Your companies.<br/>A clearer perspective.</p></div></aside>
         <div className="demo-main">
