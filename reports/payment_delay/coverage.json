@@ -1,0 +1,78 @@
+{
+  "grano": "(company_id, month), meses cerrados",
+  "filas": 30864,
+  "meses": 24,
+  "empresas_grid": 1286,
+  "mora_ratio_calculable": {
+    "empresa_mes": 12841,
+    "empresas": 691,
+    "pct_sobre_filas": 0.4161,
+    "confidence_reparto_en_calculables": {
+      "alta": 12730,
+      "media": 108,
+      "baja": 3,
+      "ninguna": 0
+    },
+    "nota": "esta cifra decide el alcance de la penalizacion v3"
+  },
+  "cobro_mora_ratio_calculable": {
+    "empresa_mes": 10969,
+    "empresas": 629
+  },
+  "confidence_reparto": {
+    "alta": 13207,
+    "media": 628,
+    "baja": 1717,
+    "ninguna": 15312
+  },
+  "criterio_confidence": "ninguna=sin cartera observable; alta=cartera sin agujeros; media=agujeros en <50% de la cartera; baja=en >=50%",
+  "distribucion_mora_ratio": {
+    "n": 12841,
+    "mediana": 0.16980440750564105,
+    "p75": 0.7484690081498907,
+    "p90": 1.0
+  },
+  "distribucion_cobro_mora_ratio": {
+    "n": 10969,
+    "mediana": 0.22268975752051715,
+    "p75": 0.9257749679334839,
+    "p90": 1.0
+  },
+  "distribucion_retraso_medio_dias_pagado": {
+    "n": 8397,
+    "mediana": 20.866934528310352,
+    "p75": 45.773442767132245,
+    "p90": 91.7898796254621
+  },
+  "sin_cartera_observada": {
+    "empresa_mes": 15312,
+    "empresas_nunca_con_cartera": 503,
+    "empresas_con_cartera_alguna_vez": 782,
+    "nota": "NULL, no significa que pague puntual"
+  },
+  "agujeros_fx_eur": {
+    "empresa_mes_con_agujeros": 2345,
+    "nota": "fx_ambiguous o amount_eur nulo: ni cero ni imputacion; se publica [mora_ratio_min, mora_ratio_max] y mora_ratio NULL"
+  },
+  "cancel_y_vencimiento_desconocido": {
+    "cancel_empresa_mes_suma": 141817,
+    "vencimiento_desconocido_empresa_mes_suma": 2688,
+    "nota": "sumas acumuladas sobre cortes: una factura cuenta en todos los cortes desde su vencimiento (point-in-time)"
+  },
+  "anomalia_panel_cobro": {
+    "reportado_en_mart": {
+      "ar_pct_vencido_mediana": 0.839,
+      "ar_retraso_medio_dias_mediana": 0.0,
+      "incoherencia": "pct_vencido altisimo con retraso medio 0"
+    },
+    "medido_aqui": {
+      "mora_ratio_pago_mediana": 0.16980440750564105,
+      "mora_ratio_cobro_mediana": 0.22268975752051715,
+      "retraso_medio_dias_pagado_mediana": 20.866934528310352
+    },
+    "lectura": "Esta capa se construye desde clean/invoices.parquet con disciplina de corte; NO hereda ni ajusta al mart. La mora pago mediana no reproduce el 0,839 del mart: el pct_vencido del panel es stock reconstruido (vencido sobre ABIERTO, con pagos posteriores al corte ya descartados de forma retrospectiva), no una medida point-in-time comparable."
+  },
+  "limitacion_residual": "La fuente no tiene fecha de importacion ni de cancelacion: no puede demostrarse que una factura estuviera REGISTRADA en el sistema en el corte m, solo que su vencimiento era anterior a m. Medida point-in-time por vencimiento, no por disponibilidad de registro certificada.",
+  "fuente": "clean/invoices.parquet (document_type_norm='invoice')",
+  "no_consumido": "marts/panel_cobro: columnas de stock reconstruidas hacia atras (fuga); solo cohortes coh_pct_cobrado_Nd con coh_Nd_available_at <= fin de corte"
+}
