@@ -1,4 +1,6 @@
 "use client";
+import Image from "next/image";
+import logo from "../../brand/blau.svg";
 import { Activity, ArrowUpRight, Building2, FileText, LoaderCircle, LogOut, Plug, Plus, ShieldCheck } from "lucide-react";
 import type { CompanySummary, Identity } from "../lib/types";
 
@@ -12,7 +14,7 @@ type Props = {
 export function Sidebar({ companies, selected, identity, canPlan, logoutBusy, onCompany, onPlan, onConnections, onLogout, onNavigate }: Props) {
   const demo = identity?.email.endsWith("@demo.blaubeere.local");
   return <>
-    <a className="brand sidebar-brand" href="/dashboard"><span className="brand-mark" aria-hidden><i/><i/><i/><i/></span>blaubeere</a>
+    <a className="brand sidebar-brand" href="/dashboard" aria-label="blau workspace"><Image className="brand-logo" src={logo} alt="blau"/></a>
     <div className="sidebar-scroll">
       <nav className="sidebar-section" aria-label="Workspace">
         <span className="nav-label">Workspace</span>
