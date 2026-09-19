@@ -14,16 +14,16 @@
   "facturas": {
     "rows_in_dataset": 897894,
     "universo_cartera": 748316,
-    "universo_eur_conocido_abs": 6628385477.857542,
+    "universo_eur_conocido_abs": 6628385477.857527,
     "excluidas": {
       "cancel": {
         "n": 13699,
-        "eur_conocido_abs": 118258575.94737627,
+        "eur_conocido_abs": 118258575.94737636,
         "motivo": "factura cancelada: ni cobro ni deuda"
       },
       "tipo_no_invoice": {
         "n": 135879,
-        "eur_conocido_abs": 2245644226.2846704,
+        "eur_conocido_abs": 2245644226.2846594,
         "motivo": "document_type_norm <> 'invoice'"
       },
       "fecha_invalida": {
@@ -65,17 +65,17 @@
     },
     {
       "mes": "2024-11",
-      "ar_abierto_eur": 36367063.70963477,
+      "ar_abierto_eur": 36367063.709634766,
       "ar_abierto_norm_mediana": 2.098538568908278,
-      "ar_pct_vencido": 0.2303901865991113,
+      "ar_pct_vencido": 0.23039018659911137,
       "ap_abierto_eur": 35063013.916112006,
       "ap_pct_vencido": 0.29040636406352704
     },
     {
       "mes": "2024-12",
-      "ar_abierto_eur": 41706786.86552399,
+      "ar_abierto_eur": 41706786.86552398,
       "ar_abierto_norm_mediana": 2.380063787191247,
-      "ar_pct_vencido": 0.38633061958520687,
+      "ar_pct_vencido": 0.386330619585207,
       "ap_abierto_eur": 27142412.252304785,
       "ap_pct_vencido": 0.3038456033327307
     },
@@ -90,16 +90,16 @@
     {
       "mes": "2025-02",
       "ar_abierto_eur": 67283939.48078947,
-      "ar_abierto_norm_mediana": 2.7170690577729157,
+      "ar_abierto_norm_mediana": 2.7170690577729153,
       "ar_pct_vencido": 0.35685807158566557,
       "ap_abierto_eur": 33654725.83685872,
-      "ap_pct_vencido": 0.4808730706689138
+      "ap_pct_vencido": 0.48087307066891377
     },
     {
       "mes": "2025-03",
       "ar_abierto_eur": 82847214.54481563,
       "ar_abierto_norm_mediana": 2.8624044848154657,
-      "ar_pct_vencido": 0.377560341633222,
+      "ar_pct_vencido": 0.37756034163322205,
       "ap_abierto_eur": 48954869.22964747,
       "ap_pct_vencido": 0.38066393745469873
     },
@@ -129,9 +129,9 @@
     },
     {
       "mes": "2025-07",
-      "ar_abierto_eur": 143615999.32561672,
+      "ar_abierto_eur": 143615999.3256167,
       "ar_abierto_norm_mediana": 2.540995163966162,
-      "ar_pct_vencido": 0.646432646945798,
+      "ar_pct_vencido": 0.6464326469457982,
       "ap_abierto_eur": 52966430.08252439,
       "ap_pct_vencido": 0.47072311766894326
     },
@@ -188,8 +188,8 @@
       "ar_abierto_eur": 156507329.37761644,
       "ar_abierto_norm_mediana": 2.274558801878765,
       "ar_pct_vencido": 0.6068608566074604,
-      "ap_abierto_eur": 50715764.44891193,
-      "ap_pct_vencido": 0.6152723077631901
+      "ap_abierto_eur": 50715764.44891194,
+      "ap_pct_vencido": 0.61527230776319
     },
     {
       "mes": "2026-03",
@@ -204,14 +204,14 @@
       "ar_abierto_eur": 175264410.28774673,
       "ar_abierto_norm_mediana": 2.18369103444814,
       "ar_pct_vencido": 0.5433428938027101,
-      "ap_abierto_eur": 46999634.498666584,
+      "ap_abierto_eur": 46999634.49866658,
       "ap_pct_vencido": 0.27797164123643325
     },
     {
       "mes": "2026-05",
-      "ar_abierto_eur": 159205264.4524148,
+      "ar_abierto_eur": 159205264.45241484,
       "ar_abierto_norm_mediana": 2.1352187743601703,
-      "ar_pct_vencido": 0.617120014663159,
+      "ar_pct_vencido": 0.6171200146631589,
       "ap_abierto_eur": 55320301.25664263,
       "ap_pct_vencido": 0.2478005954944154
     },
@@ -263,14 +263,14 @@
       "aging_0_30_pct": 0.2774758907100712,
       "aging_31_60_eur": 7871829.365736676,
       "aging_31_60_pct": 0.2212606764363422,
-      "aging_61_90_eur": 6388049.971242848,
-      "aging_61_90_pct": 0.1795547377968444,
+      "aging_61_90_eur": 6388049.971242849,
+      "aging_61_90_pct": 0.17955473779684442,
       "aging_91_180_eur": 4787933.175714253,
       "aging_91_180_pct": 0.13457879788421948,
       "aging_181_360_eur": 2624444.32961687,
       "aging_181_360_pct": 0.07376764671349154,
-      "aging_360_mas_eur": 4033108.397307703,
-      "aging_360_mas_pct": 0.11336225045903076
+      "aging_360_mas_eur": 4033108.3973077033,
+      "aging_360_mas_pct": 0.11336225045903077
     },
     "nota": "los seis tramos de aging suman el importe VENCIDO del lado (lo no vencido no esta en ningun tramo)"
   },
@@ -301,7 +301,7 @@
         "mes": "2024-11",
         "coh_pct_cobrado_30d": 0.45169068859366973,
         "n_null_censura_30d": 0,
-        "coh_pct_cobrado_60d": 0.5410011848147905,
+        "coh_pct_cobrado_60d": 0.5410011848147904,
         "n_null_censura_60d": 0,
         "coh_pct_cobrado_90d": 0.5847260820950748,
         "n_null_censura_90d": 0
@@ -382,9 +382,9 @@
         "mes": "2025-08",
         "coh_pct_cobrado_30d": 0.4681431259641707,
         "n_null_censura_30d": 0,
-        "coh_pct_cobrado_60d": 0.5956166476654823,
+        "coh_pct_cobrado_60d": 0.5956166476654824,
         "n_null_censura_60d": 0,
-        "coh_pct_cobrado_90d": 0.6463209976242057,
+        "coh_pct_cobrado_90d": 0.6463209976242058,
         "n_null_censura_90d": 0
       },
       {
@@ -427,7 +427,7 @@
         "mes": "2026-01",
         "coh_pct_cobrado_30d": 0.49849618166936177,
         "n_null_censura_30d": 0,
-        "coh_pct_cobrado_60d": 0.6159329293619435,
+        "coh_pct_cobrado_60d": 0.6159329293619438,
         "n_null_censura_60d": 0,
         "coh_pct_cobrado_90d": 0.670393747680154,
         "n_null_censura_90d": 0
@@ -463,7 +463,7 @@
         "mes": "2026-05",
         "coh_pct_cobrado_30d": 0.45676580832130065,
         "n_null_censura_30d": 0,
-        "coh_pct_cobrado_60d": 0.5929578773102681,
+        "coh_pct_cobrado_60d": 0.592957877310268,
         "n_null_censura_60d": 0,
         "coh_pct_cobrado_90d": 0.6694907163584137,
         "n_null_censura_90d": 0
@@ -527,7 +527,7 @@
       {
         "moneda": "USD",
         "n": 25626,
-        "nominal_contable_abs": 1133193757.6648383
+        "nominal_contable_abs": 1133193757.6648364
       },
       {
         "moneda": "GBP",
@@ -542,42 +542,42 @@
       {
         "moneda": "MXN",
         "n": 6159,
-        "nominal_contable_abs": 2377848134.443469
+        "nominal_contable_abs": 2377848134.443466
       },
       {
         "moneda": "COP",
         "n": 5582,
-        "nominal_contable_abs": 558680440053.8306
+        "nominal_contable_abs": 558680440053.831
       },
       {
         "moneda": "BRL",
         "n": 5057,
-        "nominal_contable_abs": 250361151.4311065
+        "nominal_contable_abs": 250361151.43110657
       },
       {
         "moneda": "DKK",
         "n": 4853,
-        "nominal_contable_abs": 110476188.33609985
+        "nominal_contable_abs": 110476188.33609979
       },
       {
         "moneda": "CAD",
         "n": 3092,
-        "nominal_contable_abs": 33197449.259800043
+        "nominal_contable_abs": 33197449.25980006
       },
       {
         "moneda": "AUD",
         "n": 2950,
-        "nominal_contable_abs": 60070280.05382766
+        "nominal_contable_abs": 60070280.0538276
       },
       {
         "moneda": "PEN",
         "n": 2423,
-        "nominal_contable_abs": 26438274.01953037
+        "nominal_contable_abs": 26438274.01953038
       },
       {
         "moneda": "MYR",
         "n": 2145,
-        "nominal_contable_abs": 3354765.7957249056
+        "nominal_contable_abs": 3354765.7957249023
       },
       {
         "moneda": "NAD",
@@ -587,12 +587,12 @@
       {
         "moneda": "ARS",
         "n": 1580,
-        "nominal_contable_abs": 11852542651.34255
+        "nominal_contable_abs": 11852542651.342554
       },
       {
         "moneda": "AED",
         "n": 1482,
-        "nominal_contable_abs": 73477677.73748502
+        "nominal_contable_abs": 73477677.73748499
       },
       {
         "moneda": "MZN",
@@ -602,12 +602,12 @@
       {
         "moneda": "SGD",
         "n": 644,
-        "nominal_contable_abs": 117250556.57263207
+        "nominal_contable_abs": 117250556.57263209
       },
       {
         "moneda": "NZD",
         "n": 294,
-        "nominal_contable_abs": 1975980.1732967035
+        "nominal_contable_abs": 1975980.1732967033
       },
       {
         "moneda": "INR",

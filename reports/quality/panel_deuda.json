@@ -1,0 +1,48 @@
+{
+  "mart": "panel_deuda",
+  "contract_version": 1,
+  "grain": [
+    "company_id",
+    "month"
+  ],
+  "rows": 30864,
+  "input_rows": 2510869,
+  "columns": {
+    "company_id": "VARCHAR",
+    "group_id": "VARCHAR",
+    "month": "DATE",
+    "available_at": "DATE",
+    "tiene_actividad_caja": "BOOLEAN",
+    "n_tx_producto_deuda": "BIGINT",
+    "n_caja": "BIGINT",
+    "principal_conocido_eur": "DOUBLE",
+    "intereses_conocido_eur": "DOUBLE",
+    "financiacion_no_desglosada_conocido_eur": "DOUBLE",
+    "reintegros_deuda_conocido_eur": "DOUBLE",
+    "servicio_deuda_conocido_eur": "DOUBLE",
+    "n_pagos_servicio": "BIGINT",
+    "n_servicio_sin_eur": "BIGINT",
+    "n_financiacion_no_desglosada": "BIGINT",
+    "n_posibles_pagos_no_identificados": "BIGINT",
+    "servicio_deuda_eur": "DOUBLE",
+    "reintegros_deuda_eur": "DOUBLE",
+    "servicio_deuda_neto_eur": "DOUBLE",
+    "cobertura_servicio_eur_pct": "DOUBLE",
+    "ledger_deuda_neto_conocido_eur": "DOUBLE",
+    "n_ledger_sin_eur": "BIGINT",
+    "financiacion_salidas_caja_conocido_eur": "DOUBLE"
+  },
+  "perimetro": {
+    "source": "banking",
+    "product_types": [
+      "checking",
+      "saving",
+      "wallet"
+    ]
+  },
+  "filas_servicio_observable": 5249,
+  "filas_con_pagos_identificados": 6879,
+  "apuntes_en_productos_deuda_no_sumados": 182800,
+  "signos": "servicio bruto positivo; reintegros separados; neto puede ser negativo",
+  "limites": "Servicio identificado en cuentas de caja observadas, no deuda total de la empresa. No se usa outstanding actual ni se proyectan calendarios."
+}

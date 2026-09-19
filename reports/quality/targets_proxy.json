@@ -1,0 +1,69 @@
+{
+  "mart": "targets_proxy",
+  "contract_version": 1,
+  "grain": [
+    "company_id",
+    "month"
+  ],
+  "rows": 30864,
+  "input_rows": 30864,
+  "columns": {
+    "company_id": "VARCHAR",
+    "group_id": "VARCHAR",
+    "month": "DATE",
+    "origin_as_of": "DATE",
+    "available_at_deficit": "DATE",
+    "available_at_cobro": "DATE",
+    "baseline_cohort_end": "DATE",
+    "tiene_actividad_caja": "BOOLEAN",
+    "es_calentamiento": "BOOLEAN",
+    "cobertura_temporal_original": "BOOLEAN",
+    "n_meses_futuros_con_caja": "INTEGER",
+    "n_deficit_min": "INTEGER",
+    "n_deficit_max": "INTEGER",
+    "n_deficit_sin_atipicos_min": "INTEGER",
+    "n_deficit_sin_atipicos_max": "INTEGER",
+    "baseline_n_meses": "BIGINT",
+    "baseline_n_facturas": "HUGEINT",
+    "baseline_emitido_eur": "DOUBLE",
+    "baseline_cobrado_60d_pct": "DOUBLE",
+    "futuro_n_meses": "BIGINT",
+    "futuro_n_facturas": "HUGEINT",
+    "futuro_emitido_eur": "DOUBLE",
+    "futuro_cobrado_60d_pct": "DOUBLE",
+    "target_version": "INTEGER",
+    "baseline_cohort_start": "DATE",
+    "deficit_base_3m": "BOOLEAN",
+    "deficit_sin_atipicos_3m": "BOOLEAN",
+    "motivo_deficit_no_observable": "VARCHAR",
+    "target_deficit_3m": "BOOLEAN",
+    "motivo_cobro_no_observable": "VARCHAR",
+    "deterioro_cobro_60d_pp": "DOUBLE"
+  },
+  "target_version": 1,
+  "horizonte_meses": 3,
+  "deficit": "Al menos 2 de los 3 meses futuros: neto operativo negativo redondeado a centimos, robusto a la asignacion de ambiguos y con/sin atipicos.",
+  "cobro": "100*(conversion60d_base-conversion60d_futura), ponderada por EUR emitido; positivo indica menor conversion, no incumplimiento contractual.",
+  "baseline_cobro": "Tres cohortes consecutivas terminando en la ultima que habia madurado a 60 dias en el origen.",
+  "futuro_cobro": "Cohortes de emision m+1..m+3, con maduracion adicional de 60 dias; sin umbral binario inventado.",
+  "filas_deficit_observable": 6478,
+  "filas_deficit_positivo": 3081,
+  "filas_cobro_observable": 1623,
+  "motivos_no_observable": {
+    "deficit": {
+      "calentamiento": 3757,
+      "horizonte_sin_actividad_caja": 614,
+      "incertidumbre_material": 6647,
+      "sensible_atipicos": 18,
+      "sin_caja_origen": 9828,
+      "sin_horizonte": 3522
+    },
+    "cobro": {
+      "baseline_incompleto": 21916,
+      "cohortes_futuras_incompletas": 895,
+      "sin_horizonte_cohorte": 6430
+    }
+  },
+  "uso": "Solo etiquetas proxy, nunca predictores. Consultar targets_available_at para respetar maduracion al entrenar.",
+  "limites": "No hay etiquetas oficiales ni versiones historicas de ERP; mantiene los supuestos declarados de las fuentes."
+}
