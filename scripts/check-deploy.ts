@@ -10,6 +10,9 @@ try {
 set -eu
 printf '%s\\n' "$1" >> "$DEPLOY_TEST/log"
 case "$1" in
+  usage)
+    if [[ "$CASE" == wrong_account ]]; then echo 'Account: demo (shared by its API keys)'; else echo 'Account: blaubeere (shared by its API keys)'; fi
+    ;;
   exec)
     if [[ "$CASE" == auth ]]; then echo 'jio: unauthorised' >&2; exit 1; fi
     if [[ "$CASE" == stopped && ! -f "$DEPLOY_TEST/started" ]]; then echo "jio: session $2 is Stopped" >&2; exit 1; fi
@@ -24,7 +27,7 @@ case "$1" in
 esac
 `, { mode: 0o700 });
   writeFileSync(join(directory, "bun"), "#!/bin/sh\nexit 0\n", { mode: 0o700 });
-  for (const scenario of ["auth", "bad_url", "stopped"]) {
+  for (const scenario of ["wrong_account", "auth", "bad_url", "stopped"]) {
     writeFileSync(join(directory, "log"), "");
     const result = Bun.spawnSync(["bash", "deploy/jio.sh"], { env: { ...process.env, PATH: `${directory}:${process.env.PATH}`, DEPLOY_TEST: directory, CASE: scenario, JIO_VM_ID: vm, GIT_REF: revision, GITHUB_STEP_SUMMARY: "" } });
     const commands = readFileSync(join(directory, "log"), "utf8");
@@ -36,8 +39,8 @@ esac
       assert.ok(payload.endsWith("BLAUBEERE_DEPLOY_SCRIPT\n"));
     } else {
       assert.notEqual(result.exitCode, 0);
-      assert.ok(!commands.includes("start\n") && !commands.includes("connect\n"), "Invalid credentials and origins must fail before deployment");
+      assert.ok(!commands.includes("start\n") && !commands.includes("connect\n"), "Wrong accounts, invalid credentials and origins must fail before deployment");
     }
   }
-  console.log("Deployment checks passed: exact revision, HTTPS origins, stopped-VM recovery and authentication failures.");
+  console.log("Deployment checks passed: Blaubeere account, exact revision, HTTPS origins, stopped-VM recovery and authentication failures.");
 } finally { rmSync(directory, { recursive: true, force: true }); }

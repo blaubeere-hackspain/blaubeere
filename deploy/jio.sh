@@ -5,6 +5,7 @@ cd "$(dirname "$0")/.."
 vm="${JIO_VM_ID:?Set JIO_VM_ID to the dedicated Blaubeere VM}"
 revision="${GIT_REF:-$(git rev-parse HEAD)}"
 [[ "$vm" =~ ^[0-9a-f]{32}$ && "$revision" =~ ^[0-9a-f]{40}$ ]] || { echo 'Expected a VM ID and full commit SHA' >&2; exit 1; }
+[[ "$(jio usage)" == "Account: blaubeere ("* ]] || { echo 'Production deployments require the blaubeere Jio account' >&2; exit 1; }
 
 if readiness="$(jio exec "$vm" true --timeout 15 2>&1)"; then
   :
