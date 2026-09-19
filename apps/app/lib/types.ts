@@ -39,3 +39,22 @@ export type Comparison = {
   goal: Goal; baseline: Forecast; baseline_value_cents: number; plans: Plan[];
   any_qualifies: boolean; explanation: string; assumptions: string[];
 };
+
+export type ModelRecord = {
+  version: string; company_id: string; group_id: string; month: string; as_of: string;
+  health_score: number | null; confidence: string; n_meses_ventana: number; n_meses_con_actividad: number;
+  c6: number | null; p6: number | null; d6: number | null; t6: number | null;
+  r_hist: number | null; colchon_bruto: number | null; colchon_aplicable: number | null;
+  mora_ratio: number | null; h_antes_de_mora: number | null; penalizacion_mora_puntos: number | null;
+  volumen_ambiguo_eur: number | null; volumen_ambiguo_pct: number | null;
+  k: number; alpha: number; beta: number; reasons: string[];
+  cash: { posicion_acumulada: number | null; flujo_neto: number | null; meses_de_cobertura: number | null; mes_origen: string; confidence: string } | null;
+  payment: { debido_eur: number | null; en_mora_en_el_corte_eur: number | null; retraso_medio_dias_pagado: number | null; confidence: string } | null;
+};
+export type ModelAssessment = {
+  kind: "model"; company: CompanySummary; records: ModelRecord[];
+  provenance: { batch_id: string; source_revision: string; imported_at: string;
+    files: { table: string; path: string; sha256: string; rows: number }[];
+    model_summary: { advertencia: string; limitaciones: string[] };
+  };
+};

@@ -31,3 +31,9 @@ The authorised company assessment may include `health_assessments`, an array of 
 Supply each new day's response through the existing assessment-file integration while retaining earlier entries. No daily model runner is introduced here; the UI displays supplied outputs. Dated snapshots take precedence over legacy score-only history for the same date. Legacy current assessments remain supported; older scores without a saved explanation explicitly show that it is unavailable. Days with no model output are not interpolated.
 
 Private links use `/dashboard/health/YYYY-MM-DD?company=ID` and the existing authenticated company API. Login returns to the selected date. `/demo/health/YYYY-MM-DD` uses only bundled synthetic snapshots and needs no deployed backend.
+
+## Published monthly challenge outputs
+
+Imported companies use a `kind: "model"` response from the same authenticated Rust endpoint. It contains each published monthly score and its original inputs/reasons, joined to that month's cash and payment evidence, plus import provenance. The dashboard shows known collections, operating payments, debt service and confidence; every saved month-end rating opens its own explanation page. Missing scores remain empty. The native company selector supports the full imported company list.
+
+The current files contain monthly assessments, not daily outputs. Model inputs are EUR, not cents. Cash position is relative cumulative movement, not an opening balance. No forecast or plan is inferred from these historical artifacts. The provisional model's limitations, including the retained zero-operating-payment behavior, remain visible. Daily JSON assessments and the offline synthetic demo retain their existing contracts.

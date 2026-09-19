@@ -4,8 +4,9 @@ import Link from "next/link";
 import { Activity, ArrowDownRight, ArrowRight, Building2, CalendarDays, ChevronDown, FlaskConical, Layers3, LoaderCircle, PanelLeft, PanelLeftClose, ShieldCheck, TrendingUp, TriangleAlert, Wallet, X } from "lucide-react";
 import { ApiError, api } from "../lib/api";
 import { date, money } from "../lib/format";
-import type { Assessment, Company, CompanySummary, Comparison, Forecast, Identity, Plan } from "../lib/types";
+import type { Assessment, Company, CompanySummary, Comparison, Forecast, Identity, Plan, ModelAssessment } from "../lib/types";
 import { healthHref, healthTimeline } from "../lib/health";
+import { ModelDashboard } from "./model-dashboard";
 import { HealthExplanation } from "./health-explanation";
 import { CashChart } from "./cash-chart";
 import { Planner } from "./planner";
@@ -21,7 +22,7 @@ export function Dashboard({ demo, scoreDate }: { demo?: Demo; scoreDate?: string
   const [identity, setIdentity] = useState<Identity | null>(null);
   const [companies, setCompanies] = useState<CompanySummary[] | null>(demo ? [demo.company] : null);
   const [selected, setSelected] = useState(demo?.company.id ?? "");
-  const [assessment, setAssessment] = useState<Assessment | null>(null);
+  const [assessment, setAssessment] = useState<Assessment | ModelAssessment | null>(null);
   const [days, setDays] = useState(90);
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(!demo);
@@ -57,7 +58,7 @@ export function Dashboard({ demo, scoreDate }: { demo?: Demo; scoreDate?: string
     if (demo || !selected) return;
     const controller = new AbortController(); setLoading(true); setError(""); setComparison(null); setPlan(undefined); setAssessment(current => current?.company.id === selected ? current : null);
     const url = new URL(window.location.href); url.searchParams.set("company", selected); window.history.replaceState(null, "", url);
-    api<Assessment>(`/companies/${encodeURIComponent(selected)}/assessment?days=${days}`, { signal: controller.signal }).then(setAssessment).catch(error => { if (!controller.signal.aborted) handleError(error); }).finally(() => { if (!controller.signal.aborted) setLoading(false); });
+    api<Assessment | ModelAssessment>(`/companies/${encodeURIComponent(selected)}/assessment?days=${days}`, { signal: controller.signal }).then(setAssessment).catch(error => { if (!controller.signal.aborted) handleError(error); }).finally(() => { if (!controller.signal.aborted) setLoading(false); });
     return () => controller.abort();
   }, [selected, days, retry, demo]);
   async function logout() {
@@ -66,31 +67,33 @@ export function Dashboard({ demo, scoreDate }: { demo?: Demo; scoreDate?: string
     try { await api("/auth/logout", { method: "POST", body: "{}" }); window.location.assign("/login"); }
     catch (error) { handleError(error); setLogoutBusy(false); }
   }
-  const company = demo?.company ?? (assessment?.company.id === selected ? assessment.company : undefined);
-  const forecast = comparison?.baseline ?? demo?.forecasts[days] ?? assessment?.forecast;
+  const model = assessment && "kind" in assessment && assessment.company.id === selected ? assessment : undefined;
+  const company = demo?.company ?? (assessment && !("kind" in assessment) && assessment.company.id === selected ? assessment.company : undefined);
+  const forecast = comparison?.baseline ?? demo?.forecasts[days] ?? (assessment && "forecast" in assessment ? assessment.forecast : undefined);
   const health = company ? healthTimeline(company) : [];
   const latestHealth = health.at(-1);
   const overviewHref = `${demo ? "/demo" : "/dashboard"}${selected ? `?company=${encodeURIComponent(selected)}` : ""}`;
   const format = (value: number, compact = false) => money(value, company?.currency ?? "EUR", compact);
-  const sidebar = <Sidebar overviewHref={scoreDate ? overviewHref : undefined} offline={Boolean(demo)} companies={companies} selected={selected} identity={identity} canPlan={Boolean(company) && !loading} logoutBusy={logoutBusy}
+  const sidebar = <Sidebar overviewLabel={model ? "Financial health" : "Cash outlook"} canInspect={Boolean(company || model)} overviewHref={scoreDate ? overviewHref : undefined} offline={Boolean(demo)} companies={companies} selected={selected} identity={identity} canPlan={Boolean(company) && !loading} logoutBusy={logoutBusy}
     onCompany={id => { setSelected(id); setMobileNavigation(false); }}
     onPlan={() => { setMobileNavigation(false); setPlanning(true); }}
     onConnections={() => { setMobileNavigation(false); setConnections(true); }}
     onLogout={logout} onNavigate={() => setMobileNavigation(false)}/>;
-  return <div className="app-shell" data-sidebar-collapsed={sidebarCollapsed}><a href="#main" className="skip-link">{scoreDate ? "Skip to health assessment" : "Skip to cash outlook"}</a>
+  return <div className="app-shell" data-sidebar-collapsed={sidebarCollapsed}><a href="#main" className="skip-link">{scoreDate || model ? "Skip to health assessment" : "Skip to cash outlook"}</a>
     <aside className="sidebar" id="workspace-sidebar" aria-label="Workspace navigation">{sidebar}</aside>
     <div className="app-content"><header className="topbar"><div className="topbar-context">
       <button className="icon-button desktop-sidebar-toggle" aria-label={sidebarCollapsed ? "Show sidebar" : "Hide sidebar"} aria-expanded={!sidebarCollapsed} aria-controls="workspace-sidebar" onClick={() => setSidebarCollapsed(!sidebarCollapsed)}><span className="icon-swap" aria-hidden><PanelLeft data-visible={sidebarCollapsed}/><PanelLeftClose data-visible={!sidebarCollapsed}/></span></button>
       <button className="icon-button mobile-sidebar-toggle" aria-label="Open navigation" aria-haspopup="dialog" onClick={() => setMobileNavigation(true)}><PanelLeft/></button>
-      <span className="current-view"><Activity size={16} aria-hidden/>{scoreDate ? "Daily health assessment" : "Cash outlook"}</span>
-      {company && <a className="topbar-link" href={scoreDate ? `${overviewHref}#evidence` : "#evidence"}>Sources &amp; evidence</a>}
+      <span className="current-view"><Activity size={16} aria-hidden/>{model ? "Financial health" : scoreDate ? "Daily health assessment" : "Cash outlook"}</span>
+      {(company || model) && <a className="topbar-link" href={scoreDate ? `${overviewHref}#evidence` : "#evidence"}>Sources &amp; evidence</a>}
     </div><div className="topbar-actions"><span className="private-label"><ShieldCheck size={14} aria-hidden/>{demo ? "Sample workspace" : "Private workspace"}</span>{demo ? <a className="topbar-link" href="/login">Exit demo<ArrowRight size={14} aria-hidden/></a> : <span className="user-avatar" aria-label="Finance team">FT</span>}</div></header>
-      <main id="main" className="dashboard-main" tabIndex={-1}>{demo && <p className="demo-notice"><FlaskConical size={16} aria-hidden/>You’re exploring sample data. Try the charts, sources and example plans.</p>}{!scoreDate && <><div className="page-heading"><div><div className="eyebrow mb-2">A little foresight goes a long way</div><h1>Your cash, in perspective.</h1><p className="muted mt-2">See what’s ahead. Understand why. Choose your next move.</p></div><button className="button" onClick={() => setPlanning(true)} disabled={!company || loading}><TrendingUp size={17} aria-hidden/>Explore a plan<ArrowRight size={16} aria-hidden/></button></div>
+      <main id="main" className="dashboard-main" tabIndex={-1}>{demo && <p className="demo-notice"><FlaskConical size={16} aria-hidden/>You’re exploring sample data. Try the charts, sources and example plans.</p>}{!scoreDate && !model && <><div className="page-heading"><div><div className="eyebrow mb-2">A little foresight goes a long way</div><h1>Your cash, in perspective.</h1><p className="muted mt-2">See what’s ahead. Understand why. Choose your next move.</p></div><button className="button" onClick={() => setPlanning(true)} disabled={!company || loading}><TrendingUp size={17} aria-hidden/>Explore a plan<ArrowRight size={16} aria-hidden/></button></div>
         <div className="context-row"><div className="company-selector"><Building2 size={17} aria-hidden/><label className="sr-only" htmlFor="company">Company</label><select id="company" value={selected} onChange={e => setSelected(e.target.value)} disabled={!companies?.length}>{!companies?.length && <option value="">No company selected</option>}{companies?.map(c => <option key={c.id} value={c.id}>{c.name}</option>)}</select></div><span className="context-date"><CalendarDays size={15} aria-hidden/>{company ? `As of ${date(company.assessment_date, true)}` : loading ? "Loading assessment" : "No assessment available"}</span><span className="badge">{company?.currency ?? "EUR"}</span>{company?.data_mode === "demo" && <span className="badge accent"><FlaskConical size={13} aria-hidden/>Demo data</span>}<div className="horizon-select"><label htmlFor="horizon" className="small muted">Outlook</label><select id="horizon" value={comparison?.baseline.horizon_days ?? days} onChange={e => { setComparison(null); setPlan(undefined); setDays(Number(e.target.value)); }} disabled={!company || loading}>{[30,60,90,180].map(d => <option key={d} value={d}>{d} days</option>)}{forecast && ![30,60,90,180].includes(forecast.horizon_days) && <option value={forecast.horizon_days}>{forecast.horizon_days} days · goal</option>}</select></div></div></>}
         {error && <div className="error error-retry" role="alert"><span>{error}</span><button className="button secondary" onClick={() => setRetry(retry + 1)}>Try again</button></div>}
-        <p className="refresh-status small" role="status">{loading && company && <><LoaderCircle className="spinner" size={14} aria-hidden/>Updating outlook… Showing the previous assessment.</>}{error && company && !loading && `Showing the last available ${forecast?.horizon_days}-day outlook.`}</p>
-        {loading && !company && <div className="dashboard-skeleton" role="status"><span className="sr-only">{scoreDate ? "Loading health assessment…" : "Loading company cash outlook…"}</span><div className="skeleton-stats">{[1,2,3,4].map(n => <div key={n}/>)}</div><div className="skeleton-chart"/></div>}
+        <p className="refresh-status small" role="status">{loading && (company || model) && <><LoaderCircle className="spinner" size={14} aria-hidden/>Updating… Showing the previous assessment.</>}{error && company && !loading && `Showing the last available ${forecast?.horizon_days}-day outlook.`}</p>
+        {loading && !company && !model && <div className="dashboard-skeleton" role="status"><span className="sr-only">{scoreDate ? "Loading health assessment…" : "Loading company cash outlook…"}</span><div className="skeleton-stats">{[1,2,3,4].map(n => <div key={n}/>)}</div><div className="skeleton-chart"/></div>}
         {!loading && companies?.length === 0 && <PaintedEmptyState image={garden} title="Your next chapter starts here."><p>Your workspace is ready. Ask your administrator to grant company access and load your first assessment.</p><button className="button secondary" onClick={() => setRetry(retry + 1)}>Refresh company access<ArrowRight size={16} aria-hidden/></button></PaintedEmptyState>}
+        {model && <div aria-busy={loading}><ModelDashboard data={model} scoreDate={scoreDate} companies={companies ?? []} onCompany={setSelected}/></div>}
         {company && scoreDate && <HealthExplanation key={`${company.id}:${scoreDate}`} company={company} scoreDate={scoreDate} demo={Boolean(demo)}/>}
         {company && forecast && !scoreDate && <div aria-busy={loading}>
           <section className="stats-grid" aria-label="Cash outlook summary"><Stat label="Usable cash today" value={format(company.opening_cash_cents)} caption={`Observed at ${date(company.assessment_date)}`} icon={<Wallet size={17} aria-hidden/>}/><Stat label="Funding needed" value={format(forecast.funding_needed_cents)} caption={`Above a ${format(forecast.buffer_cents)} cash floor`} tone={forecast.funding_needed_cents > 0 ? "warn" : "good"} icon={<TriangleAlert size={17} aria-hidden/>}/><Stat label="First cash floor breach" value={forecast.first_shortfall ? date(forecast.first_shortfall.date) : "None forecast"} caption={forecast.first_shortfall ? `${format(forecast.first_shortfall.cash_cents)} projected cash` : `Within ${forecast.horizon_days} days`} tone={forecast.first_shortfall ? "bad" : "good"} icon={<CalendarDays size={17} aria-hidden/>}/><Stat label="Minimum projected cash" value={format(forecast.minimum.cash_cents)} caption={`On ${date(forecast.minimum.date)}`} tone={forecast.minimum.cash_cents < 0 ? "bad" : "neutral"} icon={<ArrowDownRight size={17} aria-hidden/>}/></section>

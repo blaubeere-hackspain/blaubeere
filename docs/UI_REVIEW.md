@@ -55,3 +55,12 @@ The scroll-linked effect has a static gradient fallback and is disabled for redu
 Original asset paths and generation prompts/briefs are recorded in [ARTWORK.md](ARTWORK.md).
 
 **Approve** for the inspected scope. No unresolved HIGH finding was identified; the unverified checks above remain explicit.
+
+## Published model dashboard review
+
+| Severity | Location | Before | After | Why |
+| --- | --- | --- | --- | --- |
+| HIGH — fixed | `components/model-dashboard.tsx` | Published model records were unavailable in the app. | Dated monthly ratings, original model inputs and reason codes, visible confidence, null states and source provenance. | Explain the returned rating without inventing daily scores, a bank balance or numerical attribution. |
+| MEDIUM — fixed | `components/sidebar.tsx` | Company buttons assumed a small workspace. | Native labelled select for large lists; overview label follows the selected data source. | The imported company universe stays navigable without expanding the sidebar indefinitely. |
+
+Regression checks render missing-score overview/detail pages and verify source gaps, monthly labels and dated links. Existing surface styles, keyboard-accessible disclosures and links are reused. A fresh browser inspection of this imported-data view is still pending; prior UI verification above applies to the earlier surfaces.

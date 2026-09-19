@@ -6,26 +6,26 @@ import type { CompanySummary, Identity } from "../lib/types";
 
 type Props = {
   companies: CompanySummary[] | null; selected: string; identity: Identity | null;
-  canPlan: boolean; logoutBusy: boolean; offline?: boolean; overviewHref?: string;
+  canPlan: boolean; canInspect?: boolean; logoutBusy: boolean; offline?: boolean; overviewHref?: string; overviewLabel?: string;
   onCompany: (id: string) => void; onPlan: () => void; onConnections: () => void;
   onLogout: () => void; onNavigate: () => void;
 };
 
-export function Sidebar({ overviewHref, offline = false, companies, selected, identity, canPlan, logoutBusy, onCompany, onPlan, onConnections, onLogout, onNavigate }: Props) {
+export function Sidebar({ overviewLabel = "Cash outlook", overviewHref, offline = false, companies, selected, identity, canPlan, canInspect = canPlan, logoutBusy, onCompany, onPlan, onConnections, onLogout, onNavigate }: Props) {
   const demo = offline || identity?.email.endsWith("@demo.blaubeere.local");
   return <>
     <a className="brand sidebar-brand" href={offline ? "/demo" : "/dashboard"} aria-label="blau workspace"><Image className="brand-logo" src={logo} alt="blau"/></a>
     <div className="sidebar-scroll">
       <nav className="sidebar-section" aria-label="Workspace">
         <span className="nav-label">Workspace</span>
-        <a className={`nav-link ${overviewHref ? "" : "active"}`} href={overviewHref ?? "#main"} aria-current={overviewHref ? undefined : "page"} onClick={onNavigate}><Activity aria-hidden/>Cash outlook</a>
+        <a className={`nav-link ${overviewHref ? "" : "active"}`} href={overviewHref ?? "#main"} aria-current={overviewHref ? undefined : "page"} onClick={onNavigate}><Activity aria-hidden/>{overviewLabel}</a>
         <button className="nav-link" onClick={onPlan} disabled={!canPlan}><Plus aria-hidden/>Explore a plan</button>
-        <a className="nav-link" href={overviewHref ? `${overviewHref}#evidence` : "#evidence"} onClick={onNavigate} aria-disabled={!canPlan} tabIndex={canPlan ? undefined : -1}><FileText aria-hidden/>Sources &amp; evidence</a>
+        <a className="nav-link" href={overviewHref ? `${overviewHref}#evidence` : "#evidence"} onClick={onNavigate} aria-disabled={!canInspect} tabIndex={canInspect ? undefined : -1}><FileText aria-hidden/>Sources &amp; evidence</a>
         <button className="nav-link" onClick={onConnections} disabled={!offline && !identity}><Plug aria-hidden/>Connected assistants</button>
       </nav>
       <nav className="sidebar-section" aria-label="Companies">
         <span className="nav-label">Your companies<span>{companies?.length ?? "—"}</span></span>
-        {companies?.map(company => <button className="nav-link company-link" key={company.id} onClick={() => onCompany(company.id)} aria-pressed={selected === company.id} title={company.name}><Building2 aria-hidden/><span>{company.name}</span>{selected === company.id && <span className="company-dot" aria-hidden/>}</button>)}
+        {companies && companies.length > 12 ? <><label className="sr-only" htmlFor="sidebar-company">Choose a company</label><select className="sidebar-company-select" id="sidebar-company" value={selected} onChange={event => onCompany(event.target.value)}><option value="" disabled>Choose a company</option>{companies.map(company => <option key={company.id} value={company.id}>{company.name}</option>)}</select></> : companies?.map(company => <button className="nav-link company-link" key={company.id} onClick={() => onCompany(company.id)} aria-pressed={selected === company.id} title={company.name}><Building2 aria-hidden/><span>{company.name}</span>{selected === company.id && <span className="company-dot" aria-hidden/>}</button>)}
         {!companies && <p className="sidebar-note">Loading your companies…</p>}
         {companies?.length === 0 && <p className="sidebar-note">Companies appear here when your administrator grants access.</p>}
       </nav>

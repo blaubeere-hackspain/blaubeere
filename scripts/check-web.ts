@@ -9,10 +9,29 @@ import { HealthExplanation } from "../apps/app/components/health-explanation";
 import { healthHref, healthTimeline, validHealthDate } from "../apps/app/lib/health";
 import type { Company } from "../apps/app/lib/types";
 import { outsideDialog } from "../apps/app/components/dialog";
+import { ModelDashboard, modelNumber, modelReason } from "../apps/app/components/model-dashboard";
+import type { ModelAssessment, ModelRecord } from "../apps/app/lib/types";
 
 const requireApp = createRequire(new URL("../apps/app/package.json", import.meta.url));
 const { createElement } = requireApp("react");
 const { renderToStaticMarkup } = requireApp("react-dom/server");
+const record: ModelRecord = {
+  version: "healthscore_v3", company_id: "COMP_TEST", group_id: "GROUP_TEST", month: "2026-08-01", as_of: "2026-08-31",
+  health_score: null, confidence: "ninguna", n_meses_ventana: 6, n_meses_con_actividad: 0,
+  c6: null, p6: null, d6: null, t6: null, r_hist: null, colchon_bruto: null, colchon_aplicable: null,
+  mora_ratio: null, h_antes_de_mora: null, penalizacion_mora_puntos: null, volumen_ambiguo_eur: null, volumen_ambiguo_pct: null,
+  k: 4178.45, alpha: 3, beta: 0.25, reasons: ["sin_actividad_en_ventana"], cash: null, payment: null,
+};
+const model: ModelAssessment = { kind: "model", company: { id: record.company_id, name: record.company_id, group: record.group_id, currency: "EUR", data_mode: "challenge" }, records: [record], provenance: { batch_id: "test", source_revision: "test", imported_at: "2026-09-19", files: [], model_summary: { advertencia: "Provisional", limitaciones: [] } } };
+const modelOverview = renderToStaticMarkup(createElement(ModelDashboard, { data: model, companies: [model.company], onCompany: () => {} }));
+assert.ok(modelOverview.includes("No score") && modelOverview.includes("Monthly observations") && !modelOverview.includes("Usable cash today"));
+assert.ok(modelOverview.includes('/dashboard/health/2026-08-31?company=COMP_TEST'));
+const modelDetail = renderToStaticMarkup(createElement(ModelDashboard, { data: model, scoreDate: record.as_of, companies: [model.company], onCompany: () => {} }));
+assert.ok(modelDetail.includes("Not available") && modelDetail.includes("No cash activity was observed") && modelDetail.includes("not a bank balance"));
+assert.ok(!modelDetail.includes("NaN") && !modelDetail.includes("€0"), "Missing source values must not become zero-valued cash");
+assert.equal(modelNumber(null), "Not available");
+assert.equal(modelNumber(0), "0");
+assert.match(modelReason("p_eur_desconocido_en_2_meses"), /Operating payments.*2 month/);
 const login = renderToStaticMarkup(createElement(LoginForm));
 assert.ok(login.includes('name="email"') && login.includes('type="password"'), "The normal sign-in form stays visible");
 assert.match(login, /<a href="\/demo"[^>]*>Access demo/, "Demo must always be a direct link, independent of credentials and server flags");
