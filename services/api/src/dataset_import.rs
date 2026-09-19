@@ -58,10 +58,19 @@ pub async fn build(root: &Path, directory: &Path, revision: &str) -> anyhow::Res
     for (table, path) in SOURCES {
         files.push(json!({"table":table,"path":path,"sha256":hash(&root.join(path))?}));
     }
+    let daily_sources = crate::daily_cash::SOURCES;
+    let has_daily = daily_sources
+        .iter()
+        .any(|(_, path)| root.join(path).exists());
+    if has_daily {
+        for (table, path) in daily_sources {
+            files.push(json!({"table":table,"path":path,"sha256":hash(&root.join(path))?}));
+        }
+    }
     let summary_hash = hash(&root.join(SUMMARY))?;
     let batch = format!(
         "{:x}",
-        Sha256::digest(serde_json::to_vec(&json!([3, files, summary_hash]))?)
+        Sha256::digest(serde_json::to_vec(&json!([4, files, summary_hash]))?)
     );
     std::fs::create_dir_all(directory)?;
     let target = directory
@@ -96,7 +105,7 @@ pub async fn build(root: &Path, directory: &Path, revision: &str) -> anyhow::Res
         CREATE INDEX dataset_company_period ON parquet_records(source,company_id,period);")
         .execute(&mut *tx).await?;
     let mut companies = BTreeMap::new();
-    for info in &mut files {
+    for info in &mut files[..SOURCES.len()] {
         let table = text(info, "table")?.to_owned();
         let reader = SerializedFileReader::new(File::open(root.join(text(info, "path")?))?)?;
         let mut count = 0;
@@ -201,6 +210,13 @@ pub async fn build(root: &Path, directory: &Path, revision: &str) -> anyhow::Res
         ensure!(count > 0, "Empty {table} source");
         info["rows"] = json!(count);
         eprintln!("Imported {table}: {count} rows");
+    }
+    if has_daily {
+        let counts = crate::daily_cash::import(root, &mut tx).await?;
+        for (info, count) in files[SOURCES.len()..].iter_mut().zip(counts) {
+            info["rows"] = json!(count);
+        }
+        eprintln!("Imported daily cash in original currencies");
     }
     for (company, group) in companies {
         sqlx::query("INSERT INTO dataset_companies VALUES (?,?)")

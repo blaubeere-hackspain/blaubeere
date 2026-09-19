@@ -14,7 +14,7 @@ assert.ok(login.includes('href="/register?returnTo=%2Fdashboard"'), "Sign-in mus
 const registration = await (await read(`${app}/register`)).text();
 assert.ok(registration.includes("Create account") && registration.includes('autoComplete="new-password"'), "Registration must render a new-account form");
 const demo = await (await read(`${app}/demo`)).text();
-assert.ok(demo.includes("Published challenge dataset") && !demo.includes("Mediterránea Supply"), "Demo must use imported companies, never the removed hardcoded workspace");
+assert.ok(demo.includes("Workspace navigation") && !demo.includes("Mediterránea Supply"), "Demo must use the company workspace, never the removed hardcoded dashboard");
 assert.ok(!demo.includes('Why this number') && !demo.includes('Why this score'), "Cash metrics must not have explanation popups");
 const companies = await (await read(`${app}/api/demo/companies`)).json();
 assert.ok(companies.length > 1 && companies.every((company: { data_mode: string; id: string }) => company.data_mode === "challenge" && company.id !== "DEMO_001"));
@@ -26,9 +26,16 @@ for (const company of [companies[0], companies.at(-1)]) {
   assert.equal(assessment.provenance.schema_version, 3);
   assert.ok(assessment.records.every((row: { version: string; health_score: number | null; excluida: boolean }) => row.version === "healthscore_v4" && (!row.excluida || row.health_score === null)), "Serve only v4 ratings and preserve exclusions");
   const sources = assessment.provenance.files.map((file: { path: string }) => file.path);
-  for (const path of ["reports/score_v4/assessments.parquet", "reports/cash_backfill/cash_backfill_monthly.parquet", "reports/payment_delay_v2/payment_delay_v2_monthly.parquet", "reports/debt_obligation/debt_obligation_monthly.parquet"]) assert.ok(sources.includes(path), `Missing v4 source: ${path}`);
+  for (const path of ["reports/score_v4/assessments.parquet", "reports/cash_backfill/cash_backfill_monthly.parquet", "reports/payment_delay_v2/payment_delay_v2_monthly.parquet", "reports/debt_obligation/debt_obligation_monthly.parquet", "data/clean/transactions.parquet", "data/clean/balances.parquet"]) assert.ok(sources.includes(path), `Missing source: ${path}`);
   assert.ok(assessment.records.length > 1 && assessment.provenance.files.length >= 3);
   const latest = assessment.records.at(-1);
+  for (const series of latest.daily_cash ?? []) {
+    assert.match(series.currency, /^[A-Z]{3}$/);
+    assert.equal(series.days.at(-1).date, latest.as_of);
+    assert.equal(series.days.length, Number(latest.as_of.slice(-2)));
+    assert.ok(series.days.every((day: { date: string }) => day.date.startsWith(latest.as_of.slice(0, 7))), "Cash flow must contain only the selected month");
+  }
+  if (company.id === companies[0].id) assert.ok(latest.daily_cash?.length, "Daily cash must be populated for the first imported company");
   const health = await (await read(`${app}/demo/health/${latest.as_of}?company=${company.id}`)).text();
   assert.ok(health.includes(`Health assessment · ${latest.as_of}`), "Imported rating deep links must load without a session");
 }

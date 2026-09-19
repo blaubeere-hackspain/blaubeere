@@ -1,4 +1,5 @@
 pub mod auth;
+mod daily_cash;
 pub mod dataset;
 pub mod dataset_import;
 pub mod finance;
