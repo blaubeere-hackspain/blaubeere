@@ -228,7 +228,8 @@ body { font-family: "Inter Variable", system-ui, sans-serif; background: #f1f1ee
 .skeleton-stats > div, .skeleton-chart { background: var(--line); border-radius: var(--radius); height: 140px; }
 .skeleton-chart { height: 420px; }
 .planning-dialog, .connection-dialog { color: var(--ink); border: 0; background: var(--surface); padding: 0; border-radius: 28px; max-height: calc(100svh - 48px); width: min(1040px, calc(100% - 48px)); max-width: none; box-shadow: var(--shadow-raised), 0 24px 100px #131a2430; }
-.planning-dialog { margin: auto 24px auto auto; }
+.planning-dialog { display: none; width: min(640px, calc(100% - 24px)); height: calc(100svh - 24px); max-height: none; margin: 12px auto 12px 12px; border-radius: 16px; overflow: hidden; box-shadow: var(--shadow-raised), 16px 0 64px -24px oklch(0 0 0 / .16); }
+.planning-dialog[open] { display: flex; flex-direction: column; }
 .connection-dialog { width: min(560px, calc(100% - 32px)); margin: auto; }
 .planning-dialog::backdrop, .connection-dialog::backdrop { background: #131a2466; backdrop-filter: blur(2px); }
 .panel-head { display: flex; align-items: center; justify-content: space-between; gap: 16px; padding: 24px 32px; border-bottom: 1px solid var(--line); background: var(--surface); position: sticky; top: 0; z-index: 2; }
@@ -242,8 +243,9 @@ body { font-family: "Inter Variable", system-ui, sans-serif; background: #f1f1ee
 .form-grid label { font-size: 13px; }
 .form-grid small { font-size: 12px; }
 .field-note { font-size: 12px; color: var(--subtle); margin-top: 14px; }
-.planner-submit { display: flex; align-items: center; justify-content: space-between; gap: 16px; padding: 20px 0; border-top: 1px solid var(--line); }
-.planner-submit p { display: flex; align-items: center; gap: 8px; }
+.planner-submit { display: flex; flex-shrink: 0; align-items: center; justify-content: space-between; gap: 16px; padding: 16px 24px; border-top: 1px solid var(--line); background: var(--surface); }
+.planner-submit p { font-size: 12px; color: var(--muted); }
+.planner-submit p span { display: block; color: var(--subtle); }
 .comparison { border-top: 1px solid var(--line); margin-top: 12px; padding-top: 28px; }
 .section-heading h2 { margin-top: 8px; }
 .comparison-summary { margin: 16px 0 20px; border-radius: 6px; padding: 12px 16px; font-size: 12px; }
@@ -318,4 +320,49 @@ body { font-family: "Inter Variable", system-ui, sans-serif; background: #f1f1ee
   .empty-message h2 { font-size: 28px; }
   .empty-painting img { height: 210px; }
   .auth-form .field input { font-size: 16px; }
+}
+
+/* The planner stays beside the dashboard, with controls outside its scrolling body. */
+.planning-dialog::backdrop { background: oklch(0 0 0 / .06); backdrop-filter: none; }
+.planning-dialog .panel-head { position: static; flex-shrink: 0; padding: 8px 12px 8px 24px; }
+.planner-breadcrumb { display: flex; align-items: center; gap: 12px; min-width: 0; font-size: 13px; color: var(--muted); }
+.planner-breadcrumb > span { flex-shrink: 0; }
+.planner-breadcrumb strong { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; color: var(--ink); font-weight: 400; }
+.planning-dialog .panel-body { flex: 1; min-height: 0; overflow-y: auto; overscroll-behavior: contain; padding: 24px; scroll-padding-block: 24px; }
+.planner-intro { display: grid; grid-template-columns: 48px minmax(0, 1fr); gap: 16px; align-items: center; margin-bottom: 28px; }
+.planner-symbol { display: grid; place-items: center; width: 48px; height: 48px; border-radius: 12px; color: var(--accent); background: var(--accent-soft); box-shadow: var(--shadow-border); }
+.planner-symbol svg { stroke-width: 1.5px; }
+.planner-intro .eyebrow { text-transform: none; letter-spacing: 0; font-weight: 400; }
+.planner-intro h2 { font-size: 22px; margin-top: 4px; }
+.planner-intro > p { grid-column: 1 / -1; color: var(--muted); font-size: 13px; line-height: 1.6; }
+.planning-dialog fieldset { padding-top: 20px; border-top: 1px solid var(--line); }
+.planning-dialog legend { padding-right: 12px; margin-bottom: 0; font-size: 14px; }
+.planning-dialog .step-number { color: var(--muted); background: #f4f4f3; font-family: inherit; font-variant-numeric: tabular-nums; border-radius: 6px; }
+.planning-dialog .form-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 18px 16px; }
+.planning-dialog .field { min-width: 0; font-weight: 400; }
+.planning-dialog .field input, .planning-dialog .field select { min-width: 0; border-radius: 8px; font-variant-numeric: tabular-nums; }
+.planning-dialog .plan-grid { grid-template-columns: 1fr; }
+.planning-dialog .plan-card { border-radius: 12px; box-shadow: var(--shadow-border); border: 0; }
+.planning-dialog .plan-card.qualifies { box-shadow: var(--shadow-border), inset 3px 0 var(--accent); }
+.planning-dialog .comparison { scroll-margin-top: 4px; }
+.planning-dialog .comparison h2 { font-size: 20px; }
+@media (prefers-reduced-motion: no-preference) {
+  .planning-dialog { opacity: 0; transform: translateX(-24px); transition: opacity 180ms var(--ease-out), transform 180ms var(--ease-out), display 180ms allow-discrete, overlay 180ms allow-discrete; }
+  .planning-dialog[open] { opacity: 1; transform: translateX(0); transition-duration: 260ms; }
+  .planning-dialog::backdrop { opacity: 0; transition: opacity 180ms var(--ease-out), display 180ms allow-discrete, overlay 180ms allow-discrete; }
+  .planning-dialog[open]::backdrop { opacity: 1; }
+  @starting-style {
+    .planning-dialog[open] { opacity: 0; transform: translateX(calc(-100% - 12px)); }
+    .planning-dialog[open]::backdrop { opacity: 0; }
+  }
+  .planning-dialog[data-instant="true"], .planning-dialog[data-instant="true"]::backdrop { transition: none; }
+}
+@media (max-width: 700px) {
+  .planning-dialog .panel-head { padding-left: 16px; }
+  .planning-dialog .panel-body { padding: 24px 16px; }
+  .planner-submit { padding: 12px 16px max(12px, env(safe-area-inset-bottom)); gap: 12px; }
+  .planner-submit p { display: none; }
+  .planner-submit .button { width: 100%; }
+  .planning-dialog .form-grid { grid-template-columns: 1fr; }
+  .planner-intro { gap: 12px; }
 }
