@@ -73,9 +73,23 @@ The upstream Data/Model workstreams own challenge CSV reconciliation, currency c
 
 Planning compares two deterministic candidates, not every possible plan. Funding is conditional on availability, assumed on day one at 8% annual interest, with principal repayment after the horizon. Growth applies only to incremental revenue and associated costs. Plans are held in the current browser session and are not saved to the database.
 
+## Published Parquet assessments in the app
+
+From the repository root, import the four published model outputs with the existing Rust API binary:
+
+```sh
+cargo run -p blaubeere-api -- import-parquet . .local/datasets "$(git rev-parse HEAD)"
+```
+
+The command prints the absolute SQLite snapshot path. Add `DATASET_DATABASE_URL=sqlite:///absolute/path/printed/above` and `DATASET_TEAM_EMAIL=finance@blaubeere.local` to `.env`, then restart the Rust services. The explicitly configured existing team account receives memberships in the imported companies. Demo visitors remain restricted to `DEMO_001`.
+
+Rust streams `reports/score_v3/assessments.parquet`, `reports/cash_position/cash_position_monthly.parquet`, `reports/payment_delay/payment_delay_monthly.parquet` and `reports/transfer_resolution_v2/resolution.parquet`. It validates and indexes a private, immutable SQLite snapshot, preserves nulls and reason codes, and records file hashes and source revision. An unchanged batch reuses its snapshot; failed imports cannot replace a healthy snapshot. API and MCP share the same Rust query and access-control logic. No Redis or database service is needed on the single VM.
+
+`GET /api/companies/:id/assessment` returns `kind: "model"`, monthly `records` joined with cash/payment evidence, and provenance for imported companies. Model amounts are EUR values, unlike the integer-cent forecast contract. The UI links each monthly score to its own dated explanation; it does not interpolate daily scores. Relative cumulative cash movement is not a bank balance. Planning is unavailable for these companies until verified opening cash and future obligations are supplied. The independent `/demo` remains an illustrative, frontend-only experience.
+
 ## Challenge dataset pipeline
 
-The Python/DuckDB pipeline is separate from the Rust planning services: publishing its Parquet tables does not replace the app's illustrative assessment snapshot or provide an official challenge score. The source dataset is described in [data_dictionary.md](data_dictionary.md); the current analytical contracts and limitations are in [reports/vistas_y_hallazgos.md](reports/vistas_y_hallazgos.md).
+The offline Python/DuckDB pipeline produces the analytical outputs. The existing Rust API binary parses the published Parquet files into SQLite for the app and MCP; there is no Python runtime or additional data service in production. The published score remains provisional, not an official credit rating. The source dataset is described in [data_dictionary.md](data_dictionary.md); the current analytical contracts and limitations are in [reports/vistas_y_hallazgos.md](reports/vistas_y_hallazgos.md).
 
 Use Python 3.13 and the pinned dependency in `requirements.txt`. On a fresh clone, download the dataset through Git LFS and build the regenerable intermediate tables before running the data checks:
 
@@ -131,7 +145,7 @@ For deployment, configure canonical HTTPS `APP_ORIGIN` and `API_ORIGIN` values w
 
 ## Jio production
 
-Every push to `main` runs `.github/workflows/deploy-jio.yml`. A manual workflow run can redeploy a selected commit. The workflow uses a dedicated Medium Jio VM (2 vCPU, 4 GiB), builds both Next.js apps and Rust services, runs the checks, then activates the new release and verifies its public HTTPS endpoints. Builds happen before service restarts. Failed local health checks restore the previous release; database migrations are forward-only and must remain compatible with that release.
+Every push to `main` runs `.github/workflows/deploy-jio.yml`. A manual workflow run can redeploy a selected commit. The workflow uses a dedicated Medium Jio VM (2 vCPU, 4 GiB), builds both Next.js apps and Rust services, runs the checks, then activates the new release and verifies its public HTTPS endpoints. Builds and the Rust Parquet import happen before service restarts. Failed local health checks restore the previous release; database migrations are forward-only and must remain compatible with that release.
 
 Repository configuration:
 
@@ -142,11 +156,11 @@ Repository configuration:
 | Variable | `JIO_VM_ID` | Dedicated persistent VM ID |
 | Variable | `JIO_ENDPOINT` | Jio endpoint; omit to use the CLI default |
 
-Jio publishes port 8080 for the app, API, OAuth and MCP, and port 3102 for the landing. Deployment URLs appear in the Actions run summary. Nginx forwards to private listeners; systemd runs the four application services as an unprivileged `blaubeere` user.
+Jio publishes port 8080 for the app, API, OAuth and MCP, and port 3102 for the landing. Only the app URL appears in the Actions completion summary. Nginx forwards app traffic to Next.js, whose rewrites proxy API/OAuth requests to Rust and MCP requests to the existing MCP listener; systemd runs the four application services as an unprivileged `blaubeere` user.
 
 Deployment verifies that the key belongs to `blaubeere` before touching a VM. For local commands, `JIO_API_KEY` overrides `jio login`; unset a stale environment key to use the saved login. GitHub Actions uses the repository secret.
 
-State lives under `/var/lib/blaubeere`: `data/blaubeere.db` persists across releases, `bootstrap.env` contains the initial finance account credentials, and `deployed-revision` records the healthy commit. Retrieve credentials through an authorised Jio SSH session with `sudo cat /var/lib/blaubeere/bootstrap.env`; never commit them. Provisioning and assessment overrides follow the rules above; service settings are in `runtime.env`. Retained releases permit manual rollback and should be pruned as disk usage grows. A destroyed VM needs explicit reprovisioning and a database restore; the workflow will not silently replace it.
+State lives under `/var/lib/blaubeere`: `data/blaubeere.db` persists identity across releases, `data/datasets/finance-HASH.sqlite` stores immutable model snapshots, `bootstrap.env` contains the initial finance account credentials, and `deployed-revision` records the healthy commit. Retrieve credentials through an authorised Jio SSH session with `sudo cat /var/lib/blaubeere/bootstrap.env`; never commit them. Provisioning and assessment overrides follow the rules above; service settings are in `runtime.env`. Retained releases permit manual rollback and should be pruned as disk usage grows. A destroyed VM needs explicit reprovisioning and a database restore; the workflow will not silently replace it.
 
 For a manual deployment from a configured local Jio session:
 
