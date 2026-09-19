@@ -1,0 +1,80 @@
+{
+  "mart": "panel_evidencia",
+  "contract_version": 1,
+  "grain": [
+    "company_id",
+    "month"
+  ],
+  "rows": 30864,
+  "input_rows": 30864,
+  "columns": {
+    "company_id": "VARCHAR",
+    "group_id": "VARCHAR",
+    "month": "DATE",
+    "available_at": "DATE",
+    "tiene_actividad_caja": "BOOLEAN",
+    "n_tx_caja": "BIGINT",
+    "n_tx_fuera_perimetro": "BIGINT",
+    "n_sin_eur": "BIGINT",
+    "n_operativo_sin_eur": "BIGINT",
+    "n_ambiguos_sin_eur": "BIGINT",
+    "n_ambiguos": "BIGINT",
+    "n_atipicos": "BIGINT",
+    "n_atipicos_operativos": "BIGINT",
+    "n_atipicos_desconocidos": "BIGINT",
+    "n_conflictos_direccion": "BIGINT",
+    "meses_observados": "BIGINT",
+    "meses_con_actividad_hasta_m": "BIGINT",
+    "cobertura_eur_pct": "DOUBLE",
+    "cobertura_clasificacion_pct": "DOUBLE",
+    "volumen_ambiguo_pct": "DOUBLE",
+    "flujo_operativo_eur": "DOUBLE",
+    "servicio_deuda_eur": "DOUBLE",
+    "n_pagos_servicio": "BIGINT",
+    "n_servicio_sin_eur": "BIGINT",
+    "n_posibles_pagos_no_identificados": "BIGINT",
+    "n_financiacion_no_desglosada": "BIGINT",
+    "cobertura_servicio_eur_pct": "DOUBLE",
+    "tiene_erp": "BOOLEAN",
+    "cohorte_cobro_month": "DATE",
+    "cobro_available_at": "DATE",
+    "cobro_pct_60d": "DOUBLE",
+    "cobro_n_facturas": "BIGINT",
+    "cobro_antiguedad_dias": "BIGINT",
+    "deficit_operativo_definido": "BOOLEAN",
+    "deficit_sin_atipicos_definido": "BOOLEAN",
+    "sensible_atipicos": "BOOLEAN",
+    "motivos_operativo": "VARCHAR[]",
+    "motivos_servicio_deuda": "VARCHAR[]",
+    "motivos_cobro": "VARCHAR[]",
+    "estado_operativo": "VARCHAR",
+    "estado_servicio_deuda": "VARCHAR",
+    "estado_cobro": "VARCHAR",
+    "dimensiones_publicables": "VARCHAR[]"
+  },
+  "estados_por_dimension": {
+    "operativo": {
+      "insuficiente": 10883,
+      "parcial": 17251,
+      "publicable": 2730
+    },
+    "servicio_deuda": {
+      "insuficiente": 9938,
+      "parcial": 16635,
+      "publicable": 4291
+    },
+    "cobro": {
+      "insuficiente": 21264,
+      "parcial": 5537,
+      "publicable": 4063
+    }
+  },
+  "reglas": {
+    "min_historia_meses": 3,
+    "min_facturas_cohorte": 5,
+    "max_antiguedad_cohorte_dias": 90
+  },
+  "significado": "Publicable significa metrica completa en el perimetro observado; no score certificado ni cobertura de toda la empresa.",
+  "disponibilidad": "Solo mes actual/pasado y cohortes maduras; no se incorporan flags de observabilidad futura a los predictores.",
+  "limites": "Umbrales operativos de evidencia, no confianza estadistica calibrada. No hay snapshots historicos de deuda/caja ni versiones ERP."
+}

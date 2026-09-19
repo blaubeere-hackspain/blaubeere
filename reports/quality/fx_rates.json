@@ -1,0 +1,114 @@
+{
+  "tabla": {
+    "filas": 429,
+    "grano": "(moneda, month), identidad EUR y evidencia mensual sin estimaciones",
+    "columnas": [
+      "moneda",
+      "month",
+      "rate_por_eur",
+      "n_obs",
+      "fuente",
+      "available_at"
+    ]
+  },
+  "politica": "unknown_no_estimates",
+  "advertencia": "Solo identidad EUR. Las monedas extranjeras no tienen un tipo aplicable estimado; panel_cobro no consume esta tabla.",
+  "monedas_observadas": [
+    {
+      "moneda": "AED",
+      "n_obs": 72
+    },
+    {
+      "moneda": "ARS",
+      "n_obs": 1736
+    },
+    {
+      "moneda": "AUD",
+      "n_obs": 204
+    },
+    {
+      "moneda": "BRL",
+      "n_obs": 6096
+    },
+    {
+      "moneda": "CAD",
+      "n_obs": 1188
+    },
+    {
+      "moneda": "CHF",
+      "n_obs": 848
+    },
+    {
+      "moneda": "CLP",
+      "n_obs": 3740
+    },
+    {
+      "moneda": "COP",
+      "n_obs": 303
+    },
+    {
+      "moneda": "EUR",
+      "n_obs": 0
+    },
+    {
+      "moneda": "GBP",
+      "n_obs": 13567
+    },
+    {
+      "moneda": "HKD",
+      "n_obs": 169
+    },
+    {
+      "moneda": "HUF",
+      "n_obs": 76
+    },
+    {
+      "moneda": "ILS",
+      "n_obs": 388
+    },
+    {
+      "moneda": "JPY",
+      "n_obs": 132
+    },
+    {
+      "moneda": "MXN",
+      "n_obs": 351
+    },
+    {
+      "moneda": "MZN",
+      "n_obs": 1
+    },
+    {
+      "moneda": "NOK",
+      "n_obs": 234
+    },
+    {
+      "moneda": "NZD",
+      "n_obs": 803
+    },
+    {
+      "moneda": "PEN",
+      "n_obs": 999
+    },
+    {
+      "moneda": "PLN",
+      "n_obs": 598
+    },
+    {
+      "moneda": "SEK",
+      "n_obs": 564
+    },
+    {
+      "moneda": "SGD",
+      "n_obs": 509
+    },
+    {
+      "moneda": "USD",
+      "n_obs": 49057
+    }
+  ],
+  "checks": {
+    "eur_identidad_24_meses": true,
+    "tipos_extranjeros_estimados": 0
+  }
+}

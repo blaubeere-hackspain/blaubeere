@@ -13,3 +13,22 @@ playwright-report/
 
 # Regenerable intermediate data (upstream LFS policy).
 /data/interim/
+/data/runs/
+/reports/current.json
+/reports/.publish.lock
+/reports/quality/llm_muestra.json
+/reports/quality/llm_predicciones.json
+.venv/
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.ruff_cache/
+/.agents/
+/.claude/
+/.pi/
+/AGENTS.md
+/CLAUDE.md
+/analisis_datos.md
+/plan_scoring_hackathon.md
+/reto_y_dataset.md
+/x-ray-reto-embat.html

@@ -48,10 +48,10 @@ Sin flags.
 
 | flag | filas | % de la tabla |
 |---|---:|---:|
-| `fx_not_convertible` | 118146 | 13.16% |
+| `fx_not_convertible` | 108445 | 12.08% |
 | `date_order_invalid` | 34310 | 3.82% |
 | `open_month` | 5233 | 0.58% |
-| `fx_rate_invalid` | 3650 | 0.41% |
+| `fx_rate_invalid` | 3841 | 0.43% |
 | `paid_with_pending` | 300 | 0.03% |
 | `date_out_of_range` | 223 | 0.02% |
 | `amount_extreme` | 10 | 0.00% |
@@ -60,9 +60,9 @@ Sin flags.
 | flag | filas | % de la tabla |
 |---|---:|---:|
 | `category_missing` | 635530 | 24.86% |
+| `fx_not_convertible` | 160207 | 6.27% |
 | `status_missing` | 29839 | 1.17% |
 | `open_month` | 9242 | 0.36% |
-| `fx_not_convertible` | 1334 | 0.05% |
 | `fk_orphan` | 1314 | 0.05% |
 | `fx_rate_invalid` | 77 | 0.00% |
 | `amount_extreme` | 24 | 0.00% |
@@ -135,7 +135,7 @@ Empresas con actividad y numero de transacciones por mes cerrado. Los bordes del
 ## Huecos de datos en transacciones
 
 - Transacciones **sin categoria** (`category_norm` NULL): **635860** filas (**24.87 %** del total).
-- Transacciones **sin `amount_eur`** (no convertibles a EUR): **1334** filas (**0.05 %** del total).
+- Transacciones **sin `amount_eur`** (no convertibles a EUR): **160207** filas (**6.27 %** del total).
 
 ## Avisos para la capa de features
 
@@ -145,6 +145,6 @@ Hechos que cualquier consumidor de estos datos DEBE conocer antes de usarlos:
 - **Los saldos son un unico snapshot, no una serie historica.** Toda la tabla `balances` corresponde a una sola fecha de corte (2026-09-01); no hay evolucion mensual de saldos y por tanto no se pueden calcular tendencias de saldo.
 - **Cobertura parcial de facturas y deuda.** Solo el **61.04 %** de las 1286 empresas tiene facturas y el **29.39 %** tiene deuda registrada. La ausencia de registros en esas tablas NO significa cero facturacion o cero deuda: significa que la fuente no aporta datos para esa empresa.
 - **Los importes extremos estan marcados pero NO recortados.** Las filas con `amount_extreme` (y los centinelas de saldo) conservan su valor original; cualquier agregacion sensible a outliers debe tratarlos explicitamente.
-- **Facturas en moneda no EUR no tienen `amount_eur`.** El campo `amount_eur` de `invoices` solo se rellena cuando `accounting_currency` = 'EUR'; para el resto no hay conversión, porque no existe tabla de cambios histórica. No se puede sumar facturacion en EUR sobre el total de facturas.
+- **FX conservador.** El nominal EUR se conserva por identidad. Una conversion reportada hacia EUR requiere tipo positivo, finito y distinto de 1 entre monedas diferentes. El resto queda desconocido, sin tipos estimados. Los agregados incompletos no deben presentarse como totales ni como ceros.
 - **Un 24.87 % de las transacciones no tiene categoria** (`category_norm` NULL). Todo feature basado en categorías debe contemplar explícitamente el valor faltante.
 - Hay filas con claves huerfanas (`fk_orphan`): empresas, productos o contrapartes que no resuelven contra las tablas maestras. Estan marcadas, no eliminadas.

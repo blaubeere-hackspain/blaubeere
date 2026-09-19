@@ -8,7 +8,7 @@
       "balance_sentinels: 6 filas, valores={-999999999.0: 2, 1000207616.82: 1, 1012432308.0: 1, 1212546381.96: 1, 99999990850.0: 1}",
       "product_source: {'banking': 5760, 'debt': 2207, 'orphan': 29} (orphans=29)"
     ],
-    "output_path": "/Users/josemariaiznardosalar/Documents/embat-hack/data/clean/balances.parquet",
+    "output_path": "data/clean/balances.parquet",
     "rows_in": 7996,
     "rows_out": 7996
   },
@@ -17,7 +17,7 @@
     "notes": [
       "liquidity_class_unknown: ninguno"
     ],
-    "output_path": "/Users/josemariaiznardosalar/Documents/embat-hack/data/clean/banking_products.parquet",
+    "output_path": "data/clean/banking_products.parquet",
     "rows_in": 5987,
     "rows_out": 5987
   },
@@ -29,7 +29,7 @@
       "country_mapping: 'AT'->AT; 'Alemania'->DE; 'BE'->BE; 'DE'->DE; 'ES'->ES; 'ESPANYA'->ES; 'ESPAÑA'->ES; 'Espanya'->ES; 'España'->ES; 'España '->ES; 'FR'->FR; 'GB'->GB; 'IT'->IT; 'Italia'->IT; 'Malaysia'->MY; 'NL'->NL; 'PL'->PL; 'PT'->PT; 'Portugal'->PT; 'SE'->SE; 'Spain'->ES; 'US'->US",
       "country_rows: mapped=230 unknown=0 empty_or_null=1056"
     ],
-    "output_path": "/Users/josemariaiznardosalar/Documents/embat-hack/data/clean/companies.parquet",
+    "output_path": "data/clean/companies.parquet",
     "rows_in": 1286,
     "rows_out": 1286
   },
@@ -41,7 +41,7 @@
       "debt_class_unknown: ninguno",
       "outstanding_sign_counts: {'negative': 1351, 'positive': 145, 'zero': 743}"
     ],
-    "output_path": "/Users/josemariaiznardosalar/Documents/embat-hack/data/clean/debt_products.parquet",
+    "output_path": "data/clean/debt_products.parquet",
     "rows_in": 2239,
     "rows_out": 2239
   },
@@ -52,14 +52,14 @@
     "notes": [
       "settlement_product_orphans: 10"
     ],
-    "output_path": "/Users/josemariaiznardosalar/Documents/embat-hack/data/clean/debt_schedule_config.parquet",
+    "output_path": "data/clean/debt_schedule_config.parquet",
     "rows_in": 87,
     "rows_out": 87
   },
   "groups": {
     "flag_counts": {},
     "notes": [],
-    "output_path": "/Users/josemariaiznardosalar/Documents/embat-hack/data/clean/groups.parquet",
+    "output_path": "data/clean/groups.parquet",
     "rows_in": 250,
     "rows_out": 250
   }
