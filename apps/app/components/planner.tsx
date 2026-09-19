@@ -10,20 +10,22 @@ const amountPattern = "[0-9]+(\\.[0-9]{1,2})?";
 function Amount({ label, name, value, hint, max, integer }: { label: string; name: string; value: string; hint?: string; max?: number; integer?: boolean }) {
   return <div className="field"><label htmlFor={name}>{label}</label><input id={name} name={name} defaultValue={value} type={max === undefined ? "text" : "number"} min={max === undefined ? undefined : 0} max={max} step={integer ? 1 : "any"} inputMode={integer ? "numeric" : "decimal"} pattern={max === undefined ? amountPattern : undefined} aria-describedby={hint ? `${name}-hint` : undefined} required/>{hint && <small id={`${name}-hint`}>{hint}</small>}</div>;
 }
-export function Planner({ company, open, onClose, onCompare, onPreview }: { company: Company; open: boolean; onClose: () => void; onCompare: (c: Comparison) => void; onPreview: (p?: Plan) => void }) {
+export function Planner({ company, example, open, onClose, onCompare, onPreview }: { company: Company; example?: Comparison; open: boolean; onClose: () => void; onCompare: (c: Comparison) => void; onPreview: (p?: Plan) => void }) {
   const request = useRef<AbortController | null>(null);
   const [metric, setMetric] = useState("min_cash");
   const [target, setTarget] = useState(String(company.buffer_cents / 100));
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState("");
-  const [comparison, setComparison] = useState<Comparison | null>(null);
+  const [comparison, setComparison] = useState<Comparison | null>(example ?? null);
   const resultsRef = useRef<HTMLElement>(null);
   useEffect(() => {
     if (!open) setBusy(false);
     return () => request.current?.abort();
   }, [open]);
   async function compare(event: FormEvent<HTMLFormElement>) {
-    event.preventDefault(); request.current?.abort();
+    event.preventDefault();
+    if (example) return;
+    request.current?.abort();
     const controller = new AbortController(); request.current = controller;
     setError(""); setComparison(null); setBusy(true);
     const form = new FormData(event.currentTarget);
@@ -41,15 +43,16 @@ export function Planner({ company, open, onClose, onCompare, onPreview }: { comp
     <div className="panel-head"><p className="planner-breadcrumb"><span>Planning</span><span aria-hidden>/</span><strong title={company.name}>{company.name}</strong></p><button className="icon-button" aria-label="Close planning panel" onClick={onClose}><X size={20}/></button></div>
     <div className="panel-body">
       <div className="planner-intro"><span className="planner-symbol" aria-hidden><FlaskConical size={22}/></span><div><span className="eyebrow">Planning workspace</span><h2 id="planner-title">A goal. A few ways forward.</h2></div><p>Explore conditional changes for {company.name}. Your observed health and source records stay unchanged.</p></div>
+      {example && <p className="demo-notice">A prepared example with fixed assumptions. Preview either plan on the cash chart, or sign in to create your own.</p>}
       <form id="planning-form" onSubmit={compare} onChange={() => setComparison(null)} aria-busy={busy}>
-        <fieldset disabled={busy}><legend><span className="step-number">01</span>Define your goal</legend><div className="form-grid">
+        <fieldset disabled={busy || Boolean(example)}><legend><span className="step-number">01</span>Define your goal</legend><div className="form-grid">
           <label className="field">Metric<select value={metric} onChange={e => { setMetric(e.target.value); setTarget(e.target.value === "monthly_revenue" ? "" : String(company.buffer_cents / 100)); }}><option value="min_cash">Minimum cash throughout</option><option value="ending_cash">Cash at the deadline</option><option value="monthly_revenue">Monthly revenue</option><option disabled>Retention · cohort inputs needed</option><option disabled>Margin · P&amp;L history needed</option></select></label>
           <label className="field">Target ({company.currency})<input name="target" inputMode="decimal" pattern={amountPattern} value={target} onChange={e => setTarget(e.target.value)} required/></label>
           <label className="field">Deadline<input name="deadline" type="date" min={addDays(company.assessment_date, metric === "monthly_revenue" ? 30 : 7)} max={addDays(company.assessment_date, 180)} defaultValue={addDays(company.assessment_date, 90)} required/></label>
           <Amount label={`Cash floor (${company.currency})`} name="floor" value={String(company.buffer_cents / 100)} hint="Must hold every day, including the assessment date."/>
         </div><p className="field-note">{metric === "min_cash" ? "Definition: the lowest projected daily closing balance through the deadline." : metric === "ending_cash" ? "Definition: the projected closing cash balance on your deadline." : "Definition: monthly revenue in the last completed 30-day period. Starting revenue is entered by the finance team, not inferred from bank receipts."}</p></fieldset>
-        {metric === "monthly_revenue" && <fieldset disabled={busy}><legend>Business assumptions · entered by you</legend><div className="form-grid"><Amount label={`Starting monthly revenue (${company.currency})`} name="revenue" value="" hint="Enter a positive amount from your P&L."/><Amount label="Gross margin (%)" name="margin" value="" max={100} hint="0–100% of revenue."/><Amount label="Collection delay (days)" name="collectionTiming" value="" max={90} integer hint="0–90 days after each period."/><Amount label="Maximum monthly growth (%)" name="growth" value="10" max={30} hint="0–30% per month."/></div><p className="field-note">Incremental costs are paid each 30-day period; incremental receipts arrive after the stated delay. Growth compounds monthly; no churn relationship is assumed.</p></fieldset>}
-        <fieldset disabled={busy}><legend><span className="step-number">02</span>Set the limits you could work within</legend><div className="form-grid">
+        {metric === "monthly_revenue" && <fieldset disabled={busy || Boolean(example)}><legend>Business assumptions · entered by you</legend><div className="form-grid"><Amount label={`Starting monthly revenue (${company.currency})`} name="revenue" value="" hint="Enter a positive amount from your P&L."/><Amount label="Gross margin (%)" name="margin" value="" max={100} hint="0–100% of revenue."/><Amount label="Collection delay (days)" name="collectionTiming" value="" max={90} integer hint="0–90 days after each period."/><Amount label="Maximum monthly growth (%)" name="growth" value="10" max={30} hint="0–30% per month."/></div><p className="field-note">Incremental costs are paid each 30-day period; incremental receipts arrive after the stated delay. Growth compounds monthly; no churn relationship is assumed.</p></fieldset>}
+        <fieldset disabled={busy || Boolean(example)}><legend><span className="step-number">02</span>Set the limits you could work within</legend><div className="form-grid">
           <Amount label="Collect earlier · maximum days" name="collections" value="14" max={45} integer hint="0–45 days, subject to customer agreement."/>
           <Amount label="Discretionary spending cut · maximum %" name="spend" value="10" max={30} hint="0–30%. Payroll, taxes and debt stay unchanged."/>
           <Amount label={`New funding · maximum ${company.currency}`} name="funding" value="2500000" hint="Set to 0 for no new debt. Uncommitted; assumed day one, 8% annual interest, principal after the horizon."/>
@@ -62,6 +65,6 @@ export function Planner({ company, open, onClose, onCompare, onPreview }: { comp
         </div><details className="assumption-details"><summary>Calculation assumptions<ChevronDown className="disclosure-chevron" aria-hidden/></summary><ul>{comparison.assumptions.map(item => <li key={item}>{item}</li>)}</ul></details>
       </section>}
     </div>
-    <div className="planner-submit" aria-busy={busy}><p>Two candidate combinations.<span>Explicit assumptions.</span></p><button type="submit" form="planning-form" className="button" disabled={busy}>{busy ? <><LoaderCircle className="spinner" size={16} aria-hidden/>Comparing plans…</> : <>Compare plans<ArrowRight size={16} aria-hidden/></>}</button></div>
+    <div className="planner-submit" aria-busy={busy}>{example ? <><p>Sample comparison.<span>Fixed assumptions.</span></p><a className="button" href="/login">Sign in to create a plan<ArrowRight size={16} aria-hidden/></a></> : <><p>Two candidate combinations.<span>Explicit assumptions.</span></p><button type="submit" form="planning-form" className="button" disabled={busy}>{busy ? <><LoaderCircle className="spinner" size={16} aria-hidden/>Comparing plans…</> : <>Compare plans<ArrowRight size={16} aria-hidden/></>}</button></>}</div>
   </Dialog>;
 }

@@ -42,7 +42,7 @@ export function CashChart({ company, forecast, plan }: { company: Company; forec
       if (pos < x(company.assessment_date) || pos > right) return;
       setDay(Math.max(0, Math.min(forecast.horizon_days, Math.round((pos - x(company.assessment_date)) / (right - x(company.assessment_date)) * forecast.horizon_days))));
     }}>
-      <title id="cash-chart-title">Daily closing cash, history and {forecast.horizon_days}-day outlook</title>
+      <title id="cash-chart-title">{`Daily closing cash, history and ${forecast.horizon_days}-day outlook`}</title>
       <desc id="cash-chart-desc">Lowest baseline cash is {money(forecast.minimum.cash_cents, company.currency)} on {date(forecast.minimum.date)}. Required funding above the floor is {money(forecast.funding_needed_cents, company.currency)}. Use the forecast day control below to inspect values.</desc>
       <rect x={x(company.assessment_date)} y="18" width={right - x(company.assessment_date)} height="232" fill="var(--accent-soft)" opacity=".25"/>
       {ticks.map(v => <g key={v}><line x1="76" x2={right} y1={y(v)} y2={y(v)} stroke="var(--line)"/><text x="62" y={y(v) + 4} textAnchor="end">{money(v, company.currency, true)}</text></g>)}

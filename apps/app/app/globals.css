@@ -36,6 +36,10 @@ body { font-family: "Inter Variable", system-ui, sans-serif; background: #f1f1ee
 .auth-form .field { font-size: 13px; gap: 8px; }
 .auth-form .button { min-height: 50px; }
 .auth-form > .badge { align-self: flex-start; }
+.auth-demo { text-align: center; }
+.auth-demo-link { display: inline-flex; align-items: center; justify-content: center; gap: 8px; min-height: 44px; color: var(--accent); text-decoration: underline; text-underline-offset: 4px; font-size: 14px; }
+.demo-notice { display: flex; align-items: center; gap: 10px; padding: 12px 16px; margin-bottom: 24px; border-radius: 12px; background: var(--accent-soft); color: var(--accent); font-size: 13px; }
+.demo-notice svg { flex-shrink: 0; }
 .auth-footer { padding-top: 24px; border-top: 1px solid var(--line); color: var(--muted); font-size: 12px; line-height: 1.7; }
 .auth-signature { position: absolute; bottom: 20px; color: var(--subtle); font-size: 12px; text-align: center; }
 .consent-list { padding: 0; margin: 0; list-style: none; display: grid; gap: 12px; }

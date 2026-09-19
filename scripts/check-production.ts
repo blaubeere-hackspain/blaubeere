@@ -9,6 +9,9 @@ async function read(path: string, init?: RequestInit) {
 }
 const login = await (await read(`${app}/login`)).text();
 assert.ok(login.includes("blau"));
+assert.match(login, /<a href="\/demo"[^>]*>Access demo/);
+const demo = await (await read(`${app}/demo`)).text();
+assert.ok(demo.includes("Mediterránea Supply") && demo.includes("Cash over time"), "Demo must render its sample dashboard without an authenticated session");
 const homepage = await (await read(landing)).text();
 assert.ok(homepage.includes(app), "Landing must link to the deployed app");
 const pricing = await (await read(`${landing}/pricing`)).text();
@@ -22,7 +25,7 @@ for (const path of artworkUrls) {
   const artwork = await read(path);
   assert.ok(artwork.headers.get("content-type")?.startsWith("image/"), "Painting must be served as an image");
 }
-for (const [origin, html] of [[app, login], [landing, homepage]]) {
+for (const [origin, html] of [[app, login], [app, demo], [landing, homepage]]) {
   const icons = [...html.matchAll(/<link[^>]+rel="(?:icon|apple-touch-icon)"[^>]+href="([^"]+)"/g)].map(match => match[1]);
   assert.ok(icons.length >= 2, "Pages must advertise browser and touch icons");
   for (const icon of icons) {
@@ -38,6 +41,7 @@ const pages = [
   { origin: landing, path: "/", html: homepage, private: false },
   { origin: landing, path: "/pricing", html: pricing, private: false },
   { origin: app, path: "/login", html: login, private: true },
+  { origin: app, path: "/demo", html: demo, private: true },
   { origin: app, path: "/dashboard", html: await (await read(`${app}/dashboard`)).text(), private: true },
   { origin: app, path: "/connect", html: await (await read(`${app}/connect`)).text(), private: true },
 ];
@@ -75,10 +79,9 @@ assert.equal((await fetch(`${app}/api/me`)).status, 401);
 const challenge = await fetch(`${app}/mcp`, { method: "POST" });
 assert.equal(challenge.status, 401);
 assert.ok(challenge.headers.get("www-authenticate")?.includes(`${app}/.well-known/oauth-protected-resource/mcp`));
-if (login.includes("Enter demo workspace")) {
-  process.env.DEMO_LOGIN = "true";
+if (process.env.DEMO_LOGIN === "true") {
   process.env.APP_ORIGIN = process.env.API_ORIGIN = app;
   process.env.MCP_RESOURCE = `${app}/mcp`;
   await import("./check-api");
 }
-console.log("Production checks passed: app, landing, artwork, favicons, page metadata, social preview, built assets, OAuth origins, MCP discovery and unauthorised access.");
+console.log("Production checks passed: app, public demo, landing, artwork, favicons, page metadata, social preview, built assets, OAuth origins, MCP discovery and unauthorised access.");

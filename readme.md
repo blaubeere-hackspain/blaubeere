@@ -4,7 +4,16 @@ Internal finance planning: understand a dated cash gap, inspect the evidence, an
 
 ## Run locally
 
-Requires Bun 1.3.12 and Rust 1.94 or newer.
+For the frontend demo, only Bun 1.3.12 is needed:
+
+```sh
+bun install --frozen-lockfile
+bun run dev:app
+```
+
+Open http://localhost:3100/login and choose **Access demo →**, or go directly to http://localhost:3100/demo. No credentials, environment setup, API, database or deployment is required. The demo bundles synthetic data, four chart horizons and two prepared plans with fixed assumptions. Custom planning and assistant connections require a signed-in workspace.
+
+To run the full authenticated app, install Rust 1.94 or newer as well:
 
 ```sh
 bun install --frozen-lockfile
@@ -12,7 +21,7 @@ bun run setup
 bun run dev
 ```
 
-Setup creates an ignored `.env` with demo entry enabled. Choose **Enter demo workspace** to join without a password. Existing configuration is preserved; add `DEMO_LOGIN=true` to an older `.env` and restart both the app and API to enable demo entry. The regular sign-in form above the demo button accepts `finance@blaubeere.local` with the generated `BOOTSTRAP_PASSWORD`.
+Setup creates an ignored `.env` and preserves existing configuration. The regular sign-in form accepts `finance@blaubeere.local` with the generated `BOOTSTRAP_PASSWORD`. The public **Access demo** link works regardless of `DEMO_LOGIN`.
 
 | Workspace | Address | Purpose |
 | --- | --- | --- |
@@ -25,7 +34,7 @@ Both Rust services share the SQLite database in `.local/blaubeere.db`. Run comma
 
 ## Try the workflow
 
-1. Open the app and choose **Enter demo workspace**. The demo company starts with €2m cash and a €4m payment on 28 September, before its later receivable. Its €100k cash floor makes the funding requirement €2.1m.
+1. Sign in with the locally provisioned account to try custom plans, or choose **Access demo →** to explore the prepared example. The demo company starts with €2m cash and a €4m payment on 28 September, before its later receivable. Its €100k cash floor makes the funding requirement €2.1m.
 2. Inspect the chart, health drivers, coverage notes and source records. History is labelled reconstructed; the score and underlying records are illustrative.
 3. Select **Explore a plan**. Compare the default goal with earlier collections, reduced discretionary spending and conditional funding. Constraints are checked on every projected day.
 4. Set maximum new funding to zero and compare again to see the remaining gaps. Preview either plan on the cash chart; observed health and source records stay unchanged.
@@ -33,9 +42,9 @@ Both Rust services share the SQLite database in `.local/blaubeere.db`. Run comma
 
 ## Authentication and MCP
 
-`DEMO_LOGIN=true` enables password-free demo entry. Each visitor receives a separate authenticated, 12-hour session and membership only in `DEMO_001`, which must be labelled `data_mode: "demo"`. Visitors cannot enter existing accounts or see each other’s assistant grants. Signing out ends the session; entering again creates a new visitor. Demo identities and grants remain in SQLite until explicitly removed.
+`DEMO_LOGIN=true` enables the optional `POST /api/auth/demo` endpoint for authenticated integration and MCP demos. It is separate from the public `/demo` page, which never creates a session or calls the API. Each visitor receives a separate authenticated, 12-hour session and membership only in `DEMO_001`, which must be labelled `data_mode: "demo"`. Visitors cannot enter existing accounts or see each other’s assistant grants. Signing out ends the session; entering again creates a new visitor. Demo identities and grants remain in SQLite until explicitly removed.
 
-The local example and MVP production deployment enable this flag. Set it to `false` in `.env` (local) or `deploy/runtime.sh` (production, then redeploy) to return to team-only sign-in. The backend defaults to disabled when the flag is absent.
+The local example and MVP production deployment enable this flag. Set it to `false` in `.env` (local) or `deploy/runtime.sh` and the matching check in `deploy/jio.sh` (production, then redeploy) to disable the authenticated demo endpoint. The backend defaults to disabled when the flag is absent. The public frontend demo remains available.
 
 Team accounts are provisioned through `BOOTSTRAP_EMAIL`, `BOOTSTRAP_PASSWORD` and comma-separated `BOOTSTRAP_COMPANIES` on API startup. There is no public registration for team accounts. Provisioning an existing email preserves its password and memberships; changing bootstrap variables does not reset that account.
 
@@ -44,6 +53,15 @@ Browser sign-in uses Argon2 password hashes and opaque HttpOnly sessions. Compan
 Add `http://localhost:8081/mcp` as a remote MCP server in a client supporting OAuth discovery, dynamic client registration and S256 PKCE. The client opens the app's consent screen, where the user can allow or decline access. **Connect assistant** lists active grants and allows immediate revocation.
 
 Available tools are `list_companies`, `get_cash_outlook` and `compare_plans`. The `finance:read` scope includes non-mutating plan calculations. Access tokens are bound to the MCP resource; refresh tokens rotate, and replay revokes the grant. Tokens are stored as hashes. No tool changes records or executes payments.
+
+The public demo snapshot is generated from the same Rust finance model and bundled synthetic fixture. To refresh it after changing either:
+
+```sh
+cargo run -q -p blaubeere-api --example offline_demo > apps/app/lib/demo.json
+cargo test -p blaubeere-api --example offline_demo
+```
+
+The exporter never reads runtime company files or credentials.
 
 ## Assessment inputs
 

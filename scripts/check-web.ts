@@ -3,19 +3,19 @@ import { createRequire } from "node:module";
 import { LoginForm } from "../apps/app/components/login-form";
 import { api, ApiError, returnPath } from "../apps/app/lib/api";
 import { addDays, cents } from "../apps/app/lib/format";
-import { cashScale } from "../apps/app/components/cash-chart";
+import { CashChart, cashScale } from "../apps/app/components/cash-chart";
+import demo from "../apps/app/lib/demo.json";
 import { outsideDialog } from "../apps/app/components/dialog";
 
 const requireApp = createRequire(new URL("../apps/app/package.json", import.meta.url));
 const { createElement } = requireApp("react");
 const { renderToStaticMarkup } = requireApp("react-dom/server");
-const demoLogin = renderToStaticMarkup(createElement(LoginForm, { demo: true }));
-assert.ok(demoLogin.includes('name="email"') && demoLogin.includes('type="password"'), "The normal sign-in form stays visible with demo enabled");
-const demoButton = demoLogin.match(/<button[^>]*name="demo"[^>]*>/)?.[0];
-assert.ok(demoLogin.includes("Enter demo workspace") && demoButton?.toLowerCase().includes("formnovalidate"), "Demo entry must bypass credential validation");
-const teamLogin = renderToStaticMarkup(createElement(LoginForm, { demo: false }));
-assert.ok(teamLogin.includes('name="email"') && teamLogin.includes('type="password"'));
-assert.ok(!teamLogin.includes("Enter demo workspace"), "Disabled demo entry must show team sign-in");
+const login = renderToStaticMarkup(createElement(LoginForm));
+assert.ok(login.includes('name="email"') && login.includes('type="password"'), "The normal sign-in form stays visible");
+assert.match(login, /<a href="\/demo"[^>]*>Access demo/, "Demo must always be a direct link, independent of credentials and server flags");
+assert.ok(login.indexOf('href="/demo"') > login.indexOf("</form>"), "Demo entry belongs below the sign-in form");
+const chart = renderToStaticMarkup(createElement(CashChart, { company: demo.company, forecast: demo.forecasts[90] }));
+assert.ok(chart.includes('<title id="cash-chart-title">Daily closing cash, history and 90-day outlook</title>'), "The chart title must survive server rendering for hydration and assistive technology");
 
 for (const value of [null, "https://evil.example", "//evil.example", "javascript:alert(1)", "/\\evil.example", "/login"]) assert.equal(returnPath(value), "/dashboard");
 assert.equal(returnPath("/connect?state=example"), "/connect?state=example");
@@ -39,4 +39,4 @@ try {
     await assert.rejects(api("/companies/DEMO_001/plans"), error => error instanceof ApiError && error.status === status && error.message.includes("input format"));
   }
 } finally { globalThis.fetch = originalFetch; }
-console.log("Web checks passed: demo/team sign-in, redirects, exact money input, dated horizons, chart scales, dialog boundaries and validation errors.");
+console.log("Web checks passed: offline demo entry and team sign-in, redirects, exact money input, dated horizons, chart scales, dialog boundaries and validation errors.");
