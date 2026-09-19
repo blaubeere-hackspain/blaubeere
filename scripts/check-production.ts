@@ -11,10 +11,12 @@ const login = await (await read(`${app}/login`)).text();
 assert.ok(login.includes("Blaubeere"));
 const homepage = await (await read(landing)).text();
 assert.ok(homepage.includes(app), "Landing must link to the deployed app");
-const heroImage = homepage.match(/<img[^>]+src="([^"]+)"/)?.[1];
-assert.ok(heroImage, "Landing must include the oil painting");
-const artwork = await read(new URL(heroImage.replaceAll("&amp;", "&"), landing).href);
-assert.ok(artwork.headers.get("content-type")?.startsWith("image/"), "Painting must be served as an image");
+const paintings = new Set([...homepage.matchAll(/<img[^>]+src="([^"]+)"/g)].map(match => match[1]));
+assert.ok(paintings.size >= 4, "Landing must include the hero and three editorial paintings");
+for (const path of paintings) {
+  const artwork = await read(new URL(path.replaceAll("&amp;", "&"), landing).href);
+  assert.ok(artwork.headers.get("content-type")?.startsWith("image/"), "Painting must be served as an image");
+}
 for (const [origin, html] of [[app, login], [landing, homepage]]) {
   const assets = new Set([...html.matchAll(/(?:src|href)="([^" ]+\.(?:js|css)(?:\?[^" ]*)?)"/g)].map(match => match[1]));
   assert.ok(assets.size > 0, "Production page must include built assets");
