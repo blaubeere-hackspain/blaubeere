@@ -80,6 +80,17 @@ The data contracts are conservative:
 - Historical stocks are retrospective reconstructions, not certified point-in-time snapshots. Use `cohort_features_at(con, cutoff_date)` to read only matured collection cohorts.
 - Keep the dataset calendar in `xray/period.py`.
 
+The monthly outputs retain all companies and closed calendar months:
+
+| Mart | Purpose |
+| --- | --- |
+| `panel_flujos` | Cash-account flows, reconciliation, known subtotals and operational uncertainty bounds |
+| `panel_deuda` | Identified principal, interest and refunds, excluding duplicate product-ledger aggregation |
+| `panel_evidencia` | Independent evidence states for operations, observed debt service and matured collections |
+| `targets_proxy` | Robust future operating-deficit labels and continuous changes in 60-day collection conversion |
+
+The cash perimeter is `checking`, `saving`, and `wallet`; other products remain in separate diagnostics. These are observed-perimeter proxies, not complete company accounts. No current debt/cash snapshot is copied into historical rows and no unverified debt schedule is projected. Read future outcomes only through `targets_available_at(con, cutoff_date)` from `xray.marts.targets`, which enforces label maturity. Targets are not predictor columns.
+
 Source, tests, final clean/mart Parquet files, reports, and `reports/build_manifest.json` are versioned. The portable manifest records input/output hashes, source hashes, dependency versions, parameters, and verification; final Parquet files use Git LFS.
 
 Intermediate tables, virtual environments, caches, agent settings, local execution history, and backups stay out of Git. A local build retains its executed source and complete manifest in `data/runs/<run_id>/`, with the replaced artifacts in `before/`. The ignored `reports/current.json` is the atomic local publication pointer; `xray.paths` pins readers to that complete run. The files at the usual `data/clean`, `data/marts`, and `reports/quality` paths are compatibility copies published individually, not a joint read transaction. A fresh clone has no local pointer and uses those versioned paths until its first build.

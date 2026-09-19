@@ -1,6 +1,6 @@
 # X-Ray Embat: contratos vigentes de vistas
 
-Version 3, 19 de septiembre de 2026. Sustituye las cifras y reglas de las versiones anteriores. Los recuentos y distribuciones vigentes se consultan en los JSON de la ejecucion identificada por `reports/current.json`; no se mantienen copias manuales de cifras monetarias en este documento.
+Version 4, 19 de septiembre de 2026. Sustituye las cifras y reglas de las versiones anteriores. Los recuentos y distribuciones vigentes se consultan en los JSON de la ejecucion identificada por `reports/current.json`; no se mantienen copias manuales de cifras monetarias en este documento.
 
 ## 1. Producto y alcance
 
@@ -10,7 +10,7 @@ La identidad de caja conserva tambien nueva financiacion, aportaciones, inversio
 
 No hay etiquetas oficiales en el dataset. El deficit operativo sostenido y el deterioro del cobro son objetivos proxy que deberan declararse como tales, con disponibilidad y maduracion propias. La tabla de targets debe estar separada de la de predictores.
 
-Implementado: ingesta, limpieza, clasificacion de flujos, registro de evidencia FX, panel de cobro y observabilidad temporal. Pendiente: panel_flujos, panel_deuda, panel_evidencia, targets y scorer. La auditoria no implementa esos productos pendientes.
+Implementado: ingesta, limpieza, clasificacion de flujos, registro de evidencia FX, panel de cobro, observabilidad temporal, panel_flujos, panel_deuda, panel_evidencia y targets_proxy. Pendiente: scorer, validacion predictiva por grupos/tiempo e integracion de resultados con la aplicacion. No se han entrenado modelos ni modificado la interfaz en esta fase.
 
 ## 2. Politica de moneda
 
@@ -97,7 +97,50 @@ La API de features de cobro no exporta esos stocks retrospectivos. Las cohortes 
 
 El saldo bancario del 1 de septiembre de 2026 solo sirve como snapshot o inicio de una simulacion desde esa fecha, no como liquidez conocida en meses anteriores.
 
-## 6. Publicacion y reproducibilidad
+## 6. Nuevas vistas empresa-mes
+
+Las cuatro vistas conservan el calendario completo y la clave `(company_id, month)`, con `group_id` al lado. Sus esquemas, cobertura y motivos de ausencia se publican en `reports/quality/<vista>.json`. Los contratos son versionados y sus parametros quedan en el manifiesto de construccion.
+
+### panel_flujos
+
+Perimetro de caja: transacciones `booked` de productos bancarios `checking`, `saving` y `wallet`, en meses cerrados. Tarjetas, TPV, plataformas, productos de deuda y huerfanos no se suman como si fueran caja adicional: quedan en recuentos y netos conocidos fuera del perimetro. No se afirma que todos sean duplicados; se evita sumarlos sin conciliar su relacion con las cuentas de caja.
+
+Los buckets conservan operacion, financiacion, inversion, transferencias, ajustes y desconocidos por signo. Todos los subtotales monetarios llevan el sufijo `conocido_eur`; reconcilian con el neto convertible observado. Los totales `neto_caja_eur`, `cobros_operativos_eur` y `pagos_operativos_eur` solo aparecen cuando la informacion relevante es completa. Mes sin movimientos observados no se rellena como mes economicamente vacio.
+
+Las cotas operativas son `F - U_out` y `F + U_in`, donde F es el neto operativo identificado y U incluye unknown, transfer y non_economic. Requieren conversion conocida para todos esos apuntes. Son cotas condicionales: cada apunte observado dudoso puede ser operativo o no. No acotan cuentas ausentes ni los movimientos faltantes que pueda esconder un ajuste de conciliacion.
+
+Se calcula la misma sensibilidad sin atipicos operativos conocidos. No se recortan los originales ni se supone que un movimiento grande sea falso. La financiacion entrante tampoco equivale automaticamente a prestamo nuevo: puede incluir reintegros.
+
+### panel_deuda
+
+Servicio observado en el mismo perimetro de caja. Principal e intereses se reconocen por reglas `cat:` o `transf:` de debt_repayment e interest_charge; los reintegros se conservan aparte. El neto puede ser negativo si los reintegros superan los pagos.
+
+El total de servicio queda NULL si falta FX relevante o los pagos ambiguos pueden ocultar servicio de deuda. Los apuntes de productos de deuda aparecen solo como diagnostico separado, nunca sumados al servicio de caja. El desglose concilia con la financiacion de panel_flujos.
+
+No contiene outstanding actual replicado hacia atras, caja historica reconstruida desde el saldo final ni cuotas proyectadas de calendarios sin vigencia demostrada. Un cero de servicio observado no demuestra ausencia de deuda en la empresa.
+
+### panel_evidencia
+
+Publica estados separados para operacion, servicio de deuda y cobro: `publicable`, `parcial` o `insuficiente`, cada uno con motivos. No suprime una dimension observable porque falte otra.
+
+- Operacion y servicio: al menos tres meses transcurridos de historia y tres meses con actividad para publicar trayectoria; conversion/clasificacion relevante completa. Los atipicos que pueden cambiar el signo operativo degradan su evidencia.
+- Cobro: solo la ultima cohorte a 60 dias ya madura al cierre del mes, con su fecha, numero de facturas y antiguedad. Menos de cinco facturas o mas de 90 dias desde disponibilidad se consideran evidencia parcial.
+- Esos umbrales son reglas operativas de la version 1, no probabilidades de confianza calibradas.
+- No incorpora `horizonte_completo` ni otros flags de futuro como predictores. Las filas historicas permanecen iguales al anadir registros futuros.
+
+Publicable significa metrica utilizable dentro del perimetro y supuestos declarados, no un score completo ni cobertura garantizada de toda la empresa.
+
+### targets_proxy
+
+Tabla separada de los predictores, sin etiquetas oficiales ni umbrales aprendidos sobre todo el dataset.
+
+**Deficit:** neto operativo negativo, redondeado a centimos, en al menos dos de los tres meses siguientes. Exige actividad de caja en origen y horizonte, maduracion y ausencia de calentamiento. Se cuentan deficits seguros y posibles bajo las cotas. Dos meses seguramente negativos bastan aunque el tercero sea ambiguo; cuando la incertidumbre puede cambiar la etiqueta, el resultado es NULL. Tambien queda NULL si la etiqueta no es robusta con/sin atipicos. No mide severidad relativa ni salud financiera completa.
+
+**Cobro:** `100 * (conversion_60d_base - conversion_60d_futura)`, ponderado por importe EUR emitido. Positivo significa menor conversion a caja; negativo, mejora. La base son tres cohortes consecutivas que terminan en la ultima madura al origen; el futuro son las cohortes m+1..m+3. Se requieren las tres cohortes completas de cada tramo. No se inventa un umbral binario de deterioro y no se confunde conversion a caja con incumplimiento del plazo pactado.
+
+`available_at_deficit` es el cierre de m+3; `available_at_cobro` anade 60 dias a ese cierre. La consulta `targets_available_at(con, fecha_de_corte)` devuelve solo labels no nulos cuya maduracion ya ocurrio. Estas fechas deben respetarse al separar entrenamiento y validacion, manteniendo ademas grupos completos fuera del ajuste.
+
+## 7. Publicacion y reproducibilidad
 
 `python -B -m xray.cli build` construye en una ejecucion nueva, con copia del codigo, hashes de los CSV, parametros, versiones y dependencia DuckDB fijada. Ejecuta pruebas de contratos reales y regresiones sinteticas antes de publicar.
 
@@ -105,7 +148,7 @@ El saldo bancario del 1 de septiembre de 2026 solo sirve como snapshot o inicio 
 
 El repo versiona ahora el codigo, las pruebas, los datos finales y los informes. `reports/build_manifest.json` conserva la procedencia portable de los artefactos publicados: hashes de entradas, salidas y codigo, parametros, dependencias y verificacion. Las ejecuciones locales, sus backups y `reports/current.json` no se versionan. Un clon nuevo usa las rutas canonicas hasta su primera reconstruccion; esta genera los intermedios y crea su propio puntero local. Cada ejecucion local conserva ademas su copia `source/` y sus hashes.
 
-## 7. Verificacion y decisiones pendientes
+## 8. Verificacion y decisiones pendientes
 
 Las pruebas comprueban conservacion de originales, conversion por identidad, FX ambiguo, direccion de flujos, independencia de evidencia futura, calendario con huecos, coherencia de cohortes, cobertura dimensional, ausencia de falsos ceros, aging, disponibilidad y recuperacion ante fallo de publicacion.
 
