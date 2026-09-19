@@ -11,7 +11,7 @@ flock -n 9 || { echo 'Another deployment is running' >&2; exit 1; }
 
 if ! command -v cc >/dev/null || ! command -v unzip >/dev/null || [[ ! -x /usr/sbin/nginx ]] || ! dpkg-query -W libssl-dev >/dev/null 2>&1; then
   sudo -n apt-get update -qq
-  sudo -n env DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends build-essential pkg-config libssl-dev nginx unzip ca-certificates
+  sudo -n env DEBIAN_FRONTEND=noninteractive apt-get -o DPkg::Lock::Timeout=180 install -y --no-install-recommends build-essential pkg-config libssl-dev nginx unzip ca-certificates
 fi
 node -e 'if (Number(process.versions.node.split(".")[0]) < 22) process.exit(1)'
 node_bin="$(command -v node)"
