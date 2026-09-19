@@ -366,3 +366,84 @@ body { font-family: "Inter Variable", system-ui, sans-serif; background: #f1f1ee
   .planning-dialog .form-grid { grid-template-columns: 1fr; }
   .planner-intro { gap: 12px; }
 }
+
+/* Each metric keeps its explanation a single click away. */
+.stat-card { display: flex; flex-direction: column; }
+.metric-why { display: inline-flex; align-items: center; justify-content: flex-start; gap: 6px; min-height: 44px; padding: 6px 8px; margin-inline: -8px; border: 0; border-radius: 8px; color: var(--muted); background: transparent; font-size: 12px; text-align: left; }
+.metric-why svg { stroke-width: 1.5px; }
+.stat-card > .metric-why { align-self: flex-start; margin-top: auto; }
+.health-explain { padding-inline: 24px; }
+.metric-dialog { width: min(960px, 100%); }
+.metric-dialog .panel-body { padding: 0; }
+.metric-intro { display: grid; justify-items: start; gap: 12px; padding: 28px; }
+.metric-intro h2 { font-size: 23px; }
+.metric-headline { font-size: clamp(28px, 3vw, 36px); font-weight: 500; line-height: 1.25; overflow-wrap: anywhere; }
+.metric-intro > p { max-width: 690px; color: var(--muted); font-size: 14px; line-height: 1.65; }
+.metric-columns { display: grid; grid-template-columns: minmax(0, 1.3fr) minmax(300px, 1fr); border-top: 1px solid var(--line); }
+.metric-evidence { padding: 24px; min-width: 0; }
+.metric-section-heading { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 12px; margin-bottom: 20px; }
+.metric-section-heading h3 { font-size: 15px; }
+.metric-opening, .metric-closing, .metric-history-row { display: flex; justify-content: space-between; flex-wrap: wrap; align-items: center; gap: 8px 16px; padding: 14px; font-size: 12px; }
+.metric-opening { background: var(--canvas); border-radius: 12px; margin-bottom: 12px; }
+.metric-opening > span { display: flex; align-items: center; gap: 8px; }
+.metric-opening strong, .metric-closing strong, .metric-history-row strong { font-weight: 500; }
+.metric-opening small { font: inherit; color: var(--muted); }
+.metric-closing { border-top: 1px solid var(--line); margin-top: 12px; background: var(--accent-soft); border-radius: 12px; color: var(--accent); }
+.metric-history-row + .metric-history-row { border-top: 1px solid var(--line); }
+.metric-flow { border: 1px solid var(--line); border-radius: 12px; margin-top: 10px; overflow-wrap: anywhere; }
+.metric-flow[open] { border-color: #afbbac; }
+.metric-flow summary { display: grid; grid-template-columns: 30px minmax(0, 1fr) auto 14px; align-items: center; gap: 10px; padding: 14px 12px; min-height: 72px; border-radius: 11px; list-style: none; }
+.metric-flow summary::-webkit-details-marker, .metric-later > summary::-webkit-details-marker, .metric-coverage summary::-webkit-details-marker { display: none; }
+.metric-flow-icon { width: 30px; height: 30px; display: grid; place-items: center; border-radius: 9px; }
+.metric-flow-icon.receipt { color: var(--good); background: var(--good-soft); }
+.metric-flow-icon.payment { color: var(--warn); background: var(--warn-soft); }
+.metric-flow-label { display: grid; gap: 4px; min-width: 0; }
+.metric-flow-label strong { font-weight: 500; font-size: 12px; line-height: 1.45; }
+.metric-flow-label > span { color: var(--subtle); font-size: 11px; }
+.metric-flow-amount { font-size: 12px; font-weight: 500; white-space: nowrap; }
+.metric-flow-amount small { font: inherit; }
+.metric-flow .disclosure-chevron { width: 14px; }
+.metric-source { padding: 14px; border-top: 1px solid var(--line); background: #fafbf9; font-size: 12px; }
+.metric-source > span { display: flex; align-items: flex-start; gap: 8px; color: var(--muted); line-height: 1.6; }
+.metric-source > span svg { margin-top: 3px; }
+.metric-source dl, .metric-equation { display: grid; gap: 12px; margin: 16px 0 0; }
+.metric-source dl > div, .metric-equation > div { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 6px 16px; }
+.metric-source dt, .metric-equation dt { color: var(--muted); }
+.metric-source dd, .metric-equation dd { margin: 0; font-variant-numeric: tabular-nums; }
+.metric-driver-detail > p { padding: 0 14px 14px; color: var(--muted); font-size: 12px; line-height: 1.6; }
+.metric-explanation { border-left: 1px solid var(--line); min-width: 0; background: #fdfdfc; }
+.metric-explanation > section { padding: 24px; }
+.metric-explanation > section + section { border-top: 1px solid var(--line); }
+.metric-explanation h3 { margin: 10px 0 16px; font-size: 16px; }
+.metric-equation { font-size: 12px; margin-bottom: 20px; gap: 16px; }
+.metric-equation dd { font-weight: 500; text-align: right; }
+.metric-equation .equation-result { padding-top: 14px; border-top: 1px solid var(--line); }
+.equation-result dt, .equation-result dd { color: var(--ink); font-weight: 500; }
+.metric-coverage { margin-top: 14px; }
+.metric-coverage details + details { border-top: 1px solid var(--line); }
+.metric-coverage summary { display: flex; align-items: center; justify-content: space-between; gap: 12px; min-height: 48px; list-style: none; font-size: 12px; }
+.metric-coverage details p { padding-bottom: 12px; font-size: 12px; color: var(--muted); }
+.metric-later { margin-top: 20px; }
+.metric-later > summary { display: flex; align-items: center; justify-content: space-between; gap: 12px; min-height: 48px; font-size: 12px; list-style: none; }
+.metric-list-note, .metric-empty { font-size: 12px; color: var(--muted); padding: 12px 4px; line-height: 1.65; }
+.metric-caveat { padding: 14px; margin-top: 16px; border-radius: 12px; color: var(--muted); background: var(--canvas); font-size: 12px; line-height: 1.65; }
+.metric-footnote { border-top: 1px solid var(--line); padding: 20px 28px; color: var(--subtle); font-size: 12px; }
+@media (hover: hover) and (pointer: fine) {
+  .metric-why:not(:disabled):hover { color: var(--ink); background: oklch(0 0 0 / .04); }
+  .metric-flow summary:hover { background: var(--canvas); }
+}
+@media (prefers-reduced-motion: no-preference) {
+  .metric-why { transition: transform 150ms var(--ease-out), background-color 140ms ease; }
+  .metric-why:active:not(:focus-visible):not(:disabled) { transform: scale(.96); }
+}
+@media (max-width: 760px) {
+  .metric-columns { grid-template-columns: 1fr; }
+  .metric-explanation { border-left: 0; border-top: 1px solid var(--line); }
+  .metric-intro, .metric-evidence, .metric-explanation > section { padding: 24px 16px; }
+  .metric-dialog .panel-body { padding: 0; }
+  .metric-flow summary { grid-template-columns: 30px minmax(0, 1fr) 14px; }
+  .metric-flow-amount { grid-column: 2; grid-row: 2; }
+  .metric-flow .disclosure-chevron { grid-column: 3; grid-row: 1 / 3; }
+  .metric-footnote { padding: 20px 16px; }
+  .metric-intro h2 { font-size: 21px; }
+}

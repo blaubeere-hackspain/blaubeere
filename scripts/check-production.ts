@@ -12,6 +12,7 @@ assert.ok(login.includes("blau"));
 assert.match(login, /<a href="\/demo"[^>]*>Access demo/);
 const demo = await (await read(`${app}/demo`)).text();
 assert.ok(demo.includes("Mediterránea Supply") && demo.includes("Cash over time"), "Demo must render its sample dashboard without an authenticated session");
+for (const metric of ["Usable cash today", "Funding needed", "First cash floor breach", "Minimum projected cash", "Health score"]) assert.ok(demo.includes(`aria-label="Why this ${metric === "Health score" ? "score" : "number"}: ${metric}"`), "Every metric needs its own explanation button");
 const homepage = await (await read(landing)).text();
 assert.ok(homepage.includes(app), "Landing must link to the deployed app");
 const pricing = await (await read(`${landing}/pricing`)).text();

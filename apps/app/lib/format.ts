@@ -1,5 +1,5 @@
-export function money(cents: number, currency = "EUR", compact = false) {
-  return new Intl.NumberFormat("en-IE", { style: "currency", currency, maximumFractionDigits: compact ? 1 : 0, notation: compact ? "compact" : "standard" }).format(cents / 100);
+export function money(cents: number, currency = "EUR", compact = false, exact = false) {
+  return new Intl.NumberFormat("en-IE", { style: "currency", currency, maximumFractionDigits: compact ? 1 : exact ? 2 : 0, ...(exact ? { minimumFractionDigits: 0 } : {}), notation: compact ? "compact" : "standard" }).format(cents / 100);
 }
 export function date(value: string, year = false) {
   return new Intl.DateTimeFormat("en-GB", { day: "numeric", month: "short", ...(year ? { year: "numeric" } : {}), timeZone: "UTC" }).format(new Date(`${value}T00:00:00Z`));

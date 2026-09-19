@@ -60,3 +60,21 @@ This supersedes the original inset-shell design above. Internal cards and the pl
 Passed: web checks, TypeScript checks, app production build and a desktop Chrome visual check of the frame removal. Responsive and collapsed rules were inspected in code. No new animation was introduced. Mobile and collapsed visual checks were not rerun for this CSS-only change.
 
 Approve for the inspected coverage.
+
+
+## Metric explanation popups
+
+Reference: the supplied coaching dashboard's compact evidence rows and adjacent detail column. The user's follow-up specifies a popup button on each metric, so the main dashboard keeps its charts and gains five contextual explanation buttons. The popup follows the existing right drawer behaviour.
+
+| Severity | Location | Before | After | Why |
+| --- | --- | --- | --- | --- |
+| MEDIUM, fixed | `apps/app/components/dashboard.tsx:90`, `apps/app/components/metric-breakdown.tsx:26` | Summary cards and health score had no direct explanation action | Named, 44px “Why this number/score” buttons on all five values | Make each explanation discoverable at the value it describes. |
+| MEDIUM, fixed | `apps/app/components/metric-breakdown.tsx:63`, `apps/app/app/globals.css:382` | Source tables were separated from the metric's calculation | Compact cash/driver rows beside an explicit calculation and coverage column in a right popup; stacked columns on narrow screens | Group the evidence with the number while preserving space for the chart. |
+| MEDIUM, fixed | `apps/app/components/metric-breakdown.tsx:14` | Cash sources could be read without the cutoff and settlement context | Dated remaining amounts, known-on dates, overdue timing, later receipts and reconciliation differences | Explain the baseline without inventing attribution or folding later receipts into an earlier cash gap. |
+| MEDIUM, fixed | `apps/app/components/metric-breakdown.tsx:65` | Health showed a reported score and drivers without checking their combined effect | Previous score plus reported effects, current score, and explicit unattributed changes/missing references | Keep missing evidence visible; never present coverage as a confidence score. |
+
+Verification: web checks pass for all five rendered popups and named triggers; cash attribution matches every day of all four bundled Rust forecast horizons. Additional checks cover partial settlements, overdue timing, internal transfers, future knowledge, later receipts, no breach, and missing health drivers. TypeScript and optimized production builds passed. Code reviewed for keyboard-named controls, native dialog focus containment/Escape, disabled triggers during refresh, source disclosures, no hidden API calls, responsive columns, fine-pointer hover gating and inherited reduced-motion/keyboard-instant behaviour. Added a production smoke assertion for all five metric buttons.
+
+Not verified: live popup clicking, focus restoration, desktop/mobile appearance, hover/active rendering, screen-reader output, Safari/Firefox, and 10%-speed motion replay. Browser control timed out; native Chrome access could not find a window. No new viewport override was applied during this review.
+
+Approve for the inspected code and automated checks. Visual and browser-interaction coverage remains unverified.
