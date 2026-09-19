@@ -6,21 +6,21 @@ import type { CompanySummary, Identity } from "../lib/types";
 
 type Props = {
   companies: CompanySummary[] | null; selected: string; identity: Identity | null;
-  canPlan: boolean; logoutBusy: boolean; offline?: boolean;
+  canPlan: boolean; logoutBusy: boolean; offline?: boolean; overviewHref?: string;
   onCompany: (id: string) => void; onPlan: () => void; onConnections: () => void;
   onLogout: () => void; onNavigate: () => void;
 };
 
-export function Sidebar({ offline = false, companies, selected, identity, canPlan, logoutBusy, onCompany, onPlan, onConnections, onLogout, onNavigate }: Props) {
+export function Sidebar({ overviewHref, offline = false, companies, selected, identity, canPlan, logoutBusy, onCompany, onPlan, onConnections, onLogout, onNavigate }: Props) {
   const demo = offline || identity?.email.endsWith("@demo.blaubeere.local");
   return <>
     <a className="brand sidebar-brand" href={offline ? "/demo" : "/dashboard"} aria-label="blau workspace"><Image className="brand-logo" src={logo} alt="blau"/></a>
     <div className="sidebar-scroll">
       <nav className="sidebar-section" aria-label="Workspace">
         <span className="nav-label">Workspace</span>
-        <a className="nav-link active" href="#main" aria-current="page" onClick={onNavigate}><Activity aria-hidden/>Cash outlook</a>
+        <a className={`nav-link ${overviewHref ? "" : "active"}`} href={overviewHref ?? "#main"} aria-current={overviewHref ? undefined : "page"} onClick={onNavigate}><Activity aria-hidden/>Cash outlook</a>
         <button className="nav-link" onClick={onPlan} disabled={!canPlan}><Plus aria-hidden/>Explore a plan</button>
-        <a className="nav-link" href="#evidence" onClick={onNavigate} aria-disabled={!canPlan} tabIndex={canPlan ? undefined : -1}><FileText aria-hidden/>Sources &amp; evidence</a>
+        <a className="nav-link" href={overviewHref ? `${overviewHref}#evidence` : "#evidence"} onClick={onNavigate} aria-disabled={!canPlan} tabIndex={canPlan ? undefined : -1}><FileText aria-hidden/>Sources &amp; evidence</a>
         <button className="nav-link" onClick={onConnections} disabled={!offline && !identity}><Plug aria-hidden/>Connected assistants</button>
       </nav>
       <nav className="sidebar-section" aria-label="Companies">

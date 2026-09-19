@@ -23,11 +23,46 @@ pub struct Company {
     pub data_mode: String,
     pub opening_cash_cents: i64,
     pub buffer_cents: i64,
+    #[serde(default, skip_serializing_if = "Vec::is_empty")]
+    pub health_assessments: Vec<HealthAssessment>,
     pub health: Value,
     pub history: Vec<Value>,
     pub drivers: Vec<Value>,
     pub coverage: Vec<Value>,
     pub flows: Vec<Flow>,
+}
+// A model-returned rating and its evidence, frozen at that day's cutoff.
+#[derive(Clone, Serialize, Deserialize)]
+pub struct HealthAssessment {
+    pub date: NaiveDate,
+    pub model_version: String,
+    pub history_mode: String,
+    pub health: HealthRating,
+    pub drivers: Vec<HealthDriver>,
+    pub coverage: Vec<HealthCoverage>,
+    pub flows: Vec<Flow>,
+}
+#[derive(Clone, Serialize, Deserialize)]
+pub struct HealthRating {
+    pub score: f64,
+    pub previous_score: Option<f64>,
+    pub period: String,
+    pub label: String,
+    pub note: String,
+}
+#[derive(Clone, Serialize, Deserialize)]
+pub struct HealthDriver {
+    pub label: String,
+    pub detail: String,
+    pub points: Option<f64>,
+    pub source_ids: Vec<String>,
+}
+#[derive(Clone, Serialize, Deserialize)]
+pub struct HealthCoverage {
+    pub label: String,
+    pub status: String,
+    pub as_of: Option<NaiveDate>,
+    pub detail: String,
 }
 #[derive(Clone, Serialize, Deserialize)]
 pub struct Flow {
@@ -63,40 +98,91 @@ pub fn load(input: &str) -> anyhow::Result<Vec<Company>> {
             matches!(c.history_mode.as_str(), "as_known" | "reconstructed"),
             "Unknown history mode"
         );
-        let mut flows = HashSet::new();
-        anyhow::ensure!(c.flows.len() <= 10_000, "Too many flows in one assessment");
-        for f in &c.flows {
-            anyhow::ensure!(flows.insert(&f.id), "Duplicate cash flow: {}", f.id);
+        validate_flows(&c.flows)?;
+        let mut dates = HashSet::new();
+        for assessment in &c.health_assessments {
             anyhow::ensure!(
-                (-MAX_MONEY..=MAX_MONEY).contains(&f.amount_cents)
-                    && (0..=f.amount_cents.abs()).contains(&f.settled_cents),
-                "Invalid flow amount or settlement"
+                dates.insert(assessment.date) && assessment.date <= c.assessment_date,
+                "Duplicate or future health assessment date"
             );
             anyhow::ensure!(
-                matches!(
-                    f.kind.as_str(),
-                    "receivable"
-                        | "payable"
-                        | "payroll"
-                        | "tax"
-                        | "debt"
-                        | "discretionary"
-                        | "operating_receipt"
-                        | "internal_transfer"
-                ),
-                "Unknown flow kind"
+                !assessment.model_version.trim().is_empty()
+                    && matches!(
+                        assessment.history_mode.as_str(),
+                        "as_known" | "reconstructed"
+                    ),
+                "Health assessment needs a model version and history mode"
             );
             anyhow::ensure!(
-                matches!(f.timing.as_str(), "contractual" | "estimated"),
-                "Unknown timing basis"
+                (0.0..=100.0).contains(&assessment.health.score)
+                    && assessment
+                        .health
+                        .previous_score
+                        .is_none_or(|score| (0.0..=100.0).contains(&score)),
+                "Health scores must be between 0 and 100"
+            );
+            anyhow::ensure!(
+                assessment.drivers.iter().all(|driver| driver
+                    .points
+                    .is_none_or(|points| (-100.0..=100.0).contains(&points))),
+                "Invalid score driver effect"
+            );
+            anyhow::ensure!(
+                assessment.coverage.iter().all(|source| matches!(
+                    source.status.as_str(),
+                    "available" | "missing" | "stale"
+                ) && source
+                    .as_of
+                    .is_none_or(|date| date <= assessment.date)),
+                "Invalid health evidence coverage"
+            );
+            validate_flows(&assessment.flows)?;
+            anyhow::ensure!(
+                assessment
+                    .flows
+                    .iter()
+                    .all(|flow| flow.known_on <= assessment.date),
+                "Health evidence cannot include future knowledge"
             );
         }
-        anyhow::ensure!(
-            c.flows.iter().map(|f| f.amount_cents.abs()).sum::<i64>() <= 100 * MAX_MONEY,
-            "Assessment amount exceeds supported bounds"
-        );
     }
     Ok(companies)
+}
+
+fn validate_flows(flows: &[Flow]) -> anyhow::Result<()> {
+    let mut ids = HashSet::new();
+    anyhow::ensure!(flows.len() <= 10_000, "Too many flows in one assessment");
+    for f in flows {
+        anyhow::ensure!(ids.insert(&f.id), "Duplicate cash flow: {}", f.id);
+        anyhow::ensure!(
+            (-MAX_MONEY..=MAX_MONEY).contains(&f.amount_cents)
+                && (0..=f.amount_cents.abs()).contains(&f.settled_cents),
+            "Invalid flow amount or settlement"
+        );
+        anyhow::ensure!(
+            matches!(
+                f.kind.as_str(),
+                "receivable"
+                    | "payable"
+                    | "payroll"
+                    | "tax"
+                    | "debt"
+                    | "discretionary"
+                    | "operating_receipt"
+                    | "internal_transfer"
+            ),
+            "Unknown flow kind"
+        );
+        anyhow::ensure!(
+            matches!(f.timing.as_str(), "contractual" | "estimated"),
+            "Unknown timing basis"
+        );
+    }
+    anyhow::ensure!(
+        flows.iter().map(|f| f.amount_cents.abs()).sum::<i64>() <= 100 * MAX_MONEY,
+        "Assessment amount exceeds supported bounds"
+    );
+    Ok(())
 }
 
 #[derive(Clone, Serialize, Deserialize)]
@@ -402,6 +488,52 @@ mod tests {
         load(include_str!("../../../fixtures/companies.json"))
             .unwrap()
             .remove(0)
+    }
+    #[test]
+    fn dated_health_snapshots_are_preserved_and_validated() {
+        let c = company();
+        let payload = assess(&c, 90, c.buffer_cents).unwrap();
+        assert_eq!(
+            payload["company"]["health_assessments"][4]["health"]["score"],
+            58.0
+        );
+        assert_eq!(
+            payload["company"]["health_assessments"][4]["drivers"][0]["points"],
+            -1.0
+        );
+        let input = serde_json::to_value(vec![c]).unwrap();
+        for (path, value) in [
+            ("/0/health_assessments/0/health/score", json!(101)),
+            ("/0/health_assessments/0/date", json!("2026-09-01")),
+            (
+                "/0/health_assessments/0/flows/0/known_on",
+                json!("2026-06-03"),
+            ),
+            ("/0/health_assessments/0/flows/0/settled_cents", json!(-1)),
+            (
+                "/0/health_assessments/0/coverage/0/as_of",
+                json!("2026-06-03"),
+            ),
+            ("/0/health_assessments/0/drivers/0/points", json!(101)),
+        ] {
+            let mut invalid = input.clone();
+            *invalid.pointer_mut(path).unwrap() = value;
+            assert!(load(&invalid.to_string()).is_err(), "Accepted {path}");
+        }
+        let mut duplicate = input.clone();
+        duplicate[0]["health_assessments"][1]["date"] =
+            duplicate[0]["health_assessments"][0]["date"].clone();
+        assert!(load(&duplicate.to_string()).is_err());
+        let mut legacy = input;
+        legacy[0]
+            .as_object_mut()
+            .unwrap()
+            .remove("health_assessments");
+        assert!(
+            load(&legacy.to_string()).unwrap()[0]
+                .health_assessments
+                .is_empty()
+        );
     }
     #[test]
     fn early_shortfalls_survive_later_receipts_and_future_knowledge_is_excluded() {

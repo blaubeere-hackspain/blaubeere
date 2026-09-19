@@ -78,3 +78,18 @@ Verification: web checks pass for all five rendered popups and named triggers; c
 Not verified: live popup clicking, focus restoration, desktop/mobile appearance, hover/active rendering, screen-reader output, Safari/Firefox, and 10%-speed motion replay. Browser control timed out; native Chrome access could not find a window. No new viewport override was applied during this review.
 
 Approve for the inspected code and automated checks. Visual and browser-interaction coverage remains unverified.
+
+
+## Daily health explanation pages (supersedes metric popups)
+
+| Severity | Location | Before | After | Why |
+| --- | --- | --- | --- | --- |
+| MEDIUM, fixed | `apps/app/components/dashboard.tsx:98` | Five independent metric popup buttons | Cash cards stay informational; each saved health rating is a named link to a dated page | Follow the model rating as the entry point, with a shareable URL for every data point. |
+| MEDIUM, fixed | `apps/app/components/health-explanation.tsx:8`, `apps/app/lib/health.ts:5` | Only the latest score had drivers and sources | Each date selects its own response, with a native date selector, previous/next links and explicit missing-explanation states | Historical evidence must not silently change to today's evidence. |
+| LOW, fixed | `apps/app/app/globals.css:371` | Popup layout and cash attribution controls | Full-page assessment inside the existing borderless shell; compact disclosures beside the rating context; stacked columns at 760px | Preserve the reference's information hierarchy and existing app typography. |
+
+Verification: web checks render every sample date, distinguish historical responses, cover missing explanations, absent/unknown dates, unweighted drivers, unavailable sources, future knowledge filtering, and login return paths. Rust checks cover snapshot round trips and reject invalid/duplicate/future dates, out-of-range scores, invalid settlements and future source knowledge. Existing auth/company-isolation tests pass. Code inspected: named score links, 44px controls, native keyboard date selection and disclosures, neutral treatment for unweighted drivers, loading/error/empty states, responsive stacking and fine-pointer hover gating. No page or score-selection animation is introduced; existing button motion and focus rules are retained.
+
+Not verified: browser navigation, focus after routing, hover/active rendering, desktop/mobile visual layout, screen-reader output, Safari/Firefox and slow-motion review. The browser connector timed out before opening the preview. No viewport override was applied.
+
+Approve for inspected code and automated coverage only.

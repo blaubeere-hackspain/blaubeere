@@ -6,6 +6,13 @@ export type Forecast = {
 };
 export type CompanySummary = { id: string; name: string; group: string; currency: string; data_mode: string };
 export type Flow = { id: string; label: string; amount_cents: number; settled_cents: number; date: string; known_on: string; kind: string; timing: string; source: string };
+export type HealthAssessment = {
+  date: string; model_version: string; history_mode: string;
+  health: { score: number; previous_score: number | null; period: string; label: string; note: string };
+  drivers: { label: string; detail: string; points: number | null; source_ids: string[] }[];
+  coverage: { label: string; status: string; as_of: string | null; detail: string }[];
+  flows: Flow[];
+};
 export type Company = CompanySummary & {
   assessment_date: string; model_version: string; history_mode: string;
   opening_cash_cents: number; buffer_cents: number;
@@ -14,6 +21,7 @@ export type Company = CompanySummary & {
   drivers: { label: string; detail: string; points: number; source_ids: string[] }[];
   coverage: { label: string; status: string; as_of: string | null; detail: string }[];
   flows: Flow[];
+  health_assessments?: HealthAssessment[];
 };
 export type Assessment = { company: Company; forecast: Forecast };
 export type Identity = { email: string; company_ids: string[]; mcp_resource: string };

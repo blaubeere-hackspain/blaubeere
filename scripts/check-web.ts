@@ -5,7 +5,9 @@ import { api, ApiError, returnPath } from "../apps/app/lib/api";
 import { addDays, cents, money } from "../apps/app/lib/format";
 import { CashChart, cashScale } from "../apps/app/components/cash-chart";
 import demo from "../apps/app/lib/demo.json";
-import { cashEvidence, MetricBreakdown, MetricWhy } from "../apps/app/components/metric-breakdown";
+import { HealthExplanation } from "../apps/app/components/health-explanation";
+import { healthHref, healthTimeline, validHealthDate } from "../apps/app/lib/health";
+import type { Company } from "../apps/app/lib/types";
 import { outsideDialog } from "../apps/app/components/dialog";
 
 const requireApp = createRequire(new URL("../apps/app/package.json", import.meta.url));
@@ -18,40 +20,36 @@ assert.ok(login.indexOf('href="/demo"') > login.indexOf("</form>"), "Demo entry 
 const chart = renderToStaticMarkup(createElement(CashChart, { company: demo.company, forecast: demo.forecasts[90] }));
 assert.ok(chart.includes('<title id="cash-chart-title">Daily closing cash, history and 90-day outlook</title>'), "The chart title must survive server rendering for hydration and assistive technology");
 
-// The displayed cash explanation must reconcile to the authoritative Rust forecast.
-for (const forecast of Object.values(demo.forecasts)) {
-  for (const point of forecast.points) assert.equal(cashEvidence(demo.company, point.date, forecast.points.at(-1)!.date).closing, point.cash_cents);
+// A historical rating must resolve to its own saved model response, never today's drivers.
+const timeline = healthTimeline(demo.company);
+assert.equal(timeline.length, 6);
+assert.equal(timeline.filter(point => point.date === demo.company.assessment_date).length, 1);
+assert.deepEqual(timeline.map(point => point.score), [68, 65, 61, 59, 58, 56]);
+for (const point of timeline) {
+  const page = renderToStaticMarkup(createElement(HealthExplanation, { company: demo.company, scoreDate: point.date, demo: true }));
+  assert.ok(page.includes(point.assessment!.health.note), "Each page must show the saved explanation for its own date");
+  assert.ok(page.includes('aria-label="Assessment navigation"') && page.includes('id="score-date"'));
+  assert.ok(!page.includes('<dialog'), "A score opens a page, not a popup");
 }
-assert.equal(money(1, "EUR", false, true), "€0.01", "Explanations must not round a cent discrepancy to zero");
+const legacy: Company = { ...demo.company, health_assessments: undefined };
+const historical = renderToStaticMarkup(createElement(HealthExplanation, { company: legacy, scoreDate: "2026-07-02" }));
+assert.ok(historical.includes("Explanation not available") && !historical.includes(demo.company.drivers[0].detail), "Missing historical explanations cannot borrow current evidence");
+assert.ok(healthTimeline(legacy).at(-1)?.assessment, "Existing current assessments remain supported");
+const noDate = renderToStaticMarkup(createElement(HealthExplanation, { company: demo.company, scoreDate: "2026-07-03" }));
+assert.ok(noDate.includes("No score recorded for this date"));
+const missing = structuredClone(demo.company) as Company;
+const latest = missing.health_assessments!.at(-1)!;
+latest.drivers = [{ label: "Unweighted reason", detail: "No numerical attribution supplied", points: null, source_ids: ["absent", "future"] }];
+latest.flows = [{ ...demo.company.flows[0], id: "future", known_on: "2026-09-01", source: "DO NOT SHOW FUTURE EVIDENCE" }];
+const gaps = renderToStaticMarkup(createElement(HealthExplanation, { company: missing, scoreDate: latest.date }));
+assert.ok(gaps.includes("Change without numerical attribution") && gaps.includes("No numerical effect was returned"));
+assert.ok(gaps.includes("Source absent was not included") && !gaps.includes("DO NOT SHOW FUTURE EVIDENCE"));
+assert.equal(healthHref("company/id", "2026-08-31"), "/dashboard/health/2026-08-31?company=company%2Fid");
+for (const value of ["2026-02-30", "2026-08-31T12:00:00Z", "invalid", "2026-13-01"]) assert.equal(validHealthDate(value), false);
+assert.equal(validHealthDate("2026-08-31"), true);
+assert.equal(returnPath("/dashboard/health/2026-08-31?company=DEMO_001"), "/dashboard/health/2026-08-31?company=DEMO_001");
+assert.equal(money(1, "EUR", false, true), "€0.01");
 assert.equal(money(100_029, "EUR", false, true), "€1,000.29");
-const flow = demo.company.flows[0];
-const evidenceCompany = { ...demo.company, flows: [
-  { ...flow, id: "part-paid", amount_cents: -10_000, settled_cents: 2_000, date: "2026-08-01" },
-  { ...flow, id: "late", amount_cents: 5_000, date: "2026-09-03" },
-  { ...flow, id: "settled", amount_cents: 1_000, settled_cents: 1_000 },
-  { ...flow, id: "future-knowledge", known_on: "2026-09-02" },
-  { ...flow, id: "transfer", kind: "internal_transfer" },
-] };
-const evidence = cashEvidence(evidenceCompany, "2026-09-01", "2026-09-30");
-assert.equal(evidence.outgoing, 8_000);
-assert.equal(evidence.incoming, 0);
-assert.equal(evidence.included[0].projectedDate, "2026-09-01");
-assert.deepEqual(evidence.included.map(flow => flow.id), ["part-paid"]);
-assert.deepEqual(evidence.laterReceipts.map(flow => flow.id), ["late"]);
-assert.equal(cashEvidence(evidenceCompany, "2026-08-31", "2026-09-30").closing, demo.company.opening_cash_cents);
-assert.equal(cashEvidence(evidenceCompany, "2026-08-31", "2026-09-30").outgoing, 0, "An empty outflow total must not format as negative zero");
-for (const metric of ["cash", "funding", "shortfall", "minimum", "health"]) {
-  const trigger = renderToStaticMarkup(createElement(MetricWhy, { metric, onClick() {} }));
-  assert.ok(trigger.includes('aria-haspopup="dialog"') && trigger.includes("Why this"));
-  const popup = renderToStaticMarkup(createElement(MetricBreakdown, { company: demo.company, forecast: demo.forecasts[90], metric, open: false, onClose() {} }));
-  assert.ok(popup.includes('aria-labelledby="metric-title"') && popup.includes("Evidence coverage"));
-}
-const unexplained = renderToStaticMarkup(createElement(MetricBreakdown, { company: { ...demo.company, drivers: [] }, forecast: demo.forecasts[90], metric: "health", open: false, onClose() {} }));
-assert.ok(unexplained.includes("-12 points of change are not attributed") && unexplained.includes("No score drivers were supplied"));
-const safeForecast = demo.comparison.plans[1].forecast;
-assert.equal(safeForecast.first_shortfall, null);
-const noBreach = renderToStaticMarkup(createElement(MetricBreakdown, { company: demo.company, forecast: safeForecast, metric: "shortfall", open: false, onClose() {} }));
-assert.ok(noBreach.includes("None forecast") && !noBreach.includes("Cash at first breach"));
 
 for (const value of [null, "https://evil.example", "//evil.example", "javascript:alert(1)", "/\\evil.example", "/login"]) assert.equal(returnPath(value), "/dashboard");
 assert.equal(returnPath("/connect?state=example"), "/connect?state=example");
@@ -75,4 +73,4 @@ try {
     await assert.rejects(api("/companies/DEMO_001/plans"), error => error instanceof ApiError && error.status === status && error.message.includes("input format"));
   }
 } finally { globalThis.fetch = originalFetch; }
-console.log("Web checks passed: offline demo entry and team sign-in, redirects, exact money input, dated horizons, chart scales, metric evidence, dialog boundaries and validation errors.");
+console.log("Web checks passed: offline demo entry and team sign-in, redirects, exact money input, dated horizons, chart scales, dated health explanations, dialog boundaries and validation errors.");
