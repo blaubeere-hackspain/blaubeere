@@ -95,6 +95,66 @@ pub struct Credentials {
     pub password: String,
 }
 
+pub async fn register(
+    State(state): State<AppState>,
+    headers: HeaderMap,
+    Json(input): Json<Credentials>,
+) -> ApiResult<Response> {
+    if headers.contains_key(header::AUTHORIZATION) {
+        return Err(ApiError::bad("Use browser sign-up."));
+    }
+    let email = input.email.trim().to_lowercase();
+    let valid_email = email.len() <= 254
+        && email.split_once('@').is_some_and(|(local, domain)| {
+            !local.is_empty()
+                && local.len() <= 64
+                && !local.starts_with('.')
+                && !local.ends_with('.')
+                && !local.contains("..")
+                && local
+                    .bytes()
+                    .all(|c| c.is_ascii_alphanumeric() || b".!#$%&'*+-/=?^_`{|}~".contains(&c))
+                && domain.contains('.')
+                && domain.split('.').all(|label| {
+                    !label.is_empty()
+                        && label.len() <= 63
+                        && !label.starts_with('-')
+                        && !label.ends_with('-')
+                        && label
+                            .bytes()
+                            .all(|c| c.is_ascii_alphanumeric() || c == b'-')
+                })
+        });
+    if !valid_email {
+        return Err(ApiError::bad("Enter a valid work email address."));
+    }
+    if !(12..=128).contains(&input.password.chars().count()) {
+        return Err(ApiError::bad("Use a password of 12–128 characters."));
+    }
+    limit(&state, "register:global", 30, 60).await?;
+    limit(&state, &format!("register:{}", digest(&email)), 3, 900).await?;
+    let hash = hash_password(input.password).await.map_err(|error| {
+        tracing::error!(%error, "password hashing failed");
+        ApiError(
+            StatusCode::INTERNAL_SERVER_ERROR,
+            "Could not create your account. Please retry.".into(),
+        )
+    })?;
+    let user_id = secret();
+    // Self-registration establishes identity only; company access is granted separately.
+    let created = sqlx::query("INSERT INTO users (id, email, password_hash) VALUES (?, ?, ?) ON CONFLICT(email) DO NOTHING")
+        .bind(&user_id).bind(&email).bind(hash).execute(&state.db).await?;
+    if created.rows_affected() == 0 {
+        return Err(ApiError(
+            StatusCode::CONFLICT,
+            "Could not create an account with these details. Try signing in.".into(),
+        ));
+    }
+    let mut response = start_session(&state, &user_id, &email).await?;
+    *response.status_mut() = StatusCode::CREATED;
+    Ok(response)
+}
+
 pub async fn login(
     State(state): State<AppState>,
     headers: HeaderMap,
@@ -103,7 +163,7 @@ pub async fn login(
     if headers.contains_key(header::AUTHORIZATION) {
         return Err(ApiError::bad("Use browser sign-in."));
     }
-    if input.email.len() > 254 || input.password.len() > 128 {
+    if input.email.len() > 254 || input.password.chars().count() > 128 {
         return Err(ApiError::bad("Check your email and password."));
     }
     let email = input.email.trim().to_lowercase();

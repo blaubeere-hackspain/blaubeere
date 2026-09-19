@@ -10,6 +10,9 @@ async function read(path: string, init?: RequestInit) {
 const login = await (await read(`${app}/login`)).text();
 assert.ok(login.includes("blau"));
 assert.match(login, /<a href="\/demo"[^>]*>Access demo/);
+assert.ok(login.includes('href="/register?returnTo=%2Fdashboard"'), "Sign-in must link to registration");
+const registration = await (await read(`${app}/register`)).text();
+assert.ok(registration.includes("Create account") && registration.includes('autoComplete="new-password"'), "Registration must render a new-account form");
 const demo = await (await read(`${app}/demo`)).text();
 assert.ok(demo.includes("Mediterránea Supply") && demo.includes("Cash over time"), "Demo must render its sample dashboard without an authenticated session");
 assert.ok(!demo.includes('Why this number') && !demo.includes('Why this score'), "Cash metrics must not have explanation popups");
@@ -45,6 +48,7 @@ const pages = [
   { origin: landing, path: "/", html: homepage, private: false },
   { origin: landing, path: "/pricing", html: pricing, private: false },
   { origin: app, path: "/login", html: login, private: true },
+  { origin: app, path: "/register", html: registration, private: true },
   { origin: app, path: "/demo", html: demo, private: true },
   { origin: app, path: "/dashboard", html: await (await read(`${app}/dashboard`)).text(), private: true },
   { origin: app, path: "/connect", html: await (await read(`${app}/connect`)).text(), private: true },
