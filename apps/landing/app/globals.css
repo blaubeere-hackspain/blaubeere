@@ -156,15 +156,11 @@ body { background: white; }
 .oil-gallery { margin-top: 72px; display: grid; grid-template-columns: repeat(3,minmax(0,1fr)); gap: 28px; }
 .oil-gallery figure { margin: 0; aspect-ratio: 3 / 4; overflow: hidden; position: relative; }
 .oil-gallery img { outline: 1px solid oklch(0 0 0 / 0.1); outline-offset: -1px; display: block; width: 100%; height: 100%; object-fit: cover; }
-.story-layout { display: grid; grid-template-columns: 1fr 2fr; gap: 28px; }
-.story-label { display: flex; align-items: flex-start; gap: 18px; padding-top: 4px; }
-.story-label .brand-mark { width: 36px; height: 36px; }
-.story-label .eyebrow { max-width: 100px; line-height: 1.5; }
-.page-content .story-copy h2 { font-family: var(--font-ui); font-weight: 400; font-size: clamp(1.625rem,2.7vw,2.25rem); line-height: 1.4; letter-spacing: -.02em; text-wrap: pretty; }
-.story-copy h2 { text-indent: 20%; }
-.story-copy p { font-size: 1.125rem; line-height: 1.6; color: var(--muted); margin-top: 40px; max-width: 65ch; }
+.story-copy { width: min(100%, 800px); margin-inline-start: auto; text-align: left; }
+.page-content .story-copy h2 { font-family: var(--font-ui); font-weight: 400; font-size: clamp(1.625rem,2.7vw,2.25rem); line-height: 1.4; letter-spacing: -.02em; text-wrap: wrap; }
+.story-copy p { font-size: 1.125rem; line-height: 1.6; color: var(--muted); margin-top: 28px; text-wrap: wrap; }
 .story-copy p + p { margin-top: 20px; }
-@media (max-width: 760px) { .our-story { padding-bottom: 80px; } .oil-gallery { gap: 10px; margin-top: 36px; } .story-layout { grid-template-columns: 1fr; gap: 28px; } .story-label { align-items: center; gap: 12px; } .story-label .brand-mark { width: 26px; height: 26px; } .story-label .eyebrow { max-width: none; } .story-copy h2 { text-indent: 14%; } .story-copy p { font-size: var(--text-body); margin-top: 28px; } }
+@media (max-width: 760px) { .our-story { padding-bottom: 80px; } .oil-gallery { gap: 10px; margin-top: 36px; } .story-copy p { font-size: var(--text-body); margin-top: 24px; } }
 
 .mini-plan { box-shadow: var(--shadow-border); }
 @media (prefers-reduced-motion: no-preference) {
