@@ -59,8 +59,8 @@ jobs:
           # Jio pins the current host key through its authenticated API.
           unset JIO_SSH_KEY
           bash deploy/jio.sh
-      - name: App URL
-        if: ${{ success() && steps.deploy.outputs.app_url != '' }}
+      - name: Landing URL
+        if: ${{ success() && steps.deploy.outputs.landing_url != '' }}
         env:
-          APP_URL: ${{ steps.deploy.outputs.app_url }}
-        run: printf '%s\n' "$APP_URL" | tee -a "$GITHUB_STEP_SUMMARY"
+          LANDING_URL: ${{ steps.deploy.outputs.landing_url }}
+        run: printf '%s\n' "$LANDING_URL" | tee -a "$GITHUB_STEP_SUMMARY"
