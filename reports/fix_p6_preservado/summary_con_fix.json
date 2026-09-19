@@ -1,0 +1,361 @@
+{
+  "model_version": "healthscore_v3",
+  "params": {
+    "k": 4178.45,
+    "alpha": 3.0,
+    "beta": 0.25
+  },
+  "advertencia": "alpha=3.0 y beta=0.25 son PROVISIONALES, sin calibrar; solo k esta medido (reports/calibration_k/report.md). La escala no es comparable hasta calibrar.",
+  "limitaciones": [
+    "Parametros k, alpha y beta provisionales pendientes de calibracion medida; la escala no es comparable hasta que se calibren.",
+    "Indice determinista de salud de flujo de caja; no es score oficial, probabilidad de impago ni salud financiera integral.",
+    "Los importes None se tratan como desconocidos, nunca como cero; la nota se calcula solo con lo conocido y la confianza lo declara.",
+    "R_hist es la ratio historica de la propia empresa; el motor no compara ni normaliza entre empresas.",
+    "La mora aplicada es la del mes de corte; no agrega el historial de retrasos de la ventana.",
+    "El colchon se satura contra los pagos de la ventana (alpha * T6); la caja por encima de ese tope no mejora la nota.",
+    "Con el colchon sin saturar, un aumento de pagos puede elevar la nota al crecer el colchon aplicable; la monotonia estricta frente a pagos solo esta garantizada con el colchon fijo o saturado.",
+    "Los meses sin actividad dentro de la ventana no se imputan; la nota puede apoyarse en pocos meses efectivos y la confianza lo declara.",
+    "Sin pagos operativos demostrados en la ventana no hay nota (pagos_operativos_no_demostrados); un servicio de deuda cero no bloquea por si solo."
+  ],
+  "por_corte": {
+    "2024-09-30": {
+      "total_companies": 1286,
+      "n_con_nota": 119,
+      "n_sin_nota_por_falta_de_actividad": 0,
+      "n_sin_nota_por_sin_flujos_observados_en_la_ventana": 1057,
+      "n_sin_nota_por_pagos_operativos_no_demostrados": 110,
+      "reparto_confidence": {
+        "baja": 53,
+        "media": 42,
+        "ninguna": 1191
+      }
+    },
+    "2024-10-31": {
+      "total_companies": 1286,
+      "n_con_nota": 157,
+      "n_sin_nota_por_falta_de_actividad": 0,
+      "n_sin_nota_por_sin_flujos_observados_en_la_ventana": 999,
+      "n_sin_nota_por_pagos_operativos_no_demostrados": 130,
+      "reparto_confidence": {
+        "baja": 40,
+        "media": 44,
+        "ninguna": 1202
+      }
+    },
+    "2024-11-30": {
+      "total_companies": 1286,
+      "n_con_nota": 185,
+      "n_sin_nota_por_falta_de_actividad": 0,
+      "n_sin_nota_por_sin_flujos_observados_en_la_ventana": 963,
+      "n_sin_nota_por_pagos_operativos_no_demostrados": 138,
+      "reparto_confidence": {
+        "baja": 40,
+        "media": 39,
+        "ninguna": 1207
+      }
+    },
+    "2024-12-31": {
+      "total_companies": 1286,
+      "n_con_nota": 215,
+      "n_sin_nota_por_falta_de_actividad": 0,
+      "n_sin_nota_por_sin_flujos_observados_en_la_ventana": 930,
+      "n_sin_nota_por_pagos_operativos_no_demostrados": 141,
+      "reparto_confidence": {
+        "baja": 52,
+        "media": 40,
+        "ninguna": 1194
+      }
+    },
+    "2025-01-31": {
+      "total_companies": 1286,
+      "n_con_nota": 274,
+      "n_sin_nota_por_falta_de_actividad": 0,
+      "n_sin_nota_por_sin_flujos_observados_en_la_ventana": 853,
+      "n_sin_nota_por_pagos_operativos_no_demostrados": 159,
+      "reparto_confidence": {
+        "baja": 61,
+        "media": 52,
+        "ninguna": 1173
+      }
+    },
+    "2025-02-28": {
+      "total_companies": 1286,
+      "n_con_nota": 338,
+      "n_sin_nota_por_falta_de_actividad": 0,
+      "n_sin_nota_por_sin_flujos_observados_en_la_ventana": 805,
+      "n_sin_nota_por_pagos_operativos_no_demostrados": 143,
+      "reparto_confidence": {
+        "alta": 23,
+        "baja": 37,
+        "media": 60,
+        "ninguna": 1166
+      }
+    },
+    "2025-03-31": {
+      "total_companies": 1286,
+      "n_con_nota": 371,
+      "n_sin_nota_por_falta_de_actividad": 0,
+      "n_sin_nota_por_sin_flujos_observados_en_la_ventana": 762,
+      "n_sin_nota_por_pagos_operativos_no_demostrados": 153,
+      "reparto_confidence": {
+        "alta": 30,
+        "baja": 47,
+        "media": 47,
+        "ninguna": 1162
+      }
+    },
+    "2025-04-30": {
+      "total_companies": 1286,
+      "n_con_nota": 384,
+      "n_sin_nota_por_falta_de_actividad": 0,
+      "n_sin_nota_por_sin_flujos_observados_en_la_ventana": 735,
+      "n_sin_nota_por_pagos_operativos_no_demostrados": 167,
+      "reparto_confidence": {
+        "alta": 33,
+        "baja": 37,
+        "media": 48,
+        "ninguna": 1168
+      }
+    },
+    "2025-05-31": {
+      "total_companies": 1286,
+      "n_con_nota": 399,
+      "n_sin_nota_por_falta_de_actividad": 0,
+      "n_sin_nota_por_sin_flujos_observados_en_la_ventana": 730,
+      "n_sin_nota_por_pagos_operativos_no_demostrados": 157,
+      "reparto_confidence": {
+        "alta": 24,
+        "baja": 26,
+        "media": 45,
+        "ninguna": 1191
+      }
+    },
+    "2025-06-30": {
+      "total_companies": 1286,
+      "n_con_nota": 412,
+      "n_sin_nota_por_falta_de_actividad": 0,
+      "n_sin_nota_por_sin_flujos_observados_en_la_ventana": 713,
+      "n_sin_nota_por_pagos_operativos_no_demostrados": 161,
+      "reparto_confidence": {
+        "alta": 28,
+        "baja": 16,
+        "media": 48,
+        "ninguna": 1194
+      }
+    },
+    "2025-07-31": {
+      "total_companies": 1286,
+      "n_con_nota": 435,
+      "n_sin_nota_por_falta_de_actividad": 0,
+      "n_sin_nota_por_sin_flujos_observados_en_la_ventana": 682,
+      "n_sin_nota_por_pagos_operativos_no_demostrados": 169,
+      "reparto_confidence": {
+        "alta": 32,
+        "baja": 24,
+        "media": 44,
+        "ninguna": 1186
+      }
+    },
+    "2025-08-31": {
+      "total_companies": 1286,
+      "n_con_nota": 421,
+      "n_sin_nota_por_falta_de_actividad": 0,
+      "n_sin_nota_por_sin_flujos_observados_en_la_ventana": 672,
+      "n_sin_nota_por_pagos_operativos_no_demostrados": 193,
+      "reparto_confidence": {
+        "alta": 32,
+        "baja": 20,
+        "media": 45,
+        "ninguna": 1189
+      }
+    },
+    "2025-09-30": {
+      "total_companies": 1286,
+      "n_con_nota": 436,
+      "n_sin_nota_por_falta_de_actividad": 0,
+      "n_sin_nota_por_sin_flujos_observados_en_la_ventana": 664,
+      "n_sin_nota_por_pagos_operativos_no_demostrados": 186,
+      "reparto_confidence": {
+        "alta": 38,
+        "baja": 19,
+        "media": 53,
+        "ninguna": 1176
+      }
+    },
+    "2025-10-31": {
+      "total_companies": 1286,
+      "n_con_nota": 460,
+      "n_sin_nota_por_falta_de_actividad": 0,
+      "n_sin_nota_por_sin_flujos_observados_en_la_ventana": 627,
+      "n_sin_nota_por_pagos_operativos_no_demostrados": 199,
+      "reparto_confidence": {
+        "alta": 40,
+        "baja": 18,
+        "media": 54,
+        "ninguna": 1174
+      }
+    },
+    "2025-11-30": {
+      "total_companies": 1286,
+      "n_con_nota": 479,
+      "n_sin_nota_por_falta_de_actividad": 0,
+      "n_sin_nota_por_sin_flujos_observados_en_la_ventana": 611,
+      "n_sin_nota_por_pagos_operativos_no_demostrados": 196,
+      "reparto_confidence": {
+        "alta": 50,
+        "baja": 21,
+        "media": 53,
+        "ninguna": 1162
+      }
+    },
+    "2025-12-31": {
+      "total_companies": 1286,
+      "n_con_nota": 514,
+      "n_sin_nota_por_falta_de_actividad": 0,
+      "n_sin_nota_por_sin_flujos_observados_en_la_ventana": 565,
+      "n_sin_nota_por_pagos_operativos_no_demostrados": 207,
+      "reparto_confidence": {
+        "alta": 56,
+        "baja": 17,
+        "media": 71,
+        "ninguna": 1142
+      }
+    },
+    "2026-01-31": {
+      "total_companies": 1286,
+      "n_con_nota": 550,
+      "n_sin_nota_por_falta_de_actividad": 0,
+      "n_sin_nota_por_sin_flujos_observados_en_la_ventana": 509,
+      "n_sin_nota_por_pagos_operativos_no_demostrados": 227,
+      "reparto_confidence": {
+        "alta": 62,
+        "baja": 25,
+        "media": 74,
+        "ninguna": 1125
+      }
+    },
+    "2026-02-28": {
+      "total_companies": 1286,
+      "n_con_nota": 575,
+      "n_sin_nota_por_falta_de_actividad": 0,
+      "n_sin_nota_por_sin_flujos_observados_en_la_ventana": 458,
+      "n_sin_nota_por_pagos_operativos_no_demostrados": 253,
+      "reparto_confidence": {
+        "alta": 63,
+        "baja": 31,
+        "media": 69,
+        "ninguna": 1123
+      }
+    },
+    "2026-03-31": {
+      "total_companies": 1286,
+      "n_con_nota": 582,
+      "n_sin_nota_por_falta_de_actividad": 0,
+      "n_sin_nota_por_sin_flujos_observados_en_la_ventana": 456,
+      "n_sin_nota_por_pagos_operativos_no_demostrados": 248,
+      "reparto_confidence": {
+        "alta": 65,
+        "baja": 18,
+        "media": 68,
+        "ninguna": 1135
+      }
+    },
+    "2026-04-30": {
+      "total_companies": 1286,
+      "n_con_nota": 581,
+      "n_sin_nota_por_falta_de_actividad": 0,
+      "n_sin_nota_por_sin_flujos_observados_en_la_ventana": 447,
+      "n_sin_nota_por_pagos_operativos_no_demostrados": 258,
+      "reparto_confidence": {
+        "alta": 68,
+        "baja": 15,
+        "media": 67,
+        "ninguna": 1136
+      }
+    },
+    "2026-05-31": {
+      "total_companies": 1286,
+      "n_con_nota": 577,
+      "n_sin_nota_por_falta_de_actividad": 0,
+      "n_sin_nota_por_sin_flujos_observados_en_la_ventana": 449,
+      "n_sin_nota_por_pagos_operativos_no_demostrados": 260,
+      "reparto_confidence": {
+        "alta": 76,
+        "baja": 12,
+        "media": 68,
+        "ninguna": 1130
+      }
+    },
+    "2026-06-30": {
+      "total_companies": 1286,
+      "n_con_nota": 553,
+      "n_sin_nota_por_falta_de_actividad": 0,
+      "n_sin_nota_por_sin_flujos_observados_en_la_ventana": 458,
+      "n_sin_nota_por_pagos_operativos_no_demostrados": 275,
+      "reparto_confidence": {
+        "alta": 76,
+        "baja": 7,
+        "media": 64,
+        "ninguna": 1139
+      }
+    },
+    "2026-07-31": {
+      "total_companies": 1286,
+      "n_con_nota": 535,
+      "n_sin_nota_por_falta_de_actividad": 0,
+      "n_sin_nota_por_sin_flujos_observados_en_la_ventana": 472,
+      "n_sin_nota_por_pagos_operativos_no_demostrados": 279,
+      "reparto_confidence": {
+        "alta": 78,
+        "baja": 6,
+        "media": 62,
+        "ninguna": 1140
+      }
+    },
+    "2026-08-31": {
+      "total_companies": 1286,
+      "n_con_nota": 516,
+      "n_sin_nota_por_falta_de_actividad": 0,
+      "n_sin_nota_por_sin_flujos_observados_en_la_ventana": 486,
+      "n_sin_nota_por_pagos_operativos_no_demostrados": 284,
+      "reparto_confidence": {
+        "alta": 78,
+        "baja": 16,
+        "media": 60,
+        "ninguna": 1132
+      }
+    }
+  },
+  "ultimo_corte": {
+    "as_of": "2026-08-31",
+    "total_companies": 1286,
+    "n_con_nota": 516,
+    "n_sin_nota_por_falta_de_actividad": 0,
+    "n_sin_nota_por_sin_flujos_observados_en_la_ventana": 486,
+    "n_sin_nota_por_pagos_operativos_no_demostrados": 284,
+    "reparto_confidence": {
+      "alta": 78,
+      "baja": 16,
+      "media": 60,
+      "ninguna": 1132
+    },
+    "health_score_p10": 2.236530449327061,
+    "health_score_p50": 50.024947794848586,
+    "health_score_p90": 82.06944591559608,
+    "empresa_mes_con_volumen_ambiguo": 144
+  },
+  "diagnostico": {
+    "delta_h_mensual": {
+      "n_pares": 9268,
+      "p50": 3.2723035993807628,
+      "p75": 9.125222823565204,
+      "p90": 21.133753558823685
+    },
+    "volumen_ambiguo_pct": {
+      "empresa_mes_con_ambiguo": 2364,
+      "p50": 0.039349428670759024,
+      "p90": 0.3821230072100665,
+      "max": 1.0
+    }
+  }
+}
