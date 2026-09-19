@@ -31,6 +31,37 @@ for (const [origin, html] of [[app, login], [landing, homepage]]) {
   assert.ok(assets.size > 0, "Production page must include built assets");
   for (const asset of assets) await read(new URL(asset.replaceAll("&amp;", "&"), origin).href);
 }
+const meta = (html: string, key: string) => html.match(new RegExp(`<meta (?:name|property)="${key}" content="([^"]+)"`))?.[1] ?? "";
+const pages = [
+  { origin: landing, path: "/", html: homepage, private: false },
+  { origin: app, path: "/login", html: login, private: true },
+  { origin: app, path: "/dashboard", html: await (await read(`${app}/dashboard`)).text(), private: true },
+  { origin: app, path: "/connect", html: await (await read(`${app}/connect`)).text(), private: true },
+];
+const titles = new Set<string>();
+for (const page of pages) {
+  const title = meta(page.html, "og:title");
+  assert.ok(title.includes("blau") && !titles.has(title), "Every page must have a distinct branded title");
+  titles.add(title);
+  assert.equal(meta(page.html, "twitter:title"), title);
+  assert.ok(meta(page.html, "description").length >= 40, "Every page needs a useful description");
+  assert.equal(meta(page.html, "twitter:card"), "summary_large_image");
+  assert.equal(meta(page.html, "og:image"), `${landing}/social-preview.png`);
+  assert.equal(meta(page.html, "twitter:image"), `${landing}/social-preview.png`);
+  assert.ok(meta(page.html, "og:image:alt").includes("blau"));
+  const canonical = new URL(page.path, page.origin).href;
+  assert.equal(new URL(meta(page.html, "og:url")).href, canonical);
+  const canonicalTag = page.html.match(/<link rel="canonical" href="([^"]+)"/)?.[1];
+  assert.ok(canonicalTag, "Every page needs a canonical URL");
+  assert.equal(new URL(canonicalTag).href, canonical);
+  assert.equal(meta(page.html, "robots").includes("noindex"), page.private);
+}
+const socialPreview = await read(`${landing}/social-preview.png`);
+assert.ok(socialPreview.headers.get("content-type")?.startsWith("image/png"));
+const socialBytes = Buffer.from(await socialPreview.arrayBuffer());
+assert.ok(socialBytes.length < 5_000_000, "Social preview must fit the large-card image limit");
+assert.equal(socialBytes.readUInt32BE(16), 1734);
+assert.equal(socialBytes.readUInt32BE(20), 907);
 const oauth = await (await read(`${app}/.well-known/oauth-authorization-server`)).json();
 assert.equal(oauth.issuer, app);
 assert.equal(oauth.authorization_endpoint, `${app}/connect`);
@@ -47,4 +78,4 @@ if (login.includes("Enter demo workspace")) {
   process.env.MCP_RESOURCE = `${app}/mcp`;
   await import("./check-api");
 }
-console.log("Production checks passed: app, landing, all paintings, built assets, OAuth origins, MCP discovery and unauthorised access.");
+console.log("Production checks passed: app, landing, artwork, favicons, page metadata, social preview, built assets, OAuth origins, MCP discovery and unauthorised access.");

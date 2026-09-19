@@ -6,6 +6,21 @@
 
 Both apps serve a white berry symbol on a black background through `app/icon.svg`, a multi-size `app/favicon.ico` and a 180px `app/apple-icon.png`.
 
+## Social preview: final prompt
+
+`apps/landing/public/social-preview.png` was created with the built-in image generation tool, using the outlined blau logo and the hero painting as references. The final full-bleed image is 1734 × 907 and is shared by the Open Graph and large Twitter cards across both apps.
+
+Use case: ads-marketing.
+Asset type: finished Open Graph / X large social link preview for the finance product blau.
+Primary request: a beautiful, memorable full-bleed oil-painted background with very large explanatory text and a visible illustration. A refined, warm, slightly charming editorial image that stays legible as a small social card.
+Input images: Image 1 is the exact blau logo reference; preserve its four-part berry symbol and lowercase serif lettering. Image 2 is an oil-painting style and palette reference, not a layout to copy.
+Composition: wide 1200 × 630 landscape social-card canvas, about 1.91:1. Fill every edge with the oil painting. The left two thirds have very pale ivory sky with subtle brush texture and generous breathing room for typography. The right third shows a sunlit wooden desk by an open garden window, an open cream financial ledger and a separate cream sheet with a simple sage cash-flow line chart; soft olive foliage, quiet green hills and pale blue water behind the desk. All financial objects are distinctly hand-painted and tangible. Keep important content inside a 55px safe margin.
+Brand: put the supplied dark blau logo cleanly at the top left, about 155px wide at the intended canvas size.
+Headline, exact text, in two oversized lines: "Know your cash." then "Plan what’s next." Use elegant near-black Times-style serif typography, around 78px at 1200px canvas width. Make this the strongest visual element, crisp and highly legible, comfortably separated from the logo.
+Supporting text, exact text, near the lower left: "Cash forecasts and what-if plans" then "for the people behind the numbers." Use clean dark sans-serif, about 26px, generous leading.
+Style and mood: tactile fine-art oil on linen, warm cream, sage and olive green, muted sky blue, natural light; generous editorial composition, inviting and quietly optimistic.
+Constraints: preserve exact spelling and punctuation, no additional words, no domain name, no price, no buttons, no cards framing the design, no mock social-network chrome, no watermark. Keep all text readable against the pale background. This is the final ready-to-publish image, not a mockup.
+
 The product paintings were generated with the built-in image generation tool for Blaubeere. No source template assets or reference screenshots were copied into the application. Original PNGs live in the repository; Next.js serves optimized sizes.
 
 ## Landing paintings
