@@ -54,6 +54,12 @@ bun install --frozen-lockfile
 bun run test:web
 bun run typecheck
 bun run build
+# Next.js writes optimized images at runtime as the service user.
+for name in app landing; do
+  image_cache="$release/apps/$name/.next/cache/images"
+  sudo -n install -d -m 755 -o blaubeere -g blaubeere "$image_cache"
+  sudo -n -u blaubeere test -w "$image_cache"
+done
 cargo test --locked --release --workspace
 cargo build --locked --release --workspace
 mkdir bin
