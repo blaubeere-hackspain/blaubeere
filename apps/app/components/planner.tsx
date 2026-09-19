@@ -7,7 +7,8 @@ import type { Company, Comparison, Goal, Plan } from "../lib/types";
 
 const amountPattern = "[0-9]+(\\.[0-9]{1,2})?";
 function Amount({ label, name, value, hint }: { label: string; name: string; value: string; hint?: string }) {
-  return <label className="field">{label}<input name={name} defaultValue={value} inputMode="decimal" pattern={amountPattern} required/>{hint && <small>{hint}</small>}</label>;
+  const integer = name === "collections" || name === "collectionTiming";
+  return <label className="field">{label}<input name={name} defaultValue={value} inputMode={integer ? "numeric" : "decimal"} pattern={integer ? "[0-9]+" : amountPattern} required/>{hint && <small>{hint}</small>}</label>;
 }
 export function Planner({ company, open, onClose, onCompare, onPreview }: { company: Company; open: boolean; onClose: () => void; onCompare: (c: Comparison) => void; onPreview: (p?: Plan) => void }) {
   const dialog = useRef<HTMLDialogElement>(null);

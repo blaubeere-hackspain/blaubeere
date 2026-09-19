@@ -4,7 +4,7 @@ export class ApiError extends Error {
 export async function api<T>(path: string, init?: RequestInit): Promise<T> {
   const response = await fetch(`/api${path}`, { ...init, credentials: "same-origin", cache: "no-store", headers: { "Content-Type": "application/json", ...init?.headers } });
   const body = await response.json().catch(() => null);
-  if (!response.ok) throw new ApiError(body?.error ?? "The service is unavailable. Please try again.", response.status);
+  if (!response.ok) throw new ApiError(body?.error ?? ([400, 422].includes(response.status) ? "Check the input format and try again." : "The service is unavailable. Please try again."), response.status);
   return body as T;
 }
 export function returnPath(value: string | null): string {
