@@ -196,3 +196,22 @@ body { background: white; }
 .landing-pricing { padding-bottom: 48px; }
 .pricing-details { margin-top: 28px; text-align: center; }
 @media (max-width: 760px) { .landing-pricing { padding-bottom: 32px; } }
+
+.pricing-comparison { max-width: 1080px; margin-top: 104px; }
+.pricing-comparison h2 { font-family: var(--editorial); font-size: clamp(36px,4vw,52px); font-weight: 400; line-height: 1.05; letter-spacing: -.035em; }
+.pricing-table { width: 100%; border-collapse: collapse; table-layout: fixed; font-size: 14px; }
+.pricing-table th, .pricing-table td { padding: 24px 20px; border-bottom: 1px solid var(--line); text-align: center; }
+.pricing-table th:first-child { width: 50%; padding-left: 0; text-align: left; }
+.pricing-table tr > :last-child { padding-right: 0; }
+.pricing-table thead th { border-top: 1px solid var(--line); font-family: var(--editorial); font-size: 28px; font-weight: 400; }
+.pricing-table thead th:first-child { font-family: inherit; font-size: 14px; color: var(--muted); }
+.pricing-table thead span { display: block; margin-top: 6px; font-family: "IBM Plex Sans", sans-serif; font-size: 12px; color: var(--muted); }
+.pricing-table tbody th { font-weight: 400; }
+.pricing-table td { color: var(--muted); }
+@media (max-width: 760px) {
+  .pricing-comparison { margin-top: 72px; }
+  .pricing-table { font-size: 13px; }
+  .pricing-table th, .pricing-table td { padding: 20px 8px; }
+  .pricing-table th:first-child { width: 44%; }
+  .pricing-table thead th { font-size: 21px; }
+}
