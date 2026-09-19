@@ -33,12 +33,13 @@ export function AssessmentCalendar({ dates, selected, onSelect }: { dates: strin
       onClick={() => { if (open) close(); else { setYear((selected || dates.at(-1) || "").slice(0, 4)); setOpen(true); } }}>
       <CalendarDays aria-hidden/><span>{selected ? monthLabel(selected) : "Choose a month"}</span><ChevronsUpDown aria-hidden/>
     </button>
-    {open && <div className="assessment-calendar-panel" id="assessment-calendar-panel" ref={panel} role="dialog" tabIndex={-1} aria-label="Choose a month">
+    {open && <div className="assessment-calendar-panel" id="assessment-calendar-panel" ref={panel} role="dialog" tabIndex={-1} aria-label="Choose a month" aria-describedby="assessment-calendar-note">
       <div className="assessment-calendar-year"><button type="button" className="icon-button" aria-label="Previous year" disabled={yearIndex <= 0} onClick={() => changeYear(years[yearIndex - 1])}><ChevronLeft aria-hidden/></button><strong aria-live="polite">{year}</strong><button type="button" className="icon-button" aria-label="Next year" disabled={yearIndex >= years.length - 1} onClick={() => changeYear(years[yearIndex + 1])}><ChevronRight aria-hidden/></button></div>
       <div className="assessment-months" role="group" aria-label={`Assessments in ${year}`}>{months.map((month, index) => {
         const cutoff = dates.find(value => value.startsWith(`${year}-${String(index + 1).padStart(2, "0")}-`));
-        return <button type="button" key={month} disabled={!cutoff} aria-label={`${month} ${year}`} aria-pressed={Boolean(cutoff && cutoff === selected)} onClick={() => { if (cutoff) { close(); onSelect(cutoff); } }}>{month}</button>;
+        return <button type="button" key={month} disabled={!cutoff} aria-label={`${month} ${year}${cutoff ? "" : ": no company data"}`} aria-pressed={Boolean(cutoff && cutoff === selected)} onClick={() => { if (cutoff) { close(); onSelect(cutoff); } }}>{month}{!cutoff && <small>No data</small>}</button>;
       })}</div>
+      <p className="assessment-calendar-note" id="assessment-calendar-note">Months without company data can’t be selected.</p>
     </div>}
   </div>;
 }

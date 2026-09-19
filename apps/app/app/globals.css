@@ -479,6 +479,8 @@ body { background: #f1f1ee; }
 .assessment-months { display: grid; grid-template-columns: repeat(3,minmax(0,1fr)); gap: 4px; }
 .assessment-months button { min-height: 44px; border: 0; border-radius: 8px; background: transparent; color: var(--ink); }
 .assessment-months button:disabled { opacity: .4; }
+.assessment-months button small { display: block; font-size: 10px; line-height: 1.2; }
+.assessment-calendar-note { padding: 10px 6px 2px; color: var(--muted); font-size: 12px; line-height: 1.4; }
 .assessment-months button[aria-pressed="true"] { background: var(--accent); color: white; }
 @media (hover:hover) and (pointer:fine) { .assessment-calendar-trigger:not(:disabled):hover, .assessment-months button:not(:disabled):not([aria-pressed="true"]):hover { background: #ededeb; } }
 @media (max-width:700px) { .company-heading-actions { width: 100%; justify-content: flex-end; } }
@@ -520,14 +522,14 @@ body { background: #f1f1ee; }
 .financial-card-heading p { color: var(--muted); font-size: var(--text-caption); margin-top: 4px; }
 .aging-gauge { position: relative; width: min(260px,100%); align-self: center; margin: 20px 0 16px; }
 .aging-gauge svg { display: block; width: 100%; }
-.aging-total { position: absolute; inset: auto 0 8px; text-align: center; display: grid; gap: 4px; }
-.aging-total strong { font-size: clamp(18px,1.6vw,24px); font-weight: 500; letter-spacing: -.03em; }
+.aging-total { text-align: center; display: grid; gap: 4px; margin-top: -12px; }
+.aging-total strong { min-width: 0; overflow-wrap: anywhere; font-size: clamp(18px,1.6vw,24px); font-weight: 500; letter-spacing: -.03em; }
 .aging-total span { font-size: var(--text-caption); color: var(--muted); }
 .aging-buckets { border-top: 1px solid var(--line); padding-top: 4px; }
-.aging-buckets > div { display: flex; align-items: center; gap: 8px; justify-content: space-between; min-height: 32px; padding-block: 4px; font-size: var(--text-caption); }
+.aging-buckets > div { display: grid; grid-template-columns: max-content minmax(0,1fr); align-items: center; gap: 8px; min-height: 32px; padding-block: 4px; font-size: var(--text-caption); }
 .aging-buckets dt { display: flex; align-items: center; gap: 8px; white-space: nowrap; }
 .aging-buckets dt i { width: 7px; height: 7px; border-radius: 50%; flex-shrink: 0; }
-.aging-buckets dd { display: grid; grid-template-columns: minmax(0,1fr) 40px; align-items: baseline; gap: 6px; text-align: right; font-variant-numeric: tabular-nums; }
+.aging-buckets dd { min-width: 0; display: grid; grid-template-columns: minmax(0,1fr) 44px; align-items: baseline; gap: 6px; text-align: right; font-variant-numeric: tabular-nums; }
 .aging-buckets dd strong { font-weight: 500; overflow-wrap: anywhere; }
 .aging-buckets dd span { color: var(--muted); }
 .financial-card-note { color: var(--muted); font-size: var(--text-caption); line-height: 1.6; }
