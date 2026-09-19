@@ -66,6 +66,7 @@ mkdir bin
 install -m 755 "$CARGO_TARGET_DIR/release/blaubeere-api" "$CARGO_TARGET_DIR/release/blaubeere-mcp" bin/
 
 cat > "$root/runtime.env" <<EOF
+DEMO_LOGIN=true
 DATABASE_URL=sqlite://$root/data/blaubeere.db
 API_BIND=127.0.0.1:4000
 MCP_BIND=127.0.0.1:4001

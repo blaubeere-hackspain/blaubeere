@@ -35,4 +35,10 @@ assert.equal((await fetch(`${app}/api/me`)).status, 401);
 const challenge = await fetch(`${app}/mcp`, { method: "POST" });
 assert.equal(challenge.status, 401);
 assert.ok(challenge.headers.get("www-authenticate")?.includes(`${app}/.well-known/oauth-protected-resource/mcp`));
+if (login.includes("Enter demo workspace")) {
+  process.env.DEMO_LOGIN = "true";
+  process.env.APP_ORIGIN = process.env.API_ORIGIN = app;
+  process.env.MCP_RESOURCE = `${app}/mcp`;
+  await import("./check-api");
+}
 console.log("Production checks passed: app, landing, all paintings, built assets, OAuth origins, MCP discovery and unauthorised access.");

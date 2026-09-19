@@ -12,7 +12,7 @@ bun run setup
 bun run dev
 ```
 
-Setup creates an ignored `.env` with a random local password and prints the sign-in details. Existing configuration is preserved. Sign in as `finance@blaubeere.local` with the generated `BOOTSTRAP_PASSWORD`.
+Setup creates an ignored `.env` with demo entry enabled. Choose **Enter demo workspace** to join without a password. Existing configuration is preserved; add `DEMO_LOGIN=true` to an older `.env` and restart both the app and API to enable demo entry. **Use a team account** still accepts `finance@blaubeere.local` with the generated `BOOTSTRAP_PASSWORD`.
 
 | Workspace | Address | Purpose |
 | --- | --- | --- |
@@ -25,7 +25,7 @@ Both Rust services share the SQLite database in `.local/blaubeere.db`. Run comma
 
 ## Try the workflow
 
-1. Open the app and sign in. The demo company starts with €2m cash and a €4m payment on 28 September, before its later receivable. Its €100k cash floor makes the funding requirement €2.1m.
+1. Open the app and choose **Enter demo workspace**. The demo company starts with €2m cash and a €4m payment on 28 September, before its later receivable. Its €100k cash floor makes the funding requirement €2.1m.
 2. Inspect the chart, health drivers, coverage notes and source records. History is labelled reconstructed; the score and underlying records are illustrative.
 3. Select **Explore a plan**. Compare the default goal with earlier collections, reduced discretionary spending and conditional funding. Constraints are checked on every projected day.
 4. Set maximum new funding to zero and compare again to see the remaining gaps. Preview either plan on the cash chart; observed health and source records stay unchanged.
@@ -33,7 +33,11 @@ Both Rust services share the SQLite database in `.local/blaubeere.db`. Run comma
 
 ## Authentication and MCP
 
-Accounts are provisioned through `BOOTSTRAP_EMAIL`, `BOOTSTRAP_PASSWORD` and comma-separated `BOOTSTRAP_COMPANIES` on API startup. There is no public registration. Provisioning an existing email preserves its password and memberships; changing bootstrap variables does not reset that account.
+`DEMO_LOGIN=true` enables password-free demo entry. Each visitor receives a separate authenticated, 12-hour session and membership only in `DEMO_001`, which must be labelled `data_mode: "demo"`. Visitors cannot enter existing accounts or see each other’s assistant grants. Signing out ends the session; entering again creates a new visitor. Demo identities and grants remain in SQLite until explicitly removed.
+
+The local example and MVP production deployment enable this flag. Set it to `false` in `.env` (local) or `deploy/runtime.sh` (production, then redeploy) to return to team-only sign-in. The backend defaults to disabled when the flag is absent.
+
+Team accounts are provisioned through `BOOTSTRAP_EMAIL`, `BOOTSTRAP_PASSWORD` and comma-separated `BOOTSTRAP_COMPANIES` on API startup. There is no public registration for team accounts. Provisioning an existing email preserves its password and memberships; changing bootstrap variables does not reset that account.
 
 Browser sign-in uses Argon2 password hashes and opaque HttpOnly sessions. Company membership is checked in the backend for each assessment and plan request. Browser mutations require the configured app origin.
 

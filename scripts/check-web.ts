@@ -1,8 +1,20 @@
 import assert from "node:assert/strict";
+import { createRequire } from "node:module";
+import { LoginForm } from "../apps/app/components/login-form";
 import { api, ApiError, returnPath } from "../apps/app/lib/api";
 import { addDays, cents } from "../apps/app/lib/format";
 import { cashScale } from "../apps/app/components/cash-chart";
 import { outsideDialog } from "../apps/app/components/dialog";
+
+const requireApp = createRequire(new URL("../apps/app/package.json", import.meta.url));
+const { createElement } = requireApp("react");
+const { renderToStaticMarkup } = requireApp("react-dom/server");
+const demoLogin = renderToStaticMarkup(createElement(LoginForm, { demo: true }));
+assert.ok(demoLogin.includes("Enter demo workspace") && demoLogin.includes("Use a team account"));
+assert.ok(!demoLogin.includes("<input"), "Demo entry must not require credentials");
+const teamLogin = renderToStaticMarkup(createElement(LoginForm, { demo: false }));
+assert.ok(teamLogin.includes('name="email"') && teamLogin.includes('type="password"'));
+assert.ok(!teamLogin.includes("Enter demo workspace"), "Disabled demo entry must show team sign-in");
 
 for (const value of [null, "https://evil.example", "//evil.example", "javascript:alert(1)", "/\\evil.example", "/login"]) assert.equal(returnPath(value), "/dashboard");
 assert.equal(returnPath("/connect?state=example"), "/connect?state=example");
@@ -26,4 +38,4 @@ try {
     await assert.rejects(api("/companies/DEMO_001/plans"), error => error instanceof ApiError && error.status === status && error.message.includes("input format"));
   }
 } finally { globalThis.fetch = originalFetch; }
-console.log("Web checks passed: redirects, exact money input, dated horizons, chart scales, dialog boundaries and validation errors.");
+console.log("Web checks passed: demo/team sign-in, redirects, exact money input, dated horizons, chart scales, dialog boundaries and validation errors.");

@@ -10,6 +10,7 @@ type Props = {
 };
 
 export function Sidebar({ companies, selected, identity, canPlan, logoutBusy, onCompany, onPlan, onConnections, onLogout, onNavigate }: Props) {
+  const demo = identity?.email.endsWith("@demo.blaubeere.local");
   return <>
     <a className="brand sidebar-brand" href="/dashboard"><span className="brand-mark" aria-hidden><i/><i/><i/><i/></span>blaubeere</a>
     <div className="sidebar-scroll">
@@ -29,7 +30,7 @@ export function Sidebar({ companies, selected, identity, canPlan, logoutBusy, on
     </div>
     <div className="sidebar-bottom">
       <button className="assistant-shortcut" onClick={onConnections} disabled={!identity}><span className="assistant-icon"><Plug aria-hidden/></span><span><strong>A second pair of eyes</strong><span>Connect your assistant</span></span><ArrowUpRight aria-hidden/></button>
-      <div className="sidebar-user"><span className="user-avatar" aria-hidden>FT</span><div><strong>Finance workspace</strong><span title={identity?.email}>{identity?.email ?? "Signing in…"}</span></div><button className="icon-button" onClick={onLogout} disabled={logoutBusy || !identity} aria-label="Sign out">{logoutBusy ? <LoaderCircle className="spinner"/> : <LogOut/>}</button></div>
+      <div className="sidebar-user"><span className="user-avatar" aria-hidden>{demo ? "DV" : "FT"}</span><div><strong>{demo ? "Demo workspace" : "Finance workspace"}</strong><span title={demo ? undefined : identity?.email}>{demo ? "Demo visitor" : identity?.email ?? "Signing in…"}</span></div><button className="icon-button" onClick={onLogout} disabled={logoutBusy || !identity} aria-label="Sign out">{logoutBusy ? <LoaderCircle className="spinner"/> : <LogOut/>}</button></div>
       <span className="sidebar-privacy"><ShieldCheck aria-hidden/>Private company access</span>
     </div>
   </>;
