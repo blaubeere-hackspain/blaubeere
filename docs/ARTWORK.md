@@ -2,7 +2,7 @@
 
 ## Vector identity
 
-`apps/brand/blau.svg` is the shared landing, sign-in and dashboard lockup. It preserves the existing four-part berry symbol and outlines the lowercase “blau” lettering from Times New Roman Bold as SVG paths, with no font dependency or SVG text nodes. The consuming images provide accessible alternatives.
+`apps/brand/blau.svg` is the shared landing, sign-in and dashboard lockup. It preserves the existing four-part berry symbol and outlines the lowercase “blau” lettering from IBM Plex Sans 600 (the landing’s body family) as SVG paths, with no font dependency or SVG text nodes. The consuming images provide accessible alternatives.
 
 Both apps serve a white berry symbol on a black background through `app/icon.svg`, a multi-size `app/favicon.ico` and a 180px `app/apple-icon.png`.
 
@@ -20,6 +20,14 @@ Headline, exact text, in two oversized lines: "Know your cash." then "Plan what�
 Supporting text, exact text, near the lower left: "Cash forecasts and what-if plans" then "for the people behind the numbers." Use clean dark sans-serif, about 26px, generous leading.
 Style and mood: tactile fine-art oil on linen, warm cream, sage and olive green, muted sky blue, natural light; generous editorial composition, inviting and quietly optimistic.
 Constraints: preserve exact spelling and punctuation, no additional words, no domain name, no price, no buttons, no cards framing the design, no mock social-network chrome, no watermark. Keep all text readable against the pale background. This is the final ready-to-publish image, not a mockup.
+
+The wordmark was subsequently changed to the approved sans-serif logo with the built-in image tool using this edit prompt:
+
+Use case: precise-object-edit.
+Edit target: Image 1 is the finished blau social preview, 1734 × 907.
+Supporting insert: Image 2 is the approved replacement logo, with the same four-part berry symbol and the clean lowercase IBM Plex Sans wordmark rendered as outlines.
+Change only the blau logo at the top left of Image 1. Replace the old serif logo with Image 2's exact symbol and sans-serif lettering, in the same dark ink color, at the same position and approximately the same overall width. Preserve the subtle symbol rotation and the exact proportions of the new letters.
+Keep absolutely everything else unchanged: the large serif headline "Know your cash. Plan what’s next.", supporting sans-serif sentence, all painting details, desk and ledger, background, layout, colors and crop. Keep the original 1734 × 907 dimensions and full-bleed social-card composition. Do not change the headline's font. No other edits, no added text.
 
 The product paintings were generated with the built-in image generation tool for Blaubeere. No source template assets or reference screenshots were copied into the application. Original PNGs live in the repository; Next.js serves optimized sizes.
 
