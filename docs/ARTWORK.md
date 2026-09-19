@@ -1,6 +1,6 @@
 # Original product artwork
 
-All six paintings were generated with the built-in image generation tool for Blaubeere. No source template assets or reference screenshots were copied into the application. Original PNGs live in the repository; Next.js serves optimized sizes.
+The product paintings were generated with the built-in image generation tool for Blaubeere. No source template assets or reference screenshots were copied into the application. Original PNGs live in the repository; Next.js serves optimized sizes.
 
 ## Landing paintings
 
@@ -24,3 +24,11 @@ Use case: stylized-concept. Asset: original oil-painting illustration for the em
 Use case: stylized-concept. Asset: original oil-painting illustration for the empty assistant connections state in Blaubeere, a calm finance workspace. Two modest empty wooden chairs side by side overlooking a quiet lake with low green hills across the water, suggesting room for a conversation. Wide landscape composition, 3:2 aspect ratio, chairs in the lower middle, plenty of pale sky and water. Traditional oil on linen, tactile layered brushstrokes, soft diffused daylight, sage and olive greens, cream and muted blue, airy and understated. No people, no text, no logos, no interface, no border. Paint the whole image edge to edge.
 
 The open path belongs to the company-access empty state. The chairs belong to assistant connections. Both images are decorative; the accompanying heading, instructions and action communicate the state without relying on the artwork.
+
+## Garden login artwork
+
+`apps/app/public/garden-gate-oil.png` was generated with the built-in image generation tool. Final prompt:
+
+Use case: stylized-concept. Asset type: original oil painting for one half of a 50/50 finance app login screen, portrait 4:5 composition. Paint a sunlit garden with an open weathered pale wooden gate, a narrow stone path continuing through it into lush grasses, flowering borders, a mature olive tree and soft distant countryside. Gentle afternoon sunlight and dappled shadows. Tactile painterly brush strokes, visible canvas grain, softly blended atmospheric depth, elegant fine-art oil painting, warm cream, sage green, muted olive, touches of dusty blue and butter yellow. Full bleed, no frame, no lettering, no logo, no UI, no watermark. A quiet welcoming scene, believable natural garden, subject beautifully legible at a tall crop. Original image, distinct from a lake or alpine landscape.
+
+A built-in image edit removed an unintended signature: “Remove only the tiny dark signature or lettering at the extreme bottom-right corner of this oil painting. Fill that small area seamlessly with the existing painted stone path and garden ground texture. Keep the entire rest of the image exactly the same: open gate, garden, lighting, brushwork, palette, composition and portrait dimensions. No signature, no watermark, no text anywhere.”
