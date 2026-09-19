@@ -91,3 +91,12 @@ Verification: both frontend production builds and web checks pass. Chrome checks
 Not verified in this pass: Safari/Firefox, physical touch devices, a screen-reader session, automated accessibility audit, 200% browser zoom, RTL, and 10%-speed animation replay. Reduced-motion behavior was checked in code.
 
 **Approve** for the inspected typography/component scope; no unresolved HIGH finding.
+
+## Landing story and scroll motion
+
+| Location | Before | After |
+| --- | --- | --- |
+| Product story | Label/logo, first-line indent and a narrower paragraph measure | Label/logo removed. An 800px column meets the right content edge, with matching left-aligned heading and paragraph widths. This supersedes the earlier 65ch body measure. |
+| Landing and pricing | Below-the-fold sections appeared at once | One-time 420ms opacity/16px rise reveals, with 60ms group staggering. Native IntersectionObserver; no new dependency or dashboard animation. |
+
+Verified in Chrome at 1800px and 390px: first entry, staggered paintings, no replay when scrolling back, immediate keyboard focus, pricing-table entry and no horizontal overflow. Story alignment also checked at 320px. Web checks cover initial visibility, focused content, observer cleanup, late observer callbacks, changing reduced-motion preferences and unsupported browsers. Landing production build passes. Server markup remains visible without JavaScript; reduced-motion and print CSS keep it static. OS/browser-emulated reduced motion and print rendering remain unverified.

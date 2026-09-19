@@ -173,6 +173,16 @@ body { background: white; }
 }
 @keyframes hero-reveal { from { opacity: 0; transform: translateY(8px); filter: blur(3px); } to { opacity: 1; transform: translateY(0); filter: blur(0); } }
 
+@media (prefers-reduced-motion: no-preference) {
+  [data-scroll-state="pending"] { opacity: 0; transform: translateY(16px); }
+  [data-scroll-state="revealed"] { animation: scroll-reveal 420ms var(--ease-out) both; }
+  [data-scroll-reveal="1"][data-scroll-state="revealed"] { animation-delay: 60ms; }
+  [data-scroll-reveal="2"][data-scroll-state="revealed"] { animation-delay: 120ms; }
+  [data-scroll-reveal]:focus-within { opacity: 1; transform: none; animation: none; }
+}
+@keyframes scroll-reveal { from { opacity: 0; transform: translateY(16px); } to { opacity: 1; transform: none; } }
+@media print { [data-scroll-reveal] { opacity: 1; transform: none; animation: none; } }
+
 .pricing-main { position: relative; isolation: isolate; padding-block: 176px 80px; }
 .pricing-painting { position: absolute; z-index: -1; inset: 0 0 auto; height: 850px; pointer-events: none; }
 .pricing-painting img { object-fit: cover; object-position: center 58%; }

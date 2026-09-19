@@ -1,4 +1,5 @@
 import assert from "node:assert/strict";
+import "./check-scroll-reveals";
 import { createRequire } from "node:module";
 import { LoginForm } from "../apps/app/components/login-form";
 import { api, ApiError, returnPath } from "../apps/app/lib/api";
