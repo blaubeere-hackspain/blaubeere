@@ -3,6 +3,47 @@ use axum::{body::Body, http::Request};
 use http_body_util::BodyExt;
 use tower::ServiceExt;
 
+#[test]
+fn origins_match_the_served_oauth_endpoints() {
+    let valid = Config {
+        app_origin: "http://localhost:3100".into(),
+        api_origin: "https://api.example.com".into(),
+        mcp_resource: "https://mcp.example.com/mcp".into(),
+    };
+    assert!(valid.validate().is_ok());
+    for origin in [
+        "https://app.example.com/",
+        "https://app.example.com/app",
+        "http://app.example.com",
+        "https://user:pass@app.example.com",
+    ] {
+        assert!(
+            Config {
+                app_origin: origin.into(),
+                ..valid.clone()
+            }
+            .validate()
+            .is_err()
+        );
+    }
+    assert!(
+        Config {
+            api_origin: "https://api.example.com/oauth".into(),
+            ..valid.clone()
+        }
+        .validate()
+        .is_err()
+    );
+    assert!(
+        Config {
+            mcp_resource: "https://mcp.example.com/other".into(),
+            ..valid
+        }
+        .validate()
+        .is_err()
+    );
+}
+
 pub(crate) async fn state() -> AppState {
     AppState::new(
         "sqlite::memory:",

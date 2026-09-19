@@ -35,7 +35,12 @@ impl Config {
             mcp_resource: std::env::var("MCP_RESOURCE")
                 .unwrap_or_else(|_| "http://localhost:8081/mcp".into()),
         };
-        for value in [&config.app_origin, &config.api_origin, &config.mcp_resource] {
+        config.validate()?;
+        Ok(config)
+    }
+
+    fn validate(&self) -> anyhow::Result<()> {
+        for value in [&self.app_origin, &self.api_origin, &self.mcp_resource] {
             let url = url::Url::parse(value)?;
             anyhow::ensure!(
                 url.username().is_empty()
@@ -51,7 +56,18 @@ impl Config {
                 "Use HTTPS outside localhost"
             );
         }
-        Ok(config)
+        anyhow::ensure!(
+            [&self.app_origin, &self.api_origin]
+                .iter()
+                .all(|value| url::Url::parse(value)
+                    .is_ok_and(|url| url.origin().ascii_serialization() == **value)),
+            "APP_ORIGIN and API_ORIGIN must be canonical origins without a path or trailing slash"
+        );
+        anyhow::ensure!(
+            url::Url::parse(&self.mcp_resource)?.path() == "/mcp",
+            "MCP_RESOURCE must end in /mcp"
+        );
+        Ok(())
     }
 }
 
