@@ -428,7 +428,9 @@ pub async fn companies(
 ) -> ApiResult<Json<Value>> {
     let user = auth::browser_user(&state, &headers).await?;
     let identity = auth::identity(&state, &user).await?;
-    Ok(Json(json!(state.companies.iter().filter(|c| identity.company_ids.contains(&c.id)).map(|c| json!({"id":c.id,"name":c.name,"group":c.group,"currency":c.currency,"data_mode":c.data_mode})).collect::<Vec<_>>())))
+    Ok(Json(
+        company_summaries(&state, &identity.company_ids).await?,
+    ))
 }
 pub async fn assessment(
     State(state): State<AppState>,
@@ -438,16 +440,45 @@ pub async fn assessment(
 ) -> ApiResult<Json<Value>> {
     let user = auth::browser_user(&state, &headers).await?;
     auth::company_access(&state, &user, &id).await?;
+    Ok(Json(
+        assessment_for(&state, &id, query.days, query.buffer_cents).await?,
+    ))
+}
+
+pub async fn company_summaries(state: &AppState, allowed: &[String]) -> ApiResult<Value> {
+    let mut rows = if let Some(pool) = &state.dataset {
+        crate::dataset::companies(pool).await?
+    } else {
+        vec![]
+    };
+    rows.extend(state.companies.iter().map(|c| json!({"id":c.id,"name":c.name,"group":c.group,"currency":c.currency,"data_mode":c.data_mode})));
+    rows.retain(|c| {
+        c["id"]
+            .as_str()
+            .is_some_and(|id| allowed.iter().any(|allowed| allowed == id))
+    });
+    Ok(json!(rows))
+}
+
+pub async fn assessment_for(
+    state: &AppState,
+    id: &str,
+    days: Option<i64>,
+    buffer: Option<i64>,
+) -> ApiResult<Value> {
+    if let Some(value) = crate::dataset::assessment(state, id).await? {
+        return Ok(value);
+    }
     let company = state
         .companies
         .iter()
         .find(|c| c.id == id)
         .ok_or_else(|| ApiError::bad("Assessment not available for this company."))?;
-    Ok(Json(assess(
+    assess(
         company,
-        query.days.unwrap_or(90),
-        query.buffer_cents.unwrap_or(company.buffer_cents),
-    )?))
+        days.unwrap_or(90),
+        buffer.unwrap_or(company.buffer_cents),
+    )
 }
 
 pub fn assess(company: &Company, days: i64, buffer: i64) -> ApiResult<Value> {
@@ -473,12 +504,28 @@ pub async fn plans(
 ) -> ApiResult<Json<Value>> {
     let user = auth::browser_user(&state, &headers).await?;
     auth::company_access(&state, &user, &id).await?;
+    Ok(Json(compare_for(&state, &id, &goal).await?))
+}
+
+pub async fn compare_for(state: &AppState, id: &str, goal: &Goal) -> ApiResult<Value> {
+    if let Some(pool) = &state.dataset {
+        let imported: bool =
+            sqlx::query_scalar("SELECT EXISTS(SELECT 1 FROM dataset_companies WHERE id=?)")
+                .bind(id)
+                .fetch_one(pool)
+                .await?;
+        if imported {
+            return Err(ApiError::bad(
+                "Planning requires verified opening cash and dated future obligations. The imported dataset contains historical model assessments.",
+            ));
+        }
+    }
     let company = state
         .companies
         .iter()
         .find(|c| c.id == id)
         .ok_or_else(|| ApiError::bad("Assessment not available for this company."))?;
-    Ok(Json(compare(company, &goal)?))
+    compare(company, goal)
 }
 
 #[cfg(test)]

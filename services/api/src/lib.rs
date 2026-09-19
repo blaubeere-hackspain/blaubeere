@@ -1,4 +1,6 @@
 pub mod auth;
+pub mod dataset;
+pub mod dataset_import;
 pub mod finance;
 pub mod oauth;
 
@@ -78,6 +80,7 @@ impl Config {
 #[derive(Clone)]
 pub struct AppState {
     pub db: SqlitePool,
+    pub dataset: Option<SqlitePool>,
     pub config: Config,
     pub dummy_hash: Arc<String>,
     pub companies: Arc<Vec<finance::Company>>,
@@ -98,6 +101,7 @@ impl AppState {
         let dummy_hash = Arc::new(auth::hash_password(auth::secret()).await?);
         Ok(Self {
             db,
+            dataset: None,
             config,
             dummy_hash,
             companies: Arc::new(finance::load(include_str!(

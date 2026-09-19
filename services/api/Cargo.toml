@@ -26,6 +26,8 @@ sha2 = "0.10"
 sqlx = { version = "0.9", default-features = false, features = ["sqlite", "runtime-tokio", "macros", "migrate"] }
 url = "2"
 schemars = { version = "1", features = ["chrono04"] }
+parquet = { version = "59", default-features = false, features = ["json", "snap", "zstd"] }
+tempfile = "3"
 
 [dev-dependencies]
 tower = { version = "0.5", features = ["util"] }

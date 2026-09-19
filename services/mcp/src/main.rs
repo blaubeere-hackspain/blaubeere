@@ -76,10 +76,14 @@ impl FinanceTools {
         let identity = auth::identity(&self.state, principal(&ctx)?)
             .await
             .map_err(failure)?;
-        Ok(result(json!(self.state.companies.iter().filter(|c| identity.company_ids.contains(&c.id)).map(|c|json!({"id":c.id,"name":c.name,"currency":c.currency,"data_mode":c.data_mode})).collect::<Vec<_>>())))
+        Ok(result(
+            finance::company_summaries(&self.state, &identity.company_ids)
+                .await
+                .map_err(failure)?,
+        ))
     }
     #[tool(
-        description = "Read a dated cash outlook, evidence, missing inputs and observed health for an authorised company. Demo fixtures and reconstructed history are labelled. Amounts are integer cents.",
+        description = "Read a dated cash outlook or imported monthly model assessments, evidence and missing inputs for an authorised company. Imported model inputs are EUR amounts; forecasts use integer cents. No forecast is inferred from relative cash movements. Demo fixtures and reconstructed history are labelled.",
         annotations(
             read_only_hint = true,
             destructive_hint = false,
@@ -95,18 +99,14 @@ impl FinanceTools {
         auth::company_access(&self.state, principal(&ctx)?, &input.company_id)
             .await
             .map_err(failure)?;
-        let company = self
-            .state
-            .companies
-            .iter()
-            .find(|c| c.id == input.company_id)
-            .ok_or_else(|| ErrorData::invalid_params("Assessment unavailable.", None))?;
         Ok(result(
-            finance::assess(
-                company,
-                input.days.unwrap_or(90),
-                input.buffer_cents.unwrap_or(company.buffer_cents),
+            finance::assessment_for(
+                &self.state,
+                &input.company_id,
+                input.days,
+                input.buffer_cents,
             )
+            .await
             .map_err(failure)?,
         ))
     }
@@ -127,14 +127,10 @@ impl FinanceTools {
         auth::company_access(&self.state, principal(&ctx)?, &input.company_id)
             .await
             .map_err(failure)?;
-        let company = self
-            .state
-            .companies
-            .iter()
-            .find(|c| c.id == input.company_id)
-            .ok_or_else(|| ErrorData::invalid_params("Assessment unavailable.", None))?;
         Ok(result(
-            finance::compare(company, &input.goal).map_err(failure)?,
+            finance::compare_for(&self.state, &input.company_id, &input.goal)
+                .await
+                .map_err(failure)?,
         ))
     }
 }
@@ -228,6 +224,9 @@ async fn main() -> anyhow::Result<()> {
     let database =
         std::env::var("DATABASE_URL").unwrap_or_else(|_| "sqlite://.local/blaubeere.db".into());
     let mut state = AppState::new(&database, Config::from_env()?).await?;
+    if let Ok(url) = std::env::var("DATASET_DATABASE_URL") {
+        state.dataset = Some(blaubeere_api::dataset::connect(&url).await?);
+    }
     if let Ok(path) = std::env::var("ASSESSMENT_FILE") {
         state.companies = Arc::new(finance::load(&std::fs::read_to_string(path)?)?);
     }
