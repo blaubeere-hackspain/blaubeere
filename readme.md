@@ -46,7 +46,7 @@ Both Rust services share the SQLite database in `.local/blaubeere.db`. Run comma
 
 The local example and MVP production deployment enable this flag. Set it to `false` in `.env` (local) or `deploy/runtime.sh` and the matching check in `deploy/jio.sh` (production, then redeploy) to disable the authenticated demo endpoint. The backend defaults to disabled when the flag is absent. The public frontend demo remains available.
 
-Team accounts are provisioned through `BOOTSTRAP_EMAIL`, `BOOTSTRAP_PASSWORD` and comma-separated `BOOTSTRAP_COMPANIES` on API startup. There is no public registration for team accounts. Provisioning an existing email preserves its password and memberships; changing bootstrap variables does not reset that account.
+Team accounts are provisioned through `BOOTSTRAP_EMAIL`, `BOOTSTRAP_PASSWORD` and comma-separated `BOOTSTRAP_COMPANIES` on API startup. Public registration creates an identity without company access; memberships must be granted separately. Provisioning an existing email preserves its password and memberships; changing bootstrap variables does not reset that account.
 
 Browser sign-in uses Argon2 password hashes and opaque HttpOnly sessions. Company membership is checked in the backend for each assessment and plan request. Browser mutations require the configured app origin.
 
