@@ -18,7 +18,6 @@
     "check": "bun run test:deploy && bun run test:web && bun run typecheck && bun run build && bun run check:rust",
     "test:deploy": "bun scripts/check-deploy.ts",
     "test:web": "bun scripts/check-web.ts",
-    "test:assessments:e2e": "bun scripts/check-assessments-e2e.ts",
     "test:integration": "bun --env-file=.env scripts/check-api.ts"
   },
   "devDependencies": {

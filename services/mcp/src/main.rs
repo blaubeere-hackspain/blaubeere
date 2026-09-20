@@ -83,7 +83,7 @@ impl FinanceTools {
         ))
     }
     #[tool(
-        description = "Read a dated cash outlook, imported monthly model assessments or proxy-only evidence for an authorised company. Imported model inputs are EUR amounts; forecasts use integer cents. No forecast is inferred from relative cash movements. Demo fixtures and reconstructed history are labelled. Proxy-only assessments return forecast null and cash_planning_available false, with synthetic reconstructed operating-deficit probability evidence over three calendar months. Display proxy estimates only when accepted and eligible; this proxy is not calibrated, default risk or health. Empty proxy cash history means unknown, not no activity.",
+        description = "Read a dated cash outlook or imported monthly model assessments, evidence and missing inputs for an authorised company. Imported model inputs are EUR amounts; forecasts use integer cents. No forecast is inferred from relative cash movements. Demo fixtures and reconstructed history are labelled.",
         annotations(
             read_only_hint = true,
             destructive_hint = false,
@@ -111,7 +111,7 @@ impl FinanceTools {
         ))
     }
     #[tool(
-        description = "Compare a baseline with two bounded, conditional financial plans. Rejects proxy-only assessments even if callers supply cash assumptions. Does not save changes or modify source records. Supported metrics: min_cash, ending_cash, monthly_revenue (requires explicit business inputs). Targets and amounts are integer cents; deadlines are ISO dates 7–180 days after assessment.",
+        description = "Compare a baseline with two bounded, conditional financial plans. Does not save changes or modify source records. Supported metrics: min_cash, ending_cash, monthly_revenue (requires explicit business inputs). Targets and amounts are integer cents; deadlines are ISO dates 7–180 days after assessment.",
         annotations(
             read_only_hint = true,
             destructive_hint = false,
@@ -240,9 +240,6 @@ async fn main() -> anyhow::Result<()> {
         .await?;
     Ok(())
 }
-
-#[cfg(test)]
-mod proxy_tests;
 
 #[cfg(test)]
 mod tests {

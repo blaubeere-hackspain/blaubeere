@@ -14,7 +14,6 @@ import { HealthExplanation } from "../apps/app/components/health-explanation";
 import { healthHref, healthTimeline, validHealthDate } from "../apps/app/lib/health";
 import type { Company } from "../apps/app/lib/types";
 import { outsideDialog } from "../apps/app/components/dialog";
-import { hasProxyEstimate, type Predictive } from "../apps/app/lib/types";
 import { ModelDashboard, modelNumber, modelReason, hasMonthlyData } from "../apps/app/components/model-dashboard";
 import { agingAmounts, DefaultingCard, formatArrearsIndex } from "../apps/app/components/financial-cards";
 import type { CashMonth, ModelAssessment, ModelRecord } from "../apps/app/lib/types";
@@ -212,10 +211,4 @@ try {
     await assert.rejects(api("/companies/DEMO_001/plans"), error => error instanceof ApiError && error.status === status && error.message.includes("input format"));
   }
 } finally { globalThis.fetch = originalFetch; }
-for (const accepted of [true, false]) for (const eligible of [true, false]) {
-  for (const probability_estimate of [null, NaN, Infinity, -0.1, 1.1, 0, 0.5675, 1]) {
-    const p = { accepted, eligible, probability_estimate } as Predictive;
-    assert.equal(hasProxyEstimate(p), accepted && eligible && probability_estimate !== null && Number.isFinite(probability_estimate) && probability_estimate >= 0 && probability_estimate <= 1);
-  }
-}
-console.log("Web checks passed: published company demo and team sign-in, redirects, exact money input, dated horizons, chart scales, dated health explanations, dialog boundaries, validation errors and proxy display guards.");
+console.log("Web checks passed: published company demo and team sign-in, redirects, exact money input, dated horizons, chart scales, dated health explanations, dialog boundaries and validation errors.");

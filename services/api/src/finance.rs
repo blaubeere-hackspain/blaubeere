@@ -10,26 +10,10 @@ use serde_json::{Value, json};
 use std::collections::{BTreeMap, HashSet};
 
 const MAX_MONEY: i64 = 1_000_000_000_000;
-pub const CASH_UNAVAILABLE: &str = "Cash planning is unavailable: proxy-only assessments have no verified opening cash or dated cash flows. Empty history and flows mean unknown, not no activity.";
-
-#[path = "predictive.rs"]
-mod predictive;
-pub use predictive::Predictive;
-
-#[derive(Clone, Copy, Default, PartialEq, Eq, Serialize, Deserialize)]
-#[serde(rename_all = "snake_case")]
-pub enum AssessmentKind {
-    #[default]
-    Cash,
-    ProxyOnly,
-}
 
 #[derive(Clone, Serialize, Deserialize)]
 #[serde(deny_unknown_fields)]
 pub struct Company {
-    #[serde(default)]
-    pub kind: AssessmentKind,
-    pub predictive: Option<Predictive>,
     pub id: String,
     pub name: String,
     pub group: String,
@@ -38,8 +22,8 @@ pub struct Company {
     pub model_version: String,
     pub history_mode: String,
     pub data_mode: String,
-    pub opening_cash_cents: Option<i64>,
-    pub buffer_cents: Option<i64>,
+    pub opening_cash_cents: i64,
+    pub buffer_cents: i64,
     #[serde(default, skip_serializing_if = "Vec::is_empty")]
     pub health_assessments: Vec<HealthAssessment>,
     pub health: Value,
@@ -106,24 +90,10 @@ pub fn load(input: &str) -> anyhow::Result<Vec<Company>> {
             c.currency.len() == 3 && c.currency.bytes().all(|b| b.is_ascii_uppercase()),
             "Use ISO currency codes"
         );
-        if c.kind == AssessmentKind::ProxyOnly {
-            anyhow::ensure!(
-                c.health_assessments.is_empty(),
-                "Proxy-only assessment cannot contain health assessments"
-            );
-            predictive::validate(c)?;
-            continue;
-        }
         anyhow::ensure!(
-            c.predictive.is_none(),
-            "Cash mode cannot contain proxy evidence"
-        );
-        anyhow::ensure!(
-            c.opening_cash_cents
-                .is_some_and(|cash| (-MAX_MONEY..=MAX_MONEY).contains(&cash))
-                && c.buffer_cents
-                    .is_some_and(|buffer| (0..=MAX_MONEY).contains(&buffer)),
-            "Cash missing or outside supported bounds"
+            (-MAX_MONEY..=MAX_MONEY).contains(&c.opening_cash_cents)
+                && (0..=MAX_MONEY).contains(&c.buffer_cents),
+            "Cash outside supported bounds"
         );
         anyhow::ensure!(
             matches!(c.history_mode.as_str(), "as_known" | "reconstructed"),
@@ -281,9 +251,7 @@ fn forecast(
                 .or_default() += extra;
         }
     }
-    let mut cash = company
-        .opening_cash_cents
-        .expect("validated cash-mode assessment");
+    let mut cash = company.opening_cash_cents;
     let points: Vec<Point> = (0..=days)
         .map(|day| {
             let date = cutoff + Duration::days(day);
@@ -395,12 +363,6 @@ fn validate_goal(company: &Company, goal: &Goal) -> ApiResult<i64> {
 }
 
 pub fn compare(company: &Company, goal: &Goal) -> ApiResult<Value> {
-    if company.kind == AssessmentKind::ProxyOnly
-        || company.opening_cash_cents.is_none()
-        || company.buffer_cents.is_none()
-    {
-        return Err(ApiError::bad(CASH_UNAVAILABLE));
-    }
     let days = validate_goal(company, goal)?;
     let baseline = forecast(
         company,
@@ -513,21 +475,14 @@ pub async fn assessment_for(
         .iter()
         .find(|c| c.id == id)
         .ok_or_else(|| ApiError::bad("Assessment not available for this company."))?;
-    assess(company, days.unwrap_or(90), buffer)
+    assess(
+        company,
+        days.unwrap_or(90),
+        buffer.unwrap_or(company.buffer_cents),
+    )
 }
 
-pub fn assess(company: &Company, days: i64, buffer: Option<i64>) -> ApiResult<Value> {
-    if company.kind == AssessmentKind::ProxyOnly
-        || company.opening_cash_cents.is_none()
-        || company.buffer_cents.is_none()
-    {
-        return Ok(
-            json!({"company":company,"forecast":null,"cash_planning_available":false,"cash_planning_reason":CASH_UNAVAILABLE}),
-        );
-    }
-    let buffer = buffer
-        .or(company.buffer_cents)
-        .ok_or_else(|| ApiError::bad(CASH_UNAVAILABLE))?;
+pub fn assess(company: &Company, days: i64, buffer: i64) -> ApiResult<Value> {
     if !(7..=180).contains(&days) || !(0..=MAX_MONEY).contains(&buffer) {
         return Err(ApiError::bad(
             "Use a 7–180 day horizon and a non-negative buffer.",
@@ -538,7 +493,7 @@ pub fn assess(company: &Company, days: i64, buffer: Option<i64>) -> ApiResult<Va
         .flows
         .retain(|flow| flow.known_on <= company.assessment_date);
     Ok(
-        json!({"company":snapshot,"forecast":forecast(company,days,buffer,&Changes::default(),None),"cash_planning_available":true,"cash_planning_reason":null}),
+        json!({"company":snapshot,"forecast":forecast(company,days,buffer,&Changes::default(),None)}),
     )
 }
 
@@ -583,6 +538,19 @@ mod tests {
             .remove(0)
     }
     #[test]
+    fn retired_proxy_and_unknown_fields_are_rejected() {
+        let input = serde_json::to_value(vec![company()]).unwrap();
+        for (field, value) in [
+            ("kind", json!("proxy_only")),
+            ("predictive", json!({"probability_estimate": 0.5})),
+            ("unexpected", json!(true)),
+        ] {
+            let mut invalid = input.clone();
+            invalid[0][field] = value;
+            assert!(load(&invalid.to_string()).is_err(), "Accepted {field}");
+        }
+    }
+    #[test]
     fn dated_health_snapshots_are_preserved_and_validated() {
         let c = company();
         let payload = assess(&c, 90, c.buffer_cents).unwrap();
@@ -595,12 +563,6 @@ mod tests {
             -1.0
         );
         let input = serde_json::to_value(vec![c]).unwrap();
-        let mut proxy = input.clone();
-        proxy[0]["kind"] = json!("proxy_only");
-        assert_eq!(
-            load(&proxy.to_string()).err().unwrap().to_string(),
-            "Proxy-only assessment cannot contain health assessments"
-        );
         for (path, value) in [
             ("/0/health_assessments/0/health/score", json!(101)),
             ("/0/health_assessments/0/date", json!("2026-09-01")),

@@ -1,7 +1,7 @@
 "use client";
 import { useEffect, useRef, useState } from "react";
 import { date, money } from "../lib/format";
-import type { CashCompany, Forecast, Plan, Point } from "../lib/types";
+import type { Company, Forecast, Plan, Point } from "../lib/types";
 
 export function cashScale(low: number, high: number) {
   const rough = Math.max((high - low) / 4, 100_000);
@@ -12,7 +12,7 @@ export function cashScale(low: number, high: number) {
   return { min, max, ticks: Array.from({ length: Math.round((max - min) / step) + 1 }, (_, i) => min + i * step) };
 }
 
-export function CashChart({ company, forecast, plan }: { company: CashCompany; forecast: Forecast; plan?: Plan }) {
+export function CashChart({ company, forecast, plan }: { company: Company; forecast: Forecast; plan?: Plan }) {
   const [day, setDay] = useState(0);
   const [width, setWidth] = useState(1000);
   const svg = useRef<SVGSVGElement>(null);
