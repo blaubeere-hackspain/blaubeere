@@ -429,6 +429,18 @@ async fn parquet_snapshot_preserves_model_data_and_requires_membership() {
     );
     assert!((points[1]["saldo_proyectado_eur"].as_f64().unwrap() - 115665.8246291364).abs() < 0.01);
     assert!((points[2]["flujo_neto_esperado_eur"].as_f64().unwrap() - 125.6813203119).abs() < 0.01);
+    let estimated = &august["health_projection"];
+    assert_eq!(estimated["method"], "cash_only_scenario_v1");
+    assert_eq!(estimated["as_of"], august["as_of"]);
+    assert_eq!(estimated["points"].as_array().unwrap().len(), 3);
+    for (health, cash) in estimated["points"].as_array().unwrap().iter().zip(points) {
+        assert_eq!(health["date"], cash["date"]);
+        assert!(
+            health["health_score"]
+                .as_f64()
+                .is_some_and(|score| (0.0..=100.0).contains(&score))
+        );
+    }
     for record in projection["records"].as_array().unwrap() {
         if !record["cash_projection"].is_null() {
             assert_eq!(

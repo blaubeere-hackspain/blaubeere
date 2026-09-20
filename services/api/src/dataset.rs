@@ -141,6 +141,8 @@ pub async fn assessment(state: &AppState, id: &str) -> ApiResult<Option<Value>> 
             .transpose()?
             .unwrap_or(Value::Null);
         row["health_status"] = crate::company_health::status(&row, records.last());
+        row["health_projection"] =
+            crate::company_health::cash_projection(&row).unwrap_or(Value::Null);
         records.push(row);
     }
     let metadata: String = sqlx::query_scalar("SELECT payload FROM dataset_metadata")

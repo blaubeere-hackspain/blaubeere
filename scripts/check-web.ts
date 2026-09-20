@@ -146,7 +146,16 @@ assert.ok(!partialForecast.includes('data-forecast-horizon="60"') && (partialFor
 const foreignForecast = renderToStaticMarkup(createElement(DailyCashPlot, { series: { ...forecastDaily, currency: "GBP" }, projection }));
 assert.ok(!foreignForecast.includes('data-series="forecast"'), "Never plot EUR estimates as native GBP");
 const forecastDashboard = renderToStaticMarkup(createElement(ModelDashboard, { data: { ...model, records: [forecastRow] } }));
-assert.ok(forecastDashboard.includes('aria-pressed="false" aria-controls="cash"') && !forecastDashboard.includes('data-forecast-horizon'), "Forecast starts off and its health-card toggle controls the cash chart");
+assert.ok(forecastDashboard.includes('aria-pressed="false" aria-controls="health cash"') && !forecastDashboard.includes('data-forecast-horizon'), "Forecast starts off and its toggle controls both charts");
+const healthProjection: NonNullable<ModelRecord["health_projection"]> = { as_of: "2026-03-31", method: "cash_only_scenario_v1", assumptions: "Only cash changes; other inputs stay fixed.", points: ([30, 60, 90] as const).map((h, index) => ({ h, date: addDays("2026-03-31", h), health_score: 60 + index })) };
+const healthForecastRow = { ...scoredV4, as_of: healthProjection.as_of, health_projection: healthProjection };
+const actualHistory = [healthForecastRow, { ...healthForecastRow, as_of: "2026-04-30", health_score: 45 }, { ...healthForecastRow, as_of: "2026-05-31", health_score: 44 }, { ...healthForecastRow, as_of: "2026-08-31", health_score: 43 }];
+const healthOverlay = renderToStaticMarkup(createElement(HealthScorePanel, { records: actualHistory, row: healthForecastRow, forecast: true }));
+assert.deepEqual([...healthOverlay.matchAll(/data-health-forecast-horizon="(\d+)"/g)].map(match => Number(match[1])), [30, 60, 90]);
+for (const actual of ["30 Apr 2026: 45", "31 May 2026: 44", "31 Aug 2026: 43"]) assert.ok(healthOverlay.includes(actual), "Actual scores after the cutoff stay visible alongside the estimate");
+assert.ok(healthOverlay.includes("Estimated health") && healthOverlay.includes('data-series="health-forecast"') && healthOverlay.includes('stroke-dasharray="5 5"') && !healthOverlay.includes("NaN"));
+const unknownHealth = renderToStaticMarkup(createElement(HealthScorePanel, { records: actualHistory, row: { ...healthForecastRow, health_projection: null }, forecast: true }));
+assert.ok(!unknownHealth.includes('data-health-forecast-horizon'), "Cash forecasts cannot invent missing health estimates");
 const nativeChart = renderToStaticMarkup(createElement(MonthlyCashChart, { row: { ...cashRecord, daily_cash: [{ ...daily, currency: "GBP" }] } }));
 assert.ok(nativeChart.includes("Original GBP accounts") && nativeChart.includes("£1,000") && !nativeChart.includes("€"), "Currency labels must follow the original-currency amounts");
 const aged = agingAmounts(cashRecord.payment, "pago");

@@ -25,6 +25,88 @@ fn score(row: &Value) -> Option<f64> {
     }
     number(row, "/health_score").filter(|v| (0.0..99.99).contains(v))
 }
+
+// Same v4 formula as xray/scoring_v4.py, changing only the cash cushion.
+fn score_for_cash(row: &Value, cash: f64) -> Option<f64> {
+    let c6 = number(row, "/c6")?;
+    let t6 = number(row, "/t6_efectivo")?;
+    let alpha = number(row, "/alpha")?;
+    let k = number(row, "/k")?;
+    let beta = number(row, "/beta")?;
+    let beta_fx = number(row, "/beta_fx")?;
+    if !cash.is_finite()
+        || [c6, t6, alpha, k].iter().any(|v| *v < 0.0)
+        || !(0.0..=1.0).contains(&beta)
+        || !(0.0..=1.0).contains(&beta_fx)
+    {
+        return None;
+    }
+    for field in [
+        "r_hist",
+        "mora_indice",
+        "multiplicador_deuda",
+        "indice_fx_aplicado",
+    ] {
+        if !row.get(field)?.is_null()
+            && !number(row, &format!("/{field}")).is_some_and(|v| (0.0..=1.0).contains(&v))
+        {
+            return None;
+        }
+    }
+    let history = number(row, "/r_hist");
+    let cushion = cash.max(0.0).min(alpha * t6);
+    let denominator = c6 + cushion + t6 + if history.is_some() { k } else { 0.0 };
+    if denominator <= 0.0 || !denominator.is_finite() {
+        return None;
+    }
+    let base = 100.0 * (c6 + cushion + history.map_or(0.0, |ratio| k * ratio)) / denominator;
+    let adjusted = base
+        * number(row, "/mora_indice").map_or(1.0, |mora| 1.0 - beta * mora)
+        * number(row, "/multiplicador_deuda").unwrap_or(1.0)
+        * number(row, "/indice_fx_aplicado").map_or(1.0, |fx| 1.0 - beta_fx * fx);
+    adjusted.is_finite().then(|| adjusted.clamp(0.0, 100.0))
+}
+
+pub fn cash_projection(row: &Value) -> Option<Value> {
+    let current = score(row)?;
+    if row["version"] != "healthscore_v4" {
+        return None;
+    }
+    // Fail closed if a future model revision no longer reproduces the saved score.
+    let baseline = score_for_cash(row, number(row, "/colchon_v4")?)?;
+    if (baseline - current).abs() > 1e-6 {
+        return None;
+    }
+    let forecast = &row["cash_projection"];
+    if forecast["as_of"] != row["as_of"] || forecast["currency"] != "EUR" {
+        return None;
+    }
+    let horizons = forecast["horizons"].as_array()?;
+    if horizons.len() != 3 {
+        return None;
+    }
+    let mut points = Vec::new();
+    for (point, h) in horizons.iter().zip([30, 60, 90]) {
+        if point["h"] != h {
+            return None;
+        }
+        let opening = number(point, "/saldo_corte_eur");
+        let comparable = opening
+            .zip(number(row, "/cash/saldo_reversa_eur"))
+            .is_some_and(|(a, b)| (a - b).abs() <= 0.01);
+        let estimated = if comparable {
+            number(point, "/saldo_proyectado_eur").and_then(|cash| score_for_cash(row, cash))
+        } else {
+            None
+        };
+        points.push(json!({"h":h,"date":point["date"],"health_score":estimated}));
+    }
+    Some(
+        json!({"as_of":row["as_of"],"method":"cash_only_scenario_v1","points":points,
+        "assumptions":"Only the cash cushion changes. Historical flows, obligations, arrears, debt and FX factors stay fixed at the selected month. Conditional estimates, not published future scores."}),
+    )
+}
+
 pub fn has_activity(row: &Value) -> bool {
     number(row, "/health_score").is_some()
         || [
@@ -177,6 +259,51 @@ pub async fn endpoint(
 #[cfg(test)]
 mod tests {
     use super::*;
+    #[test]
+    fn cash_health_projection_keeps_adjustments_caps_and_missing_evidence() {
+        let mut row = json!({"version":"healthscore_v4","as_of":"2026-08-31","health_score":35.64,
+        "excluida":false,"confidence":"alta","c6":100.0,"t6_efectivo":100.0,"alpha":3.0,
+        "k":4178.45,"r_hist":null,"beta":0.25,"mora_indice":0.4,"multiplicador_deuda":0.8,
+        "beta_fx":0.05,"indice_fx_aplicado":0.2,"colchon_v4":0.0,"cash":{"saldo_reversa_eur":0.0},
+        "cash_projection":{"as_of":"2026-08-31","currency":"EUR","horizons":[
+            {"h":30,"date":"2026-09-30","saldo_corte_eur":0.0,"saldo_proyectado_eur":100.0},
+            {"h":60,"date":"2026-10-30","saldo_corte_eur":0.0,"saldo_proyectado_eur":300.0},
+            {"h":90,"date":"2026-11-29","saldo_corte_eur":0.0,"saldo_proyectado_eur":500.0}
+        ]}});
+        let original = row.clone();
+        let projection = cash_projection(&row).unwrap();
+        assert_eq!(row, original, "Estimates never overwrite observations");
+        for (point, expected) in projection["points"]
+            .as_array()
+            .unwrap()
+            .iter()
+            .zip([47.52, 57.024, 57.024])
+        {
+            assert!((point["health_score"].as_f64().unwrap() - expected).abs() < 1e-9);
+        }
+        assert!((score_for_cash(&row, -100.0).unwrap() - 35.64).abs() < 1e-9);
+        row["cash_projection"]["horizons"][1]["saldo_proyectado_eur"] = Value::Null;
+        assert!(cash_projection(&row).unwrap()["points"][1]["health_score"].is_null());
+        row["cash_projection"]["horizons"][0]["saldo_corte_eur"] = json!(100.0);
+        assert!(cash_projection(&row).unwrap()["points"][0]["health_score"].is_null());
+        for (field, value) in [
+            ("excluida", json!(true)),
+            ("confidence", json!("ninguna")),
+            ("health_score", Value::Null),
+            ("health_score", json!(90.0)),
+            ("t6_efectivo", Value::Null),
+        ] {
+            let mut invalid = original.clone();
+            invalid[field] = value;
+            assert!(
+                cash_projection(&invalid).is_none(),
+                "Reject unsupported baseline: {field}"
+            );
+        }
+        row["cash_projection"]["as_of"] = json!("2026-07-31");
+        assert!(cash_projection(&row).is_none());
+    }
+
     #[test]
     fn summaries_preserve_evidence_dates_currency_and_unknowns() {
         let fixture: Value = serde_json::from_str(include_str!(

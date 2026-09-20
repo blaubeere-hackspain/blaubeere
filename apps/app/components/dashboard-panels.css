@@ -88,6 +88,10 @@
 .monthly-cash .cash-flow-totals { margin-top: auto; }
 @media (max-width:900px) { .dashboard-charts { grid-template-columns: 1fr; } }
 .health-overview-main { min-width: 0; }
+.health-overview-panel { --health-forecast: #857043; }
+.health-forecast-legend { display: flex; align-items: center; gap: 8px; color: var(--muted); font-size: var(--text-caption); margin-bottom: 6px; }
+.health-forecast-legend i { width: 18px; border-top: 2px dashed var(--health-forecast); }
+.health-forecast-point:focus-visible { stroke-width: 4px; outline: none; }
 .health-selected-score { display: flex; align-items: center; flex-wrap: wrap; gap: 16px; padding: 0 16px 8px; }
 .health-score-gauge { width: 160px; flex-shrink: 0; }
 .health-score-gauge svg { display: block; width: 100%; }

@@ -63,6 +63,10 @@ export type ModelRecord = {
   };
   daily_cash?: CashMonth[] | null;
   cash_projection?: CashProjection | null;
+  health_projection?: {
+    as_of: string; method: "cash_only_scenario_v1"; assumptions: string;
+    points: { h: 30 | 60 | 90; date: string; health_score: number | null }[];
+  } | null;
   version: string; company_id: string; group_id: string; month: string; as_of: string;
   health_score: number | null; excluida: boolean; confidence: string; n_meses_ventana: number; n_meses_con_actividad: number;
   c6: number | null; p6: number | null; d6: number | null; t6_efectivo: number | null;
