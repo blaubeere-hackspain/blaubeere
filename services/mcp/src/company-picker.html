@@ -10,6 +10,10 @@
 const companies = document.getElementById('companies'), status = document.getElementById('status'), result = document.getElementById('result');
 const pending = new Map(); let requestId = 0, selection = 0;
 function request(method, params) {
+  const host = window.openai;
+  if (method === 'tools/call' && host?.callTool) return host.callTool(params.name, params.arguments).then(value => value.structuredContent ? value : {structuredContent:value});
+  if (method === 'ui/message' && host?.sendFollowUpMessage) return host.sendFollowUpMessage({prompt:params.content[0].text});
+  if (method === 'ui/update-model-context' && host?.setWidgetState) { host.setWidgetState({modelContent:params.structuredContent}); return Promise.resolve({}); }
   return new Promise((resolve, reject) => {
     const id = ++requestId;
     const timer = setTimeout(() => { pending.delete(id); reject(new Error('The request timed out. Please retry.')); }, 30000);
@@ -65,6 +69,8 @@ window.addEventListener('message', event => {
   if (call) { clearTimeout(call.timer); pending.delete(message.id); message.error ? call.reject(new Error(message.error.message || 'Request failed.')) : call.resolve(message.result); }
   if (message.method === 'ui/notifications/tool-result') renderCompanies(message.params?.structuredContent);
 });
-request('ui/initialize',{appInfo:{name:'Blau company picker',version:'1.0.0'},appCapabilities:{},protocolVersion:'2026-01-26'}).then(() => notify('ui/notifications/initialized',{})).catch(error => { status.textContent = error.message; });
+window.addEventListener('openai:set_globals', event => renderCompanies(event.detail?.globals?.toolOutput));
+if (window.openai) renderCompanies(window.openai.toolOutput);
+else request('ui/initialize',{appInfo:{name:'Blau company picker',version:'1.0.0'},appCapabilities:{},protocolVersion:'2026-01-26'}).then(() => notify('ui/notifications/initialized',{})).catch(error => { status.textContent = error.message; });
 new ResizeObserver(() => notify('ui/notifications/size-changed',{height:document.documentElement.scrollHeight})).observe(document.body);
 </script></html>

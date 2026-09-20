@@ -26,6 +26,7 @@ use serde_json::{Value, json};
 use std::sync::Arc;
 
 const COMPANY_PICKER: &str = "ui://blau/company-picker-v1.html";
+const CHATGPT_PICKER: &str = "ui://blau/company-picker-chatgpt-v2.html";
 
 #[derive(Clone)]
 struct Principal(String);
@@ -181,7 +182,7 @@ impl ServerHandler for FinanceTools {
         ctx: RequestContext<RoleServer>,
     ) -> Result<ListResourcesResult, ErrorData> {
         principal(&ctx)?;
-        Ok(serde_json::from_value(json!({"resources":[{"uri":COMPANY_PICKER,"name":"Blau company picker","mimeType":"text/html;profile=mcp-app"}]})).expect("valid resource list"))
+        Ok(serde_json::from_value(json!({"resources":[{"uri":COMPANY_PICKER,"name":"Blau company picker","mimeType":"text/html;profile=mcp-app"},{"uri":CHATGPT_PICKER,"name":"Blau company picker for ChatGPT","mimeType":"text/html+skybridge"}]})).expect("valid resource list"))
     }
     async fn read_resource(
         &self,
@@ -189,10 +190,15 @@ impl ServerHandler for FinanceTools {
         ctx: RequestContext<RoleServer>,
     ) -> Result<ReadResourceResponse, ErrorData> {
         principal(&ctx)?;
-        if input.uri != COMPANY_PICKER {
+        if input.uri != COMPANY_PICKER && input.uri != CHATGPT_PICKER {
             return Err(ErrorData::invalid_params("Unknown resource", None));
         }
-        Ok(serde_json::from_value::<ReadResourceResult>(json!({"contents":[{"uri":COMPANY_PICKER,"mimeType":"text/html;profile=mcp-app","text":include_str!("company-picker.html"),"_meta":{"ui":{"prefersBorder":true,"csp":{"connectDomains":[],"resourceDomains":[]}},"openai/widgetDescription":"Pick an authorised company and inspect its dated financial health, alerts and metrics."}}]})).expect("valid UI resource").into())
+        let mime = if input.uri == CHATGPT_PICKER {
+            "text/html+skybridge"
+        } else {
+            "text/html;profile=mcp-app"
+        };
+        Ok(serde_json::from_value::<ReadResourceResult>(json!({"contents":[{"uri":input.uri,"mimeType":mime,"text":include_str!("company-picker.html"),"_meta":{"ui":{"prefersBorder":true,"csp":{"connectDomains":[],"resourceDomains":[]}},"openai/widgetPrefersBorder":true,"openai/widgetCSP":{"connect_domains":[],"resource_domains":[]},"openai/widgetDescription":"Pick an authorised company and inspect its dated financial health, alerts and metrics."}}]})).expect("valid UI resource").into())
     }
     fn get_info(&self) -> ServerInfo {
         ServerInfo::new(ServerCapabilities::builder().enable_tools().enable_resources().build()).with_instructions("Blaubeere supports internal finance planning. Use list_companies to show the company picker; use get_company_health for a company's health, issues and metrics. Surface returned risk alerts and the assessment date; historical snapshots are not live financial status. Insufficient evidence is not poor health. Attention thresholds are provisional, not default probabilities. Preserve source labels, dates, missing coverage and explicit assumptions in every answer. Scenarios are conditional, not guarantees. Never infer retention or profit from bank data. Each company is authorised independently.")
@@ -254,10 +260,10 @@ fn router(state: AppState) -> Router {
         move || {
             let mut tool_router = FinanceTools::tool_router();
             for route in tool_router.map.values_mut() {
-                let mut meta = json!({"securitySchemes":[{"type":"oauth2","scopes":[oauth::SCOPE]}],"ui":{"visibility":["model","app"]}});
+                let mut meta = json!({"securitySchemes":[{"type":"oauth2","scopes":[oauth::SCOPE]}],"ui":{"visibility":["model","app"]},"openai/widgetAccessible":true});
                 if route.attr.name == "list_companies" {
                     meta["ui"]["resourceUri"] = json!(COMPANY_PICKER);
-                    meta["openai/outputTemplate"] = json!(COMPANY_PICKER);
+                    meta["openai/outputTemplate"] = json!(CHATGPT_PICKER);
                 }
                 route.attr.meta = Some(rmcp::model::MetaObject(meta.as_object().unwrap().clone()));
             }
@@ -452,6 +458,7 @@ mod tests {
         for (method, params) in [
             ("tools/list", json!({})),
             ("resources/read", json!({"uri":COMPANY_PICKER})),
+            ("resources/read", json!({"uri":CHATGPT_PICKER})),
         ] {
             let request = Request::builder()
                 .method("POST")
@@ -484,10 +491,16 @@ mod tests {
                     .find(|t| t["name"] == "list_companies")
                     .unwrap();
                 assert_eq!(picker["_meta"]["ui"]["resourceUri"], COMPANY_PICKER);
+                assert_eq!(picker["_meta"]["openai/outputTemplate"], CHATGPT_PICKER);
+                assert_eq!(picker["_meta"]["openai/widgetAccessible"], true);
             } else {
                 assert_eq!(
                     value["result"]["contents"][0]["mimeType"],
-                    "text/html;profile=mcp-app"
+                    if params["uri"] == CHATGPT_PICKER {
+                        "text/html+skybridge"
+                    } else {
+                        "text/html;profile=mcp-app"
+                    }
                 );
                 assert!(
                     value["result"]["contents"][0]["text"]
