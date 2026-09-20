@@ -3,7 +3,6 @@
 @import "../components/dashboard-panels.css";
 
 :root {
-  --font-ui: "Inter Variable", system-ui, sans-serif;
   --ink: #252724;
   --muted: #626661;
   --subtle: #6b706a;
@@ -503,6 +502,7 @@ body { background: #f1f1ee; }
 .model-stats .stat-card { padding: 16px; }
 .model-stats .stat-card > div { margin-bottom: 12px; }
 .model-stats .stat-value { display: flex; align-items: center; min-height: 44px; }
-.model-dashboard .page-heading h1 { font-family: var(--font-ui); font-size: 28px; font-weight: 500; letter-spacing: -.035em; }
 .model-dashboard section[id], #payments { scroll-margin-top: 24px; }
 .model-dashboard .model-chart circle { cursor: default; }
+
+@media (max-width: 700px) { .app-shell input, .app-shell select { font-size: 16px; } }

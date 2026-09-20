@@ -1,4 +1,6 @@
-import "@fontsource-variable/inter";
+import "@fontsource/ibm-plex-sans/400.css";
+import "@fontsource/ibm-plex-sans/500.css";
+import "@fontsource/ibm-plex-sans/600.css";
 import "@fontsource/ibm-plex-mono/400.css";
 import type { Metadata } from "next";
 import { appOrigin, pageMetadata } from "../../metadata";

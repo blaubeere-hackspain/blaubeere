@@ -1,5 +1,4 @@
 "use client";
-import "@fontsource-variable/inter";
 import Image from "next/image";
 import welcomePainting from "../public/welcome-garden-oil.png";
 import welcomeStyles from "./welcome-onboarding.module.css";
