@@ -8,6 +8,7 @@ import { MonthlyCashChart } from "./monthly-cash-chart";
 import { AssessmentCalendar } from "./assessment-calendar";
 import { AgingCard, DefaultingCard, formatIndex } from "./financial-cards";
 import type { ModelAssessment, ModelRecord } from "../lib/types";
+import { ChartMotion } from "./motion";
 
 import { HealthScorePanel, modelNumber } from "./health-score-panel";
 export { modelNumber } from "./health-score-panel";
@@ -46,7 +47,7 @@ export function ModelDashboard({ data, scoreDate, demo = false }: { data: ModelA
   const selectedIndex = row ? data.records.indexOf(row) : -1;
   const previous = data.records[selectedIndex - 1];
   const next = data.records[selectedIndex + 1];
-  return <div className="model-dashboard">
+  return <ChartMotion><div className="model-dashboard">
     <p className="sr-only" role="status">{row ? `Showing data for ${date(row.as_of, true)}` : "No assessment selected"}</p>
     <header className="page-heading company-heading"><div><h1>{scoreDate ? "The story behind this rating." : companyName}</h1><p className="muted mt-2">{scoreDate ? companyName : "Financial health and the movements behind it."}</p></div><div className="company-heading-actions"><AssessmentCalendar dates={availableDates} selected={row?.as_of ?? ""} onSelect={value => scoreDate ? window.location.assign(scoreHref(value)) : setMonth(value)}/>{scoreDate && <Link className="button secondary" href={`${demo ? "/demo" : "/dashboard"}?company=${encodeURIComponent(data.company.id)}`}><ArrowLeft size={16} aria-hidden/>Overview</Link>}</div></header>
     {!row ? <section className="card metric-intro"><h2>{availableDates.length ? "No assessment for this date" : "No recorded activity yet"}</h2><p>{availableDates.length ? "Choose an available month above." : "No cash movements, invoices or model activity were recorded for this company."}</p></section> : <>
@@ -61,5 +62,6 @@ export function ModelDashboard({ data, scoreDate, demo = false }: { data: ModelA
       </div></section>}
       {scoreDate && <nav className="health-adjacent" aria-label="Other assessments">{previous?<Link className="button secondary" href={scoreHref(previous.as_of)}><ArrowLeft size={16} aria-hidden/>{date(previous.as_of,true)}</Link>:<span/>}{next&&<Link className="button secondary" href={scoreHref(next.as_of)}>{date(next.as_of,true)}<ArrowRight size={16} aria-hidden/></Link>}</nav>}
     </>}
-  </div>;
+  </div>
+  </ChartMotion>;
 }

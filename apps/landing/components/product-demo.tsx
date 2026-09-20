@@ -6,12 +6,13 @@ import { HealthScorePanel } from "../../app/components/health-score-panel";
 import { MonthlyCashChart } from "../../app/components/monthly-cash-chart";
 import { AgingCard, DefaultingCard } from "../../app/components/financial-cards";
 import type { ModelRecord } from "../../app/lib/types";
+import { ChartMotion } from "../../app/components/motion";
 import snapshot from "../data/product-preview.json";
 
 export function ProductDemo() {
   const row: ModelRecord = snapshot.record;
   const companyUrl = `${appOrigin}/demo?company=${snapshot.company_id}`;
-  return <section className="product-demo site-container" id="outlook" aria-labelledby="demo-title">
+  return <ChartMotion><section className="product-demo site-container" id="outlook" aria-labelledby="demo-title">
     <h2 id="demo-title" className="sr-only">A preview of your finance workspace</h2>
     <div className="demo-window" data-scroll-reveal>
       <div className="demo-topbar"><Image className="brand-logo" src={logo} alt="blau"/><a className="text-link" href={companyUrl}>Explore the dashboard<ArrowRight size={16} aria-hidden/></a></div>
@@ -22,5 +23,6 @@ export function ProductDemo() {
       </div>
     </div>
     <p className="preview-caption">COMP 6 · August 2026. A snapshot from the published demo dataset.</p>
-  </section>;
+  </section>
+  </ChartMotion>;
 }

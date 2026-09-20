@@ -1,7 +1,9 @@
+"use client";
 import type { ReactNode } from "react";
 import { ArrowDownLeft, ArrowUpRight, ClockAlert, Coins } from "lucide-react";
 import { date, money } from "../lib/format";
 import type { ModelRecord } from "../lib/types";
+import { GrowingBar } from "./motion";
 
 const buckets = [
   { key: "1_30", label: "0–30 days", color: "#315b4b" },
@@ -61,11 +63,11 @@ export function DefaultingCard({ row }: { row: ModelRecord }) {
   return <section className="card financial-card defaulting-card" aria-labelledby="defaulting-title">
     <header className="financial-card-heading"><ClockAlert size={17} aria-hidden/><div><h2 id="defaulting-title">Defaulting</h2><p>Payment arrears · {date(row.as_of, true)}</p></div></header>
     <div className="defaulting-summary"><span>Arrears index</span><strong className="num">{formatIndex(index)}</strong>{index === null && <p>Insufficient payment evidence.</p>}</div>
-    <dl className="defaulting-bars">{([['Supplier payments', suppliers], ['Customer collections', customers]] as const).map(([label, value]) => <div key={label}><dt>{label}</dt><dd className="num">{formatIndex(value)}</dd>{value !== null && <div className="defaulting-track" aria-hidden><i style={{ width: `${value * 100}%` }}/></div>}</div>)}</dl>
+    <dl className="defaulting-bars">{([['Supplier payments', suppliers], ['Customer collections', customers]] as const).map(([label, value]) => <div key={label}><dt>{label}</dt><dd className="num">{formatIndex(value)}</dd>{value !== null && <div className="defaulting-track" aria-hidden><GrowingBar width={`${value * 100}%`}/></div>}</div>)}</dl>
     <footer className="financial-card-note"><p>Observed arrears, not default probability.</p>{index !== null && (suppliers === null || customers === null) && <p>{suppliers !== null ? "Supplier evidence only." : customers !== null ? "Customer evidence only." : "Breakdown unavailable."}</p>}</footer>
     {hasFxLayer && <section className="defaulting-fx" aria-labelledby="fx-risk-title">
       <header className="financial-card-heading"><Coins size={17} aria-hidden/><div><h3 id="fx-risk-title">Currency risk</h3><p>Foreign-currency receivables</p></div></header>
-      <div className="defaulting-summary"><span>FX risk index</span><strong className="num">{formatIndex(fxHeadline)}</strong>{fxHeadline !== null && <div className="fx-track" aria-hidden><i style={{ width: `${fxHeadline * 100}%` }}/></div>}{fxHeadline === null && <p>FX evidence unavailable; no adjustment.</p>}</div>
+      <div className="defaulting-summary"><span>FX risk index</span><strong className="num">{formatIndex(fxHeadline)}</strong>{fxHeadline !== null && <div className="fx-track" aria-hidden><GrowingBar width={`${fxHeadline * 100}%`}/></div>}{fxHeadline === null && <p>FX evidence unavailable; no adjustment.</p>}</div>
       <dl className="defaulting-bars"><div><dt>Applied index</dt><dd className="num">{formatIndex(row.indice_fx_aplicado)}</dd></div><div><dt>Score reduction</dt><dd className="num">{formatFxPoints(row.penalizacion_fx_puntos)}</dd></div></dl>
       <footer className="financial-card-note">{row.indice_es_intervalo && <p>Incomplete FX coverage; minimum compatible penalty applied.</p>}{row.beta_fx != null && <p>Maximum reduction: {percentage(row.beta_fx)} of the score.</p>}</footer>
     </section>}
