@@ -1,0 +1,507 @@
+{
+  "company_id": "COMP_0006",
+  "source_files": [
+    {
+      "path": "reports/score_v4/assessments.parquet",
+      "sha256": "9177fbf443f7aadfe696422ccec90a7f17e89f7c1192af68d134265409218c79"
+    },
+    {
+      "path": "reports/cash_backfill/cash_backfill_monthly.parquet",
+      "sha256": "70db83e48a89e505fe946d98394a3c4b2aba40ad57fd5a387c5e2fef8061c4fb"
+    },
+    {
+      "path": "reports/payment_delay_v2/payment_delay_v2_monthly.parquet",
+      "sha256": "630c8def49a69fcaab1f24a1a50e31bf4165a1b946cc277e66e4300786763ccb"
+    },
+    {
+      "path": "reports/debt_obligation/debt_obligation_monthly.parquet",
+      "sha256": "7dccf66383a3345fc934609bc107ef86dfb4da096b9b5504339366db0894a344"
+    },
+    {
+      "path": "reports/transfer_resolution_v2/resolution.parquet",
+      "sha256": "ce14d09937df337b5187f84e575d8231cf511d0dab02683d804b63ddb16b3112"
+    },
+    {
+      "path": "data/clean/transactions.parquet",
+      "sha256": "5a88e7f43978849bb514b80c2111b547ea44037a53484b10c4bcd7c36b9668b7"
+    },
+    {
+      "path": "data/clean/balances.parquet",
+      "sha256": "86591d78768df467ebc053ebaa4b6ab9a42540bcc58d82e39b264ba1c760ebd3"
+    }
+  ],
+  "record": {
+    "alpha": 3.0,
+    "as_of": "2026-08-31",
+    "beta": 0.25,
+    "c6": 26977.59,
+    "colchon_aplicable": 15564.58,
+    "colchon_v4": 15564.58,
+    "company_id": "COMP_0006",
+    "confidence": "ninguna",
+    "d6": 0.0,
+    "deficit_servicio_6": 0.0,
+    "excluida": false,
+    "group_id": "GROUP_0195",
+    "h_antes_de_ajustes": 31.583089113375976,
+    "health_score": 30.177206649148637,
+    "k": 4178.45,
+    "month": "2026-08-01",
+    "mora_indice": 0.022176786676854243,
+    "multiplicador_deuda": 0.9608131639916938,
+    "n_meses_con_actividad": 6,
+    "n_meses_ventana": 6,
+    "obligacion_vencida_m": 5870.98,
+    "p6": 85769.09,
+    "penalizacion_mora_puntos": 0.17510285746585552,
+    "penalizacion_multiplicador_puntos": 1.2307796067614838,
+    "r_hist": 0.276755739707758,
+    "reasons": [
+      "c_eur_desconocido_en_2_meses",
+      "p_eur_desconocido_en_3_meses",
+      "d_eur_desconocido_en_3_meses"
+    ],
+    "t6_efectivo": 91640.06999999999,
+    "ventana_parcial": false,
+    "version": "healthscore_v4",
+    "volumen_ambiguo_eur": 30481.0,
+    "volumen_ambiguo_pct": 0.45681378045662496,
+    "cash": {
+      "ancla_presente": true,
+      "colchon_reversa_eur": 13035.91,
+      "company_id": "COMP_0006",
+      "confidence": "alta",
+      "flags": [],
+      "flujo_financing_in": 0.0,
+      "flujo_financing_out": -108.85,
+      "flujo_investment_in": 0.0,
+      "flujo_investment_out": 0.0,
+      "flujo_neto": 4419.34,
+      "flujo_neto_tramo": 0.0,
+      "flujo_non_economic": 0.0,
+      "flujo_operating_in": 5091.28,
+      "flujo_operating_out": -8747.18,
+      "flujo_transfer": 30481.0,
+      "flujo_unknown": -22296.91,
+      "meses_de_cobertura_reversa": 0.389391,
+      "month": "2026-08-01",
+      "motivo_cobertura": null,
+      "n_meses_tramo": 0,
+      "reason": "",
+      "saldo_ancla_eur": 15564.58,
+      "saldo_reversa_eur": 15564.58,
+      "saldo_reversa_min_hasta_m": 2528.67,
+      "salida_media_mensual_reversa": 33477.723333,
+      "salidas_conocidas": 31152.94,
+      "volumen_agujero": 0.0,
+      "volumen_agujero_tramo": 0.0,
+      "volumen_conocido": 66725.22,
+      "volumen_conocido_tramo": 0.0
+    },
+    "payment": {
+      "cobro_exposicion_eur": 256907.5700000001,
+      "cobro_hueco_eur": 0.0,
+      "cobro_n_facturas": 42,
+      "cobro_n_huecos_eur": 0,
+      "cobro_n_huecos_fx": 0,
+      "cobro_n_huecos_sin_importe": 0,
+      "cobro_severidad": 0.04995952435344741,
+      "cobro_severidad_shrunk": 0.05006549585228295,
+      "cobro_shrinkage_aplicado": true,
+      "cobro_vencido_180_mas_eur": 5735.4,
+      "cobro_vencido_1_30_eur": 1807.35,
+      "cobro_vencido_31_60_eur": 0.0,
+      "cobro_vencido_61_90_eur": 5675.700000000001,
+      "cobro_vencido_91_180_eur": 6235.4,
+      "cobro_vencido_eur": 19453.850000000002,
+      "cobro_vencido_ponderado_eur": 12834.98,
+      "coh_30d_available_at": "2026-08-30 00:00:00.000 +00:00",
+      "coh_60d_available_at": "2025-12-30 00:00:00.000 +00:00",
+      "coh_90d_available_at": "2026-01-29 00:00:00.000 +00:00",
+      "coh_pct_cobrado_30d": 0.10013692667148787,
+      "coh_pct_cobrado_60d": 0.0,
+      "coh_pct_cobrado_90d": 1.0,
+      "company_id": "COMP_0006",
+      "confidence": "alta",
+      "confidence_cobro": "alta",
+      "confidence_pago": "alta",
+      "flags": [],
+      "month": "2026-08-01 00:00:00.000 +00:00",
+      "mora_cobro_robusta": 0.07105587075204552,
+      "mora_indice": 0.022176786676854243,
+      "mora_pago_robusta": 0.001228607787486557,
+      "n_cancel": 0,
+      "n_vencimiento_desconocido": 0,
+      "pago_exposicion_eur": 164003.08,
+      "pago_hueco_eur": 0.0,
+      "pago_n_facturas": 151,
+      "pago_n_huecos_eur": 0,
+      "pago_n_huecos_fx": 0,
+      "pago_n_huecos_sin_importe": 0,
+      "pago_severidad": 0.003579798623294148,
+      "pago_severidad_shrunk": 0.0034910852279966256,
+      "pago_shrinkage_aplicado": true,
+      "pago_vencido_180_mas_eur": 0.0,
+      "pago_vencido_1_30_eur": 5870.98,
+      "pago_vencido_31_60_eur": 0.0,
+      "pago_vencido_61_90_eur": 0.0,
+      "pago_vencido_91_180_eur": 0.0,
+      "pago_vencido_eur": 5870.98,
+      "pago_vencido_ponderado_eur": 587.098,
+      "reason": null
+    },
+    "debt": {
+      "company_id": "COMP_0006",
+      "confidence": "alta",
+      "deficit_servicio_eur": null,
+      "flags": [
+        "deficit_servicio_no_calculable"
+      ],
+      "fuente_normalizacion": "t6",
+      "magnitud_normalizacion_eur": 149820.21,
+      "month": "2026-08-01 00:00:00.000 +00:00",
+      "multiplicador_deuda": 0.9608131639916938,
+      "n_cancel": 0,
+      "n_debido": 151,
+      "n_sin_eur": 0,
+      "n_vencidas": 3,
+      "obligacion_no_atendida_eur": 5870.98,
+      "obligacion_vencida_eur": 5870.98,
+      "reason": null,
+      "servicio_esperado_eur": null,
+      "servicio_observado_eur": null,
+      "t6_meses_conocidos": 6,
+      "vencido_180_mas_eur": 0.0,
+      "vencido_1_30_eur": 5870.98,
+      "vencido_31_60_eur": 0.0,
+      "vencido_61_90_eur": 0.0,
+      "vencido_91_180_eur": 0.0
+    },
+    "daily_cash": [
+      {
+        "currency": "EUR",
+        "anchor_date": "2026-09-01",
+        "income": 35572.28,
+        "expense": 31152.94,
+        "closing_balance": 15564.58,
+        "days": [
+          {
+            "date": "2026-08-01",
+            "income": 0.0,
+            "expense": 0.0,
+            "balance": 11145.24,
+            "unknown_movements": 0
+          },
+          {
+            "date": "2026-08-02",
+            "income": 0.0,
+            "expense": 0.0,
+            "balance": 11145.24,
+            "unknown_movements": 0
+          },
+          {
+            "date": "2026-08-03",
+            "income": 0.0,
+            "expense": 40.06,
+            "balance": 11105.18,
+            "unknown_movements": 0
+          },
+          {
+            "date": "2026-08-04",
+            "income": 0.0,
+            "expense": 0.0,
+            "balance": 11105.18,
+            "unknown_movements": 0
+          },
+          {
+            "date": "2026-08-05",
+            "income": 0.0,
+            "expense": 0.0,
+            "balance": 11105.18,
+            "unknown_movements": 0
+          },
+          {
+            "date": "2026-08-06",
+            "income": 0.0,
+            "expense": 108.85,
+            "balance": 10996.33,
+            "unknown_movements": 0
+          },
+          {
+            "date": "2026-08-07",
+            "income": 0.0,
+            "expense": 0.0,
+            "balance": 10996.33,
+            "unknown_movements": 0
+          },
+          {
+            "date": "2026-08-08",
+            "income": 0.0,
+            "expense": 0.0,
+            "balance": 10996.33,
+            "unknown_movements": 0
+          },
+          {
+            "date": "2026-08-09",
+            "income": 0.0,
+            "expense": 0.0,
+            "balance": 10996.33,
+            "unknown_movements": 0
+          },
+          {
+            "date": "2026-08-10",
+            "income": 0.0,
+            "expense": 0.0,
+            "balance": 10996.33,
+            "unknown_movements": 0
+          },
+          {
+            "date": "2026-08-11",
+            "income": 0.0,
+            "expense": 0.0,
+            "balance": 10996.33,
+            "unknown_movements": 0
+          },
+          {
+            "date": "2026-08-12",
+            "income": 0.0,
+            "expense": 0.0,
+            "balance": 10996.33,
+            "unknown_movements": 0
+          },
+          {
+            "date": "2026-08-13",
+            "income": 1208.7,
+            "expense": 1279.21,
+            "balance": 10925.82,
+            "unknown_movements": 0
+          },
+          {
+            "date": "2026-08-14",
+            "income": 0.0,
+            "expense": 0.0,
+            "balance": 10925.82,
+            "unknown_movements": 0
+          },
+          {
+            "date": "2026-08-15",
+            "income": 0.0,
+            "expense": 0.0,
+            "balance": 10925.82,
+            "unknown_movements": 0
+          },
+          {
+            "date": "2026-08-16",
+            "income": 0.0,
+            "expense": 0.0,
+            "balance": 10925.82,
+            "unknown_movements": 0
+          },
+          {
+            "date": "2026-08-17",
+            "income": 0.0,
+            "expense": 0.0,
+            "balance": 10925.82,
+            "unknown_movements": 0
+          },
+          {
+            "date": "2026-08-18",
+            "income": 0.0,
+            "expense": 42.35,
+            "balance": 10883.47,
+            "unknown_movements": 0
+          },
+          {
+            "date": "2026-08-19",
+            "income": 0.0,
+            "expense": 0.0,
+            "balance": 10883.47,
+            "unknown_movements": 0
+          },
+          {
+            "date": "2026-08-20",
+            "income": 0.0,
+            "expense": 0.0,
+            "balance": 10883.47,
+            "unknown_movements": 0
+          },
+          {
+            "date": "2026-08-21",
+            "income": 0.0,
+            "expense": 4549.42,
+            "balance": 6334.05,
+            "unknown_movements": 0
+          },
+          {
+            "date": "2026-08-22",
+            "income": 0.0,
+            "expense": 0.0,
+            "balance": 6334.05,
+            "unknown_movements": 0
+          },
+          {
+            "date": "2026-08-23",
+            "income": 0.0,
+            "expense": 0.0,
+            "balance": 6334.05,
+            "unknown_movements": 0
+          },
+          {
+            "date": "2026-08-24",
+            "income": 0.0,
+            "expense": 0.0,
+            "balance": 6334.05,
+            "unknown_movements": 0
+          },
+          {
+            "date": "2026-08-25",
+            "income": 34363.58,
+            "expense": 0.0,
+            "balance": 40697.63,
+            "unknown_movements": 0
+          },
+          {
+            "date": "2026-08-26",
+            "income": 0.0,
+            "expense": 0.0,
+            "balance": 40697.63,
+            "unknown_movements": 0
+          },
+          {
+            "date": "2026-08-27",
+            "income": 0.0,
+            "expense": 0.0,
+            "balance": 40697.63,
+            "unknown_movements": 0
+          },
+          {
+            "date": "2026-08-28",
+            "income": 0.0,
+            "expense": 6833.69,
+            "balance": 33863.94,
+            "unknown_movements": 0
+          },
+          {
+            "date": "2026-08-29",
+            "income": 0.0,
+            "expense": 0.0,
+            "balance": 33863.94,
+            "unknown_movements": 0
+          },
+          {
+            "date": "2026-08-30",
+            "income": 0.0,
+            "expense": 0.0,
+            "balance": 33863.94,
+            "unknown_movements": 0
+          },
+          {
+            "date": "2026-08-31",
+            "income": 0.0,
+            "expense": 18299.36,
+            "balance": 15564.58,
+            "unknown_movements": 0
+          }
+        ]
+      }
+    ]
+  },
+  "history": [
+    {
+      "as_of": "2024-09-30",
+      "health_score": null
+    },
+    {
+      "as_of": "2024-10-31",
+      "health_score": null
+    },
+    {
+      "as_of": "2024-11-30",
+      "health_score": null
+    },
+    {
+      "as_of": "2024-12-31",
+      "health_score": null
+    },
+    {
+      "as_of": "2025-01-31",
+      "health_score": null
+    },
+    {
+      "as_of": "2025-02-28",
+      "health_score": null
+    },
+    {
+      "as_of": "2025-03-31",
+      "health_score": null
+    },
+    {
+      "as_of": "2025-04-30",
+      "health_score": null
+    },
+    {
+      "as_of": "2025-05-31",
+      "health_score": null
+    },
+    {
+      "as_of": "2025-06-30",
+      "health_score": null
+    },
+    {
+      "as_of": "2025-07-31",
+      "health_score": null
+    },
+    {
+      "as_of": "2025-08-31",
+      "health_score": null
+    },
+    {
+      "as_of": "2025-09-30",
+      "health_score": null
+    },
+    {
+      "as_of": "2025-10-31",
+      "health_score": null
+    },
+    {
+      "as_of": "2025-11-30",
+      "health_score": null
+    },
+    {
+      "as_of": "2025-12-31",
+      "health_score": 43.19120238060547
+    },
+    {
+      "as_of": "2026-01-31",
+      "health_score": 31.441911135532354
+    },
+    {
+      "as_of": "2026-02-28",
+      "health_score": 50.76072861098854
+    },
+    {
+      "as_of": "2026-03-31",
+      "health_score": 38.48320472661303
+    },
+    {
+      "as_of": "2026-04-30",
+      "health_score": 39.18534492137222
+    },
+    {
+      "as_of": "2026-05-31",
+      "health_score": 30.77548091650617
+    },
+    {
+      "as_of": "2026-06-30",
+      "health_score": 42.69931695141878
+    },
+    {
+      "as_of": "2026-07-31",
+      "health_score": 45.116461677675325
+    },
+    {
+      "as_of": "2026-08-31",
+      "health_score": 30.177206649148637
+    }
+  ]
+}

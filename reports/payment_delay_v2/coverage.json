@@ -1,0 +1,138 @@
+{
+  "capa": "healthscore_v4 · capa C · indice de morosidad robusto (payment_delay_v2)",
+  "grano": "(company_id, month), meses cerrados",
+  "workspace": "/Users/josemariaiznardosalar/Documents/embat-hack/data/runs/20260919T022951Z-83143e8d/data",
+  "filas": 30864,
+  "meses": 24,
+  "empresas_grid": 1286,
+  "constantes_diseno": {
+    "bucket_edges_dias": [
+      30,
+      60,
+      90,
+      180
+    ],
+    "bucket_labels": [
+      "1_30",
+      "31_60",
+      "61_90",
+      "91_180",
+      "180_mas"
+    ],
+    "bucket_pesos": [
+      0.1,
+      0.25,
+      0.45,
+      0.7,
+      1.0
+    ],
+    "lambda_ewma": 0.35,
+    "kappa_eur": 4178.45,
+    "peso_mora_pago": 0.7,
+    "peso_mora_cobro": 0.3,
+    "justificacion": {
+      "bucket_edges_dias": "Mismos cinco cortes que la capa A (debt_obligation.py) para que ambas capas sean legibles juntas.",
+      "bucket_pesos": "Curva concava de perdida esperada: 0,10/0,25/0,45/0,70/1,00 crece con la antiguedad del impago y satura en 1,00 a partir de 180 dias.",
+      "lambda_ewma": "Peso del mes corriente ~1/3: amortigua picos aislados y exige 2-3 meses de mora sostenida para acercarse al nivel observado.",
+      "kappa_eur": "Mismo mecanismo de euros virtuales que el score; valor de k recomendado por la calibracion medida (4178,45 EUR).",
+      "peso_mora_pago": "La conducta de pago es propia y accionable: pesa mas en el indice.",
+      "peso_mora_cobro": "El retraso de cobro es riesgo externo y mas ruidoso: pesa menos.",
+      "estado": "PROVISIONAL pendiente de calibracion"
+    }
+  },
+  "criterio_confidence": "ninguna=sin cartera exigible en el corte; baja=agujeros >=50% de la cartera; media=algun agujero o cartera fina (<3 facturas o <2000 EUR); alta=sin agujeros y cartera gruesa. confidence de fila = peor de los lados observables",
+  "cobertura": {
+    "filas_calculables_mora_pago": {
+      "empresa_mes": 14337,
+      "empresas": 756
+    },
+    "filas_calculables_mora_cobro": {
+      "empresa_mes": 11805,
+      "empresas": 667
+    },
+    "filas_calculables_mora_indice": {
+      "empresa_mes": 14880,
+      "empresas": 759,
+      "pct_sobre_filas": 0.4821
+    },
+    "v3_referencia": {
+      "mora_ratio_calculable_empresa_mes": 12841,
+      "mora_ratio_calculable_empresas": 691
+    },
+    "ganancia_vs_v3": {
+      "empresa_mes_absoluta": 2039,
+      "empresa_mes_factor": 1.159,
+      "empresas_absoluta": 68,
+      "empresas_factor": 1.098,
+      "nota": "mora_indice cubre filas con agujeros fx/eur y filas con un solo lado observable; v3 exigia cartera sin agujeros"
+    }
+  },
+  "distribuciones": {
+    "mora_pago_robusta": {
+      "n": 14337,
+      "mediana": 0.08868660821584105,
+      "p75": 0.25621710363695915,
+      "p90": 0.5601746540335661
+    },
+    "mora_cobro_robusta": {
+      "n": 11805,
+      "mediana": 0.08895566633519435,
+      "p75": 0.2998881867033925,
+      "p90": 0.6312861755080852
+    },
+    "mora_indice": {
+      "n": 14880,
+      "mediana": 0.1,
+      "p75": 0.2758431449879528,
+      "p90": 0.5448341163866334
+    },
+    "v3_mora_ratio_referencia": {
+      "n": 12841,
+      "mediana": 0.16980440750564105,
+      "p75": 0.7484690081498907,
+      "p90": 1.0
+    }
+  },
+  "reduccion_saturacion": {
+    "v3_p75": 0.7484690081498907,
+    "v3_p90": 1.0,
+    "mora_indice_p75": 0.2758431449879528,
+    "mora_indice_p90": 0.5448341163866334,
+    "mora_pago_p75": 0.25621710363695915,
+    "mora_pago_p90": 0.5601746540335661,
+    "mora_cobro_p75": 0.2998881867033925,
+    "mora_cobro_p90": 0.6312861755080852,
+    "lectura": "los pesos por antiguedad, el shrinkage y la EWMA bajan la cola alta (p75/p90) por debajo del 1,0 saturado de v3"
+  },
+  "correlacion_mora_indice_vs_v3_mora_ratio": {
+    "n": 12841,
+    "pearson": 0.6837260885848343,
+    "spearman": 0.7905381575453949,
+    "nota": "solo filas donde mora_indice y el mora_ratio de v3 son no nulos"
+  },
+  "confidence_reparto": {
+    "alta": 10121,
+    "media": 3672,
+    "baja": 1759,
+    "ninguna": 15312
+  },
+  "confidence_mora_indice": {
+    "alta": 10121,
+    "media": 3672,
+    "baja": 1087
+  },
+  "agujeros_fx_eur": {
+    "empresa_mes_con_agujeros": 2345,
+    "n_huecos_sin_importe": 791985,
+    "n_huecos_fx": 2139,
+    "nota": "fx_ambiguous o amount_eur nulo: ni cero ni imputacion; se cuentan aparte y degradan la confidence de la fila. Los contadores n_huecos_* son sumas acumuladas sobre cortes point-in-time (una factura cuenta desde su vencimiento)."
+  },
+  "cancel_y_vencimiento_desconocido": {
+    "cancel_empresa_mes_suma": 141817,
+    "vencimiento_desconocido_empresa_mes_suma": 2688,
+    "nota": "sumas acumuladas sobre cortes: una factura cuenta en todos los cortes desde su vencimiento (point-in-time)"
+  },
+  "limitacion_residual": "La fuente no tiene fecha de importacion ni de cancelacion: no puede demostrarse que una factura estuviera REGISTRADA en el sistema en el corte m, solo que su vencimiento era anterior a m. Medida point-in-time por vencimiento, no por disponibilidad de registro certificada.",
+  "fuente": "clean/invoices.parquet (document_type_norm='invoice')",
+  "no_consumido": "marts/panel_cobro: columnas de stock reconstruidas hacia atras (fuga); solo cohortes coh_pct_cobrado_Nd con coh_Nd_available_at <= fin de corte"
+}

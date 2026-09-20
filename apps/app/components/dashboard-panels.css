@@ -1,0 +1,104 @@
+/* Shared by the company dashboard and its landing-page preview. */
+.card { background: var(--surface); border: 0; box-shadow: var(--shadow-border); border-radius: var(--radius-surface); min-width: 0; }
+.card-heading { flex-wrap: wrap; padding: 16px 16px 12px; display: flex; align-items: flex-start; gap: 12px; justify-content: space-between; }
+.card-heading > div { flex: 1 1 220px; min-width: 0; }
+.card h2 { font-size: var(--text-heading); line-height: 1.3; }
+
+.chart-note { color: var(--subtle); font-size: var(--text-caption); padding: 4px 4px 20px; }
+.checkpoints { display: grid; grid-template-columns: repeat(3,minmax(0,1fr)); border-top: 1px solid var(--line); }
+.checkpoints > div { min-width: 0; overflow-wrap: anywhere; padding: 16px 24px; display: flex; gap: 5px; flex-direction: column; }
+.checkpoints > div + div { border-left: 1px solid var(--line); }
+
+.model-chart { padding: 4px 16px 12px; }
+.model-chart svg { width: 100%; height: auto; min-height: 160px; }
+.model-chart text { fill: var(--muted); font-family: var(--font-ui); font-size: 12px; font-variant-numeric: tabular-nums; }
+.model-chart circle { cursor: default; }
+.model-chart a:focus-visible circle { stroke-width: 5px; }
+
+.monthly-cash { margin-block: 16px; }
+.monthly-cash { --cash-income: #71967e; --cash-expense: #9b85b4; --cash-balance: #314b40; }
+.cash-flow-legend { display: flex; flex-wrap: wrap; gap: 12px 20px; padding: 0 16px 12px; color: var(--muted); font-size: var(--text-caption); }
+.cash-flow-legend > span, .cash-flow-totals dt { display: flex; align-items: center; gap: 8px; }
+.model-chart .cash-zero-label { fill: var(--cash-balance); paint-order: stroke; stroke: var(--surface); stroke-width: 4px; stroke-linejoin: round; }
+.cash-flow-swatch { display: inline-block; width: 10px; height: 10px; border-radius: 2px; flex-shrink: 0; }
+.cash-flow-swatch.income { background: var(--cash-income); }
+.cash-flow-swatch.expense { background: var(--cash-expense); }
+.cash-flow-swatch.balance { width: 18px; height: 3px; background: var(--cash-balance); }
+.cash-flow-plot { overflow-x: auto; overscroll-behavior-x: contain; scrollbar-width: thin; }
+.cash-flow-plot svg { display: block; max-width: none; height: 290px; touch-action: pan-x pan-y; }
+.monthly-cash .checkpoints > div { padding: 12px 16px; }
+.cash-flow-totals dt { font-size: var(--text-caption); color: var(--muted); }
+.monthly-cash .checkpoints dd { font-size: var(--text-heading); margin: 10px 0 0; font-variant-numeric: tabular-nums; overflow-wrap: anywhere; }
+.monthly-empty { padding: 24px 8px; color: var(--muted); line-height: 1.6; }
+
+.obligation-cards { display: grid; grid-template-columns: repeat(3,minmax(0,1fr)); gap: 16px; margin-top: 16px; }
+.financial-card { padding: 16px; display: flex; flex-direction: column; min-width: 0; }
+.financial-card-heading { display: flex; align-items: flex-start; gap: 8px; }
+.financial-card-heading > svg { margin-top: 3px; color: var(--muted); stroke-width: 1.5px; flex-shrink: 0; }
+.financial-card-heading h2 { font-size: var(--text-ui); font-weight: 500; }
+.financial-card-heading p { color: var(--muted); font-size: var(--text-caption); margin-top: 4px; }
+.aging-gauge { position: relative; width: min(260px,100%); align-self: center; margin: 20px 0 16px; }
+.aging-gauge svg { display: block; width: 100%; }
+.aging-total { text-align: center; display: grid; gap: 4px; margin-top: -12px; }
+.aging-total strong { min-width: 0; overflow-wrap: anywhere; font-size: clamp(18px,1.6vw,24px); font-weight: 500; letter-spacing: -.03em; }
+.aging-total span { font-size: var(--text-caption); color: var(--muted); }
+.aging-buckets { border-top: 1px solid var(--line); padding-top: 4px; }
+.aging-buckets > div { display: grid; grid-template-columns: max-content minmax(0,1fr); align-items: center; gap: 8px; min-height: 32px; padding-block: 4px; font-size: var(--text-caption); }
+.aging-buckets dt { display: flex; align-items: center; gap: 8px; white-space: nowrap; }
+.aging-buckets dt i { width: 7px; height: 7px; border-radius: 50%; flex-shrink: 0; }
+.aging-buckets dd { min-width: 0; display: grid; grid-template-columns: minmax(0,1fr) 44px; align-items: baseline; gap: 6px; text-align: right; font-variant-numeric: tabular-nums; }
+.aging-buckets dd strong { font-weight: 500; overflow-wrap: anywhere; }
+.aging-buckets dd span { color: var(--muted); }
+.financial-card-note { color: var(--muted); font-size: var(--text-caption); line-height: 1.6; }
+.financial-card > footer { margin-top: auto; padding-top: 16px; }
+.financial-card-note p + p { margin-top: 8px; }
+.defaulting-summary { padding: 28px 0 24px; }
+.defaulting-summary > span, .defaulting-summary p { color: var(--muted); font-size: var(--text-caption); }
+.defaulting-summary > strong { display: block; font-size: 30px; font-weight: 500; letter-spacing: -.04em; margin-block: 12px; overflow-wrap: anywhere; }
+.defaulting-summary p { line-height: 1.6; }
+.defaulting-bars { display: grid; gap: 24px; padding-block: 20px; border-top: 1px solid var(--line); }
+.defaulting-bars > div { display: grid; grid-template-columns: minmax(0,1fr) minmax(0,auto); gap: 12px; font-size: var(--text-caption); }
+.defaulting-bars dt { color: var(--muted); }
+.defaulting-bars dd { font-weight: 500; text-align: right; overflow-wrap: anywhere; }
+.defaulting-track { grid-column: 1 / -1; height: 10px; border-radius: 4px; background: var(--canvas); overflow: hidden; }
+.defaulting-track i { display: block; height: 100%; border-radius: inherit; background: #b65f56; }
+@media (max-width:1200px) { .obligation-cards { grid-template-columns: repeat(2,minmax(0,1fr)); } .defaulting-card { grid-column: 1 / -1; } }
+@media (max-width:700px) { .obligation-cards { grid-template-columns: 1fr; } .aging-total strong { font-size: 24px; } }
+
+@media (max-width:700px) { .monthly-cash .card-heading > div { flex-basis: auto; } .monthly-cash .checkpoints { grid-template-columns: 1fr; } .monthly-cash .checkpoints > div + div { border-left: 0; border-top: 1px solid var(--line); } }
+
+@media (max-width:760px) { .model-chart { padding-inline: 8px; } }
+
+.dashboard-charts { display: grid; grid-template-columns: repeat(2,minmax(0,1fr)); gap: 16px; align-items: stretch; }
+.dashboard-charts > .card { margin: 0; }
+.health-overview-panel, .monthly-cash { display: flex; flex-direction: column; overflow: hidden; }
+.health-history-chart svg { display: block; height: 290px; }
+.health-chart-footer { margin-top: auto; padding: 12px 16px; border-top: 1px solid var(--line); }
+.monthly-cash .cash-flow-totals { margin-top: auto; }
+@media (max-width:900px) { .dashboard-charts { grid-template-columns: 1fr; } }
+.health-overview-main { min-width: 0; }
+.health-selected-score { display: flex; align-items: center; flex-wrap: wrap; gap: 16px; padding: 0 16px 8px; }
+.health-score-gauge { position: relative; width: 160px; flex-shrink: 0; }
+.health-score-gauge svg { display: block; width: 100%; }
+.health-score-value { position: absolute; inset: auto 0 8px; display: flex; align-items: baseline; justify-content: center; gap: 4px; }
+.health-score-value strong { font-size: 32px; line-height: 1.1; font-weight: 500; letter-spacing: -.045em; }
+.health-score-value[data-empty="true"] strong { font-size: 20px; }
+.health-score-value span { color: var(--muted); font-size: var(--text-caption); }
+.health-score-context { display: grid; gap: 4px; font-size: var(--text-caption); color: var(--muted); }
+
+@media (max-width:700px) {
+  .health-selected-score { padding-inline: 16px; }
+}
+
+.cash-currency { position: relative; flex-shrink: 0; }
+.monthly-cash { overflow: visible; }
+.cash-currency .button { gap: 8px; min-height: 36px; padding: 6px 10px; font-size: var(--text-caption); }
+.cash-currency-options { position: absolute; top: calc(100% + 6px); right: 0; z-index: 6; width: 210px; max-height: 270px; overflow-y: auto; padding: 6px; background: var(--surface); border: 1px solid var(--line); border-radius: 12px; box-shadow: 0 4px 18px #0000000d, 0 1px 3px #00000008; }
+.cash-currency-options p { padding: 8px; color: var(--muted); font-size: 12px; }
+.cash-currency-options button { width: 100%; min-height: 36px; display: flex; justify-content: space-between; align-items: center; padding: 8px; border: 0; border-radius: 6px; background: transparent; color: var(--ink); text-align: left; }
+.cash-currency-options button[aria-pressed="true"] { background: var(--surface-alt); }
+@media (hover: hover) { .cash-currency-options button:hover { background: var(--surface-alt); } }
+.cash-inspected-period { padding: 10px 16px; color: var(--muted); font-size: var(--text-caption); margin-top: auto; }
+.monthly-cash .cash-flow-totals { margin-top: 0; }
+@media (max-width:700px) { .monthly-cash .card-heading { flex-direction: row; align-items: flex-start; } }
+.monthly-cash .card-heading > .cash-currency { flex: 0 0 auto; }

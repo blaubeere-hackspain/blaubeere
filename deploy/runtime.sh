@@ -9,9 +9,9 @@ sudo -n install -d -m 755 -o "$(id -un)" -g "$(id -gn)" "$root"
 exec 9>"$root/deploy.lock"
 flock -n 9 || { echo 'Another deployment is running' >&2; exit 1; }
 
-if ! command -v cc >/dev/null || ! command -v unzip >/dev/null || [[ ! -x /usr/sbin/nginx ]] || ! dpkg-query -W libssl-dev >/dev/null 2>&1; then
+if ! command -v cc >/dev/null || ! command -v unzip >/dev/null || ! command -v git-lfs >/dev/null || [[ ! -x /usr/sbin/nginx ]] || ! dpkg-query -W libssl-dev >/dev/null 2>&1; then
   sudo -n apt-get update -qq
-  sudo -n env DEBIAN_FRONTEND=noninteractive apt-get -o DPkg::Lock::Timeout=180 install -y --no-install-recommends build-essential pkg-config libssl-dev nginx unzip ca-certificates
+  sudo -n env DEBIAN_FRONTEND=noninteractive apt-get -o DPkg::Lock::Timeout=180 install -y --no-install-recommends build-essential pkg-config libssl-dev nginx unzip ca-certificates git-lfs
 fi
 node -e 'if (Number(process.versions.node.split(".")[0]) < 22) process.exit(1)'
 node_bin="$(command -v node)"
@@ -43,12 +43,20 @@ if [[ ! -d "$root/repo/.git" ]]; then
 fi
 git -C "$root/repo" -c protocol.version=2 fetch --depth=1 --filter=blob:none origin "$revision"
 [[ "$(git -C "$root/repo" rev-parse FETCH_HEAD)" == "$revision" ]]
-# Export only runtime sources. Challenge datasets and local secrets never enter releases.
+# Export runtime sources and published reports; the two clean cash sources are
+# materialized from LFS at this exact revision for Rust's daily aggregation.
 release="$(mktemp -d "$root/releases/$revision.XXXXXX")"
 chmod 755 "$release"
-git -C "$root/repo" archive "$revision" Cargo.toml Cargo.lock package.json bun.lock apps services fixtures scripts | tar -x -C "$release"
+git -C "$root/repo" archive "$revision" Cargo.toml Cargo.lock package.json bun.lock apps services fixtures scripts reports/score_v4/assessments.parquet reports/score_v4/summary.json reports/cash_backfill/cash_backfill_monthly.parquet reports/payment_delay_v2/payment_delay_v2_monthly.parquet reports/debt_obligation/debt_obligation_monthly.parquet reports/transfer_resolution_v2/resolution.parquet | tar -x -C "$release"
+git -C "$root/repo" lfs fetch --include='data/clean/transactions.parquet,data/clean/balances.parquet' --exclude='' origin "$revision"
+mkdir -p "$release/data/clean"
+chmod 755 "$release/data" "$release/data/clean"
+for source in transactions balances; do
+  git -C "$root/repo" show "$revision:data/clean/$source.parquet" | git -C "$root/repo" lfs smudge > "$release/data/clean/$source.parquet"
+  chmod 644 "$release/data/clean/$source.parquet"
+done
 cd "$release"
-export NEXT_TELEMETRY_DISABLED=1 API_INTERNAL_URL=http://127.0.0.1:4000
+export NEXT_TELEMETRY_DISABLED=1 API_INTERNAL_URL=http://127.0.0.1:4000 MCP_INTERNAL_URL=http://127.0.0.1:4001
 export NEXT_PUBLIC_APP_URL="$app" NEXT_PUBLIC_LANDING_URL="$landing"
 bun install --frozen-lockfile
 bun run test:web
@@ -65,11 +73,22 @@ cargo build --locked --release --workspace
 mkdir bin
 install -m 755 "$CARGO_TARGET_DIR/release/blaubeere-api" "$CARGO_TARGET_DIR/release/blaubeere-mcp" bin/
 
+# Build an immutable analytics DB before activating the release. Existing readers keep
+# their previous snapshot; the model and identity databases have independent locks.
+sudo -n install -d -m 700 -o blaubeere -g blaubeere "$root/data/datasets"
+dataset_file="$(sudo -n -u blaubeere "$release/bin/blaubeere-api" import-parquet "$release" "$root/data/datasets" "$revision")"
+[[ "$dataset_file" == "$root/data/datasets/finance-"*.sqlite ]] || { echo 'Invalid dataset path' >&2; exit 1; }
+
 cat > "$root/runtime.env" <<EOF
+DEMO_LOGIN=true
+DATASET_DEMO=true
 DATABASE_URL=sqlite://$root/data/blaubeere.db
+DATASET_DATABASE_URL=sqlite://$dataset_file
+DATASET_TEAM_EMAIL=finance@blaubeere.local
 API_BIND=127.0.0.1:4000
 MCP_BIND=127.0.0.1:4001
 API_INTERNAL_URL=http://127.0.0.1:4000
+MCP_INTERNAL_URL=http://127.0.0.1:4001
 APP_ORIGIN=$app
 API_ORIGIN=$app
 MCP_RESOURCE=$app/mcp
@@ -125,12 +144,6 @@ server {
   proxy_set_header Connection "";
   proxy_buffering off;
   proxy_read_timeout 300s;
-  location = /mcp { proxy_pass http://127.0.0.1:4001; }
-  location = /.well-known/oauth-protected-resource { proxy_pass http://127.0.0.1:4001; }
-  location = /.well-known/oauth-protected-resource/mcp { proxy_pass http://127.0.0.1:4001; }
-  location /oauth/ { proxy_pass http://127.0.0.1:4000; }
-  location /.well-known/ { proxy_pass http://127.0.0.1:4000; }
-  location /api/ { proxy_pass http://127.0.0.1:4000; }
   location / { proxy_pass http://127.0.0.1:3100; }
 }
 NGINX

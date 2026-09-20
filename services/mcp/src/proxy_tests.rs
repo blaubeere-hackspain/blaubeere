@@ -29,6 +29,8 @@ async fn actual_export_mcp_rejects_proxy_plans() {
             app_origin: "http://localhost:3100".into(),
             api_origin: "http://localhost:8080".into(),
             mcp_resource: "http://localhost:8081/mcp".into(),
+            demo_login: false,
+            dataset_demo: false,
         },
     )
     .await

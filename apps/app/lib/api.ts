@@ -11,6 +11,6 @@ export function returnPath(value: string | null): string {
   if (!value) return "/dashboard";
   try {
     const url = new URL(value, "https://app.local");
-    return url.origin === "https://app.local" && ["/connect", "/dashboard"].includes(url.pathname) ? url.pathname + url.search : "/dashboard";
+    return url.origin === "https://app.local" && (["/connect", "/dashboard"].includes(url.pathname) || /^\/dashboard\/health\/\d{4}-\d{2}-\d{2}$/.test(url.pathname)) ? url.pathname + url.search : "/dashboard";
   } catch { return "/dashboard"; }
 }

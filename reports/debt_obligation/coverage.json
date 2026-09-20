@@ -1,0 +1,108 @@
+{
+  "grano": "(company_id, month), meses cerrados",
+  "filas": 30864,
+  "meses": 24,
+  "empresas_grid": 1286,
+  "obligacion_vencida": {
+    "empresa_mes": 13230,
+    "empresas": 743,
+    "empresas_alguna_vez": 743,
+    "pct_sobre_filas": 0.4287
+  },
+  "criterio_impagada": {
+    "corte_referencia": "2026-08-31",
+    "criterio_vigente": "impagada al corte = NOT(status_norm='paid' AND payment_date_ok IS NOT NULL AND payment_date_ok <= fin de m)",
+    "criterio_literal_rechazado": "impagada = payment_date_ok IS NULL OR payment_date_ok > fin de m (sin mirar status_norm)",
+    "motivo": "payment_date_ok solo es fecha REAL de pago si status_norm='paid'; en cualquier otro status es fecha PREVISTA. El criterio literal daba por pagadas las facturas vencidas con payment_date_ok = due_date_ok y reproducia el defecto que esta capa corrige (empresa que no paga leida como si pagase).",
+    "status_aware": {
+      "facturas": 83522,
+      "empresas": 726,
+      "eur": 621674404.09
+    },
+    "literal": {
+      "facturas": 4061,
+      "empresas": 303,
+      "eur": 23009972.72
+    },
+    "reparto_status_norm_vigente": {
+      "overdue": {
+        "facturas": 77223,
+        "empresas": 719,
+        "eur": 588269476.06
+      },
+      "paid": {
+        "facturas": 3647,
+        "empresas": 281,
+        "eur": 19313919.9
+      },
+      "payment_in_progress": {
+        "facturas": 724,
+        "empresas": 41,
+        "eur": 2505207.21
+      },
+      "paymentorder": {
+        "facturas": 191,
+        "empresas": 9,
+        "eur": 1212328.87
+      },
+      "pending": {
+        "facturas": 1737,
+        "empresas": 255,
+        "eur": 10373472.06
+      }
+    }
+  },
+  "obligacion_no_atendida_calculable": {
+    "empresa_mes": 30133,
+    "empresas": 1282
+  },
+  "confidence_reparto": {
+    "ninguna": 15871,
+    "baja": 2941,
+    "media": 535,
+    "alta": 11517
+  },
+  "criterio_confidence": "ninguna=sin facturas outflow exigibles en el corte; alta=cartera sin agujeros de importe y con magnitud de normalizacion; media=agujeros en <50% de las vencidas; baja=agujeros en >=50% de las vencidas o sin magnitud de normalizacion",
+  "distribucion_obligacion_no_atendida_eur": {
+    "n": 30133,
+    "mediana": 0.0,
+    "p75": 11415.924004914004,
+    "p90": 258466.88621033408
+  },
+  "distribucion_multiplicador_deuda": {
+    "n": 28470,
+    "mediana": 1.0,
+    "p75": 1.0,
+    "p90": 1.0,
+    "min": 0.5,
+    "max": 1.0
+  },
+  "deficit_servicio": {
+    "empresa_mes_con_deficit_positivo": 558,
+    "empresas_con_deficit_positivo": 111,
+    "empresa_mes_calculable": 1057,
+    "nota": "deficit>0 = venia pagando servicio de deuda y dejo de hacerlo (o lo redujo) respecto a su mediana previa"
+  },
+  "agujeros_importe": {
+    "empresa_mes_con_n_sin_eur": 1923,
+    "nota": "fx_ambiguous o amount_eur nulo: no se imputan como cero; los buckets son cotas inferiores y la confianza baja"
+  },
+  "constantes_diseno": {
+    "pesos_bucket": {
+      "1_30": 1.0,
+      "31_60": 1.5,
+      "61_90": 2.0,
+      "91_180": 3.0,
+      "180_mas": 5.0,
+      "justificacion": "pesos crecientes por antiguedad: un euro impagado hace mas tiempo es una senal de distress mas fuerte; provisionales"
+    },
+    "multiplicador_minimo": 0.5,
+    "multiplicador_minimo_justificacion": "cota de diseno PROVISIONAL pendiente de calibracion: acota el castigo para que ningun impago lleve el multiplicador a 0; deja hasta un 50% de penalizacion",
+    "normalizacion": "T6 = pagos operativos conocidos + servicio de deuda en la ventana movil de 6 meses hasta m (magnitud de la propia empresa, misma escala que el scorer v3); fallback 6x servicio_esperado",
+    "min_meses_servicio": 3,
+    "nota": "todas las constantes son PROVISIONALES y no calibradas"
+  },
+  "limitacion_residual": "La fuente no tiene fecha de importacion: no puede demostrarse que una factura estuviera REGISTRADA en el sistema en el corte m, solo que su vencimiento era anterior a m. Medida point-in-time por vencimiento, no por disponibilidad de registro certificada.",
+  "fuente": "clean/invoices.parquet (invoice/outflow) + marts/panel_deuda.parquet + marts/panel_flujos.parquet",
+  "no_consumido": "interim/debt_products.parquet (stock sin fecha), interim/debt_schedule_config.parquet, clean/balances.parquet (snapshot de fecha unica), marts/targets_proxy.parquet y reports/label_review/: NO entran en ninguna cifra publicada"
+}

@@ -1,10 +1,14 @@
+import Image from "next/image";
+import garden from "../public/garden-gate-oil.png";
+import logo from "../../brand/blau.svg";
+
 export function AuthLayout({ children }: { children: React.ReactNode }) {
   return <main className="auth-layout">
-    <section className="auth-story" aria-label="Blaubeere">
-      <div><a className="brand" href={process.env.NEXT_PUBLIC_LANDING_URL ?? "http://localhost:3102"}><span className="brand-mark" aria-hidden><i/><i/><i/><i/></span>blaubeere</a></div>
-      <div><span className="eyebrow">A clearer view of what’s ahead</span><p className="auth-story-title">Tomorrow’s cash.<br/>Today’s decisions.</p><p>Understand the gap. Explore your options. Give your next decision a little more foresight.</p><div className="auth-art" aria-hidden><svg viewBox="0 0 500 180" fill="none"><path d="M0 90H500M0 45H500M0 135H500" stroke="currentColor" opacity=".12"/><path d="M0 95L70 65L130 82L210 50L270 115" stroke="currentColor" strokeWidth="3"/><path d="M270 115L340 88L410 38L500 20" stroke="currentColor" strokeWidth="3" strokeDasharray="7 6"/><path d="M270 0V180" stroke="currentColor" opacity=".25" strokeDasharray="3 5"/></svg></div></div>
-      <p className="small">For the people behind the numbers.</p>
+    <section className="auth-story" aria-label="blau">
+      <Image className="auth-painting" src={garden} alt="An open wooden gate leading into a sunlit garden, painted in oils." draggable={false} fill sizes="(max-width: 760px) 100vw, 50vw" preload placeholder="blur"/>
+      <a className="brand" href={process.env.NEXT_PUBLIC_LANDING_URL ?? "http://localhost:3102"} aria-label="blau home"><Image className="brand-logo" src={logo} alt="blau"/></a>
+      <div className="auth-story-copy"><p className="auth-story-title">A little foresight.<br/><span>A world of possibility.</span></p><p>Make room for your next decision.<br/>We’ll help you see what’s ahead.</p></div>
     </section>
-    <section className="auth-form-area">{children}</section>
+    <section className="auth-form-area">{children}<p className="auth-signature">For the people behind the numbers.</p></section>
   </main>;
 }

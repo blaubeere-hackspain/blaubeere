@@ -1,0 +1,100 @@
+{
+  "workspace": "data/runs/20260919T022951Z-83143e8d",
+  "perimetro": {
+    "filas_empresa_mes": 21464,
+    "mes_inicio": "2024-09-01",
+    "mes_fin": "2026-08-01"
+  },
+  "empresas": {
+    "universo": 1286,
+    "con_serie": 1278,
+    "sin_actividad_de_caja_observada": 8,
+    "ids_sin_actividad": [
+      "COMP_0046",
+      "COMP_0168",
+      "COMP_0339",
+      "COMP_0475",
+      "COMP_0559",
+      "COMP_0676",
+      "COMP_0683",
+      "COMP_0906"
+    ]
+  },
+  "reparto_confianza": {
+    "empresa_mes": {
+      "alta": 19645,
+      "media": 99,
+      "baja": 201,
+      "ninguna": 1519
+    },
+    "empresa_ultimo_mes": {
+      "alta": 1142,
+      "media": 9,
+      "baja": 16,
+      "ninguna": 111
+    }
+  },
+  "meses_de_cobertura": {
+    "empresa_mes": {
+      "n_no_nulos": 20353,
+      "p25": 0.0,
+      "mediana": 0.119348,
+      "p75": 0.740504,
+      "p90": 2.805394
+    },
+    "empresa_ultimo_mes": {
+      "n_no_nulos": 1208,
+      "p25": 0.014705,
+      "mediana": 0.247004,
+      "p75": 1.047942,
+      "p90": 5.06665
+    }
+  },
+  "posicion_acumulada_negativa": {
+    "empresa_mes": 10525,
+    "empresa_ultimo_mes": 610
+  },
+  "agujeros_fx": {
+    "filas": 138827,
+    "volumen_proxy_moneda_local": 261178539662.9527
+  },
+  "diagnostico_balances": {
+    "nota": "Diagnostico solo informe: la posicion reconstruida es relativa al mes_origen y el snapshot de balances es un saldo absoluto a 2026-09-01; no son la misma magnitud y no deben coincidir. Este diagnostico no entra en ninguna cifra.",
+    "snapshot_date": "2026-09-01",
+    "empresas_snapshot": 1268,
+    "empresas_comparadas": 1263,
+    "discrepancia_absoluta_eur": {
+      "p25": 23116.775,
+      "mediana": 125836.78,
+      "p75": 601965.355
+    },
+    "discrepancia_relativa_al_snapshot": {
+      "p25": 0.567264,
+      "mediana": 1.012128,
+      "p75": 2.342658
+    },
+    "correlacion_pearson_posicion_snapshot": 0.008668,
+    "acuerdo_de_signo": 632
+  },
+  "fuentes_sha256": {
+    "data/runs/20260919T022951Z-83143e8d/data/clean/transactions.parquet": "5a88e7f43978849bb514b80c2111b547ea44037a53484b10c4bcd7c36b9668b7",
+    "data/runs/20260919T022951Z-83143e8d/data/clean/companies.parquet": "d3eec399514a09b112e5bc02afb9772b08e6ab04c00c55f128bfe4b2ce85a487",
+    "data/runs/20260919T022951Z-83143e8d/data/clean/banking_products.parquet": "6059bf92b2f5c6e20a53096b7d1b6fac3ac3643039f1873dc20a9e97ea5e58b3",
+    "data/runs/20260919T022951Z-83143e8d/data/clean/balances.parquet": "86591d78768df467ebc053ebaa4b6ab9a42540bcc58d82e39b264ba1c760ebd3",
+    "data/runs/20260919T022951Z-83143e8d/data/interim/transactions.parquet": "c24c2280fa0774e1e7350d8830abd8c4d1a8e03d58a19d1743b97e29844d85bc",
+    "data/runs/20260919T022951Z-83143e8d/data/interim/companies.parquet": "263b88020c9da26c263d4c3d4d64392d2e830d14137f0f8b6dd5a593f83cba3d",
+    "data/runs/20260919T022951Z-83143e8d/data/interim/banking_products.parquet": "40b534b9a0abccd21363e8208ac0d3ecb31fe2ffb8f018f99e12dea864238579",
+    "data/runs/20260919T022951Z-83143e8d/data/interim/debt_products.parquet": "7b18aafe418dc51dad6016d07347dd8aaafc6080f896bf320a07745d5d2a9702",
+    "data/runs/20260919T022951Z-83143e8d/data/interim/debt_schedule_config.parquet": "5563a81980d3df078c7e285e6645ed6d87a25c5e5c45706ce2d02322a89b6ab0",
+    "data/runs/20260919T022951Z-83143e8d/data/interim/groups.parquet": "15725e066bdf1df9f62f7423593807648bc2845c894ee18c8c84f8f9dfde0449",
+    "data/runs/20260919T022951Z-83143e8d/data/interim/invoices.parquet": "ea2701f7bea122977ca7fc9a3f819904b1e9dcd7ac7f023086e1674df0d05be4",
+    "data/runs/20260919T022951Z-83143e8d/data/interim/tx_flow_class.parquet": "e847a46f8415a900e266496069d42c69a3e99b6905ac61b840984d924b907aed",
+    "data/runs/20260919T022951Z-83143e8d/data/marts/fx_rates.parquet": "332ddfeae00a6262767a4d79af4a970fb96b32e579cf68b075061eb4d92c5027",
+    "data/runs/20260919T022951Z-83143e8d/data/marts/observabilidad.parquet": "95b9f99530436937cc9bed6daeb103d2cc5690df030f12bb01f3e58cf819667a",
+    "data/runs/20260919T022951Z-83143e8d/data/marts/panel_cobro.parquet": "2cdf6f8ef2e68d09fbd0639c948f5f25d3f3c0cc43b1885f4db9fc509f420972",
+    "data/runs/20260919T022951Z-83143e8d/data/marts/panel_deuda.parquet": "ae88f01cd4c9afe1257aabd8c0b488e85b467969703ba031fa4068b00b7893e3",
+    "data/runs/20260919T022951Z-83143e8d/data/marts/panel_evidencia.parquet": "8d14cd182d8c962e4a438c6e44cdc80074a4dfd77d40dc807f569eff0d93a789",
+    "data/runs/20260919T022951Z-83143e8d/data/marts/panel_flujos.parquet": "47a9f494d28f8f1d6448e749a91cacfd42a07c984046e2072c315e863df30aef",
+    "data/runs/20260919T022951Z-83143e8d/data/marts/targets_proxy.parquet": "20196759d2ff2ecc47d431ef171f06cbb60e9131a1c7099fc9eb81487290aea1"
+  }
+}

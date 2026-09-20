@@ -12,10 +12,10 @@
     "buffer_cents": 10000000,
     "health": {
       "score": 56,
-      "previous_score": 68,
-      "period": "3 months",
+      "previous_score": 58,
+      "period": "1 day",
       "label": "Deteriorating \u00b7 illustrative score",
-      "note": "Demo score supplied by the fixture. Not the official challenge model or a validated rating."
+      "note": "The receipt timing gap and fixed commitments outweigh lower discretionary spending. The illustrative daily rating falls by two points; it is not a validated rating."
     },
     "history": [
       {
@@ -43,7 +43,7 @@
       {
         "label": "Receipts arrive after supplier payments",
         "detail": "\u20ac3.2m expected 17 days after the \u20ac4m supplier batch.",
-        "points": -12,
+        "points": -3,
         "source_ids": [
           "AR-108",
           "INV-042"
@@ -52,7 +52,7 @@
       {
         "label": "Contractual commitments concentrate in September",
         "detail": "\u20ac520k of payroll, tax and debt service each month.",
-        "points": -6,
+        "points": -1,
         "source_ids": [
           "PAY-01",
           "DEBT-01"
@@ -60,8 +60,8 @@
       },
       {
         "label": "Lower discretionary spending",
-        "detail": "Illustrative observed improvement compared with the previous quarter.",
-        "points": 6,
+        "detail": "Illustrative improvement in discretionary spending compared with the prior daily assessment.",
+        "points": 2,
         "source_ids": [
           "OPS-01"
         ]
@@ -391,6 +391,382 @@
         "kind": "debt",
         "timing": "contractual",
         "source": "Demo ledger \u00b7 dated commitments"
+      }
+    ],
+    "health_assessments": [
+      {
+        "date": "2026-06-02",
+        "model_version": "demo-scorecard-v1",
+        "history_mode": "reconstructed",
+        "health": {
+          "score": 68,
+          "previous_score": null,
+          "period": "",
+          "label": "Illustrative rating",
+          "note": "The first saved assessment shows a manageable supplier commitment relative to the supplied cash position. This is an illustrative starting rating."
+        },
+        "drivers": [
+          {
+            "label": "Supplier commitments",
+            "detail": "The first saved assessment shows a manageable supplier commitment relative to the supplied cash position. This is an illustrative starting rating.",
+            "points": null,
+            "source_ids": [
+              "SUP-2026-06-02"
+            ]
+          }
+        ],
+        "flows": [
+          {
+            "id": "SUP-2026-06-02",
+            "label": "Inventory supplier commitments",
+            "amount_cents": -80000000,
+            "settled_cents": 0,
+            "date": "2026-09-28",
+            "known_on": "2026-06-02",
+            "kind": "payable",
+            "timing": "contractual",
+            "source": "Synthetic archived ledger \u00b7 illustrative assessment"
+          }
+        ],
+        "coverage": [
+          {
+            "label": "Archived supplier ledger",
+            "status": "available",
+            "as_of": "2026-06-02",
+            "detail": "Synthetic ledger snapshot saved with this rating."
+          }
+        ]
+      },
+      {
+        "date": "2026-07-02",
+        "model_version": "demo-scorecard-v1",
+        "history_mode": "reconstructed",
+        "health": {
+          "score": 65,
+          "previous_score": 68,
+          "period": "30 days",
+          "label": "Illustrative rating",
+          "note": "Larger supplier commitments reduce flexibility compared with the June assessment. The sample rating falls by three points."
+        },
+        "drivers": [
+          {
+            "label": "Supplier commitments",
+            "detail": "Larger supplier commitments reduce flexibility compared with the June assessment. The sample rating falls by three points.",
+            "points": -3,
+            "source_ids": [
+              "SUP-2026-07-02"
+            ]
+          }
+        ],
+        "flows": [
+          {
+            "id": "SUP-2026-07-02",
+            "label": "Inventory supplier commitments",
+            "amount_cents": -110000000,
+            "settled_cents": 0,
+            "date": "2026-09-28",
+            "known_on": "2026-07-02",
+            "kind": "payable",
+            "timing": "contractual",
+            "source": "Synthetic archived ledger \u00b7 illustrative assessment"
+          }
+        ],
+        "coverage": [
+          {
+            "label": "Archived supplier ledger",
+            "status": "available",
+            "as_of": "2026-07-02",
+            "detail": "Synthetic ledger snapshot saved with this rating."
+          }
+        ]
+      },
+      {
+        "date": "2026-08-01",
+        "model_version": "demo-scorecard-v1",
+        "history_mode": "reconstructed",
+        "health": {
+          "score": 61,
+          "previous_score": 65,
+          "period": "30 days",
+          "label": "Illustrative rating",
+          "note": "The next inventory order concentrates more cash outflows into one supplier payment. The sample rating falls by four points."
+        },
+        "drivers": [
+          {
+            "label": "Supplier commitments",
+            "detail": "The next inventory order concentrates more cash outflows into one supplier payment. The sample rating falls by four points.",
+            "points": -4,
+            "source_ids": [
+              "SUP-2026-08-01"
+            ]
+          }
+        ],
+        "flows": [
+          {
+            "id": "SUP-2026-08-01",
+            "label": "Inventory supplier commitments",
+            "amount_cents": -400000000,
+            "settled_cents": 0,
+            "date": "2026-09-28",
+            "known_on": "2026-08-01",
+            "kind": "payable",
+            "timing": "contractual",
+            "source": "Synthetic archived ledger \u00b7 illustrative assessment"
+          }
+        ],
+        "coverage": [
+          {
+            "label": "Archived supplier ledger",
+            "status": "available",
+            "as_of": "2026-08-01",
+            "detail": "Synthetic ledger snapshot saved with this rating."
+          }
+        ]
+      },
+      {
+        "date": "2026-08-29",
+        "model_version": "demo-scorecard-v1",
+        "history_mode": "reconstructed",
+        "health": {
+          "score": 59,
+          "previous_score": 61,
+          "period": "28 days",
+          "label": "Illustrative rating",
+          "note": "Customer receipts are expected after the supplier batch is due. This timing mismatch lowers the illustrative rating by two points."
+        },
+        "drivers": [
+          {
+            "label": "Collection timing trails payments",
+            "detail": "Expected customer receipts arrive 17 days after the supplier payment.",
+            "points": -2,
+            "source_ids": [
+              "AR-108",
+              "INV-042"
+            ]
+          }
+        ],
+        "flows": [
+          {
+            "id": "INV-042",
+            "label": "Inventory suppliers",
+            "amount_cents": -400000000,
+            "settled_cents": 0,
+            "date": "2026-09-28",
+            "known_on": "2026-08-01",
+            "kind": "payable",
+            "timing": "contractual",
+            "source": "Supplier invoices \u00b7 12 open invoices"
+          },
+          {
+            "id": "AR-108",
+            "label": "September customer receipts",
+            "amount_cents": 320000000,
+            "settled_cents": 0,
+            "date": "2026-10-15",
+            "known_on": "2026-08-16",
+            "kind": "receivable",
+            "timing": "estimated",
+            "source": "Customer invoices \u00b7 historical collection timing"
+          }
+        ],
+        "coverage": [
+          {
+            "label": "Customer and supplier invoices",
+            "status": "available",
+            "as_of": "2026-08-29",
+            "detail": "Synthetic invoice snapshot for this date."
+          }
+        ]
+      },
+      {
+        "date": "2026-08-30",
+        "model_version": "demo-scorecard-v1",
+        "history_mode": "reconstructed",
+        "health": {
+          "score": 58,
+          "previous_score": 59,
+          "period": "1 day",
+          "label": "Illustrative rating",
+          "note": "The dated payroll and debt schedule adds pressure to the collection gap. The illustrative daily rating falls by one point."
+        },
+        "drivers": [
+          {
+            "label": "Payroll and debt service",
+            "detail": "The newly supplied schedule contains payroll, tax and debt commitments.",
+            "points": -1,
+            "source_ids": [
+              "PAY-01",
+              "DEBT-01"
+            ]
+          }
+        ],
+        "flows": [
+          {
+            "id": "PAY-01",
+            "label": "Payroll and tax",
+            "amount_cents": -40000000,
+            "settled_cents": 0,
+            "date": "2026-10-01",
+            "known_on": "2026-08-30",
+            "kind": "payroll",
+            "timing": "contractual",
+            "source": "Demo ledger \u00b7 dated commitments"
+          },
+          {
+            "id": "DEBT-01",
+            "label": "Debt instalment",
+            "amount_cents": -12000000,
+            "settled_cents": 0,
+            "date": "2026-10-05",
+            "known_on": "2026-08-30",
+            "kind": "debt",
+            "timing": "contractual",
+            "source": "Demo ledger \u00b7 dated commitments"
+          }
+        ],
+        "coverage": [
+          {
+            "label": "Payroll and debt schedule",
+            "status": "available",
+            "as_of": "2026-08-30",
+            "detail": "Synthetic commitments saved at this daily cutoff."
+          }
+        ]
+      },
+      {
+        "date": "2026-08-31",
+        "model_version": "demo-scorecard-v1",
+        "history_mode": "reconstructed",
+        "health": {
+          "score": 56,
+          "previous_score": 58,
+          "period": "1 day",
+          "label": "Deteriorating \u00b7 illustrative score",
+          "note": "The receipt timing gap and fixed commitments outweigh lower discretionary spending. The illustrative daily rating falls by two points; it is not a validated rating."
+        },
+        "drivers": [
+          {
+            "label": "Receipts arrive after supplier payments",
+            "detail": "\u20ac3.2m expected 17 days after the \u20ac4m supplier batch.",
+            "points": -3,
+            "source_ids": [
+              "AR-108",
+              "INV-042"
+            ]
+          },
+          {
+            "label": "Contractual commitments concentrate in September",
+            "detail": "\u20ac520k of payroll, tax and debt service each month.",
+            "points": -1,
+            "source_ids": [
+              "PAY-01",
+              "DEBT-01"
+            ]
+          },
+          {
+            "label": "Lower discretionary spending",
+            "detail": "Illustrative improvement in discretionary spending compared with the prior daily assessment.",
+            "points": 2,
+            "source_ids": [
+              "OPS-01"
+            ]
+          }
+        ],
+        "coverage": [
+          {
+            "label": "Bank balances",
+            "status": "available",
+            "as_of": "2026-08-31",
+            "detail": "Usable cash in EUR. No restricted balances in this demo."
+          },
+          {
+            "label": "Open invoices",
+            "status": "available",
+            "as_of": "2026-08-31",
+            "detail": "Remaining balances only; settled cash is not counted twice."
+          },
+          {
+            "label": "Debt schedule",
+            "status": "available",
+            "as_of": "2026-08-31",
+            "detail": "Contractual repayments. New funding is a separate assumption."
+          },
+          {
+            "label": "Committed credit",
+            "status": "missing",
+            "as_of": null,
+            "detail": "No verified accessible facility. Additional funding requires approval."
+          },
+          {
+            "label": "Business metrics",
+            "status": "missing",
+            "as_of": null,
+            "detail": "Revenue, margins and retention need finance-team inputs."
+          },
+          {
+            "label": "Supplier update",
+            "status": "stale",
+            "as_of": "2026-08-10",
+            "detail": "Illustrative stale source. Confirm obligations before relying on a plan."
+          }
+        ],
+        "flows": [
+          {
+            "id": "INV-042",
+            "label": "Inventory suppliers",
+            "amount_cents": -400000000,
+            "settled_cents": 0,
+            "date": "2026-09-28",
+            "known_on": "2026-08-01",
+            "kind": "payable",
+            "timing": "contractual",
+            "source": "Supplier invoices \u00b7 12 open invoices"
+          },
+          {
+            "id": "AR-108",
+            "label": "September customer receipts",
+            "amount_cents": 320000000,
+            "settled_cents": 0,
+            "date": "2026-10-15",
+            "known_on": "2026-08-16",
+            "kind": "receivable",
+            "timing": "estimated",
+            "source": "Customer invoices \u00b7 historical collection timing"
+          },
+          {
+            "id": "PAY-01",
+            "label": "Payroll and tax",
+            "amount_cents": -40000000,
+            "settled_cents": 0,
+            "date": "2026-10-01",
+            "known_on": "2026-08-30",
+            "kind": "payroll",
+            "timing": "contractual",
+            "source": "Demo ledger \u00b7 dated commitments"
+          },
+          {
+            "id": "OPS-01",
+            "label": "Discretionary operating spend",
+            "amount_cents": -18000000,
+            "settled_cents": 0,
+            "date": "2026-10-03",
+            "known_on": "2026-08-30",
+            "kind": "discretionary",
+            "timing": "estimated",
+            "source": "Demo treasury schedule \u00b7 monthly assumption"
+          },
+          {
+            "id": "DEBT-01",
+            "label": "Debt instalment",
+            "amount_cents": -12000000,
+            "settled_cents": 0,
+            "date": "2026-10-05",
+            "known_on": "2026-08-30",
+            "kind": "debt",
+            "timing": "contractual",
+            "source": "Demo ledger \u00b7 dated commitments"
+          }
+        ]
       }
     ]
   }

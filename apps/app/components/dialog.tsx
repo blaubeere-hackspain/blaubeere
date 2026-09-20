@@ -9,10 +9,15 @@ export function Dialog({ open, onClose, titleId, className, children }: { open: 
   const dialog = useRef<HTMLDialogElement>(null);
   const backdropStart = useRef(false);
   useEffect(() => {
-    if (open && !dialog.current?.open) dialog.current?.showModal();
+    if (open && dialog.current && !dialog.current.open) {
+      dialog.current.dataset.instant = String(document.activeElement?.matches(":focus-visible") ?? false);
+      dialog.current.showModal();
+    }
     else if (!open) dialog.current?.close();
   }, [open]);
   return <dialog ref={dialog} className={className} aria-labelledby={titleId} onClose={onClose}
+    onKeyDown={event => { if (event.key === "Escape" || event.key === "Enter" || event.key === " ") event.currentTarget.dataset.instant = "true"; }}
+    onPointerDownCapture={event => { event.currentTarget.dataset.instant = "false"; }}
     onPointerDown={event => { backdropStart.current = event.target === event.currentTarget && outsideDialog(event.currentTarget.getBoundingClientRect(), event.clientX, event.clientY); }}
     onPointerCancel={() => { backdropStart.current = false; }}
     onClick={event => {

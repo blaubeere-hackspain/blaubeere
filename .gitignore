@@ -34,3 +34,6 @@ __pycache__/
 /x-ray-reto-embat.html
 # Local Pi runtime state
 .atl/
+
+# Material archivado (movido a .legacy/, no borrado).
+/.legacy/

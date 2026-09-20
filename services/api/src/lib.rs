@@ -1,4 +1,7 @@
 pub mod auth;
+mod daily_cash;
+pub mod dataset;
+pub mod dataset_import;
 pub mod finance;
 pub mod oauth;
 
@@ -20,6 +23,8 @@ use tower_http::cors::CorsLayer;
 
 #[derive(Clone)]
 pub struct Config {
+    pub demo_login: bool,
+    pub dataset_demo: bool,
     pub app_origin: String,
     pub api_origin: String,
     pub mcp_resource: String,
@@ -28,6 +33,12 @@ pub struct Config {
 impl Config {
     pub fn from_env() -> anyhow::Result<Self> {
         let config = Self {
+            dataset_demo: std::env::var("DATASET_DEMO")
+                .unwrap_or_else(|_| "false".into())
+                .parse()?,
+            demo_login: std::env::var("DEMO_LOGIN")
+                .unwrap_or_else(|_| "false".into())
+                .parse()?,
             app_origin: std::env::var("APP_ORIGIN")
                 .unwrap_or_else(|_| "http://localhost:3100".into()),
             api_origin: std::env::var("API_ORIGIN")
@@ -74,6 +85,7 @@ impl Config {
 #[derive(Clone)]
 pub struct AppState {
     pub db: SqlitePool,
+    pub dataset: Option<SqlitePool>,
     pub config: Config,
     pub dummy_hash: Arc<String>,
     pub companies: Arc<Vec<finance::Company>>,
@@ -94,6 +106,7 @@ impl AppState {
         let dummy_hash = Arc::new(auth::hash_password(auth::secret()).await?);
         Ok(Self {
             db,
+            dataset: None,
             config,
             dummy_hash,
             companies: Arc::new(finance::load(include_str!(
@@ -151,6 +164,13 @@ pub fn router(state: AppState) -> Router {
     Router::new()
         .route("/health", get(|| async { Json(json!({"status": "ok"})) }))
         .route("/api/auth/login", post(auth::login))
+        .route("/api/auth/register", post(auth::register))
+        .route("/api/auth/demo", post(auth::demo_login))
+        .route("/api/demo/companies", get(dataset::demo_companies))
+        .route(
+            "/api/demo/companies/{id}/assessment",
+            get(dataset::demo_assessment),
+        )
         .route("/api/auth/logout", post(auth::logout))
         .route("/api/me", get(auth::me))
         .route(

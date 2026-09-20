@@ -27,6 +27,9 @@ endpoint() {
 }
 app="$(endpoint 8080)"
 landing="$(endpoint 3102)"
+if [[ -n "${GITHUB_OUTPUT:-}" ]]; then
+  printf 'app_url=%s\nlanding_url=%s\n' "$app" "$landing" >> "$GITHUB_OUTPUT"
+fi
 
 # A complete heredoc prevents commands such as installers from consuming the SSH input.
 {
@@ -35,8 +38,6 @@ landing="$(endpoint 3102)"
   printf '\nBLAUBEERE_DEPLOY_SCRIPT\n'
 } | jio connect "$vm"
 
-bun scripts/check-production.ts "$app" "$landing"
+# Match runtime.sh: exercise authenticated demo/MCP separately from the public frontend demo.
+DEMO_LOGIN=true bun scripts/check-production.ts "$app" "$landing"
 printf 'App: %s\nLanding: %s\nMCP: %s/mcp\nRevision: %s\n' "$app" "$landing" "$app" "$revision"
-if [[ -n "${GITHUB_STEP_SUMMARY:-}" ]]; then
-  printf '### Blaubeere deployed\n\n- [App](%s)\n- [Landing](%s)\n- MCP: %s/mcp\n- Commit: %s\n' "$app" "$landing" "$app" "$revision" >> "$GITHUB_STEP_SUMMARY"
-fi
