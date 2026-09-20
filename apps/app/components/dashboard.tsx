@@ -2,7 +2,7 @@
 import Image from "next/image";
 import painting from "../../landing/public/cash-horizon-oil.png";
 import { useEffect, useState } from "react";
-import { Activity, ArrowRight, LoaderCircle, PanelLeft, PanelLeftClose, ShieldCheck, X } from "lucide-react";
+import { ArrowRight, LoaderCircle, PanelLeft, PanelLeftClose, X } from "lucide-react";
 import { ApiError, api } from "../lib/api";
 import type { CompanySummary, Identity, ModelAssessment } from "../lib/types";
 import { ModelDashboard } from "./model-dashboard";
@@ -69,13 +69,13 @@ export function Dashboard({ demo = false, scoreDate }: { demo?: boolean; scoreDa
   const sidebar = (mobile = false) => <Sidebar selectorId={mobile ? "mobile-company" : "sidebar-company"} canInspect={Boolean(model)} overviewHref={scoreDate ? overviewHref : undefined} demo={demo} companies={companies} recentCompanies={recent.flatMap(id => companies?.find(company => company.id === id) ?? [])} selected={selected} identity={identity} logoutBusy={logoutBusy}
     onCompany={id => { setSelected(id); setMobileNavigation(false); }} onConnections={() => { setMobileNavigation(false); setConnections(true); }} onLogout={logout} onNavigate={() => setMobileNavigation(false)}/>;
   return <div className="app-shell" data-sidebar-collapsed={sidebarCollapsed}><div className="dashboard-painting" aria-hidden="true"><Image src={painting} alt="" fill sizes="100vw" priority/></div><a href="#main" className="skip-link">Skip to financial health</a>
-    <aside className="sidebar" id="workspace-sidebar" aria-label="Workspace navigation">{sidebar()}</aside>
-    <div className="app-content"><header className="topbar"><div className="topbar-context">
+    <aside className="sidebar" aria-label="Workspace navigation">
       <button className="icon-button desktop-sidebar-toggle" aria-label={sidebarCollapsed ? "Show sidebar" : "Hide sidebar"} aria-expanded={!sidebarCollapsed} aria-controls="workspace-sidebar" onClick={() => setSidebarCollapsed(!sidebarCollapsed)}><span className="icon-swap" aria-hidden><PanelLeft data-visible={sidebarCollapsed}/><PanelLeftClose data-visible={!sidebarCollapsed}/></span></button>
-      <button className="icon-button mobile-sidebar-toggle" aria-label="Open navigation" aria-haspopup="dialog" onClick={() => setMobileNavigation(true)}><PanelLeft/></button>
-      <span className="current-view"><Activity size={16} aria-hidden/>{scoreDate ? "Health assessment" : "Financial health"}</span>
-    </div><div className="topbar-actions">{companies !== null && (identity || demo) && <WelcomeOnboarding scope={demo ? "demo" : identity!.email} hasCompanies={companies.length > 0} demo={demo} autoOpen={!scoreDate}/>}{!demo && <span className="private-label"><ShieldCheck size={14} aria-hidden/>Private workspace</span>}{demo ? <a className="topbar-link" href="/login">Sign in<ArrowRight size={14} aria-hidden/></a> : <span className="user-avatar" aria-label="Finance team">FT</span>}</div></header>
+      <div className="sidebar-content" id="workspace-sidebar" hidden={sidebarCollapsed}>{sidebar()}</div>
+    </aside>
+    <div className="app-content">
       <main id="main" className="dashboard-main" tabIndex={-1}>
+        <button className="icon-button mobile-sidebar-toggle" aria-label="Open navigation" aria-haspopup="dialog" onClick={() => setMobileNavigation(true)}><PanelLeft aria-hidden/></button>
         {error && <div className="error error-retry" role="alert"><span>{error}</span><button className="button secondary" onClick={() => setRetry(retry + 1)}>Try again</button></div>}
         <p className="refresh-status small" role="status">{loading && model && <><LoaderCircle className="spinner" size={14} aria-hidden/>Updating… Showing the previous assessment.</>}</p>
         {loading && !model && <div className="dashboard-skeleton" role="status"><span className="sr-only">Loading company health and source records…</span><div className="skeleton-chart"/><div className="skeleton-stats">{[1,2,3,4].map(n => <div key={n}/>)}</div></div>}
@@ -84,6 +84,7 @@ export function Dashboard({ demo = false, scoreDate }: { demo?: boolean; scoreDa
       </main>
     </div>
     <Dialog open={mobileNavigation} onClose={() => setMobileNavigation(false)} className="navigation-dialog" titleId="navigation-title"><h2 id="navigation-title" className="sr-only">Workspace navigation</h2><button className="icon-button close-navigation" aria-label="Close navigation" onClick={() => setMobileNavigation(false)}><X/></button>{mobileNavigation && sidebar(true)}</Dialog>
+    {companies !== null && (identity || demo) && <WelcomeOnboarding scope={demo ? "demo" : identity!.email} hasCompanies={companies.length > 0} demo={demo} autoOpen={!scoreDate}/>}
     {(identity || demo) && <Connections demo={demo} endpoint={identity?.mcp_resource ?? ""} open={connections} onClose={() => setConnections(false)}/>}
   </div>;
 }
