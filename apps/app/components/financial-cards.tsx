@@ -18,7 +18,7 @@ const percentage = (value: number) => new Intl.NumberFormat("en-GB", { style: "p
 const knownIndex = (value: number | null | undefined) => value != null && Number.isFinite(value) && value >= 0 && value <= 1 ? value : null;
 export function formatIndex(value: number | null | undefined) {
   const index = knownIndex(value);
-  return index === null ? "Not available" : `${new Intl.NumberFormat("en-GB", { maximumFractionDigits: 3 }).format(index)} / 1`;
+  return index === null ? "Not available" : percentage(index);
 }
 const formatFxPoints = (value: number | null | undefined) => value == null || !Number.isFinite(value) ? "Not available" : `${new Intl.NumberFormat("en-GB", { maximumFractionDigits: 2 }).format(value)} points`;
 
