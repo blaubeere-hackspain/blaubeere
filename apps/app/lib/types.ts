@@ -64,6 +64,8 @@ export type ModelRecord = {
   penalizacion_mora_puntos: number | null; penalizacion_multiplicador_puntos: number | null;
   volumen_ambiguo_eur: number | null; volumen_ambiguo_pct: number | null;
   k: number; alpha: number; beta: number; reasons: string[];
+  indice_fx?: number | null; indice_fx_min?: number | null; indice_es_intervalo?: boolean;
+  indice_fx_aplicado?: number | null; penalizacion_fx_puntos?: number | null; beta_fx?: number;
   cash: {
     saldo_reversa_eur: number | null; flujo_neto: number | null; volumen_conocido: number | null; meses_de_cobertura_reversa: number | null; saldo_ancla_eur: number | null; confidence: string;
     flujo_operating_in: number | null; flujo_operating_out: number | null;

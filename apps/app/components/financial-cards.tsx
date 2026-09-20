@@ -1,5 +1,5 @@
 import type { ReactNode } from "react";
-import { ArrowDownLeft, ArrowUpRight, ClockAlert } from "lucide-react";
+import { ArrowDownLeft, ArrowUpRight, ClockAlert, Coins } from "lucide-react";
 import { date, money } from "../lib/format";
 import type { ModelRecord } from "../lib/types";
 
@@ -14,10 +14,11 @@ const knownAmount = (value: number | null | undefined) => value != null && Numbe
 const euros = (value: number | null) => value === null ? "Not available" : money(Math.round(value * 100), "EUR", false, true);
 const percentage = (value: number) => new Intl.NumberFormat("en-GB", { style: "percent", maximumFractionDigits: 1 }).format(value);
 const knownIndex = (value: number | null | undefined) => value != null && Number.isFinite(value) && value >= 0 && value <= 1 ? value : null;
-export function formatArrearsIndex(value: number | null | undefined) {
+export function formatIndex(value: number | null | undefined) {
   const index = knownIndex(value);
   return index === null ? "Not available" : `${new Intl.NumberFormat("en-GB", { maximumFractionDigits: 3 }).format(index)} / 1`;
 }
+const formatFxPoints = (value: number | null | undefined) => value == null || !Number.isFinite(value) ? "Not available" : `${new Intl.NumberFormat("en-GB", { maximumFractionDigits: 2 }).format(value)} points`;
 
 export function SegmentedGauge({ segments, className, children }: { segments: { fraction: number; color: string }[]; className: string; children: ReactNode }) {
   let end = 0;
@@ -55,10 +56,18 @@ export function AgingCard({ row, side }: { row: ModelRecord; side: "pago" | "cob
 export function DefaultingCard({ row }: { row: ModelRecord }) {
   const index = knownIndex(row.mora_indice);
   const suppliers = knownIndex(row.payment?.mora_pago_robusta), customers = knownIndex(row.payment?.mora_cobro_robusta);
+  const hasFxLayer = row.indice_fx !== undefined || row.indice_fx_aplicado !== undefined;
+  const fxHeadline = knownIndex(row.indice_fx) ?? (row.indice_es_intervalo ? knownIndex(row.indice_fx_aplicado) : null);
   return <section className="card financial-card defaulting-card" aria-labelledby="defaulting-title">
     <header className="financial-card-heading"><ClockAlert size={17} aria-hidden/><div><h2 id="defaulting-title">Defaulting</h2><p>Payment arrears · {date(row.as_of, true)}</p></div></header>
-    <div className="defaulting-summary"><span>Arrears index</span><strong className="num">{formatArrearsIndex(index)}</strong><p>{index === null ? "Insufficient payment evidence for this month." : "Late payments, weighted by age and persistence."}</p></div>
-    <dl className="defaulting-bars">{([['Supplier payments', suppliers], ['Customer collections', customers]] as const).map(([label, value]) => <div key={label}><dt>{label}</dt><dd className="num">{formatArrearsIndex(value)}</dd>{value !== null && <div className="defaulting-track" aria-hidden><i style={{ width: `${value * 100}%` }}/></div>}</div>)}</dl>
+    <div className="defaulting-summary"><span>Arrears index</span><strong className="num">{formatIndex(index)}</strong><p>{index === null ? "Insufficient payment evidence for this month." : "Late payments, weighted by age and persistence."}</p></div>
+    <dl className="defaulting-bars">{([['Supplier payments', suppliers], ['Customer collections', customers]] as const).map(([label, value]) => <div key={label}><dt>{label}</dt><dd className="num">{formatIndex(value)}</dd>{value !== null && <div className="defaulting-track" aria-hidden><i style={{ width: `${value * 100}%` }}/></div>}</div>)}</dl>
     <footer className="financial-card-note"><p>Higher means more payment arrears. This is an observed index, not a probability of default.</p>{index !== null && (suppliers === null || customers === null) && <p>{suppliers !== null ? "Only supplier-payment evidence contributes to this index." : customers !== null ? "Only customer-collection evidence contributes to this index." : "The supplier and customer breakdown is unavailable."}</p>}</footer>
+    {hasFxLayer && <section className="defaulting-fx" aria-labelledby="fx-risk-title">
+      <header className="financial-card-heading"><Coins size={17} aria-hidden/><div><h3 id="fx-risk-title">Currency risk</h3><p>Receivables in foreign currency · {date(row.as_of, true)}</p></div></header>
+      <div className="defaulting-summary"><span>FX risk index</span><strong className="num">{formatIndex(fxHeadline)}</strong>{fxHeadline !== null && <div className="fx-track" aria-hidden><i style={{ width: `${fxHeadline * 100}%` }}/></div>}<p>{fxHeadline === null && !row.indice_es_intervalo ? "The currencies owed to this company could not be valued this month, so no FX adjustment was applied." : "Higher means the currencies owed to this company moved more against the euro (volatility and drift). This is an observed index, not an exchange-rate forecast."}</p></div>
+      <dl className="defaulting-bars"><div><dt>Applied to the score</dt><dd className="num">{formatIndex(row.indice_fx_aplicado)}</dd></div><div><dt>Score reduction</dt><dd className="num">{formatFxPoints(row.penalizacion_fx_puntos)}</dd></div></dl>
+      <footer className="financial-card-note">{row.indice_es_intervalo && <p>Part of this receivables portfolio has no reference exchange rate, so the minimum compatible penalty consistent with what is known was applied.</p>}{row.beta_fx != null && <p>Its weight in the score is {row.beta_fx} score points per unit of the index.</p>}</footer>
+    </section>}
   </section>;
 }
