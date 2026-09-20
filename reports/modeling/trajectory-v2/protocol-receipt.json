@@ -1,0 +1,22 @@
+{
+  "excluded_groups": 50,
+  "group_counts": {
+    "final_test": 50,
+    "train": 150,
+    "validation": 50
+  },
+  "included_groups": 200,
+  "input_sha256": {
+    "data/runs/20260919T124814Z-e5302b58/data/marts/panel_flujos.parquet": "af5cf4be59d9e3e1a98841208b69b029127345cd9c02a47a553e986dc0c7ebd7",
+    "data/runs/20260919T124814Z-e5302b58/manifest.json": "88059a142248927f2c6ae0816993eae6e1177abf3138f089df09d93bc642ce6b",
+    "reports/modeling/experiment-v1/model.joblib": "2ac7cffd080d6c0a22422c90a3b806ae2f053d585eb4b7330078ca9c588bcbf5",
+    "reports/modeling/experiment-v1/model_manifest.json": "9b30c24feeb75fb0c2f17bca9a2eb178a508dd3e24759ac53c713424dd531dc8",
+    "reports/modeling/protocol-v1/feature_contract.json": "fc63dd509e547fdf41f89a6b05012947531e9f1590e5f71771219f83a0539fab",
+    "reports/modeling/protocol-v1/group_assignment.json": "180e6373477e1c2fd12c69677bb43781a6c7c52334f38efc362d6b30d54217e4",
+    "reports/modeling/protocol-v1/protocol.json": "b313de697e5daded3027db6ea18f4221649efcb899f23312768b5fcb4f2f9034"
+  },
+  "outcome_values_read": 0,
+  "protocol_sha256": "d37ee0cad9101b4e6ae1dbc39f69d471ff7457b2cf3c5dac8ac5bd786c70159d",
+  "protocol_version": "trajectory-v2",
+  "verification_scope": "Metadata and byte hashes only; no Parquet queries, model loading or outcome values"
+}

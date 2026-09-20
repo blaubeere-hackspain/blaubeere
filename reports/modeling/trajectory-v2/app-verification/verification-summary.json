@@ -1,0 +1,78 @@
+{
+  "scope": "V2T5 application integration and read-only verification of existing exports; not overall goal acceptance",
+  "status": "application_checks_passed",
+  "inputs": {
+    "companies_file": "reports/modeling/trajectory-v2/assessment/companies.json",
+    "companies_bytes": 103942971,
+    "companies_sha256": "2c9cbfd1cb5f8976cbff5184f7eabcc796fe86763de0e0cc512c2448a579a5c9",
+    "manifest_sha256": "fe7e57c28a92eefbf04c6e456ba639ac6df9c481441eeda8bbfab1326458aae3",
+    "companies": 1286,
+    "points": 30864,
+    "months_per_company": 24,
+    "final_test_companies_without_case_labels": 208,
+    "august_probability_estimates": 1010
+  },
+  "source_and_protected_hash_evidence": "browser-2026-09-19T18-40-46.953Z.json#/source_sha256 and #/protected_sha256",
+  "commands": [
+    {"command": "cargo check --workspace", "exit": 101, "result": "Initial Rust E0502: mutable filtered snapshot borrow overlapped snapshot serialization; corrected once by materializing current_point before serialization."},
+    {"command": "TRAJECTORY_ASSESSMENT_FILE=<absolute sealed trajectory companies.json> cargo test -p blaubeere-api actual_trajectory_export_validation_and_historical_gating -- --ignored", "exit": 0, "passed": 1},
+    {"command": "bun run typecheck", "exit": 0, "result": "Both applications"},
+    {"command": "TRAJECTORY_ASSESSMENT_FILE=<absolute sealed trajectory companies.json> cargo test -p blaubeere-mcp actual_trajectory_mcp_dates_and_company_isolation -- --ignored", "exit": 0, "passed": 1},
+    {"command": "cargo fmt --all", "exit": 0},
+    {"command": "cargo build --workspace", "exit": 0},
+    {"command": "bun run test:web", "exit": 0, "trajectory_unit_tests_passed": 3, "existing_web_checks": "passed"},
+    {"command": "bun run typecheck", "exit": 0, "result": "Both applications, with new trajectory unit tests included"},
+    {"command": "cargo clippy --workspace --all-targets -- -D warnings", "exit": 0},
+    {"command": "bun run test:trajectory:e2e", "exit": 1, "report": "browser-2026-09-19T18-39-23.242Z.json", "passed_steps": 7},
+    {"command": "bun scripts/check-trajectory-e2e.ts --inspect", "exit": 0, "result": "Read-only gap counts: COMP_0001=16, COMP_0009=0, COMP_0028=7, COMP_0179=0"},
+    {"command": "bun run test:trajectory:e2e", "exit": 0, "report": "browser-2026-09-19T18-40-46.953Z.json", "passed_steps": 13},
+    {"command": "TRAJECTORY_ASSESSMENT_FILE=<absolute sealed trajectory companies.json> cargo test --workspace actual_trajectory -- --ignored", "exit": 0, "passed": 2},
+    {"command": "bun run check", "exit": 0, "result": "Mocked deployment validation only; existing web checks; 3 trajectory unit tests; both app typechecks and production builds; cargo fmt --check; warning-denying clippy; 11 Rust tests passed, 4 explicit-export tests ignored here and separately executed successfully"},
+    {"command": "EXPORTED_ASSESSMENT_FILE=<absolute sealed v1 companies.json> cargo test --workspace actual_export -- --ignored", "exit": 0, "passed": 2},
+    {"command": "git diff --check -- apps services scripts/check-trajectory-e2e.ts package.json readme.md docs", "exit": 0, "result": "No whitespace errors; existing Git CRLF-conversion warnings only, configuration untouched"}
+  ],
+  "command_counts": {"verification_and_formatting_invocations": 16, "exit_zero": 14, "initial_failed_attempts": 2},
+  "corrections": [
+    {"bug": "Rust mutable/immutable snapshot borrow overlap", "correction": "Serialize the selected current point before serializing the company snapshot", "focused_recheck": "Actual-export Rust test compiled and passed; subsequent build, clippy and full check also passed"},
+    {"bug": "E2E gap assertion incorrectly assumed COMP_0009 has missing monthly inputs", "diagnosis": "Read-only exported aggregate counts show zero monthly gaps for COMP_0009, seven for the already-required COMP_0028", "correction": "Only the gap-specific check uses COMP_0028; all three deterministic development cases and their dates remain unchanged", "focused_recheck": "One full E2E rerun passed all 13 steps without weakening any assertion or browser sandbox"}
+  ],
+  "api_contract": {
+    "new_kind": "operating_trajectory",
+    "loading": "API and MCP call the same load_file function once on startup; pinned local sibling manifest and companies SHA256, exact schema traversal, typed structs, temporal/count/coverage/probability/bounds checks; Arc-shared dictionary, never a remote or arbitrary reference loader",
+    "read": "GET /api/companies/{id}/assessment?as_of=YYYY-MM-DD; MCP get_cash_outlook adds optional as_of",
+    "response": "One authorised company, selected_as_of, current_point, closed-date options and resolved methodological metadata; no global company trajectory payload",
+    "history": "Only exported closed months September 2024 through August 2026. Company assessment_date becomes the selected close; only points <= cutoff are serialized; entire development case is null until case_visibility_from. Historical backtest metrics omitted; latest metrics explicitly labelled as a later retrospective report. Omitted/null MCP as_of is explicitly latest, not an arbitrary historical fallback.",
+    "legacy": "Cash and v1 proxy reject alternate historical dates. Existing cash planning and proxy rendering remain separate.",
+    "planning": "Trajectory forecast null, cash_planning_available false; compare/plans reject regardless of cash assumptions",
+    "precision": "Existing serde_json float_roundtrip preserved; real API responses deep-equal exported selected point values"
+  },
+  "browser": {
+    "system_chromium": "152.0.7977.82",
+    "executable": "/usr/bin/chromium",
+    "sandbox_enabled": true,
+    "passed_steps": 13,
+    "page_errors": 0,
+    "historical_api_responses": 78,
+    "counted_ui_historical_cuts": 26,
+    "maximum_response_bytes": 115763,
+    "response_limit_bytes": 150000,
+    "cases": [
+      {"company": "COMP_0009", "kind": "deterioration", "onset": "2025-04-01", "visible_from": "2025-05-31", "api_months": 24},
+      {"company": "COMP_0179", "kind": "improvement", "onset": "2025-04-01", "visible_from": "2025-05-31", "api_months": 24},
+      {"company": "COMP_0028", "kind": "recovered_dip", "onset": "2025-04-01", "visible_from": "2025-06-30", "api_months": 24}
+    ],
+    "ui_cuts_each_case": ["2024-09-30", "2025-03-31", "2025-04-30", "2025-05-31", "2025-06-30", "2025-07-31", "2026-08-31"],
+    "probability_overlay": "COMP_0001 eligible April, May, June, July and August 2026; earliest history has null probability; separate probability axis",
+    "other_checks": ["negative backtest warning", "no planner/cash/health UI", "keyboard company/month selectors", "monthly gaps and source disclosure", "mobile no horizontal overflow", "unauthorised assessment and plans return 403", "invalid/nonclosed/out-of-range dates return 400", "cash demo funding need remains 210000000 cents and planner opens", "v1 proxy eligible and abstained views remain correct"],
+    "cleanup": "All owned process groups stopped and temporary SQLite identities removed; random unlogged passwords; no screenshots, saved sessions, persistent env files or external browser requests"
+  },
+  "protected_scope": {
+    "writes": "Only apps, services, new scripts/check-trajectory-e2e.ts, package script, existing relevant README/docs and new app-verification JSON evidence",
+    "e2e_hashes_unchanged": true,
+    "sealed_source_and_output_scope": "Seven trajectory Python source files, all existing top-level trajectory-v2 outputs, v2 companies/manifest, v1 companies/manifest/browser-summary were hashed before and after successful E2E; existing reports were not overwritten",
+    "not_executed": ["data pipelines", "training/refitting", "inference replay", "event label computation", "development/reserved backtest phases", "frozen Python model tests", "deploy", "commit", "push"],
+    "not_modified": ["goal/vault/raw/run/marts", "frozen v1 model code/tests/artifacts", "sealed T1-T4 source/tests", "existing trajectory protocol/manifests/reports/assessment outputs", "Git configuration/ignore/security controls"],
+    "limitation": "This records application verification, not a fresh audit of every raw/model artifact or overall goal completion. No protected model/raw data was opened for such an audit."
+  },
+  "remaining": "No application verification blocker found. Parent/coordinating agent must decide overall acceptance. Any future replacement export requires an explicit reviewed update of pinned manifest/companies identities; controls intentionally fail closed."
+}
