@@ -1,0 +1,1759 @@
+{
+  "fuente": {
+    "url": "https://www.ecb.europa.eu/stats/eurofxref/eurofxref-hist.zip",
+    "sha256": "22760c0c056226ba0d12d2acd67c3b60c18407a5185c48a06b3d16672fe6987d",
+    "fichero": "data/fx_ecb/eurofxref-hist.csv",
+    "publicacion_bce_hora_local": 16
+  },
+  "ventana": {
+    "primer_mes": "2024-09-01",
+    "ultimo_mes": "2026-08-01",
+    "n_meses": 24
+  },
+  "rejilla": {
+    "divisas": [
+      "AED",
+      "ARS",
+      "AUD",
+      "BGN",
+      "BRL",
+      "CAD",
+      "CHF",
+      "CLP",
+      "CNY",
+      "COP",
+      "CZK",
+      "DKK",
+      "EUR",
+      "GBP",
+      "HKD",
+      "HUF",
+      "IDR",
+      "ILS",
+      "INR",
+      "ISK",
+      "JPY",
+      "KRW",
+      "MAD",
+      "MXN",
+      "MYR",
+      "MZN",
+      "NAD",
+      "NOK",
+      "NZD",
+      "PEN",
+      "PHP",
+      "PLN",
+      "RON",
+      "SEK",
+      "SGD",
+      "THB",
+      "TRY",
+      "USD",
+      "ZAR"
+    ],
+    "filas": 936
+  },
+  "estadistico": {
+    "nombre": "volatilidad_robusta_anualizada",
+    "formula": "(IQR(rendimientos_log_diarios) / 1.349) * sqrt(252)",
+    "iqr_a_normal": 1.349,
+    "dias_anualizacion": 252,
+    "min_rendimientos": 10,
+    "justificacion": "Escala robusta: un unico dia extremo (devaluacion puntual) no domina el mes; expresada en terminos anualizados para ser comparable entre divisas."
+  },
+  "estadistico_deriva": {
+    "nombre": "deriva_sostenida_asimetrica",
+    "formula": "deriva_valor = tipo(cierre m-W) / tipo(cierre m) - 1; deriva_componente = max(0, -deriva_valor)",
+    "ventana_meses": 12,
+    "signo": "El BCE cotiza unidades de divisa por EUR: si el tipo SUBE la divisa se DEBILITA. El cociente invierte el signo, de modo que deriva_valor < 0 = perdida para quien va a cobrar en esa divisa.",
+    "asimetria": "Solo cuenta la deriva negativa. Una revalorizacion da componente 0 (ni premia ni castiga).",
+    "justificacion_ventana": "12 meses maximiza la separacion medida (Cohen d ~1.0) entre el bloque estructuralmente debil (TRY, IDR, INR, JPY) y el apreciado (USD, GBP, BRL, MXN); a 18/24 meses la mediana del bloque apreciado se vuelve negativa (castigaria a BRL) y a 3/6 meses TRY solo es el mas castigado en 16/24 meses. El CSV llega a 1999-01-04, asi que no hay calentamiento."
+  },
+  "tramos": {
+    "orden": [
+      "estable",
+      "volatil",
+      "hipervolatil"
+    ],
+    "combinacion": "mas_severo_de_los_dos",
+    "combinacion_justificacion": "Una divisa es tan arriesgada como su peor dimension; un componente benigno no compensa al otro. Se publican los dos tramos por separado para que F3 mida cual mueve la nota.",
+    "cortes": {
+      "vol_estable": "vol < 0.025",
+      "vol_volatil": "0.025 <= vol < 0.1",
+      "vol_hipervolatil": "vol >= 0.1 o sin cobertura BCE",
+      "deriva_estable": "componente < 0.025",
+      "deriva_volatil": "0.025 <= componente < 0.06",
+      "deriva_hipervolatil": "componente >= 0.06"
+    },
+    "justificacion": "Volatilidad: cortes sobre la distribucion medida (0.025 ~ p20, 0.10 ~ p95). Deriva: 2.5% de erosion es el borde de una banda gestionada y 6% acumulado en 12 meses separa en el ultimo mes la cola de depreciacion gestionada (IDR/INR/JPY/PHP, 6.5-7.8%) del bloque leve (RON 3.5%, THB 1.8%, resto 0).",
+    "conteo_filas": {
+      "estable": 141,
+      "volatil": 406,
+      "hipervolatil": 389
+    },
+    "conteo_filas_volatilidad": {
+      "estable": 155,
+      "volatil": 547,
+      "hipervolatil": 234
+    },
+    "conteo_filas_deriva": {
+      "estable": 451,
+      "volatil": 114,
+      "hipervolatil": 171
+    }
+  },
+  "distribucion_vol_anualizada": {
+    "n": 736,
+    "min": 0.0,
+    "p10": 0.0035291709994753617,
+    "p20": 0.024292866661120925,
+    "p25": 0.028211433825418533,
+    "p50": 0.04356432897576197,
+    "p75": 0.06246860475328721,
+    "p90": 0.08422754903971623,
+    "p95": 0.09816392463452789,
+    "p99": 0.1518281290756869,
+    "max": 0.1914525685699773
+  },
+  "distribucion_deriva_componente": {
+    "n": 736,
+    "min": 0.0,
+    "p10": 0.0,
+    "p20": 0.0,
+    "p25": 0.0,
+    "p50": 0.004231208621244931,
+    "p75": 0.05561661572310844,
+    "p90": 0.11256680385687295,
+    "p95": 0.13561847941469976,
+    "p99": 0.22332382203514123,
+    "max": 0.2810385010148092
+  },
+  "meses_deriva_hiper_por_divisa": {
+    "TRY": 24,
+    "INR": 18,
+    "IDR": 16,
+    "KRW": 16,
+    "JPY": 13,
+    "PHP": 11,
+    "BRL": 10,
+    "MXN": 10,
+    "CAD": 9,
+    "NZD": 9,
+    "AUD": 8,
+    "CNY": 7,
+    "HKD": 6,
+    "USD": 5,
+    "HUF": 3,
+    "SGD": 3,
+    "MYR": 1,
+    "THB": 1,
+    "ZAR": 1
+  },
+  "resumen_por_divisa": {
+    "AED": {
+      "vol_mediana": null,
+      "vol_min": null,
+      "vol_max": null,
+      "meses_con_medida": 0,
+      "deriva_mediana": null,
+      "deriva_componente_mediana": null,
+      "deriva_componente_max": null,
+      "meses_con_deriva": 0,
+      "meses": 24,
+      "meses_cobertura_bce": 0,
+      "tramo_volatilidad_modal": "hipervolatil",
+      "tramo_deriva_modal": null,
+      "tramo_modal": "hipervolatil",
+      "cobertura_bce": false
+    },
+    "ARS": {
+      "vol_mediana": null,
+      "vol_min": null,
+      "vol_max": null,
+      "meses_con_medida": 0,
+      "deriva_mediana": null,
+      "deriva_componente_mediana": null,
+      "deriva_componente_max": null,
+      "meses_con_deriva": 0,
+      "meses": 24,
+      "meses_cobertura_bce": 0,
+      "tramo_volatilidad_modal": "hipervolatil",
+      "tramo_deriva_modal": null,
+      "tramo_modal": "hipervolatil",
+      "cobertura_bce": false
+    },
+    "AUD": {
+      "vol_mediana": 0.05447218109445298,
+      "vol_min": 0.01970137336298401,
+      "vol_max": 0.1212522365921114,
+      "meses_con_medida": 24,
+      "deriva_mediana": -0.01579874946039045,
+      "deriva_componente_mediana": 0.01579874946039045,
+      "deriva_componente_max": 0.10413416536661457,
+      "meses_con_deriva": 24,
+      "meses": 24,
+      "meses_cobertura_bce": 24,
+      "tramo_volatilidad_modal": "volatil",
+      "tramo_deriva_modal": "estable",
+      "tramo_modal": "volatil",
+      "cobertura_bce": true
+    },
+    "BGN": {
+      "vol_mediana": 0.0,
+      "vol_min": 0.0,
+      "vol_max": 0.0,
+      "meses_con_medida": 16,
+      "deriva_mediana": 0.0,
+      "deriva_componente_mediana": 0.0,
+      "deriva_componente_max": 0.0,
+      "meses_con_deriva": 16,
+      "meses": 24,
+      "meses_cobertura_bce": 16,
+      "tramo_volatilidad_modal": "estable",
+      "tramo_deriva_modal": "estable",
+      "tramo_modal": "estable",
+      "cobertura_bce": true
+    },
+    "BRL": {
+      "vol_mediana": 0.08675286360901281,
+      "vol_min": 0.036405612079080635,
+      "vol_max": 0.1914525685699773,
+      "meses_con_medida": 24,
+      "deriva_mediana": -0.027942205596413416,
+      "deriva_componente_mediana": 0.027942205596413416,
+      "deriva_componente_max": 0.16551756338225454,
+      "meses_con_deriva": 24,
+      "meses": 24,
+      "meses_cobertura_bce": 24,
+      "tramo_volatilidad_modal": "volatil",
+      "tramo_deriva_modal": "estable",
+      "tramo_modal": "volatil",
+      "cobertura_bce": true
+    },
+    "CAD": {
+      "vol_mediana": 0.03795093414881889,
+      "vol_min": 0.02607488777263512,
+      "vol_max": 0.09775002553532249,
+      "meses_con_medida": 24,
+      "deriva_mediana": -0.054391477635432894,
+      "deriva_componente_mediana": 0.054391477635432894,
+      "deriva_componente_max": 0.08723010487353489,
+      "meses_con_deriva": 24,
+      "meses": 24,
+      "meses_cobertura_bce": 24,
+      "tramo_volatilidad_modal": "volatil",
+      "tramo_deriva_modal": "hipervolatil",
+      "tramo_modal": "volatil",
+      "cobertura_bce": true
+    },
+    "CHF": {
+      "vol_mediana": 0.0311847534999958,
+      "vol_min": 0.012620956107248156,
+      "vol_max": 0.07484583179604061,
+      "meses_con_medida": 24,
+      "deriva_mediana": 0.021186101876288665,
+      "deriva_componente_mediana": 0.0,
+      "deriva_componente_max": 0.01614959626009349,
+      "meses_con_deriva": 24,
+      "meses": 24,
+      "meses_cobertura_bce": 24,
+      "tramo_volatilidad_modal": "volatil",
+      "tramo_deriva_modal": "estable",
+      "tramo_modal": "volatil",
+      "cobertura_bce": true
+    },
+    "CLP": {
+      "vol_mediana": null,
+      "vol_min": null,
+      "vol_max": null,
+      "meses_con_medida": 0,
+      "deriva_mediana": null,
+      "deriva_componente_mediana": null,
+      "deriva_componente_max": null,
+      "meses_con_deriva": 0,
+      "meses": 24,
+      "meses_cobertura_bce": 0,
+      "tramo_volatilidad_modal": "hipervolatil",
+      "tramo_deriva_modal": null,
+      "tramo_modal": "hipervolatil",
+      "cobertura_bce": false
+    },
+    "CNY": {
+      "vol_mediana": 0.039329109206909574,
+      "vol_min": 0.019951522719944964,
+      "vol_max": 0.09181191695205647,
+      "meses_con_medida": 24,
+      "deriva_mediana": -0.01304655019453177,
+      "deriva_componente_mediana": 0.01304655019453177,
+      "deriva_componente_max": 0.09019243305888891,
+      "meses_con_deriva": 24,
+      "meses": 24,
+      "meses_cobertura_bce": 24,
+      "tramo_volatilidad_modal": "volatil",
+      "tramo_deriva_modal": "estable",
+      "tramo_modal": "volatil",
+      "cobertura_bce": true
+    },
+    "COP": {
+      "vol_mediana": null,
+      "vol_min": null,
+      "vol_max": null,
+      "meses_con_medida": 0,
+      "deriva_mediana": null,
+      "deriva_componente_mediana": null,
+      "deriva_componente_max": null,
+      "meses_con_deriva": 0,
+      "meses": 24,
+      "meses_cobertura_bce": 0,
+      "tramo_volatilidad_modal": "hipervolatil",
+      "tramo_deriva_modal": null,
+      "tramo_modal": "hipervolatil",
+      "cobertura_bce": false
+    },
+    "CZK": {
+      "vol_mediana": 0.02066527390588057,
+      "vol_min": 0.007327148287068462,
+      "vol_max": 0.03679478004260117,
+      "meses_con_medida": 24,
+      "deriva_mediana": 0.016551314804133965,
+      "deriva_componente_mediana": 0.0,
+      "deriva_componente_max": 0.038169147925245395,
+      "meses_con_deriva": 24,
+      "meses": 24,
+      "meses_cobertura_bce": 24,
+      "tramo_volatilidad_modal": "estable",
+      "tramo_deriva_modal": "estable",
+      "tramo_modal": "estable",
+      "cobertura_bce": true
+    },
+    "DKK": {
+      "vol_mediana": 0.0012621875992769728,
+      "vol_min": 0.0003148419522511946,
+      "vol_max": 0.0025240008584003167,
+      "meses_con_medida": 24,
+      "deriva_mediana": -0.0008306173049705823,
+      "deriva_componente_mediana": 0.0008306173049705823,
+      "deriva_componente_max": 0.0019269111881280443,
+      "meses_con_deriva": 24,
+      "meses": 24,
+      "meses_cobertura_bce": 24,
+      "tramo_volatilidad_modal": "estable",
+      "tramo_deriva_modal": "estable",
+      "tramo_modal": "estable",
+      "cobertura_bce": true
+    },
+    "EUR": {
+      "vol_mediana": 0.0,
+      "vol_min": 0.0,
+      "vol_max": 0.0,
+      "meses_con_medida": 24,
+      "deriva_mediana": 0.0,
+      "deriva_componente_mediana": 0.0,
+      "deriva_componente_max": 0.0,
+      "meses_con_deriva": 24,
+      "meses": 24,
+      "meses_cobertura_bce": 24,
+      "tramo_volatilidad_modal": "estable",
+      "tramo_deriva_modal": "estable",
+      "tramo_modal": "estable",
+      "cobertura_bce": true
+    },
+    "GBP": {
+      "vol_mediana": 0.034273238807598236,
+      "vol_min": 0.011749478680200333,
+      "vol_max": 0.07407512612010772,
+      "meses_con_medida": 24,
+      "deriva_mediana": -0.008973837589682121,
+      "deriva_componente_mediana": 0.008973837589682121,
+      "deriva_componente_max": 0.05730914070523785,
+      "meses_con_deriva": 24,
+      "meses": 24,
+      "meses_cobertura_bce": 24,
+      "tramo_volatilidad_modal": "volatil",
+      "tramo_deriva_modal": "estable",
+      "tramo_modal": "volatil",
+      "cobertura_bce": true
+    },
+    "HKD": {
+      "vol_mediana": 0.05078421438066663,
+      "vol_min": 0.022659005345985205,
+      "vol_max": 0.08644123432664438,
+      "meses_con_medida": 24,
+      "deriva_mediana": -0.045842086326678744,
+      "deriva_componente_mediana": 0.045842086326678744,
+      "deriva_componente_max": 0.1297667271965357,
+      "meses_con_deriva": 24,
+      "meses": 24,
+      "meses_cobertura_bce": 24,
+      "tramo_volatilidad_modal": "volatil",
+      "tramo_deriva_modal": "estable",
+      "tramo_modal": "volatil",
+      "cobertura_bce": true
+    },
+    "HUF": {
+      "vol_mediana": 0.04607551247173994,
+      "vol_min": 0.01904036008468298,
+      "vol_max": 0.1460769051591501,
+      "meses_con_medida": 24,
+      "deriva_mediana": 0.0032065251370880787,
+      "deriva_componente_mediana": 0.00527500000000003,
+      "deriva_componente_max": 0.0752884031572556,
+      "meses_con_deriva": 24,
+      "meses": 24,
+      "meses_cobertura_bce": 24,
+      "tramo_volatilidad_modal": "volatil",
+      "tramo_deriva_modal": "estable",
+      "tramo_modal": "volatil",
+      "cobertura_bce": true
+    },
+    "IDR": {
+      "vol_mediana": 0.05012038627460265,
+      "vol_min": 0.02933759820736069,
+      "vol_max": 0.10376675179961746,
+      "meses_con_medida": 24,
+      "deriva_mediana": -0.07317612299291149,
+      "deriva_componente_mediana": 0.07317612299291149,
+      "deriva_componente_max": 0.15336281859070466,
+      "meses_con_deriva": 24,
+      "meses": 24,
+      "meses_cobertura_bce": 24,
+      "tramo_volatilidad_modal": "volatil",
+      "tramo_deriva_modal": "hipervolatil",
+      "tramo_modal": "hipervolatil",
+      "cobertura_bce": true
+    },
+    "ILS": {
+      "vol_mediana": 0.08574463268084857,
+      "vol_min": 0.052423773320769314,
+      "vol_max": 0.16130099855492533,
+      "meses_con_medida": 24,
+      "deriva_mediana": 0.05444779827665103,
+      "deriva_componente_mediana": 0.0,
+      "deriva_componente_max": 0.025684557735684344,
+      "meses_con_deriva": 24,
+      "meses": 24,
+      "meses_cobertura_bce": 24,
+      "tramo_volatilidad_modal": "volatil",
+      "tramo_deriva_modal": "estable",
+      "tramo_modal": "volatil",
+      "cobertura_bce": true
+    },
+    "INR": {
+      "vol_mediana": 0.057781118868249215,
+      "vol_min": 0.03036066220194529,
+      "vol_max": 0.0985777667513071,
+      "meses_con_medida": 24,
+      "deriva_mediana": -0.0901701440488521,
+      "deriva_componente_mediana": 0.0901701440488521,
+      "deriva_componente_max": 0.17875116921041223,
+      "meses_con_deriva": 24,
+      "meses": 24,
+      "meses_cobertura_bce": 24,
+      "tramo_volatilidad_modal": "volatil",
+      "tramo_deriva_modal": "hipervolatil",
+      "tramo_modal": "hipervolatil",
+      "cobertura_bce": true
+    },
+    "ISK": {
+      "vol_mediana": 0.032934196209249825,
+      "vol_min": 0.0,
+      "vol_max": 0.0646187025569761,
+      "meses_con_medida": 24,
+      "deriva_mediana": 0.015478005226480795,
+      "deriva_componente_mediana": 0.0,
+      "deriva_componente_max": 0.038487060384870486,
+      "meses_con_deriva": 24,
+      "meses": 24,
+      "meses_cobertura_bce": 24,
+      "tramo_volatilidad_modal": "volatil",
+      "tramo_deriva_modal": "estable",
+      "tramo_modal": "volatil",
+      "cobertura_bce": true
+    },
+    "JPY": {
+      "vol_mediana": 0.05580888296809555,
+      "vol_min": 0.02602404077011007,
+      "vol_max": 0.15231166558859136,
+      "meses_con_medida": 24,
+      "deriva_mediana": -0.06389266656922366,
+      "deriva_componente_mediana": 0.06389266656922366,
+      "deriva_componente_max": 0.14755878998533634,
+      "meses_con_deriva": 24,
+      "meses": 24,
+      "meses_cobertura_bce": 24,
+      "tramo_volatilidad_modal": "volatil",
+      "tramo_deriva_modal": "hipervolatil",
+      "tramo_modal": "hipervolatil",
+      "cobertura_bce": true
+    },
+    "KRW": {
+      "vol_mediana": 0.06312033642446539,
+      "vol_min": 0.0348262552850185,
+      "vol_max": 0.13068241629250416,
+      "meses_con_medida": 24,
+      "deriva_mediana": -0.07833835078429668,
+      "deriva_componente_mediana": 0.07833835078429668,
+      "deriva_componente_max": 0.1316029438584313,
+      "meses_con_deriva": 24,
+      "meses": 24,
+      "meses_cobertura_bce": 24,
+      "tramo_volatilidad_modal": "volatil",
+      "tramo_deriva_modal": "hipervolatil",
+      "tramo_modal": "hipervolatil",
+      "cobertura_bce": true
+    },
+    "MAD": {
+      "vol_mediana": null,
+      "vol_min": null,
+      "vol_max": null,
+      "meses_con_medida": 0,
+      "deriva_mediana": null,
+      "deriva_componente_mediana": null,
+      "deriva_componente_max": null,
+      "meses_con_deriva": 0,
+      "meses": 24,
+      "meses_cobertura_bce": 0,
+      "tramo_volatilidad_modal": "hipervolatil",
+      "tramo_deriva_modal": null,
+      "tramo_modal": "hipervolatil",
+      "cobertura_bce": false
+    },
+    "MXN": {
+      "vol_mediana": 0.05180899261368978,
+      "vol_min": 0.02712112139450208,
+      "vol_max": 0.16181355059577696,
+      "meses_con_medida": 24,
+      "deriva_mediana": 0.006733738251164301,
+      "deriva_componente_mediana": 0.0008121687659164989,
+      "deriva_componente_max": 0.18786458593009925,
+      "meses_con_deriva": 24,
+      "meses": 24,
+      "meses_cobertura_bce": 24,
+      "tramo_volatilidad_modal": "volatil",
+      "tramo_deriva_modal": "estable",
+      "tramo_modal": "volatil",
+      "cobertura_bce": true
+    },
+    "MYR": {
+      "vol_mediana": 0.04175047255871235,
+      "vol_min": 0.026832409697523,
+      "vol_max": 0.10023659350387071,
+      "meses_con_medida": 24,
+      "deriva_mediana": 0.04364766157152844,
+      "deriva_componente_mediana": 0.0,
+      "deriva_componente_max": 0.06567230632235088,
+      "meses_con_deriva": 24,
+      "meses": 24,
+      "meses_cobertura_bce": 24,
+      "tramo_volatilidad_modal": "volatil",
+      "tramo_deriva_modal": "estable",
+      "tramo_modal": "volatil",
+      "cobertura_bce": true
+    },
+    "MZN": {
+      "vol_mediana": null,
+      "vol_min": null,
+      "vol_max": null,
+      "meses_con_medida": 0,
+      "deriva_mediana": null,
+      "deriva_componente_mediana": null,
+      "deriva_componente_max": null,
+      "meses_con_deriva": 0,
+      "meses": 24,
+      "meses_cobertura_bce": 0,
+      "tramo_volatilidad_modal": "hipervolatil",
+      "tramo_deriva_modal": null,
+      "tramo_modal": "hipervolatil",
+      "cobertura_bce": false
+    },
+    "NAD": {
+      "vol_mediana": null,
+      "vol_min": null,
+      "vol_max": null,
+      "meses_con_medida": 0,
+      "deriva_mediana": null,
+      "deriva_componente_mediana": null,
+      "deriva_componente_max": null,
+      "meses_con_deriva": 0,
+      "meses": 24,
+      "meses_cobertura_bce": 0,
+      "tramo_volatilidad_modal": "hipervolatil",
+      "tramo_deriva_modal": null,
+      "tramo_modal": "hipervolatil",
+      "cobertura_bce": false
+    },
+    "NOK": {
+      "vol_mediana": 0.06045327645596265,
+      "vol_min": 0.03127617690585055,
+      "vol_max": 0.16791515431770304,
+      "meses_con_medida": 24,
+      "deriva_mediana": 0.003311114075355559,
+      "deriva_componente_mediana": 0.0,
+      "deriva_componente_max": 0.04701144552776593,
+      "meses_con_deriva": 24,
+      "meses": 24,
+      "meses_cobertura_bce": 24,
+      "tramo_volatilidad_modal": "volatil",
+      "tramo_deriva_modal": "estable",
+      "tramo_modal": "volatil",
+      "cobertura_bce": true
+    },
+    "NZD": {
+      "vol_mediana": 0.050814140900949045,
+      "vol_min": 0.025462170968175924,
+      "vol_max": 0.11692947568349184,
+      "meses_con_medida": 24,
+      "deriva_mediana": -0.05330781371511473,
+      "deriva_componente_mediana": 0.05330781371511473,
+      "deriva_componente_max": 0.13037468529397245,
+      "meses_con_deriva": 24,
+      "meses": 24,
+      "meses_cobertura_bce": 24,
+      "tramo_volatilidad_modal": "volatil",
+      "tramo_deriva_modal": "volatil",
+      "tramo_modal": "volatil",
+      "cobertura_bce": true
+    },
+    "PEN": {
+      "vol_mediana": null,
+      "vol_min": null,
+      "vol_max": null,
+      "meses_con_medida": 0,
+      "deriva_mediana": null,
+      "deriva_componente_mediana": null,
+      "deriva_componente_max": null,
+      "meses_con_deriva": 0,
+      "meses": 24,
+      "meses_cobertura_bce": 0,
+      "tramo_volatilidad_modal": "hipervolatil",
+      "tramo_deriva_modal": null,
+      "tramo_modal": "hipervolatil",
+      "cobertura_bce": false
+    },
+    "PHP": {
+      "vol_mediana": 0.05328132356288222,
+      "vol_min": 0.018562603198175792,
+      "vol_max": 0.07286070402533329,
+      "meses_con_medida": 24,
+      "deriva_mediana": -0.0540337313279417,
+      "deriva_componente_mediana": 0.0540337313279417,
+      "deriva_componente_max": 0.13571947415647112,
+      "meses_con_deriva": 24,
+      "meses": 24,
+      "meses_cobertura_bce": 24,
+      "tramo_volatilidad_modal": "volatil",
+      "tramo_deriva_modal": "hipervolatil",
+      "tramo_modal": "volatil",
+      "cobertura_bce": true
+    },
+    "PLN": {
+      "vol_mediana": 0.02759850403735977,
+      "vol_min": 0.014387241786106062,
+      "vol_max": 0.06979660931540846,
+      "meses_con_medida": 24,
+      "deriva_mediana": 0.007607904041040059,
+      "deriva_componente_mediana": 0.0,
+      "deriva_componente_max": 0.024481231056190156,
+      "meses_con_deriva": 24,
+      "meses": 24,
+      "meses_cobertura_bce": 24,
+      "tramo_volatilidad_modal": "volatil",
+      "tramo_deriva_modal": "estable",
+      "tramo_modal": "volatil",
+      "cobertura_bce": true
+    },
+    "RON": {
+      "vol_mediana": 0.0058389076582698075,
+      "vol_min": 0.0007092934312995375,
+      "vol_max": 0.03345764203563738,
+      "meses_con_medida": 24,
+      "deriva_mediana": -0.020326521178804402,
+      "deriva_componente_mediana": 0.020326521178804402,
+      "deriva_componente_max": 0.039384057271867556,
+      "meses_con_deriva": 24,
+      "meses": 24,
+      "meses_cobertura_bce": 24,
+      "tramo_volatilidad_modal": "estable",
+      "tramo_deriva_modal": "estable",
+      "tramo_modal": "estable",
+      "cobertura_bce": true
+    },
+    "SEK": {
+      "vol_mediana": 0.04099453287641007,
+      "vol_min": 0.024941161658954363,
+      "vol_max": 0.1538989798432211,
+      "meses_con_medida": 24,
+      "deriva_mediana": 0.01984217931816379,
+      "deriva_componente_mediana": 0.0,
+      "deriva_componente_max": 0.03167815690723441,
+      "meses_con_deriva": 24,
+      "meses": 24,
+      "meses_cobertura_bce": 24,
+      "tramo_volatilidad_modal": "volatil",
+      "tramo_deriva_modal": "estable",
+      "tramo_modal": "volatil",
+      "cobertura_bce": true
+    },
+    "SGD": {
+      "vol_mediana": 0.02652475714763761,
+      "vol_min": 0.00908271278867925,
+      "vol_max": 0.060551173796799446,
+      "meses_con_medida": 24,
+      "deriva_mediana": -0.010480113845911965,
+      "deriva_componente_mediana": 0.010480113845911965,
+      "deriva_componente_max": 0.06750049632717892,
+      "meses_con_deriva": 24,
+      "meses": 24,
+      "meses_cobertura_bce": 24,
+      "tramo_volatilidad_modal": "volatil",
+      "tramo_deriva_modal": "estable",
+      "tramo_modal": "volatil",
+      "cobertura_bce": true
+    },
+    "THB": {
+      "vol_mediana": 0.04834028548337852,
+      "vol_min": 0.026047512912159874,
+      "vol_max": 0.0886336693373796,
+      "meses_con_medida": 24,
+      "deriva_mediana": 0.0024884738190201205,
+      "deriva_componente_mediana": 0.0009846654763155382,
+      "deriva_componente_max": 0.06781471098651715,
+      "meses_con_deriva": 24,
+      "meses": 24,
+      "meses_cobertura_bce": 24,
+      "tramo_volatilidad_modal": "volatil",
+      "tramo_deriva_modal": "estable",
+      "tramo_modal": "volatil",
+      "cobertura_bce": true
+    },
+    "TRY": {
+      "vol_mediana": 0.05742253945836607,
+      "vol_min": 0.031421281259969853,
+      "vol_max": 0.09808820908097984,
+      "meses_con_medida": 24,
+      "deriva_mediana": -0.2022196191007386,
+      "deriva_componente_mediana": 0.2022196191007386,
+      "deriva_componente_max": 0.2810385010148092,
+      "meses_con_deriva": 24,
+      "meses": 24,
+      "meses_cobertura_bce": 24,
+      "tramo_volatilidad_modal": "volatil",
+      "tramo_deriva_modal": "hipervolatil",
+      "tramo_modal": "hipervolatil",
+      "cobertura_bce": true
+    },
+    "USD": {
+      "vol_mediana": 0.05463973425453156,
+      "vol_min": 0.02525073551625718,
+      "vol_max": 0.08823857632429657,
+      "meses_con_medida": 24,
+      "deriva_mediana": -0.04468382351157224,
+      "deriva_componente_mediana": 0.04468382351157224,
+      "deriva_componente_max": 0.12803087507341226,
+      "meses_con_deriva": 24,
+      "meses": 24,
+      "meses_cobertura_bce": 24,
+      "tramo_volatilidad_modal": "volatil",
+      "tramo_deriva_modal": "volatil",
+      "tramo_modal": "volatil",
+      "cobertura_bce": true
+    },
+    "ZAR": {
+      "vol_mediana": 0.0772689304967609,
+      "vol_min": 0.03681539058098971,
+      "vol_max": 0.134994954849855,
+      "meses_con_medida": 24,
+      "deriva_mediana": 0.026143453687586637,
+      "deriva_componente_mediana": 0.0,
+      "deriva_componente_max": 0.06449275710015312,
+      "meses_con_deriva": 24,
+      "meses": 24,
+      "meses_cobertura_bce": 24,
+      "tramo_volatilidad_modal": "volatil",
+      "tramo_deriva_modal": "estable",
+      "tramo_modal": "volatil",
+      "cobertura_bce": true
+    }
+  },
+  "empresas_por_tramo_ultimo_mes": {
+    "mes": "2026-08-01",
+    "estable": {
+      "divisas": [
+        "CHF",
+        "CZK",
+        "DKK",
+        "EUR",
+        "GBP",
+        "PLN",
+        "SEK",
+        "SGD"
+      ],
+      "empresas": 599
+    },
+    "volatil": {
+      "divisas": [
+        "AUD",
+        "BRL",
+        "CAD",
+        "CNY",
+        "HKD",
+        "HUF",
+        "ISK",
+        "MXN",
+        "NOK",
+        "NZD",
+        "USD",
+        "ZAR"
+      ],
+      "empresas": 127
+    },
+    "hipervolatil": {
+      "divisas": [
+        "AED",
+        "ARS",
+        "CLP",
+        "COP",
+        "INR",
+        "JPY",
+        "MAD",
+        "MZN",
+        "NAD",
+        "PEN"
+      ],
+      "empresas": 23
+    }
+  },
+  "empresas_por_tramo_volatilidad_ultimo_mes": {
+    "mes": "2026-08-01",
+    "estable": {
+      "divisas": [
+        "CHF",
+        "CZK",
+        "DKK",
+        "EUR",
+        "GBP",
+        "PLN",
+        "SEK",
+        "SGD"
+      ],
+      "empresas": 599
+    },
+    "volatil": {
+      "divisas": [
+        "AUD",
+        "BRL",
+        "CAD",
+        "CNY",
+        "HKD",
+        "HUF",
+        "INR",
+        "ISK",
+        "JPY",
+        "MXN",
+        "NOK",
+        "NZD",
+        "USD",
+        "ZAR"
+      ],
+      "empresas": 128
+    },
+    "hipervolatil": {
+      "divisas": [
+        "AED",
+        "ARS",
+        "CLP",
+        "COP",
+        "MAD",
+        "MZN",
+        "NAD",
+        "PEN"
+      ],
+      "empresas": 20
+    }
+  },
+  "cambio_de_tramo_ultimo_mes": {
+    "mes": "2026-08-01",
+    "n_divisas": 2,
+    "divisas": [
+      "INR",
+      "JPY"
+    ],
+    "detalle": {
+      "INR": {
+        "tramo_volatilidad": "volatil",
+        "tramo_combinado": "hipervolatil"
+      },
+      "JPY": {
+        "tramo_volatilidad": "volatil",
+        "tramo_combinado": "hipervolatil"
+      }
+    },
+    "empresas_afectadas": 4
+  },
+  "cambio_de_tramo_en_la_ventana": {
+    "n_divisas": 22,
+    "divisas": [
+      "AUD",
+      "BRL",
+      "CAD",
+      "CNY",
+      "CZK",
+      "GBP",
+      "HKD",
+      "HUF",
+      "IDR",
+      "INR",
+      "JPY",
+      "KRW",
+      "MXN",
+      "MYR",
+      "NZD",
+      "PHP",
+      "RON",
+      "SGD",
+      "THB",
+      "TRY",
+      "USD",
+      "ZAR"
+    ],
+    "empresas_afectadas": 147
+  },
+  "sensibilidad_corte_deriva": {
+    "0.030": {
+      "corte_deriva_hiper": 0.03,
+      "divisas_que_cambian": [
+        "IDR",
+        "INR",
+        "JPY",
+        "PHP",
+        "RON",
+        "TRY"
+      ],
+      "n_divisas": 6,
+      "empresas_afectadas": 4
+    },
+    "0.050": {
+      "corte_deriva_hiper": 0.05,
+      "divisas_que_cambian": [
+        "IDR",
+        "INR",
+        "JPY",
+        "PHP",
+        "RON",
+        "TRY"
+      ],
+      "n_divisas": 6,
+      "empresas_afectadas": 4
+    },
+    "0.060": {
+      "corte_deriva_hiper": 0.06,
+      "divisas_que_cambian": [
+        "IDR",
+        "INR",
+        "JPY",
+        "PHP",
+        "RON",
+        "TRY"
+      ],
+      "n_divisas": 6,
+      "empresas_afectadas": 4
+    },
+    "0.080": {
+      "corte_deriva_hiper": 0.08,
+      "divisas_que_cambian": [
+        "RON",
+        "TRY"
+      ],
+      "n_divisas": 2,
+      "empresas_afectadas": 0
+    },
+    "0.100": {
+      "corte_deriva_hiper": 0.1,
+      "divisas_que_cambian": [
+        "RON",
+        "TRY"
+      ],
+      "n_divisas": 2,
+      "empresas_afectadas": 0
+    }
+  },
+  "motivos": {
+    "sin_cobertura_bce_asumida_inestable": 192,
+    "cobertura_bce": 712,
+    "cobertura_bce_insuficiente_asumida_inestable": 8,
+    "eur_divisa_ancla": 24
+  },
+  "divisas_sin_cobertura_bce": [
+    "AED",
+    "ARS",
+    "CLP",
+    "COP",
+    "MAD",
+    "MZN",
+    "NAD",
+    "PEN"
+  ],
+  "divisas_con_cobertura_insuficiente": [
+    "BGN"
+  ],
+  "divisas_hipervolatiles_por_defecto": [
+    "AED",
+    "ARS",
+    "BGN",
+    "CLP",
+    "COP",
+    "MAD",
+    "MZN",
+    "NAD",
+    "PEN"
+  ],
+  "divisas_bce": {
+    "n_columnas": 41,
+    "cubren_ventana": [
+      "AUD",
+      "BGN",
+      "BRL",
+      "CAD",
+      "CHF",
+      "CNY",
+      "CZK",
+      "DKK",
+      "GBP",
+      "HKD",
+      "HUF",
+      "IDR",
+      "ILS",
+      "INR",
+      "ISK",
+      "JPY",
+      "KRW",
+      "MXN",
+      "MYR",
+      "NOK",
+      "NZD",
+      "PHP",
+      "PLN",
+      "RON",
+      "SEK",
+      "SGD",
+      "THB",
+      "TRY",
+      "USD",
+      "ZAR"
+    ],
+    "rango_por_divisa": {
+      "AUD": {
+        "primera_cotizacion": "1999-01-04",
+        "ultima_cotizacion": "2026-09-18",
+        "n_cotizaciones_ventana": 509,
+        "cubre_ventana": true
+      },
+      "BGN": {
+        "primera_cotizacion": "2000-07-19",
+        "ultima_cotizacion": "2025-12-31",
+        "n_cotizaciones_ventana": 340,
+        "cubre_ventana": true
+      },
+      "BRL": {
+        "primera_cotizacion": "2008-01-02",
+        "ultima_cotizacion": "2026-09-18",
+        "n_cotizaciones_ventana": 509,
+        "cubre_ventana": true
+      },
+      "CAD": {
+        "primera_cotizacion": "1999-01-04",
+        "ultima_cotizacion": "2026-09-18",
+        "n_cotizaciones_ventana": 509,
+        "cubre_ventana": true
+      },
+      "CHF": {
+        "primera_cotizacion": "1999-01-04",
+        "ultima_cotizacion": "2026-09-18",
+        "n_cotizaciones_ventana": 509,
+        "cubre_ventana": true
+      },
+      "CNY": {
+        "primera_cotizacion": "2005-04-01",
+        "ultima_cotizacion": "2026-09-18",
+        "n_cotizaciones_ventana": 509,
+        "cubre_ventana": true
+      },
+      "CYP": {
+        "primera_cotizacion": "1999-01-04",
+        "ultima_cotizacion": "2007-12-31",
+        "n_cotizaciones_ventana": 0,
+        "cubre_ventana": false
+      },
+      "CZK": {
+        "primera_cotizacion": "1999-01-04",
+        "ultima_cotizacion": "2026-09-18",
+        "n_cotizaciones_ventana": 509,
+        "cubre_ventana": true
+      },
+      "DKK": {
+        "primera_cotizacion": "1999-01-04",
+        "ultima_cotizacion": "2026-09-18",
+        "n_cotizaciones_ventana": 509,
+        "cubre_ventana": true
+      },
+      "EEK": {
+        "primera_cotizacion": "1999-01-04",
+        "ultima_cotizacion": "2010-12-31",
+        "n_cotizaciones_ventana": 0,
+        "cubre_ventana": false
+      },
+      "GBP": {
+        "primera_cotizacion": "1999-01-04",
+        "ultima_cotizacion": "2026-09-18",
+        "n_cotizaciones_ventana": 509,
+        "cubre_ventana": true
+      },
+      "HKD": {
+        "primera_cotizacion": "1999-01-04",
+        "ultima_cotizacion": "2026-09-18",
+        "n_cotizaciones_ventana": 509,
+        "cubre_ventana": true
+      },
+      "HRK": {
+        "primera_cotizacion": "2005-04-01",
+        "ultima_cotizacion": "2022-12-30",
+        "n_cotizaciones_ventana": 0,
+        "cubre_ventana": false
+      },
+      "HUF": {
+        "primera_cotizacion": "1999-01-04",
+        "ultima_cotizacion": "2026-09-18",
+        "n_cotizaciones_ventana": 509,
+        "cubre_ventana": true
+      },
+      "IDR": {
+        "primera_cotizacion": "2005-04-01",
+        "ultima_cotizacion": "2026-09-18",
+        "n_cotizaciones_ventana": 509,
+        "cubre_ventana": true
+      },
+      "ILS": {
+        "primera_cotizacion": "2011-01-03",
+        "ultima_cotizacion": "2026-09-18",
+        "n_cotizaciones_ventana": 509,
+        "cubre_ventana": true
+      },
+      "INR": {
+        "primera_cotizacion": "2009-01-02",
+        "ultima_cotizacion": "2026-09-18",
+        "n_cotizaciones_ventana": 509,
+        "cubre_ventana": true
+      },
+      "ISK": {
+        "primera_cotizacion": "1999-01-04",
+        "ultima_cotizacion": "2026-09-18",
+        "n_cotizaciones_ventana": 509,
+        "cubre_ventana": true
+      },
+      "JPY": {
+        "primera_cotizacion": "1999-01-04",
+        "ultima_cotizacion": "2026-09-18",
+        "n_cotizaciones_ventana": 509,
+        "cubre_ventana": true
+      },
+      "KRW": {
+        "primera_cotizacion": "1999-01-04",
+        "ultima_cotizacion": "2026-09-18",
+        "n_cotizaciones_ventana": 509,
+        "cubre_ventana": true
+      },
+      "LTL": {
+        "primera_cotizacion": "1999-01-04",
+        "ultima_cotizacion": "2014-12-31",
+        "n_cotizaciones_ventana": 0,
+        "cubre_ventana": false
+      },
+      "LVL": {
+        "primera_cotizacion": "1999-01-04",
+        "ultima_cotizacion": "2013-12-31",
+        "n_cotizaciones_ventana": 0,
+        "cubre_ventana": false
+      },
+      "MTL": {
+        "primera_cotizacion": "1999-01-04",
+        "ultima_cotizacion": "2007-12-31",
+        "n_cotizaciones_ventana": 0,
+        "cubre_ventana": false
+      },
+      "MXN": {
+        "primera_cotizacion": "2008-01-02",
+        "ultima_cotizacion": "2026-09-18",
+        "n_cotizaciones_ventana": 509,
+        "cubre_ventana": true
+      },
+      "MYR": {
+        "primera_cotizacion": "2005-04-01",
+        "ultima_cotizacion": "2026-09-18",
+        "n_cotizaciones_ventana": 509,
+        "cubre_ventana": true
+      },
+      "NOK": {
+        "primera_cotizacion": "1999-01-04",
+        "ultima_cotizacion": "2026-09-18",
+        "n_cotizaciones_ventana": 509,
+        "cubre_ventana": true
+      },
+      "NZD": {
+        "primera_cotizacion": "1999-01-04",
+        "ultima_cotizacion": "2026-09-18",
+        "n_cotizaciones_ventana": 509,
+        "cubre_ventana": true
+      },
+      "PHP": {
+        "primera_cotizacion": "2005-04-01",
+        "ultima_cotizacion": "2026-09-18",
+        "n_cotizaciones_ventana": 509,
+        "cubre_ventana": true
+      },
+      "PLN": {
+        "primera_cotizacion": "1999-01-04",
+        "ultima_cotizacion": "2026-09-18",
+        "n_cotizaciones_ventana": 509,
+        "cubre_ventana": true
+      },
+      "ROL": {
+        "primera_cotizacion": "1999-01-04",
+        "ultima_cotizacion": "2005-06-30",
+        "n_cotizaciones_ventana": 0,
+        "cubre_ventana": false
+      },
+      "RON": {
+        "primera_cotizacion": "2005-07-01",
+        "ultima_cotizacion": "2026-09-18",
+        "n_cotizaciones_ventana": 509,
+        "cubre_ventana": true
+      },
+      "RUB": {
+        "primera_cotizacion": "2005-04-01",
+        "ultima_cotizacion": "2022-03-01",
+        "n_cotizaciones_ventana": 0,
+        "cubre_ventana": false
+      },
+      "SEK": {
+        "primera_cotizacion": "1999-01-04",
+        "ultima_cotizacion": "2026-09-18",
+        "n_cotizaciones_ventana": 509,
+        "cubre_ventana": true
+      },
+      "SGD": {
+        "primera_cotizacion": "1999-01-04",
+        "ultima_cotizacion": "2026-09-18",
+        "n_cotizaciones_ventana": 509,
+        "cubre_ventana": true
+      },
+      "SIT": {
+        "primera_cotizacion": "1999-01-04",
+        "ultima_cotizacion": "2006-12-29",
+        "n_cotizaciones_ventana": 0,
+        "cubre_ventana": false
+      },
+      "SKK": {
+        "primera_cotizacion": "1999-01-04",
+        "ultima_cotizacion": "2008-12-31",
+        "n_cotizaciones_ventana": 0,
+        "cubre_ventana": false
+      },
+      "THB": {
+        "primera_cotizacion": "2005-04-01",
+        "ultima_cotizacion": "2026-09-18",
+        "n_cotizaciones_ventana": 509,
+        "cubre_ventana": true
+      },
+      "TRL": {
+        "primera_cotizacion": "1999-01-04",
+        "ultima_cotizacion": "2004-12-31",
+        "n_cotizaciones_ventana": 0,
+        "cubre_ventana": false
+      },
+      "TRY": {
+        "primera_cotizacion": "2005-01-03",
+        "ultima_cotizacion": "2026-09-18",
+        "n_cotizaciones_ventana": 509,
+        "cubre_ventana": true
+      },
+      "USD": {
+        "primera_cotizacion": "1999-01-04",
+        "ultima_cotizacion": "2026-09-18",
+        "n_cotizaciones_ventana": 509,
+        "cubre_ventana": true
+      },
+      "ZAR": {
+        "primera_cotizacion": "1999-01-04",
+        "ultima_cotizacion": "2026-09-18",
+        "n_cotizaciones_ventana": 509,
+        "cubre_ventana": true
+      }
+    }
+  },
+  "cartera_viva": {
+    "filtro": "document_type_norm = 'invoice' AND status_norm IN ('overdue', 'pending') AND flow_side = 'inflow'",
+    "n_filas": 98340,
+    "n_empresas": 642,
+    "n_divisas": 30,
+    "empresas_ambos_grupos": 16,
+    "cubiertas_bce": {
+      "divisas": [
+        "AUD",
+        "BRL",
+        "CAD",
+        "CHF",
+        "CNY",
+        "CZK",
+        "DKK",
+        "EUR",
+        "GBP",
+        "HKD",
+        "HUF",
+        "INR",
+        "ISK",
+        "JPY",
+        "MXN",
+        "NOK",
+        "NZD",
+        "PLN",
+        "SEK",
+        "SGD",
+        "USD",
+        "ZAR"
+      ],
+      "n_divisas": 22,
+      "empresas": 638,
+      "filas_cartera_viva": 96312
+    },
+    "sin_cobertura_bce": {
+      "divisas": [
+        "AED",
+        "ARS",
+        "CLP",
+        "COP",
+        "MAD",
+        "MZN",
+        "NAD",
+        "PEN"
+      ],
+      "n_divisas": 8,
+      "empresas": 20,
+      "filas_cartera_viva": 2028
+    },
+    "por_divisa": {
+      "AED": {
+        "filas_cartera_viva": 18,
+        "empresas": 3,
+        "cobertura_bce": false,
+        "tramo_volatilidad": "hipervolatil",
+        "tramo": "hipervolatil"
+      },
+      "ARS": {
+        "filas_cartera_viva": 537,
+        "empresas": 2,
+        "cobertura_bce": false,
+        "tramo_volatilidad": "hipervolatil",
+        "tramo": "hipervolatil"
+      },
+      "AUD": {
+        "filas_cartera_viva": 436,
+        "empresas": 6,
+        "cobertura_bce": true,
+        "tramo_volatilidad": "volatil",
+        "tramo": "volatil"
+      },
+      "BRL": {
+        "filas_cartera_viva": 674,
+        "empresas": 4,
+        "cobertura_bce": true,
+        "tramo_volatilidad": "volatil",
+        "tramo": "volatil"
+      },
+      "CAD": {
+        "filas_cartera_viva": 638,
+        "empresas": 16,
+        "cobertura_bce": true,
+        "tramo_volatilidad": "volatil",
+        "tramo": "volatil"
+      },
+      "CHF": {
+        "filas_cartera_viva": 3,
+        "empresas": 3,
+        "cobertura_bce": true,
+        "tramo_volatilidad": "estable",
+        "tramo": "estable"
+      },
+      "CLP": {
+        "filas_cartera_viva": 464,
+        "empresas": 4,
+        "cobertura_bce": false,
+        "tramo_volatilidad": "hipervolatil",
+        "tramo": "hipervolatil"
+      },
+      "CNY": {
+        "filas_cartera_viva": 4,
+        "empresas": 1,
+        "cobertura_bce": true,
+        "tramo_volatilidad": "volatil",
+        "tramo": "volatil"
+      },
+      "COP": {
+        "filas_cartera_viva": 537,
+        "empresas": 6,
+        "cobertura_bce": false,
+        "tramo_volatilidad": "hipervolatil",
+        "tramo": "hipervolatil"
+      },
+      "CZK": {
+        "filas_cartera_viva": 3,
+        "empresas": 1,
+        "cobertura_bce": true,
+        "tramo_volatilidad": "estable",
+        "tramo": "estable"
+      },
+      "DKK": {
+        "filas_cartera_viva": 221,
+        "empresas": 5,
+        "cobertura_bce": true,
+        "tramo_volatilidad": "estable",
+        "tramo": "estable"
+      },
+      "EUR": {
+        "filas_cartera_viva": 84763,
+        "empresas": 582,
+        "cobertura_bce": true,
+        "tramo_volatilidad": "estable",
+        "tramo": "estable"
+      },
+      "GBP": {
+        "filas_cartera_viva": 3046,
+        "empresas": 46,
+        "cobertura_bce": true,
+        "tramo_volatilidad": "estable",
+        "tramo": "estable"
+      },
+      "HKD": {
+        "filas_cartera_viva": 14,
+        "empresas": 2,
+        "cobertura_bce": true,
+        "tramo_volatilidad": "volatil",
+        "tramo": "volatil"
+      },
+      "HUF": {
+        "filas_cartera_viva": 3,
+        "empresas": 2,
+        "cobertura_bce": true,
+        "tramo_volatilidad": "volatil",
+        "tramo": "volatil"
+      },
+      "INR": {
+        "filas_cartera_viva": 5,
+        "empresas": 1,
+        "cobertura_bce": true,
+        "tramo_volatilidad": "volatil",
+        "tramo": "hipervolatil"
+      },
+      "ISK": {
+        "filas_cartera_viva": 4,
+        "empresas": 1,
+        "cobertura_bce": true,
+        "tramo_volatilidad": "volatil",
+        "tramo": "volatil"
+      },
+      "JPY": {
+        "filas_cartera_viva": 8,
+        "empresas": 3,
+        "cobertura_bce": true,
+        "tramo_volatilidad": "volatil",
+        "tramo": "hipervolatil"
+      },
+      "MAD": {
+        "filas_cartera_viva": 3,
+        "empresas": 2,
+        "cobertura_bce": false,
+        "tramo_volatilidad": "hipervolatil",
+        "tramo": "hipervolatil"
+      },
+      "MXN": {
+        "filas_cartera_viva": 398,
+        "empresas": 6,
+        "cobertura_bce": true,
+        "tramo_volatilidad": "volatil",
+        "tramo": "volatil"
+      },
+      "MZN": {
+        "filas_cartera_viva": 14,
+        "empresas": 1,
+        "cobertura_bce": false,
+        "tramo_volatilidad": "hipervolatil",
+        "tramo": "hipervolatil"
+      },
+      "NAD": {
+        "filas_cartera_viva": 22,
+        "empresas": 1,
+        "cobertura_bce": false,
+        "tramo_volatilidad": "hipervolatil",
+        "tramo": "hipervolatil"
+      },
+      "NOK": {
+        "filas_cartera_viva": 3,
+        "empresas": 1,
+        "cobertura_bce": true,
+        "tramo_volatilidad": "volatil",
+        "tramo": "volatil"
+      },
+      "NZD": {
+        "filas_cartera_viva": 79,
+        "empresas": 2,
+        "cobertura_bce": true,
+        "tramo_volatilidad": "volatil",
+        "tramo": "volatil"
+      },
+      "PEN": {
+        "filas_cartera_viva": 433,
+        "empresas": 4,
+        "cobertura_bce": false,
+        "tramo_volatilidad": "hipervolatil",
+        "tramo": "hipervolatil"
+      },
+      "PLN": {
+        "filas_cartera_viva": 4,
+        "empresas": 1,
+        "cobertura_bce": true,
+        "tramo_volatilidad": "estable",
+        "tramo": "estable"
+      },
+      "SEK": {
+        "filas_cartera_viva": 8,
+        "empresas": 2,
+        "cobertura_bce": true,
+        "tramo_volatilidad": "estable",
+        "tramo": "estable"
+      },
+      "SGD": {
+        "filas_cartera_viva": 127,
+        "empresas": 4,
+        "cobertura_bce": true,
+        "tramo_volatilidad": "estable",
+        "tramo": "estable"
+      },
+      "USD": {
+        "filas_cartera_viva": 5868,
+        "empresas": 118,
+        "cobertura_bce": true,
+        "tramo_volatilidad": "volatil",
+        "tramo": "volatil"
+      },
+      "ZAR": {
+        "filas_cartera_viva": 3,
+        "empresas": 1,
+        "cobertura_bce": true,
+        "tramo_volatilidad": "volatil",
+        "tramo": "volatil"
+      }
+    },
+    "empresas_por_tramo_ultimo_mes": {
+      "mes": "2026-08-01",
+      "estable": {
+        "divisas": [
+          "CHF",
+          "CZK",
+          "DKK",
+          "EUR",
+          "GBP",
+          "PLN",
+          "SEK",
+          "SGD"
+        ],
+        "empresas": 599
+      },
+      "volatil": {
+        "divisas": [
+          "AUD",
+          "BRL",
+          "CAD",
+          "CNY",
+          "HKD",
+          "HUF",
+          "ISK",
+          "MXN",
+          "NOK",
+          "NZD",
+          "USD",
+          "ZAR"
+        ],
+        "empresas": 127
+      },
+      "hipervolatil": {
+        "divisas": [
+          "AED",
+          "ARS",
+          "CLP",
+          "COP",
+          "INR",
+          "JPY",
+          "MAD",
+          "MZN",
+          "NAD",
+          "PEN"
+        ],
+        "empresas": 23
+      }
+    },
+    "empresas_por_tramo_volatilidad_ultimo_mes": {
+      "mes": "2026-08-01",
+      "estable": {
+        "divisas": [
+          "CHF",
+          "CZK",
+          "DKK",
+          "EUR",
+          "GBP",
+          "PLN",
+          "SEK",
+          "SGD"
+        ],
+        "empresas": 599
+      },
+      "volatil": {
+        "divisas": [
+          "AUD",
+          "BRL",
+          "CAD",
+          "CNY",
+          "HKD",
+          "HUF",
+          "INR",
+          "ISK",
+          "JPY",
+          "MXN",
+          "NOK",
+          "NZD",
+          "USD",
+          "ZAR"
+        ],
+        "empresas": 128
+      },
+      "hipervolatil": {
+        "divisas": [
+          "AED",
+          "ARS",
+          "CLP",
+          "COP",
+          "MAD",
+          "MZN",
+          "NAD",
+          "PEN"
+        ],
+        "empresas": 20
+      }
+    },
+    "cambio_de_tramo_ultimo_mes": {
+      "mes": "2026-08-01",
+      "n_divisas": 2,
+      "divisas": [
+        "INR",
+        "JPY"
+      ],
+      "detalle": {
+        "INR": {
+          "tramo_volatilidad": "volatil",
+          "tramo_combinado": "hipervolatil"
+        },
+        "JPY": {
+          "tramo_volatilidad": "volatil",
+          "tramo_combinado": "hipervolatil"
+        }
+      },
+      "empresas_afectadas": 4
+    },
+    "cambio_de_tramo_en_la_ventana": {
+      "n_divisas": 22,
+      "divisas": [
+        "AUD",
+        "BRL",
+        "CAD",
+        "CNY",
+        "CZK",
+        "GBP",
+        "HKD",
+        "HUF",
+        "IDR",
+        "INR",
+        "JPY",
+        "KRW",
+        "MXN",
+        "MYR",
+        "NZD",
+        "PHP",
+        "RON",
+        "SGD",
+        "THB",
+        "TRY",
+        "USD",
+        "ZAR"
+      ],
+      "empresas_afectadas": 147
+    },
+    "sensibilidad_corte_deriva": {
+      "0.030": {
+        "corte_deriva_hiper": 0.03,
+        "divisas_que_cambian": [
+          "IDR",
+          "INR",
+          "JPY",
+          "PHP",
+          "RON",
+          "TRY"
+        ],
+        "n_divisas": 6,
+        "empresas_afectadas": 4
+      },
+      "0.050": {
+        "corte_deriva_hiper": 0.05,
+        "divisas_que_cambian": [
+          "IDR",
+          "INR",
+          "JPY",
+          "PHP",
+          "RON",
+          "TRY"
+        ],
+        "n_divisas": 6,
+        "empresas_afectadas": 4
+      },
+      "0.060": {
+        "corte_deriva_hiper": 0.06,
+        "divisas_que_cambian": [
+          "IDR",
+          "INR",
+          "JPY",
+          "PHP",
+          "RON",
+          "TRY"
+        ],
+        "n_divisas": 6,
+        "empresas_afectadas": 4
+      },
+      "0.080": {
+        "corte_deriva_hiper": 0.08,
+        "divisas_que_cambian": [
+          "RON",
+          "TRY"
+        ],
+        "n_divisas": 2,
+        "empresas_afectadas": 0
+      },
+      "0.100": {
+        "corte_deriva_hiper": 0.1,
+        "divisas_que_cambian": [
+          "RON",
+          "TRY"
+        ],
+        "n_divisas": 2,
+        "empresas_afectadas": 0
+      }
+    }
+  }
+}
