@@ -1,7 +1,4 @@
 "use client";
-import Image from "next/image";
-import welcomePainting from "../public/welcome-garden-oil.png";
-import welcomeStyles from "./welcome-onboarding.module.css";
 import { useEffect, useRef, useState } from "react";
 import { m } from "framer-motion";
 import { date, monthlyTimeline } from "../lib/format";
@@ -65,16 +62,9 @@ export function HealthScorePanel({ records, row, detail = false, chartHeight = 2
   const previous = records[records.findIndex(record => record.as_of === row.as_of) - 1];
   const delta = row.health_score != null && previous?.health_score != null ? row.health_score - previous.health_score : null;
   return <section className="card health-overview-panel" id="health" aria-labelledby="health-title">
-    <div className={welcomeStyles.painting} aria-hidden="true">
-      <Image src={welcomePainting} alt="" fill sizes="(max-width: 900px) 100vw, 50vw"/>
-      <div className={welcomeStyles.brand}><span className="brand-mark"><i/><i/><i/><i/></span></div>
-    </div>
-    <div className="health-overview-main">
-      <header className="health-card-heading"><h2 id="health-title">Health score</h2><p>{detail ? "Published rating at this cutoff" : "How the company’s cash-flow health has changed"}</p></header>
-      <div className="health-score-details">
+    <div className="health-overview-main"><div className="card-heading"><div><h2 id="health-title">Health score</h2><p className="small muted mt-1">{detail ? "Published rating at this cutoff" : "How the company’s cash-flow health has changed"}</p></div></div>
       <div className="health-selected-score"><HealthScoreGauge row={row}/><div className="health-score-context"><span>{date(row.as_of,true)}</span><span>{delta === null ? "No comparable previous score" : `${delta > 0 ? "+" : ""}${modelNumber(delta)} points since ${date(previous.as_of)}`}</span></div></div>
-      {!detail && <ScoreChart records={records.filter(record => record.as_of >= "2025-01-01")} row={row} height={Math.max(160, chartHeight - 80)}/>}
-      </div>
+      {!detail && <ScoreChart records={records.filter(record => record.as_of >= "2025-01-01")} row={row} height={chartHeight}/>}
     </div>
   </section>;
 }

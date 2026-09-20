@@ -82,21 +82,7 @@
 .health-history-chart svg { display: block; height: 290px; }
 .monthly-cash .cash-flow-totals { margin-top: auto; }
 @media (max-width:900px) { .dashboard-charts { grid-template-columns: 1fr; } }
-:is(.model-dashboard, .dashboard-preview) .health-overview-panel.card { border-radius: 28px; }
-.health-overview-main { min-width: 0; padding: 20px; }
-.health-card-heading { text-align: center; margin-bottom: 20px; }
-.health-card-heading h2 { font-family: var(--font-editorial); font-size: 30px; font-weight: 400; line-height: 1.15; letter-spacing: -.025em; }
-.health-card-heading p { margin-top: 8px; color: var(--muted); font-size: var(--text-caption); line-height: 1.5; }
-.health-score-details { border: 1px solid var(--line); border-radius: 16px; padding: 16px; }
-.health-score-details .health-selected-score { justify-content: center; padding: 0 0 12px; }
-.health-score-details .health-score-gauge { width: 128px; }
-.health-score-details .health-history-chart { padding: 4px 0 0; }
-.health-score-details .chart-note { padding: 8px 4px 0; line-height: 1.5; }
-@media (max-width: 420px) {
-  .health-overview-main { padding: 20px 16px; }
-  .health-card-heading h2 { font-size: 28px; }
-  .health-score-details { padding: 12px; }
-}
+.health-overview-main { min-width: 0; }
 .health-selected-score { display: flex; align-items: center; flex-wrap: wrap; gap: 16px; padding: 0 16px 8px; }
 .health-score-gauge { width: 160px; flex-shrink: 0; }
 .health-score-gauge svg { display: block; width: 100%; }
