@@ -16,7 +16,7 @@
 .model-chart a:focus-visible circle { stroke-width: 5px; }
 
 .monthly-cash { margin-block: 16px; }
-.monthly-cash { --cash-income: #71967e; --cash-expense: #9b85b4; --cash-balance: #314b40; }
+.monthly-cash { --cash-income: #71967e; --cash-expense: #9b85b4; --cash-balance: #314b40; --cash-forecast: #857043; }
 .cash-flow-legend { display: flex; flex-wrap: wrap; gap: 12px 20px; padding: 0 16px 12px; color: var(--muted); font-size: var(--text-caption); }
 .cash-flow-legend > span, .cash-flow-totals dt { display: flex; align-items: center; gap: 8px; }
 .model-chart .cash-zero-label { fill: var(--cash-balance); paint-order: stroke; stroke: var(--surface); stroke-width: 4px; stroke-linejoin: round; }
@@ -24,6 +24,12 @@
 .cash-flow-swatch.income { background: var(--cash-income); }
 .cash-flow-swatch.expense { background: var(--cash-expense); }
 .cash-flow-swatch.balance { width: 18px; height: 3px; background: var(--cash-balance); }
+.cash-flow-swatch.forecast { width: 18px; height: 0; border-top: 2px dashed var(--cash-forecast); }
+.cash-forecast-note { padding: 0 16px 12px; color: var(--muted); font-size: var(--text-caption); line-height: 1.5; }
+.forecast-toggle { min-height: 36px; padding: 6px 10px; font-size: var(--text-caption); flex-shrink: 0; }
+.forecast-toggle[aria-pressed="true"] { background: var(--accent-soft); color: var(--accent); box-shadow: inset 0 0 0 1px var(--accent); }
+.health-overview-main > .card-heading { flex-wrap: nowrap; }
+.health-overview-main > .card-heading > div { flex-basis: 0; }
 .cash-flow-plot { overflow-x: auto; overscroll-behavior-x: contain; scrollbar-width: thin; }
 .cash-flow-plot svg { display: block; max-width: none; height: 290px; touch-action: pan-x pan-y; }
 .monthly-cash .checkpoints > div { padding: 12px 16px; }

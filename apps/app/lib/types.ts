@@ -47,6 +47,14 @@ export type CashMonth = {
   currency: string; anchor_date: string; income: number | null; expense: number | null;
   closing_balance: number | null; days: DailyCash[];
 };
+export type CashProjection = {
+  version: string; as_of: string; currency: "EUR";
+  horizons: {
+    h: 30 | 60 | 90; date: string; saldo_corte_eur: number | null;
+    entrada_esperada_eur: number | null; salida_esperada_eur: number | null;
+    flujo_neto_esperado_eur: number | null; saldo_proyectado_eur: number | null;
+  }[];
+};
 export type ModelRecord = {
   health_status?: {
     state: "attention_needed" | "insufficient_evidence" | "no_flags";
@@ -54,6 +62,7 @@ export type ModelRecord = {
     issues: { code: string; severity: string; title: string; detail: string; value: number; unit: string; source: string }[];
   };
   daily_cash?: CashMonth[] | null;
+  cash_projection?: CashProjection | null;
   version: string; company_id: string; group_id: string; month: string; as_of: string;
   health_score: number | null; excluida: boolean; confidence: string; n_meses_ventana: number; n_meses_con_actividad: number;
   c6: number | null; p6: number | null; d6: number | null; t6_efectivo: number | null;

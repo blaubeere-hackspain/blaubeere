@@ -93,6 +93,7 @@ pub async fn assessment(state: &AppState, id: &str) -> ApiResult<Option<Value>> 
             .await?;
     let Some(group) = group else { return Ok(None) };
     type JoinedRecord = (
+        Option<String>,
         String,
         Option<String>,
         Option<String>,
@@ -100,19 +101,25 @@ pub async fn assessment(state: &AppState, id: &str) -> ApiResult<Option<Value>> 
         Option<String>,
     );
     let rows: Vec<JoinedRecord> = sqlx::query_as(
-        "SELECT s.payload,c.payload,p.payload,d.payload,f.payload FROM parquet_records s \
+        "SELECT projection.payload,s.payload,c.payload,p.payload,d.payload,f.payload FROM parquet_records s \
          LEFT JOIN parquet_records c ON c.source='cash' AND c.record_key=s.record_key \
          LEFT JOIN parquet_records p ON p.source='payments' AND p.record_key=s.record_key \
          LEFT JOIN parquet_records d ON d.source='debt' AND d.record_key=s.record_key \
          LEFT JOIN parquet_records f ON f.source='daily_cash' AND f.record_key=s.record_key \
+         LEFT JOIN parquet_records projection ON projection.source='cash_projection' AND projection.record_key=s.record_key \
          WHERE s.source='scores' AND s.company_id=? ORDER BY s.period",
     )
     .bind(id)
     .fetch_all(pool)
     .await?;
     let mut records = Vec::with_capacity(rows.len());
-    for (score, cash, payment, debt, daily_cash) in rows {
+    for (projection, score, cash, payment, debt, daily_cash) in rows {
         let mut row = decode(&score)?;
+        row["cash_projection"] = projection
+            .as_deref()
+            .map(decode)
+            .transpose()?
+            .unwrap_or(Value::Null);
         row["cash"] = cash
             .as_deref()
             .map(decode)

@@ -1,4 +1,5 @@
 pub mod auth;
+mod cash_projection;
 pub mod company_health;
 mod daily_cash;
 pub mod dataset;

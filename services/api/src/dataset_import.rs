@@ -67,10 +67,14 @@ pub async fn build(root: &Path, directory: &Path, revision: &str) -> anyhow::Res
             files.push(json!({"table":table,"path":path,"sha256":hash(&root.join(path))?}));
         }
     }
+    let projection_offset = files.len();
+    for (table, path) in crate::cash_projection::SOURCES {
+        files.push(json!({"table":table,"path":path,"sha256":hash(&root.join(path))?}));
+    }
     let summary_hash = hash(&root.join(SUMMARY))?;
     let batch = format!(
         "{:x}",
-        Sha256::digest(serde_json::to_vec(&json!([6, files, summary_hash]))?)
+        Sha256::digest(serde_json::to_vec(&json!([7, files, summary_hash]))?)
     );
     std::fs::create_dir_all(directory)?;
     let target = directory
@@ -213,11 +217,22 @@ pub async fn build(root: &Path, directory: &Path, revision: &str) -> anyhow::Res
     }
     if has_daily {
         let counts = crate::daily_cash::import(root, &mut tx).await?;
-        for (info, count) in files[SOURCES.len()..].iter_mut().zip(counts) {
+        for (info, count) in files[SOURCES.len()..projection_offset]
+            .iter_mut()
+            .zip(counts)
+        {
             info["rows"] = json!(count);
         }
         eprintln!("Imported daily cash in original currencies");
     }
+    let projection_counts = crate::cash_projection::import(root, &mut tx).await?;
+    for (info, count) in files[projection_offset..].iter_mut().zip(projection_counts) {
+        info["rows"] = json!(count);
+    }
+    eprintln!(
+        "Imported invoice cash projections: {} horizons",
+        projection_counts[0]
+    );
     for (company, group) in companies {
         sqlx::query("INSERT INTO dataset_companies VALUES (?,?)")
             .bind(company)

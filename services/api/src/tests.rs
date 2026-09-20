@@ -30,6 +30,8 @@ async fn parquet_snapshot_preserves_model_data_and_requires_membership() {
     for path in [
         "reports/score_v4/assessments.parquet",
         "reports/score_v4/summary.json",
+        "reports/cashflow_projection/horizontes.parquet",
+        "reports/cashflow_projection/metricas.json",
         "reports/cash_backfill/cash_backfill_monthly.parquet",
         "reports/payment_delay_v2/payment_delay_v2_monthly.parquet",
         "reports/debt_obligation/debt_obligation_monthly.parquet",
@@ -389,9 +391,52 @@ async fn parquet_snapshot_preserves_model_data_and_requires_membership() {
             .as_array()
             .unwrap()
             .iter()
-            .map(|file| file["rows"].as_i64().unwrap())
+            .map(|file| match file["table"].as_str().unwrap() {
+                "cash_projection" => file["rows"].as_i64().unwrap() / 3,
+                "projection_metadata" => 0,
+                _ => file["rows"].as_i64().unwrap(),
+            })
             .sum::<i64>()
     );
+    let projection = dataset::assessment(&state, "COMP_0318")
+        .await
+        .unwrap()
+        .unwrap();
+    let august = projection["records"]
+        .as_array()
+        .unwrap()
+        .iter()
+        .find(|row| row["as_of"] == "2026-08-31")
+        .unwrap();
+    let forecast = &august["cash_projection"];
+    assert_eq!(forecast["version"], "cashflow_projection_v1");
+    assert_eq!(forecast["as_of"], august["as_of"]);
+    let points = forecast["horizons"].as_array().unwrap();
+    assert_eq!(points.len(), 3);
+    assert_eq!(
+        points
+            .iter()
+            .map(|p| p["h"].as_i64().unwrap())
+            .collect::<Vec<_>>(),
+        vec![30, 60, 90]
+    );
+    assert_eq!(
+        points
+            .iter()
+            .map(|p| p["date"].as_str().unwrap())
+            .collect::<Vec<_>>(),
+        vec!["2026-09-30", "2026-10-30", "2026-11-29"]
+    );
+    assert!((points[1]["saldo_proyectado_eur"].as_f64().unwrap() - 115665.8246291364).abs() < 0.01);
+    assert!((points[2]["flujo_neto_esperado_eur"].as_f64().unwrap() - 125.6813203119).abs() < 0.01);
+    for record in projection["records"].as_array().unwrap() {
+        if !record["cash_projection"].is_null() {
+            assert_eq!(
+                record["cash_projection"]["as_of"], record["as_of"],
+                "Historical views use their own cutoff, never the latest forecast"
+            );
+        }
+    }
     let demo = request(
         app.clone(),
         "POST",

@@ -1,5 +1,5 @@
 "use client";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState, type ReactNode } from "react";
 import { m } from "framer-motion";
 import { date, monthlyTimeline } from "../lib/format";
 import type { ModelRecord } from "../lib/types";
@@ -57,11 +57,11 @@ function HealthScoreGauge({ row }: { row: ModelRecord }) {
   return <SegmentedGauge className="health-score-gauge" segments={score === null ? [] : [{ fraction: score / 100, color: "var(--accent)" }]}><div className="health-score-value" data-empty={score === null}><strong className="num">{row.excluida ? "Excluded" : score === null ? "No score" : modelNumber(score)}</strong>{score !== null && <span>/ 100</span>}</div></SegmentedGauge>;
 }
 
-export function HealthScorePanel({ records, row, detail = false, chartHeight = 290 }: { records: ScorePoint[]; row: ModelRecord; detail?: boolean; chartHeight?: number }) {
+export function HealthScorePanel({ records, row, detail = false, chartHeight = 290, action }: { records: ScorePoint[]; row: ModelRecord; detail?: boolean; chartHeight?: number; action?: ReactNode }) {
   const previous = records[records.findIndex(record => record.as_of === row.as_of) - 1];
   const delta = row.health_score != null && previous?.health_score != null ? row.health_score - previous.health_score : null;
   return <section className="card health-overview-panel" id="health" aria-labelledby="health-title">
-    <div className="health-overview-main"><div className="card-heading"><div><h2 id="health-title">Health score</h2><p className="small muted mt-1">{detail ? "Published rating at this cutoff" : "How the company’s cash-flow health has changed"}</p></div></div>
+    <div className="health-overview-main"><div className="card-heading"><div><h2 id="health-title">Health score</h2><p className="small muted mt-1">{detail ? "Published rating at this cutoff" : "How the company’s cash-flow health has changed"}</p></div>{action}</div>
       <div className="health-selected-score"><HealthScoreGauge row={row}/><div className="health-score-context"><span>{date(row.as_of,true)}</span><span>{delta === null ? "No comparable previous score" : `${delta > 0 ? "+" : ""}${modelNumber(delta)} points since ${date(previous.as_of)}`}</span></div></div>
       {!detail && <ScoreChart records={records.filter(record => record.as_of >= "2025-01-01")} row={row} height={chartHeight}/>}
     </div>

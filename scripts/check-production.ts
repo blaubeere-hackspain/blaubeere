@@ -34,6 +34,18 @@ for (const company of [companies[0], companies.at(-1), blau]) {
   assert.ok(!("predictive" in assessment.provenance), "Receipt predictions are no longer imported");
   assert.ok(assessment.records.every((row: Record<string, unknown>) => !("predictive" in row)), "Receipt predictions are no longer served");
   const latest = assessment.records.at(-1);
+  assert.ok(sources.includes("reports/cashflow_projection/horizontes.parquet"), "Production must import the invoice cash forecast");
+  for (const row of assessment.records) {
+    if (!row.cash_projection) continue;
+    assert.equal(row.cash_projection.as_of, row.as_of);
+    assert.equal(row.cash_projection.version, "cashflow_projection_v1");
+    assert.deepEqual(row.cash_projection.horizons.map((point: { h: number }) => point.h), [30, 60, 90]);
+  }
+  if (company.id === "COMP_0318") {
+    const points = latest.cash_projection.horizons;
+    assert.deepEqual(points.map((point: { date: string }) => point.date), ["2026-09-30", "2026-10-30", "2026-11-29"]);
+    assert.ok(Math.abs(points[0].saldo_proyectado_eur - 118333.14005917893) < 0.01, "Serve the actual published Blau forecast");
+  }
   for (const series of latest.daily_cash ?? []) {
     assert.match(series.currency, /^[A-Z]{3}$/);
     assert.equal(series.days.at(-1).date, latest.as_of);
