@@ -64,6 +64,12 @@ struct CompanyHealthInput {
     /// Optional YYYY-MM cutoff. Omit to use the latest month with company data.
     month: Option<String>,
 }
+#[derive(Deserialize, schemars::JsonSchema)]
+#[serde(deny_unknown_fields)]
+struct CompanyPickerInput {
+    /// Exact IDs returned by list_companies. Only these companies appear in the picker.
+    company_ids: Vec<String>,
+}
 
 fn principal(ctx: &RequestContext<RoleServer>) -> Result<&str, ErrorData> {
     ctx.extensions
@@ -74,6 +80,11 @@ fn principal(ctx: &RequestContext<RoleServer>) -> Result<&str, ErrorData> {
 }
 fn result(value: Value) -> CallToolResult {
     CallToolResult::success(vec![ContentBlock::text(value.to_string())])
+}
+fn company_result(companies: Value) -> CallToolResult {
+    let mut response = result(companies.clone());
+    response.structured_content = Some(json!({"companies": companies}));
+    response
 }
 fn failure(error: blaubeere_api::ApiError) -> ErrorData {
     ErrorData::invalid_request(error.1, None)
@@ -105,7 +116,7 @@ impl FinanceTools {
         Ok(CallToolResult::structured(summary))
     }
     #[tool(
-        description = "Show the interactive company picker in ChatGPT and list only companies this signed-in finance user may access. Use when the user wants to choose a company or see their companies. Read-only.",
+        description = "List only companies this signed-in finance user may access, with exact IDs and metadata. Returns data without rendering UI. To let the user choose interactively, pass the returned IDs to render_company_picker. Read-only.",
         annotations(
             read_only_hint = true,
             destructive_hint = false,
@@ -123,9 +134,39 @@ impl FinanceTools {
         let companies = finance::company_summaries(&self.state, &identity.company_ids)
             .await
             .map_err(failure)?;
-        let mut response = result(companies.clone());
-        response.structured_content = Some(json!({"companies":companies}));
-        Ok(response)
+        Ok(company_result(companies))
+    }
+    #[tool(
+        description = "Render the interactive company picker in ChatGPT. First call list_companies, then pass the returned company IDs (or the subset requested by the user). Each choice loads financial health, issues and metrics inside the widget. Read-only; every ID must belong to the signed-in account.",
+        annotations(
+            read_only_hint = true,
+            destructive_hint = false,
+            idempotent_hint = true,
+            open_world_hint = false
+        )
+    )]
+    async fn render_company_picker(
+        &self,
+        Parameters(input): Parameters<CompanyPickerInput>,
+        ctx: RequestContext<RoleServer>,
+    ) -> Result<CallToolResult, ErrorData> {
+        let identity = auth::identity(&self.state, principal(&ctx)?)
+            .await
+            .map_err(failure)?;
+        if input
+            .company_ids
+            .iter()
+            .any(|id| !identity.company_ids.contains(id))
+        {
+            return Err(ErrorData::invalid_params(
+                "Company access is not granted.",
+                None,
+            ));
+        }
+        let companies = finance::company_summaries(&self.state, &input.company_ids)
+            .await
+            .map_err(failure)?;
+        Ok(company_result(companies))
     }
     #[tool(
         description = "Read a dated cash outlook or imported monthly model assessments, evidence and missing inputs for an authorised company. Imported model inputs are EUR amounts; forecasts use integer cents. No forecast is inferred from relative cash movements. Demo fixtures and reconstructed history are labelled.",
@@ -206,7 +247,7 @@ impl ServerHandler for FinanceTools {
         Ok(serde_json::from_value::<ReadResourceResult>(json!({"contents":[{"uri":input.uri,"mimeType":mime,"text":include_str!("company-picker.html"),"_meta":{"ui":{"prefersBorder":true,"csp":{"connectDomains":[],"resourceDomains":[]}},"openai/widgetPrefersBorder":true,"openai/widgetCSP":{"connect_domains":[],"resource_domains":[]},"openai/widgetDescription":"Pick an authorised company and inspect its dated financial health, alerts and metrics."}}]})).expect("valid UI resource").into())
     }
     fn get_info(&self) -> ServerInfo {
-        ServerInfo::new(ServerCapabilities::builder().enable_tools().enable_resources().build()).with_instructions("Blaubeere supports internal finance planning. Use list_companies to show the company picker; use get_company_health for a company's health, issues and metrics. Surface returned risk alerts and the assessment date; historical snapshots are not live financial status. Insufficient evidence is not poor health. Attention thresholds are provisional, not default probabilities. Preserve source labels, dates, missing coverage and explicit assumptions in every answer. Scenarios are conditional, not guarantees. Never infer retention or profit from bank data. Each company is authorised independently.")
+        ServerInfo::new(ServerCapabilities::builder().enable_tools().enable_resources().build()).with_instructions("Blaubeere supports internal finance planning. First use list_companies to retrieve authorised company IDs, then render_company_picker with those IDs when the user wants an interactive selector. Use get_company_health for a company's health, issues and metrics. Surface returned risk alerts and the assessment date; historical snapshots are not live financial status. Insufficient evidence is not poor health. Attention thresholds are provisional, not default probabilities. Preserve source labels, dates, missing coverage and explicit assumptions in every answer. Scenarios are conditional, not guarantees. Never infer retention or profit from bank data. Each company is authorised independently.")
     }
 }
 
@@ -299,9 +340,16 @@ fn router(state: AppState) -> Router {
             let mut tool_router = FinanceTools::tool_router();
             for route in tool_router.map.values_mut() {
                 let mut meta = json!({"securitySchemes":[{"type":"oauth2","scopes":[oauth::SCOPE]}],"ui":{"visibility":["model","app"]},"openai/widgetAccessible":true});
-                if route.attr.name == "list_companies" {
+                if route.attr.name == "render_company_picker" {
                     meta["ui"]["resourceUri"] = json!(COMPANY_PICKER);
                     meta["openai/outputTemplate"] = json!(COMPANY_PICKER);
+                    meta["openai/toolInvocation/invoking"] = json!("Opening your companies…");
+                    meta["openai/toolInvocation/invoked"] = json!("Choose a company");
+                }
+                if matches!(
+                    route.attr.name.as_ref(),
+                    "list_companies" | "render_company_picker"
+                ) {
                     route.attr.output_schema = Some(Arc::new(json!({
                         "type":"object", "required":["companies"], "properties": {
                             "companies": {"type":"array", "items": {
@@ -450,6 +498,7 @@ mod tests {
         );
         for body in [
             json!({"jsonrpc":"2.0","id":1,"method":"tools/call","params":{"name":"list_companies","arguments":{}}}),
+            json!({"jsonrpc":"2.0","id":1,"method":"tools/call","params":{"name":"render_company_picker","arguments":{"company_ids":["COMP_0006"]}}}),
             json!({"jsonrpc":"2.0","id":1,"method":"tools/call","params":{"name":"get_company_health","arguments":{"company_id":"COMP_0006"}}}),
             json!({"jsonrpc":"2.0","id":1,"method":"resources/read","params":{"uri":"file:///private"}}),
             json!([{"jsonrpc":"2.0","id":1,"method":"tools/list"},{"jsonrpc":"2.0","id":2,"method":"tools/call","params":{"name":"list_companies"}}]),
@@ -470,6 +519,17 @@ mod tests {
         }
         for (name, args, allowed) in [
             ("list_companies", json!({}), true),
+            (
+                "render_company_picker",
+                json!({"company_ids":["COMP_0006"]}),
+                true,
+            ),
+            ("render_company_picker", json!({"company_ids":[]}), true),
+            (
+                "render_company_picker",
+                json!({"company_ids":["COMP_0006","COMP_PRIVATE"]}),
+                false,
+            ),
             ("get_cash_outlook", json!({"company_id":"DEMO_001"}), true),
             ("get_cash_outlook", json!({"company_id":"DEMO_002"}), false),
             (
@@ -521,6 +581,14 @@ mod tests {
                 );
                 assert!(!value.to_string().contains("COMP_PRIVATE"));
             }
+            if allowed && name == "render_company_picker" {
+                let companies = value["result"]["structuredContent"]["companies"]
+                    .as_array()
+                    .unwrap();
+                let ids = args["company_ids"].as_array().unwrap();
+                assert_eq!(companies.len(), ids.len());
+                assert!(companies.iter().all(|company| ids.contains(&company["id"])));
+            }
         }
         for (method, params) in [
             (
@@ -561,12 +629,18 @@ mod tests {
                     .as_array()
                     .unwrap()
                     .iter()
-                    .find(|t| t["name"] == "list_companies")
+                    .find(|t| t["name"] == "render_company_picker")
                     .unwrap();
                 assert_eq!(picker["_meta"]["openai/outputTemplate"], COMPANY_PICKER);
                 assert_eq!(picker["_meta"]["ui"]["resourceUri"], COMPANY_PICKER);
                 assert_eq!(picker["_meta"]["openai/widgetAccessible"], true);
                 assert_eq!(picker["outputSchema"]["required"], json!(["companies"]));
+                for tool in value["result"]["tools"].as_array().unwrap() {
+                    if tool["name"] != "render_company_picker" {
+                        assert!(tool["_meta"]["ui"]["resourceUri"].is_null());
+                        assert!(tool["_meta"]["openai/outputTemplate"].is_null());
+                    }
+                }
             } else if method == "resources/read" {
                 let content = &value["result"]["contents"][0];
                 assert_eq!(content["uri"], params["uri"]);

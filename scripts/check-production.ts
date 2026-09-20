@@ -129,7 +129,10 @@ for (const [method, params] of [["tools/list", {}], ["resources/read", { uri: "u
   const payload = await response.json();
   assert.ok(payload.result, JSON.stringify(payload.error));
   if (method === "resources/read") assert.equal(payload.result.contents[0].mimeType, "text/html;profile=mcp-app");
-  else assert.equal(payload.result.tools.find((tool: { name: string }) => tool.name === "list_companies")._meta.ui.resourceUri, "ui://blau/company-picker-v4.html");
+  else {
+    assert.equal(payload.result.tools.find((tool: { name: string }) => tool.name === "render_company_picker")._meta.ui.resourceUri, "ui://blau/company-picker-v4.html");
+    assert.equal(payload.result.tools.find((tool: { name: string }) => tool.name === "list_companies")._meta.ui.resourceUri, undefined);
+  }
 }
 if (process.env.DEMO_LOGIN === "true") {
   process.env.APP_ORIGIN = process.env.API_ORIGIN = app;

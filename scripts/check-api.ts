@@ -51,6 +51,9 @@ const tools = await rpc("tools/call", { name: "list_companies", arguments: {} })
 const accessibleCompanies = JSON.parse(tools.result.content[0].text);
 assert.ok(accessibleCompanies.some((company: {id: string}) => company.id === "DEMO_001"));
 assert.deepEqual(tools.result.structuredContent.companies, accessibleCompanies);
+const picker = await rpc("tools/call", { name: "render_company_picker", arguments: { company_ids: accessibleCompanies.map((company: {id: string}) => company.id) } });
+assert.deepEqual(picker.result.structuredContent.companies, accessibleCompanies);
+assert.ok((await rpc("tools/call", { name: "render_company_picker", arguments: { company_ids: ["NOT_AUTHORISED"] } })).error);
 for (const company of accessibleCompanies.filter((company: {data_mode: string}) => company.data_mode === "challenge").slice(0, 3)) {
   const health = await rpc("tools/call", { name: "get_company_health", arguments: { company_id: company.id } });
   assert.equal(health.result.structuredContent.company.id, company.id);
