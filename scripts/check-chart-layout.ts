@@ -59,9 +59,30 @@ try {
     await fillsCards(page);
     if (landing) {
       await page.goto(landing);
-      await page.locator(".cash-flow-plot svg").scrollIntoViewIfNeeded();
-      await page.waitForTimeout(1200);
-      await fillsCards(page);
+      const preview = page.locator(".dashboard-preview");
+      await expect(preview.getByRole("heading", { name: "Blau, Corp." })).toBeVisible();
+      await expect(preview.locator(".demo-stats article")).toHaveCount(4);
+      await expect(page.getByRole("link", { name: "Explore the dashboard" })).toHaveAttribute("href", /\/demo\?company=COMP_0318$/);
+      for (const width of [1440, 900, 390]) {
+        await page.setViewportSize({ width, height: 1080 });
+        await preview.locator(".cash-flow-plot svg").scrollIntoViewIfNeeded();
+        await page.waitForTimeout(1200);
+        await fillsCards(page);
+        assert.ok(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth));
+        const toggle = preview.getByRole("button", { name: "Forecast", exact: true });
+        await toggle.click();
+        await expect(toggle).toHaveAttribute("aria-pressed", "true");
+        await expect(preview.locator("[data-forecast-horizon]")).toHaveCount(3);
+        await expect(preview.locator("[data-health-forecast-horizon]")).toHaveCount(3);
+        await fillsCards(page);
+        await preview.locator(".cash-flow-plot").focus();
+        await page.keyboard.press("End");
+        await expect(preview.locator(".cash-flow-totals")).toHaveAttribute("aria-label", "90-day forecast totals");
+        await toggle.click();
+        await expect(toggle).toHaveAttribute("aria-pressed", "false");
+        await expect(preview.locator("[data-forecast-horizon], [data-health-forecast-horizon]")).toHaveCount(0);
+        await expect(preview.locator(".cash-flow-totals")).toHaveAttribute("aria-label", "Selected month cash totals");
+      }
     }
     assert.deepEqual(errors, []);
     await page.close();

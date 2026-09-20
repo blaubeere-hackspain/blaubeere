@@ -104,19 +104,24 @@ body { background: white; }
 .demo-topbar { min-height: 64px; padding: 4px 18px 12px; display: flex; align-items: center; justify-content: space-between; gap: 16px; }
 .demo-topbar .brand-logo { width: 72px; }
 .demo-topbar .text-link { font-size: 13px; }
-.dashboard-preview { --text-caption: 12px; --text-heading: 16px; --text-ui: 13px; --ink: #252724; --muted: #70736e; --subtle: #747872; --line: #e8e9e6; --accent: #52695b; --surface-alt: #f5f5f3; font-family: var(--font-ui); font-size: 13px; background: #fafafa; padding: 16px; border-radius: 18px; }
+.dashboard-preview { --text-caption: 12px; --text-heading: 16px; --text-ui: 13px; --ink: #252724; --muted: #626661; --subtle: #6b706a; --line: #e8e9e4; --accent: #3d5b4b; --accent-soft: #edf2ec; --surface-alt: #f5f5f3; position: relative; isolation: isolate; font-family: var(--font-ui); font-size: 13px; background: #f1f1ee; padding: 16px; border-radius: 18px; }
+.demo-backdrop { position: absolute; inset: 0; z-index: -1; opacity: .2; border-radius: inherit; overflow: hidden; pointer-events: none; }
+.demo-backdrop img { object-fit: cover; }
 .demo-heading { display: flex; align-items: center; justify-content: space-between; gap: 16px; margin-bottom: 16px; }
-.demo-heading h3 { font-size: 20px; }
+.demo-heading h3 { font-family: var(--font-editorial); font-size: 32px; font-weight: 400; }
 .demo-heading p { font-size: 12px; color: var(--muted); margin-top: 4px; }
-.demo-period { display: flex; align-items: center; gap: 8px; min-height: 36px; padding: 6px 10px; background: white; border: 1px solid var(--line); border-radius: 8px; font-size: 12px; white-space: nowrap; }
-.dashboard-preview .card { border-radius: 12px; }
+.demo-period { display: flex; align-items: center; gap: 8px; min-height: 44px; padding: 10px 12px; background: white; border: 1px solid var(--line); border-radius: 10px; font-size: 12px; white-space: nowrap; }
+.demo-stats { display: grid; grid-template-columns: repeat(4,minmax(0,1fr)); gap: 12px; margin-bottom: 12px; }
+.demo-stats > article { padding: 14px; }
+.demo-stats span { display: block; min-height: 36px; font-size: var(--text-caption); color: var(--muted); }
+.demo-stats strong { display: block; font-size: 24px; font-weight: 500; line-height: 1.2; letter-spacing: -.025em; overflow-wrap: anywhere; margin-block: 12px 8px; }
+.demo-stats p { font-size: var(--text-caption); color: var(--subtle); }
+.dashboard-preview .card { border-radius: 16px; }
 .dashboard-preview .dashboard-charts { gap: 12px; }
 .dashboard-preview .card-heading { padding: 14px 14px 10px; }
 .dashboard-preview .card-heading > div { flex-basis: 180px; }
 .dashboard-preview .button { font-size: 12px; padding: 8px 12px; min-height: 36px; gap: 8px; }
 .dashboard-preview .button.secondary { background: white; box-shadow: var(--shadow-border); }
-.dashboard-preview .health-score-gauge { width: 128px; }
-.dashboard-preview .health-score-value strong { font-size: 27px; }
 .dashboard-preview .health-selected-score { gap: 12px; }
 .dashboard-preview .chart-note { padding-bottom: 12px; }
 .dashboard-preview .monthly-cash .checkpoints > div { padding: 10px 12px; }
@@ -127,9 +132,6 @@ body { background: white; }
 .dashboard-preview .aging-buckets > div { min-height: 28px; }
 .dashboard-preview .aging-buckets dd { grid-template-columns: minmax(0,1fr) 38px; gap: 4px; }
 .dashboard-preview .defaulting-card { grid-column: auto; }
-.dashboard-preview .defaulting-summary { padding: 18px 0; }
-.dashboard-preview .defaulting-summary > strong { font-size: 26px; margin-block: 8px; }
-.dashboard-preview .defaulting-bars { gap: 14px; padding-block: 14px; }
 @media (max-width:900px) {
   .dashboard-preview .dashboard-charts { grid-template-columns: repeat(2,minmax(0,1fr)); }
   .dashboard-preview .obligation-cards { grid-template-columns: repeat(2,minmax(0,1fr)); }
@@ -142,6 +144,8 @@ body { background: white; }
   .demo-topbar .text-link { font-size: 12px; gap: 6px; }
   .dashboard-preview { padding: 10px; border-radius: 14px; }
   .demo-heading { flex-wrap: wrap; gap: 10px; }
+  .demo-stats { grid-template-columns: repeat(2,minmax(0,1fr)); gap: 10px; }
+  .demo-stats strong { font-size: 20px; }
   .dashboard-preview .dashboard-charts, .dashboard-preview .obligation-cards { grid-template-columns: 1fr; }
   .dashboard-preview .monthly-cash .checkpoints { grid-template-columns: repeat(3,minmax(0,1fr)); }
   .dashboard-preview .monthly-cash .checkpoints > div + div { border-top: 0; border-left: 1px solid var(--line); }
