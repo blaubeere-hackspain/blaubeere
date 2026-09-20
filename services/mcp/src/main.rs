@@ -254,12 +254,23 @@ impl ServerHandler for FinanceTools {
 async fn authorize(State(state): State<AppState>, mut request: Request, next: Next) -> Response {
     // Discovery and this static HTML contain no account data. ChatGPT's app
     // refresh/template loader can request them without the user's OAuth token.
+    let mut rpc_method = None;
     if request.method() == axum::http::Method::POST {
         let (parts, body) = request.into_parts();
         let Ok(bytes) = to_bytes(body, 32 * 1024).await else {
             return StatusCode::PAYLOAD_TOO_LARGE.into_response();
         };
         let public = serde_json::from_slice::<Value>(&bytes).is_ok_and(|rpc| {
+            // Log only a bounded protocol method, never arguments or credentials.
+            rpc_method = rpc["method"]
+                .as_str()
+                .filter(|method| {
+                    method.len() <= 64
+                        && method
+                            .bytes()
+                            .all(|c| c.is_ascii_alphanumeric() || c == b'/' || c == b'_')
+                })
+                .map(str::to_owned);
             rpc["jsonrpc"] == "2.0"
                 && (matches!(
                     rpc["method"].as_str(),
@@ -288,8 +299,9 @@ async fn authorize(State(state): State<AppState>, mut request: Request, next: Ne
         }
         Err(_) => {
             println!(
-                "MCP authorization rejected for {} request",
-                request.method()
+                "MCP authorization rejected for {} {}",
+                request.method(),
+                rpc_method.as_deref().unwrap_or("unknown-method")
             );
             let base = state.config.mcp_resource.trim_end_matches("/mcp");
             let mut response = (
