@@ -54,7 +54,6 @@ fn text<'a>(row: &'a Value, key: &str) -> anyhow::Result<&'a str> {
 }
 
 pub async fn build(root: &Path, directory: &Path, revision: &str) -> anyhow::Result<PathBuf> {
-    let predictive_manifest = crate::predictive::source_identity(root)?;
     let mut files = Vec::new();
     for (table, path) in SOURCES {
         files.push(json!({"table":table,"path":path,"sha256":hash(&root.join(path))?}));
@@ -71,12 +70,7 @@ pub async fn build(root: &Path, directory: &Path, revision: &str) -> anyhow::Res
     let summary_hash = hash(&root.join(SUMMARY))?;
     let batch = format!(
         "{:x}",
-        Sha256::digest(serde_json::to_vec(&json!([
-            5,
-            files,
-            summary_hash,
-            predictive_manifest
-        ]))?)
+        Sha256::digest(serde_json::to_vec(&json!([6, files, summary_hash]))?)
     );
     std::fs::create_dir_all(directory)?;
     let target = directory
@@ -224,13 +218,6 @@ pub async fn build(root: &Path, directory: &Path, revision: &str) -> anyhow::Res
         }
         eprintln!("Imported daily cash in original currencies");
     }
-    let predictive_rows = if predictive_manifest.is_some() {
-        let count = crate::predictive::import(root, &mut tx, &companies).await?;
-        eprintln!("Imported predictive inputs: {count} monthly snapshots");
-        count
-    } else {
-        0
-    };
     for (company, group) in companies {
         sqlx::query("INSERT INTO dataset_companies VALUES (?,?)")
             .bind(company)
@@ -247,8 +234,7 @@ pub async fn build(root: &Path, directory: &Path, revision: &str) -> anyhow::Res
             && summary["advertencia"].is_string(),
         "Missing v4 model summary or limitations"
     );
-    let metadata = json!({"schema_version":3,"batch_id":batch,"source_revision":revision,"imported_at":Utc::now().to_rfc3339(),"files":files,"summary_sha256":summary_hash,"model_summary":summary,
-        "predictive":{"source_manifest_sha256":predictive_manifest,"input_rows":predictive_rows,"model_version":"predictive-model-1"}});
+    let metadata = json!({"schema_version":3,"batch_id":batch,"source_revision":revision,"imported_at":Utc::now().to_rfc3339(),"files":files,"summary_sha256":summary_hash,"model_summary":summary});
     sqlx::query("INSERT INTO dataset_metadata VALUES (?)")
         .bind(metadata.to_string())
         .execute(&mut *tx)

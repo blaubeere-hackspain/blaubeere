@@ -14,37 +14,9 @@ V1/V2/V3 targets and samples differ: their metrics are not a before/after compar
 
 Start with [data/model context](docs/DATA-MODEL-CONTEXT.md) and the [consolidated training report](reports/modeling/training-report.md). Product, buyer hypothesis, acceptance and interface: [PRODUCT](docs/PRODUCT.md), [REQUIREMENTS](docs/REQUIREMENTS.md), [DASHBOARD](docs/DASHBOARD.md). CFO/treasury are considered users; the data provider is the brief's buyer hypothesis, not a validated commercial sale.
 
-## Current workflow: local model report, application kept separate
+## Archived receipt forecast
 
-The model deliverable is a simple standalone local HTML artifact. It presents company/month evidence and experimental results from versioned analytical exports; inspecting it requires no application service. The central score and its validation remain the priority.
-
-Generate the visual artifact with Python's standard library only; no application server, installation, training, inference or evaluation is needed:
-
-```sh
-.venv/bin/python -B -m scripts.render_model_report
-.venv/bin/python -B -m scripts.render_model_report --check
-```
-
-Open `.local/model-report.html` directly in a browser. The standalone file embeds its data, CSS and JavaScript; it makes no network requests. It shows the current v3 export, company/month selectors, observed flows, growth, debt-service/invoice evidence, native-currency cash reconstruction, scoped components, experimental probabilities, all candidate metrics and explicit limitations. V1/v2 outputs remain available as historical analytical evidence. This report does not validate predictive utility.
-
-By default it includes the first three non-holdout company IDs in lexical order, not cases selected for good results. Choose companies or include the full export:
-
-```sh
-.venv/bin/python -B -m scripts.render_model_report --company COMP_0009 --company COMP_0179 --output .local/selected-model-report.html
-.venv/bin/python -B -m scripts.render_model_report --all-companies --output .local/all-model-report.html
-.venv/bin/python -B -m unittest tests.test_model_report -v
-bun run check
-```
-
-Outputs are deterministic and ignored by Git. An existing different report is never overwritten; choose a new `--output` filename. `--check` verifies the same selection without writing. Files contain every embedded company's selected export history and have no authentication: handle them as local analytical data, not as a publicly shareable application. Dataset/model manifests and consumed profiles are hash-verified, but old whole-worktree/application/document verifiers necessarily describe the previous integration and are not current acceptance commands. Their seals, receipts and results are not rewritten.
-
-Validate this documentation and its analytical artifact references without running models or services:
-
-```sh
-.venv/bin/python -B reports/modeling/financial-v3/dataset-v1/delivery-v1/amendment-v2/documentation-v1/verify_artifact_docs.py check
-```
-
-This check preserves prior document versions, v1/v2 report sections, sealed metrics and model artifacts. It does not verify frontend/backend state.
+The receipt forecast has been removed from the dashboard, API, dataset import and deployment. Its model artifacts, Python package, Rust inference source, training/report tools and tests are preserved in [old/predictive](old/predictive/README.md). The active application still uses the published v4 health score and observed cash/payment evidence.
 
 <details>
 <summary>Historical v3/v2 technical evidence; commands bound to those revisions</summary>
@@ -200,18 +172,6 @@ Do not set `ASSESSMENT_FILE` to this proxy export: current API/MCP require the c
 Validation is conditional on 131 observed labels out of 299 prospective rows across 31 groups. Average precision is 0.816 against prevalence 0.511; Brier is 0.188 against baseline 0.252. Relative Brier skill is 25.1% with a grouped fixed-fit 95% interval of 12.0–38.1%. This interval is not uncertainty on an individual probability and does not establish calibration or reliability for censored outcomes.
 
 The old proxy-specific Rust tests and `test:assessments:e2e` command were retired with that integration. Existing browser summaries remain historical evidence, not current application verification. Run `bun run check` for current web, build, authentication and Rust regressions.
-
-## Portable predictive model
-
-The [model package handoff](services/predictive/README.md) prepares the predictive model for the [dedicated Jio service plan](docs/plans/xray-prediction-model-jio-plan.md). It does not deploy a service or replace scoring v4.
-
-```sh
-.venv/bin/python -B scripts/build_predictive_bundle.py --output .local/predictive-model
-.venv/bin/python -B scripts/build_predictive_bundle.py --output .local/predictive-model --check
-.venv/bin/python -B -m unittest tests.test_predictive_bundle tests.test_predictive_runtime -v
-```
-
-Copy the complete generated directory, not all of `.local/`. It contains the selected estimators, inference runtime, financial input contracts and a synthetic smoke-test snapshot. Python 3.13.15 and its standard library suffice for inference; training data and third-party scientific packages are not required at runtime. HTTP serving, Jio deployment and productive Rust integration remain separate workstreams.
 
 ## Published Parquet assessments in the app
 

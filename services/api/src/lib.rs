@@ -5,7 +5,6 @@ pub mod dataset;
 pub mod dataset_import;
 pub mod finance;
 pub mod oauth;
-mod predictive;
 
 use axum::{
     Json, Router,
@@ -95,7 +94,6 @@ pub struct AppState {
 
 impl AppState {
     pub async fn new(database_url: &str, config: Config) -> anyhow::Result<Self> {
-        predictive::verify_embedded()?;
         // ponytail: SQLite serves one deployment; move identity storage to Postgres for multiple replicas.
         let options = SqliteConnectOptions::from_str(database_url)?
             .create_if_missing(true)

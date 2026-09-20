@@ -127,6 +127,6 @@ La entrega objetivo es un artefacto sencillo; existe un generador de informe HTM
 - [Diccionario de datos](../data_dictionary.md).
 - [Informe consolidado v1/v2/v3](../reports/modeling/training-report.md).
 - [Auditoría v3](../reports/modeling/financial-v3/audit-summary.json) y [propuesta inicial de desarrollo](../reports/modeling/financial-v3/design-proposal.md), esta última histórica, no equivalente al modelo finalmente seleccionado.
-- [Política del adaptador real](../reports/modeling/financial-v3/dataset-v1/policy.json), [protocolo del experimento](../reports/modeling/financial-v3/dataset-v1/model-v1/protocol.json) y [métricas por candidato](../reports/modeling/financial-v3/dataset-v1/model-v1/metrics-summary.json).
+- [Política del adaptador real](../reports/modeling/financial-v3/dataset-v1/policy.json), [protocolo del experimento](../old/predictive/reports/modeling/financial-v3/dataset-v1/model-v1/protocol.json) y [métricas por candidato](../old/predictive/reports/modeling/financial-v3/dataset-v1/model-v1/metrics-summary.json).
 - [Verificación técnica enmendada](../reports/modeling/financial-v3/dataset-v1/delivery-v1/amendment-v2/verification.json) y [revisión del padre, no independiente](../reports/modeling/financial-v3/dataset-v1/delivery-v1/amendment-v2/check-parent-review-20260920-v1.json).
 - [Estado de producto y comprador](PRODUCT.md), separado de la evidencia de entrenamiento.

@@ -89,22 +89,20 @@ pub async fn assessment(state: &AppState, id: &str) -> ApiResult<Option<Value>> 
         Option<String>,
         Option<String>,
         Option<String>,
-        Option<String>,
     );
     let rows: Vec<JoinedRecord> = sqlx::query_as(
-        "SELECT s.payload,c.payload,p.payload,d.payload,f.payload,pi.payload FROM parquet_records s \
+        "SELECT s.payload,c.payload,p.payload,d.payload,f.payload FROM parquet_records s \
          LEFT JOIN parquet_records c ON c.source='cash' AND c.record_key=s.record_key \
          LEFT JOIN parquet_records p ON p.source='payments' AND p.record_key=s.record_key \
          LEFT JOIN parquet_records d ON d.source='debt' AND d.record_key=s.record_key \
          LEFT JOIN parquet_records f ON f.source='daily_cash' AND f.record_key=s.record_key \
-         LEFT JOIN parquet_records pi ON pi.source='predictive_inputs' AND pi.record_key=s.record_key \
          WHERE s.source='scores' AND s.company_id=? ORDER BY s.period",
     )
     .bind(id)
     .fetch_all(pool)
     .await?;
     let mut records = Vec::with_capacity(rows.len());
-    for (score, cash, payment, debt, daily_cash, predictive_input) in rows {
+    for (score, cash, payment, debt, daily_cash) in rows {
         let mut row = decode(&score)?;
         row["cash"] = cash
             .as_deref()
@@ -127,19 +125,6 @@ pub async fn assessment(state: &AppState, id: &str) -> ApiResult<Option<Value>> 
             .transpose()?
             .unwrap_or(Value::Null);
         row["health_status"] = crate::company_health::status(&row, records.last());
-        let input = predictive_input.as_deref().map(decode).transpose()?;
-        row["predictive"] = crate::predictive::forecast(
-            id,
-            &group,
-            row["as_of"].as_str().unwrap_or_default(),
-            input.as_ref(),
-        )
-        .map_err(|_| {
-            ApiError(
-                StatusCode::INTERNAL_SERVER_ERROR,
-                "The receipt outlook is unavailable.".into(),
-            )
-        })?;
         records.push(row);
     }
     let metadata: String = sqlx::query_scalar("SELECT payload FROM dataset_metadata")
