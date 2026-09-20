@@ -578,6 +578,60 @@ async fn request(
 }
 
 #[tokio::test]
+async fn registration_copies_the_reference_accounts_current_companies() {
+    let state = state().await;
+    auth::provision(
+        &state,
+        "saul@saugar.dev",
+        "reference-password",
+        &["COMP_0029", "COMP_0318"],
+    )
+    .await
+    .unwrap();
+    let source: String = sqlx::query_scalar("SELECT id FROM users WHERE email = 'saul@saugar.dev'")
+        .fetch_one(&state.db)
+        .await
+        .unwrap();
+    let app = router(state.clone());
+    for email in ["first@example.com", "second@example.com"] {
+        let response = request(
+            app.clone(),
+            "POST",
+            "/api/auth/register",
+            json!({"email":email,"password":"new-user-password"}),
+            None,
+            Some(&state.config.app_origin),
+        )
+        .await;
+        assert_eq!(response.status(), StatusCode::CREATED);
+        let user: String = sqlx::query_scalar("SELECT id FROM users WHERE email = ?")
+            .bind(email)
+            .fetch_one(&state.db)
+            .await
+            .unwrap();
+        assert_ne!(user, source);
+        let expected = auth::identity(&state, &source).await.unwrap().company_ids;
+        assert!(!expected.is_empty());
+        assert_eq!(
+            auth::identity(&state, &user).await.unwrap().company_ids,
+            expected
+        );
+        for company in expected {
+            assert!(auth::company_access(&state, &user, &company).await.is_ok());
+        }
+        assert!(
+            auth::company_access(&state, &user, "DEMO_001")
+                .await
+                .is_err()
+        );
+        if email == "first@example.com" {
+            sqlx::query("UPDATE memberships SET company_id = 'COMP_0048' WHERE user_id = ? AND company_id = 'COMP_0029'")
+                .bind(&source).execute(&state.db).await.unwrap();
+        }
+    }
+}
+
+#[tokio::test]
 async fn registration_validates_identity_and_keeps_company_access_private() {
     let mut state = state().await;
     state.config.app_origin = "https://app.example.com".into();

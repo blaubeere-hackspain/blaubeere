@@ -141,15 +141,22 @@ pub async fn register(
         )
     })?;
     let user_id = secret();
-    // Self-registration establishes identity only; company access is granted separately.
+    let mut tx = state.db.begin().await?;
     let created = sqlx::query("INSERT INTO users (id, email, password_hash) VALUES (?, ?, ?) ON CONFLICT(email) DO NOTHING")
-        .bind(&user_id).bind(&email).bind(hash).execute(&state.db).await?;
+        .bind(&user_id).bind(&email).bind(hash).execute(&mut *tx).await?;
     if created.rows_affected() == 0 {
         return Err(ApiError(
             StatusCode::CONFLICT,
             "Could not create an account with these details. Try signing in.".into(),
         ));
     }
+    // New MVP accounts inherit the reference account's current company memberships.
+    sqlx::query("INSERT INTO memberships (user_id, company_id) SELECT ?, m.company_id FROM memberships m JOIN users u ON u.id = m.user_id WHERE u.email = ?")
+        .bind(&user_id)
+        .bind("saul@saugar.dev")
+        .execute(&mut *tx)
+        .await?;
+    tx.commit().await?;
     let mut response = start_session(&state, &user_id, &email).await?;
     *response.status_mut() = StatusCode::CREATED;
     Ok(response)
