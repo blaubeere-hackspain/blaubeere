@@ -1,0 +1,1829 @@
+{
+  "version": "payment_schedule_v1",
+  "lado": "outflow (pagos)",
+  "convenio_signo": "amount_eur es NEGATIVO para flow_side='outflow'. importe_esperado_eur e importe_no_valorable_eur se publican con ese mismo signo (salida de caja). La tarea de union NO debe re-signar: el lado de cobros publica el signo opuesto (positivo).",
+  "criterio_factura_viva": "issuance_date_ok <= C AND NOT (status_norm='paid' AND payment_date_ok <= C) AND status_norm <> 'cancel'",
+  "criterio_no_valorable": "amount_eur nulo/no finito/fx_ambiguous -> motivo 'sin_importe' (importe desconocido, nunca cero); due_date_ok nulo -> motivo 'sin_fecha_vencimiento' (importe conocido pero no fechable). Ninguno se imputa como cero.",
+  "fuente": "data/clean/invoices.parquet, flow_side='outflow' (sin filtro de document_type_norm)",
+  "no_consumido": "pending_amount (estado de HOY, no del corte): NO entra en ninguna cifra; debt_obligation.py/payment_delay_v2.py/cashflow_forecast.py/daily_flows.py: solo lectura, no se editan",
+  "constantes": {
+    "horizontes": [
+      30,
+      60,
+      90
+    ],
+    "madurez_dias": 365,
+    "min_facturas_retraso_empresa": 10,
+    "min_muestra_probabilidad": 200,
+    "prior_probabilidad": 1.0,
+    "tramos": [
+      "no_vencida",
+      "1_30",
+      "31_90",
+      "91_180",
+      "180_mas"
+    ],
+    "justificacion_tramos": "Tramos alineados con la antiguedad de mora de debt_obligation.py y payment_delay_v2.py (30/90/180) mas 'no_vencida'. La masa de retrasos observada se concentra por debajo de 30 dias (p90 ~27 d), de modo que 1_30 separa el desfase de tesoreria de la mora; 90 y 180 separan la mora persistente de la practicamente irrecuperable.",
+    "warmup_dias": 90
+  },
+  "cortes": {
+    "origenes": [
+      "2024-11-30",
+      "2024-12-31",
+      "2025-01-31",
+      "2025-02-28",
+      "2025-03-31",
+      "2025-04-30",
+      "2025-05-31",
+      "2025-06-30",
+      "2025-07-31",
+      "2025-08-31",
+      "2025-09-30",
+      "2025-10-31",
+      "2025-11-30",
+      "2025-12-31",
+      "2026-01-31",
+      "2026-02-28",
+      "2026-03-31",
+      "2026-04-30",
+      "2026-05-31",
+      "2026-06-30",
+      "2026-07-31",
+      "2026-08-31"
+    ],
+    "por_horizonte": {
+      "30": [
+        "2024-11-30",
+        "2024-12-31",
+        "2025-01-31",
+        "2025-02-28",
+        "2025-03-31",
+        "2025-04-30",
+        "2025-05-31",
+        "2025-06-30",
+        "2025-07-31",
+        "2025-08-31",
+        "2025-09-30",
+        "2025-10-31",
+        "2025-11-30",
+        "2025-12-31",
+        "2026-01-31",
+        "2026-02-28",
+        "2026-03-31",
+        "2026-04-30",
+        "2026-05-31",
+        "2026-06-30",
+        "2026-07-31"
+      ],
+      "60": [
+        "2024-11-30",
+        "2024-12-31",
+        "2025-01-31",
+        "2025-02-28",
+        "2025-03-31",
+        "2025-04-30",
+        "2025-05-31",
+        "2025-06-30",
+        "2025-07-31",
+        "2025-08-31",
+        "2025-09-30",
+        "2025-10-31",
+        "2025-11-30",
+        "2025-12-31",
+        "2026-01-31",
+        "2026-02-28",
+        "2026-03-31",
+        "2026-04-30",
+        "2026-05-31",
+        "2026-06-30"
+      ],
+      "90": [
+        "2024-11-30",
+        "2024-12-31",
+        "2025-01-31",
+        "2025-02-28",
+        "2025-03-31",
+        "2025-04-30",
+        "2025-05-31",
+        "2025-06-30",
+        "2025-07-31",
+        "2025-08-31",
+        "2025-09-30",
+        "2025-10-31",
+        "2025-11-30",
+        "2025-12-31",
+        "2026-01-31",
+        "2026-02-28",
+        "2026-03-31",
+        "2026-04-30",
+        "2026-05-31"
+      ]
+    },
+    "objetivo_observable": {
+      "2024-11-30|30": true,
+      "2024-11-30|60": true,
+      "2024-11-30|90": true,
+      "2024-12-31|30": true,
+      "2024-12-31|60": true,
+      "2024-12-31|90": true,
+      "2025-01-31|30": true,
+      "2025-01-31|60": true,
+      "2025-01-31|90": true,
+      "2025-02-28|30": true,
+      "2025-02-28|60": true,
+      "2025-02-28|90": true,
+      "2025-03-31|30": true,
+      "2025-03-31|60": true,
+      "2025-03-31|90": true,
+      "2025-04-30|30": true,
+      "2025-04-30|60": true,
+      "2025-04-30|90": true,
+      "2025-05-31|30": true,
+      "2025-05-31|60": true,
+      "2025-05-31|90": true,
+      "2025-06-30|30": true,
+      "2025-06-30|60": true,
+      "2025-06-30|90": true,
+      "2025-07-31|30": true,
+      "2025-07-31|60": true,
+      "2025-07-31|90": true,
+      "2025-08-31|30": true,
+      "2025-08-31|60": true,
+      "2025-08-31|90": true,
+      "2025-09-30|30": true,
+      "2025-09-30|60": true,
+      "2025-09-30|90": true,
+      "2025-10-31|30": true,
+      "2025-10-31|60": true,
+      "2025-10-31|90": true,
+      "2025-11-30|30": true,
+      "2025-11-30|60": true,
+      "2025-11-30|90": true,
+      "2025-12-31|30": true,
+      "2025-12-31|60": true,
+      "2025-12-31|90": true,
+      "2026-01-31|30": true,
+      "2026-01-31|60": true,
+      "2026-01-31|90": true,
+      "2026-02-28|30": true,
+      "2026-02-28|60": true,
+      "2026-02-28|90": true,
+      "2026-03-31|30": true,
+      "2026-03-31|60": true,
+      "2026-03-31|90": true,
+      "2026-04-30|30": true,
+      "2026-04-30|60": true,
+      "2026-04-30|90": true,
+      "2026-05-31|30": true,
+      "2026-05-31|60": true,
+      "2026-05-31|90": true,
+      "2026-06-30|30": true,
+      "2026-06-30|60": true,
+      "2026-06-30|90": false,
+      "2026-07-31|30": true,
+      "2026-07-31|60": false,
+      "2026-07-31|90": false,
+      "2026-08-31|30": false,
+      "2026-08-31|60": false,
+      "2026-08-31|90": false
+    },
+    "primer_corte_valido": "2024-11-30",
+    "criterio": "fin de mes cerrado >= primer dia con datos + 90 dias (historia previa) Y corte + h <= 2026-08-31 (target observable); MAS el corte vivo 2026-08-31 para todos los horizontes"
+  },
+  "censo_por_corte": [
+    {
+      "corte": "2024-11-30",
+      "n_vivas": 12890,
+      "n_empresas": 441,
+      "amount_eur_sum": -81095272.53818941,
+      "n_no_vencidas": 7142,
+      "n_vencidas": 5747,
+      "n_sin_vencimiento": 1,
+      "n_valorables": 11600,
+      "n_sin_importe": 1289,
+      "n_sin_importe_nulo": 1287,
+      "n_sin_importe_fx_ambiguo": 2,
+      "n_sin_fecha_vencimiento": 1,
+      "n_no_valorable": 1290,
+      "importe_no_valorable_eur": -23.82,
+      "importe_esperado_eur": -20273812.179547355,
+      "empresas_vivas_con_retraso_global": 277,
+      "retraso": {
+        "mediana_global_dias": 0.0,
+        "n_empresas_con_pagos": 303,
+        "n_empresas_muestra_suficiente": 169,
+        "n_pagos_usados": 15438,
+        "empresas_muestra_corta": 134,
+        "cuantiles_mediana_empresa_dias": {
+          "0.1": 0.0,
+          "0.25": 0.0,
+          "0.5": 0.0,
+          "0.75": 1.0,
+          "0.9": 5.1000000000000085
+        }
+      },
+      "probabilidades": {
+        "no_vencida": {
+          "p": 0.25,
+          "n_en_riesgo": 4,
+          "n_pagadas_dentro_madurez": 1,
+          "borde_inferior_dias": null,
+          "motivo": "probabilidad_global_por_muestra_corta"
+        },
+        "1_30": {
+          "p": 0.25,
+          "n_en_riesgo": 3,
+          "n_pagadas_dentro_madurez": 0,
+          "borde_inferior_dias": 0,
+          "motivo": "probabilidad_global_por_muestra_corta"
+        },
+        "31_90": {
+          "p": 0.25,
+          "n_en_riesgo": 3,
+          "n_pagadas_dentro_madurez": 0,
+          "borde_inferior_dias": 30,
+          "motivo": "probabilidad_global_por_muestra_corta"
+        },
+        "91_180": {
+          "p": 0.25,
+          "n_en_riesgo": 3,
+          "n_pagadas_dentro_madurez": 0,
+          "borde_inferior_dias": 90,
+          "motivo": "probabilidad_global_por_muestra_corta"
+        },
+        "180_mas": {
+          "p": 0.25,
+          "n_en_riesgo": 3,
+          "n_pagadas_dentro_madurez": 0,
+          "borde_inferior_dias": 180,
+          "motivo": "probabilidad_global_por_muestra_corta"
+        }
+      },
+      "n_facturas_maduras": 4,
+      "tasa_global_pago": 0.25
+    },
+    {
+      "corte": "2024-12-31",
+      "n_vivas": 17415,
+      "n_empresas": 476,
+      "amount_eur_sum": -126058134.1334942,
+      "n_no_vencidas": 8469,
+      "n_vencidas": 8931,
+      "n_sin_vencimiento": 15,
+      "n_valorables": 15532,
+      "n_sin_importe": 1868,
+      "n_sin_importe_nulo": 1866,
+      "n_sin_importe_fx_ambiguo": 2,
+      "n_sin_fecha_vencimiento": 15,
+      "n_no_valorable": 1883,
+      "importe_no_valorable_eur": -104755.22,
+      "importe_esperado_eur": -31488344.72837355,
+      "empresas_vivas_con_retraso_global": 274,
+      "retraso": {
+        "mediana_global_dias": 0.0,
+        "n_empresas_con_pagos": 347,
+        "n_empresas_muestra_suficiente": 205,
+        "n_pagos_usados": 22751,
+        "empresas_muestra_corta": 142,
+        "cuantiles_mediana_empresa_dias": {
+          "0.1": 0.0,
+          "0.25": 0.0,
+          "0.5": 0.0,
+          "0.75": 1.0,
+          "0.9": 4.0
+        }
+      },
+      "probabilidades": {
+        "no_vencida": {
+          "p": 0.25,
+          "n_en_riesgo": 4,
+          "n_pagadas_dentro_madurez": 1,
+          "borde_inferior_dias": null,
+          "motivo": "probabilidad_global_por_muestra_corta"
+        },
+        "1_30": {
+          "p": 0.25,
+          "n_en_riesgo": 3,
+          "n_pagadas_dentro_madurez": 0,
+          "borde_inferior_dias": 0,
+          "motivo": "probabilidad_global_por_muestra_corta"
+        },
+        "31_90": {
+          "p": 0.25,
+          "n_en_riesgo": 3,
+          "n_pagadas_dentro_madurez": 0,
+          "borde_inferior_dias": 30,
+          "motivo": "probabilidad_global_por_muestra_corta"
+        },
+        "91_180": {
+          "p": 0.25,
+          "n_en_riesgo": 3,
+          "n_pagadas_dentro_madurez": 0,
+          "borde_inferior_dias": 90,
+          "motivo": "probabilidad_global_por_muestra_corta"
+        },
+        "180_mas": {
+          "p": 0.25,
+          "n_en_riesgo": 3,
+          "n_pagadas_dentro_madurez": 0,
+          "borde_inferior_dias": 180,
+          "motivo": "probabilidad_global_por_muestra_corta"
+        }
+      },
+      "n_facturas_maduras": 4,
+      "tasa_global_pago": 0.25
+    },
+    {
+      "corte": "2025-01-31",
+      "n_vivas": 21523,
+      "n_empresas": 512,
+      "amount_eur_sum": -140470457.9381081,
+      "n_no_vencidas": 9190,
+      "n_vencidas": 12303,
+      "n_sin_vencimiento": 30,
+      "n_valorables": 19191,
+      "n_sin_importe": 2302,
+      "n_sin_importe_nulo": 2290,
+      "n_sin_importe_fx_ambiguo": 12,
+      "n_sin_fecha_vencimiento": 30,
+      "n_no_valorable": 2332,
+      "importe_no_valorable_eur": -329258.79,
+      "importe_esperado_eur": -42467030.04488124,
+      "empresas_vivas_con_retraso_global": 260,
+      "retraso": {
+        "mediana_global_dias": 0.0,
+        "n_empresas_con_pagos": 389,
+        "n_empresas_muestra_suficiente": 259,
+        "n_pagos_usados": 32443,
+        "empresas_muestra_corta": 130,
+        "cuantiles_mediana_empresa_dias": {
+          "0.1": 0.0,
+          "0.25": 0.0,
+          "0.5": 0.0,
+          "0.75": 1.0,
+          "0.9": 6.0
+        }
+      },
+      "probabilidades": {
+        "no_vencida": {
+          "p": 0.30303,
+          "n_en_riesgo": 33,
+          "n_pagadas_dentro_madurez": 10,
+          "borde_inferior_dias": null,
+          "motivo": "probabilidad_global_por_muestra_corta"
+        },
+        "1_30": {
+          "p": 0.30303,
+          "n_en_riesgo": 24,
+          "n_pagadas_dentro_madurez": 1,
+          "borde_inferior_dias": 0,
+          "motivo": "probabilidad_global_por_muestra_corta"
+        },
+        "31_90": {
+          "p": 0.30303,
+          "n_en_riesgo": 24,
+          "n_pagadas_dentro_madurez": 1,
+          "borde_inferior_dias": 30,
+          "motivo": "probabilidad_global_por_muestra_corta"
+        },
+        "91_180": {
+          "p": 0.30303,
+          "n_en_riesgo": 24,
+          "n_pagadas_dentro_madurez": 1,
+          "borde_inferior_dias": 90,
+          "motivo": "probabilidad_global_por_muestra_corta"
+        },
+        "180_mas": {
+          "p": 0.30303,
+          "n_en_riesgo": 24,
+          "n_pagadas_dentro_madurez": 1,
+          "borde_inferior_dias": 180,
+          "motivo": "probabilidad_global_por_muestra_corta"
+        }
+      },
+      "n_facturas_maduras": 33,
+      "tasa_global_pago": 0.30303030303030304
+    },
+    {
+      "corte": "2025-02-28",
+      "n_vivas": 25850,
+      "n_empresas": 538,
+      "amount_eur_sum": -149449086.4081105,
+      "n_no_vencidas": 9900,
+      "n_vencidas": 15911,
+      "n_sin_vencimiento": 39,
+      "n_valorables": 23147,
+      "n_sin_importe": 2664,
+      "n_sin_importe_nulo": 2640,
+      "n_sin_importe_fx_ambiguo": 24,
+      "n_sin_fecha_vencimiento": 39,
+      "n_no_valorable": 2703,
+      "importe_no_valorable_eur": -357225.9099999999,
+      "importe_esperado_eur": -75729198.98316723,
+      "empresas_vivas_con_retraso_global": 247,
+      "retraso": {
+        "mediana_global_dias": 0.0,
+        "n_empresas_con_pagos": 406,
+        "n_empresas_muestra_suficiente": 296,
+        "n_pagos_usados": 41927,
+        "empresas_muestra_corta": 110,
+        "cuantiles_mediana_empresa_dias": {
+          "0.1": 0.0,
+          "0.25": 0.0,
+          "0.5": 0.0,
+          "0.75": 1.0,
+          "0.9": 6.0
+        }
+      },
+      "probabilidades": {
+        "no_vencida": {
+          "p": 0.507937,
+          "n_en_riesgo": 63,
+          "n_pagadas_dentro_madurez": 32,
+          "borde_inferior_dias": null,
+          "motivo": "probabilidad_global_por_muestra_corta"
+        },
+        "1_30": {
+          "p": 0.507937,
+          "n_en_riesgo": 34,
+          "n_pagadas_dentro_madurez": 3,
+          "borde_inferior_dias": 0,
+          "motivo": "probabilidad_global_por_muestra_corta"
+        },
+        "31_90": {
+          "p": 0.507937,
+          "n_en_riesgo": 33,
+          "n_pagadas_dentro_madurez": 2,
+          "borde_inferior_dias": 30,
+          "motivo": "probabilidad_global_por_muestra_corta"
+        },
+        "91_180": {
+          "p": 0.507937,
+          "n_en_riesgo": 33,
+          "n_pagadas_dentro_madurez": 2,
+          "borde_inferior_dias": 90,
+          "motivo": "probabilidad_global_por_muestra_corta"
+        },
+        "180_mas": {
+          "p": 0.507937,
+          "n_en_riesgo": 33,
+          "n_pagadas_dentro_madurez": 2,
+          "borde_inferior_dias": 180,
+          "motivo": "probabilidad_global_por_muestra_corta"
+        }
+      },
+      "n_facturas_maduras": 63,
+      "tasa_global_pago": 0.5079365079365079
+    },
+    {
+      "corte": "2025-03-31",
+      "n_vivas": 28389,
+      "n_empresas": 542,
+      "amount_eur_sum": -188432625.31760824,
+      "n_no_vencidas": 9419,
+      "n_vencidas": 18916,
+      "n_sin_vencimiento": 54,
+      "n_valorables": 25082,
+      "n_sin_importe": 3253,
+      "n_sin_importe_nulo": 3227,
+      "n_sin_importe_fx_ambiguo": 26,
+      "n_sin_fecha_vencimiento": 54,
+      "n_no_valorable": 3307,
+      "importe_no_valorable_eur": -4620310.229999999,
+      "importe_esperado_eur": -87068991.35728809,
+      "empresas_vivas_con_retraso_global": 234,
+      "retraso": {
+        "mediana_global_dias": 0.0,
+        "n_empresas_con_pagos": 429,
+        "n_empresas_muestra_suficiente": 321,
+        "n_pagos_usados": 52933,
+        "empresas_muestra_corta": 108,
+        "cuantiles_mediana_empresa_dias": {
+          "0.1": 0.0,
+          "0.25": 0.0,
+          "0.5": 0.0,
+          "0.75": 1.0,
+          "0.9": 6.0
+        }
+      },
+      "probabilidades": {
+        "no_vencida": {
+          "p": 0.473684,
+          "n_en_riesgo": 76,
+          "n_pagadas_dentro_madurez": 36,
+          "borde_inferior_dias": null,
+          "motivo": "probabilidad_global_por_muestra_corta"
+        },
+        "1_30": {
+          "p": 0.473684,
+          "n_en_riesgo": 43,
+          "n_pagadas_dentro_madurez": 3,
+          "borde_inferior_dias": 0,
+          "motivo": "probabilidad_global_por_muestra_corta"
+        },
+        "31_90": {
+          "p": 0.473684,
+          "n_en_riesgo": 42,
+          "n_pagadas_dentro_madurez": 2,
+          "borde_inferior_dias": 30,
+          "motivo": "probabilidad_global_por_muestra_corta"
+        },
+        "91_180": {
+          "p": 0.473684,
+          "n_en_riesgo": 42,
+          "n_pagadas_dentro_madurez": 2,
+          "borde_inferior_dias": 90,
+          "motivo": "probabilidad_global_por_muestra_corta"
+        },
+        "180_mas": {
+          "p": 0.473684,
+          "n_en_riesgo": 42,
+          "n_pagadas_dentro_madurez": 2,
+          "borde_inferior_dias": 180,
+          "motivo": "probabilidad_global_por_muestra_corta"
+        }
+      },
+      "n_facturas_maduras": 76,
+      "tasa_global_pago": 0.47368421052631576
+    },
+    {
+      "corte": "2025-04-30",
+      "n_vivas": 32216,
+      "n_empresas": 574,
+      "amount_eur_sum": -261736158.1830606,
+      "n_no_vencidas": 10393,
+      "n_vencidas": 21758,
+      "n_sin_vencimiento": 65,
+      "n_valorables": 28717,
+      "n_sin_importe": 3434,
+      "n_sin_importe_nulo": 3407,
+      "n_sin_importe_fx_ambiguo": 27,
+      "n_sin_fecha_vencimiento": 65,
+      "n_no_valorable": 3499,
+      "importe_no_valorable_eur": -4646846.269999998,
+      "importe_esperado_eur": -124007785.74629983,
+      "empresas_vivas_con_retraso_global": 239,
+      "retraso": {
+        "mediana_global_dias": 0.0,
+        "n_empresas_con_pagos": 443,
+        "n_empresas_muestra_suficiente": 338,
+        "n_pagos_usados": 63330,
+        "empresas_muestra_corta": 105,
+        "cuantiles_mediana_empresa_dias": {
+          "0.1": 0.0,
+          "0.25": 0.0,
+          "0.5": 0.0,
+          "0.75": 1.0,
+          "0.9": 6.300000000000011
+        }
+      },
+      "probabilidades": {
+        "no_vencida": {
+          "p": 0.482353,
+          "n_en_riesgo": 85,
+          "n_pagadas_dentro_madurez": 41,
+          "borde_inferior_dias": null,
+          "motivo": "probabilidad_global_por_muestra_corta"
+        },
+        "1_30": {
+          "p": 0.482353,
+          "n_en_riesgo": 49,
+          "n_pagadas_dentro_madurez": 5,
+          "borde_inferior_dias": 0,
+          "motivo": "probabilidad_global_por_muestra_corta"
+        },
+        "31_90": {
+          "p": 0.482353,
+          "n_en_riesgo": 47,
+          "n_pagadas_dentro_madurez": 3,
+          "borde_inferior_dias": 30,
+          "motivo": "probabilidad_global_por_muestra_corta"
+        },
+        "91_180": {
+          "p": 0.482353,
+          "n_en_riesgo": 47,
+          "n_pagadas_dentro_madurez": 3,
+          "borde_inferior_dias": 90,
+          "motivo": "probabilidad_global_por_muestra_corta"
+        },
+        "180_mas": {
+          "p": 0.482353,
+          "n_en_riesgo": 47,
+          "n_pagadas_dentro_madurez": 3,
+          "borde_inferior_dias": 180,
+          "motivo": "probabilidad_global_por_muestra_corta"
+        }
+      },
+      "n_facturas_maduras": 85,
+      "tasa_global_pago": 0.4823529411764706
+    },
+    {
+      "corte": "2025-05-31",
+      "n_vivas": 37008,
+      "n_empresas": 598,
+      "amount_eur_sum": -302039023.70920473,
+      "n_no_vencidas": 12335,
+      "n_vencidas": 24602,
+      "n_sin_vencimiento": 71,
+      "n_valorables": 33122,
+      "n_sin_importe": 3815,
+      "n_sin_importe_nulo": 3788,
+      "n_sin_importe_fx_ambiguo": 27,
+      "n_sin_fecha_vencimiento": 71,
+      "n_no_valorable": 3886,
+      "importe_no_valorable_eur": -4660678.2299999995,
+      "importe_esperado_eur": -151662956.1943944,
+      "empresas_vivas_con_retraso_global": 243,
+      "retraso": {
+        "mediana_global_dias": 0.0,
+        "n_empresas_con_pagos": 456,
+        "n_empresas_muestra_suficiente": 357,
+        "n_pagos_usados": 74872,
+        "empresas_muestra_corta": 99,
+        "cuantiles_mediana_empresa_dias": {
+          "0.1": 0.0,
+          "0.25": 0.0,
+          "0.5": 0.0,
+          "0.75": 1.0,
+          "0.9": 7.200000000000017
+        }
+      },
+      "probabilidades": {
+        "no_vencida": {
+          "p": 0.51,
+          "n_en_riesgo": 100,
+          "n_pagadas_dentro_madurez": 51,
+          "borde_inferior_dias": null,
+          "motivo": "probabilidad_global_por_muestra_corta"
+        },
+        "1_30": {
+          "p": 0.51,
+          "n_en_riesgo": 57,
+          "n_pagadas_dentro_madurez": 8,
+          "borde_inferior_dias": 0,
+          "motivo": "probabilidad_global_por_muestra_corta"
+        },
+        "31_90": {
+          "p": 0.51,
+          "n_en_riesgo": 54,
+          "n_pagadas_dentro_madurez": 5,
+          "borde_inferior_dias": 30,
+          "motivo": "probabilidad_global_por_muestra_corta"
+        },
+        "91_180": {
+          "p": 0.51,
+          "n_en_riesgo": 54,
+          "n_pagadas_dentro_madurez": 5,
+          "borde_inferior_dias": 90,
+          "motivo": "probabilidad_global_por_muestra_corta"
+        },
+        "180_mas": {
+          "p": 0.51,
+          "n_en_riesgo": 54,
+          "n_pagadas_dentro_madurez": 5,
+          "borde_inferior_dias": 180,
+          "motivo": "probabilidad_global_por_muestra_corta"
+        }
+      },
+      "n_facturas_maduras": 100,
+      "tasa_global_pago": 0.51
+    },
+    {
+      "corte": "2025-06-30",
+      "n_vivas": 42497,
+      "n_empresas": 623,
+      "amount_eur_sum": -352860338.7578013,
+      "n_no_vencidas": 14482,
+      "n_vencidas": 27931,
+      "n_sin_vencimiento": 84,
+      "n_valorables": 38171,
+      "n_sin_importe": 4242,
+      "n_sin_importe_nulo": 4212,
+      "n_sin_importe_fx_ambiguo": 30,
+      "n_sin_fecha_vencimiento": 84,
+      "n_no_valorable": 4326,
+      "importe_no_valorable_eur": -4680781.48,
+      "importe_esperado_eur": -199730908.82602555,
+      "empresas_vivas_con_retraso_global": 244,
+      "retraso": {
+        "mediana_global_dias": 0.0,
+        "n_empresas_con_pagos": 488,
+        "n_empresas_muestra_suficiente": 383,
+        "n_pagos_usados": 88024,
+        "empresas_muestra_corta": 105,
+        "cuantiles_mediana_empresa_dias": {
+          "0.1": 0.0,
+          "0.25": 0.0,
+          "0.5": 0.0,
+          "0.75": 1.0,
+          "0.9": 7.800000000000011
+        }
+      },
+      "probabilidades": {
+        "no_vencida": {
+          "p": 0.573643,
+          "n_en_riesgo": 129,
+          "n_pagadas_dentro_madurez": 74,
+          "borde_inferior_dias": null,
+          "motivo": "probabilidad_global_por_muestra_corta"
+        },
+        "1_30": {
+          "p": 0.573643,
+          "n_en_riesgo": 76,
+          "n_pagadas_dentro_madurez": 21,
+          "borde_inferior_dias": 0,
+          "motivo": "probabilidad_global_por_muestra_corta"
+        },
+        "31_90": {
+          "p": 0.573643,
+          "n_en_riesgo": 72,
+          "n_pagadas_dentro_madurez": 17,
+          "borde_inferior_dias": 30,
+          "motivo": "probabilidad_global_por_muestra_corta"
+        },
+        "91_180": {
+          "p": 0.573643,
+          "n_en_riesgo": 72,
+          "n_pagadas_dentro_madurez": 17,
+          "borde_inferior_dias": 90,
+          "motivo": "probabilidad_global_por_muestra_corta"
+        },
+        "180_mas": {
+          "p": 0.573643,
+          "n_en_riesgo": 72,
+          "n_pagadas_dentro_madurez": 17,
+          "borde_inferior_dias": 180,
+          "motivo": "probabilidad_global_por_muestra_corta"
+        }
+      },
+      "n_facturas_maduras": 129,
+      "tasa_global_pago": 0.5736434108527132
+    },
+    {
+      "corte": "2025-07-31",
+      "n_vivas": 46155,
+      "n_empresas": 644,
+      "amount_eur_sum": -563274042.9441922,
+      "n_no_vencidas": 14088,
+      "n_vencidas": 31979,
+      "n_sin_vencimiento": 88,
+      "n_valorables": 41562,
+      "n_sin_importe": 4505,
+      "n_sin_importe_nulo": 4487,
+      "n_sin_importe_fx_ambiguo": 18,
+      "n_sin_fecha_vencimiento": 88,
+      "n_no_valorable": 4593,
+      "importe_no_valorable_eur": -194723207.47,
+      "importe_esperado_eur": -228913562.40633053,
+      "empresas_vivas_con_retraso_global": 236,
+      "retraso": {
+        "mediana_global_dias": 0.0,
+        "n_empresas_con_pagos": 511,
+        "n_empresas_muestra_suficiente": 410,
+        "n_pagos_usados": 104317,
+        "empresas_muestra_corta": 101,
+        "cuantiles_mediana_empresa_dias": {
+          "0.1": 0.0,
+          "0.25": 0.0,
+          "0.5": 0.0,
+          "0.75": 2.0,
+          "0.9": 8.0
+        }
+      },
+      "probabilidades": {
+        "no_vencida": {
+          "p": 0.621118,
+          "n_en_riesgo": 161,
+          "n_pagadas_dentro_madurez": 100,
+          "borde_inferior_dias": null,
+          "motivo": "probabilidad_global_por_muestra_corta"
+        },
+        "1_30": {
+          "p": 0.621118,
+          "n_en_riesgo": 98,
+          "n_pagadas_dentro_madurez": 37,
+          "borde_inferior_dias": 0,
+          "motivo": "probabilidad_global_por_muestra_corta"
+        },
+        "31_90": {
+          "p": 0.621118,
+          "n_en_riesgo": 94,
+          "n_pagadas_dentro_madurez": 33,
+          "borde_inferior_dias": 30,
+          "motivo": "probabilidad_global_por_muestra_corta"
+        },
+        "91_180": {
+          "p": 0.621118,
+          "n_en_riesgo": 93,
+          "n_pagadas_dentro_madurez": 32,
+          "borde_inferior_dias": 90,
+          "motivo": "probabilidad_global_por_muestra_corta"
+        },
+        "180_mas": {
+          "p": 0.621118,
+          "n_en_riesgo": 91,
+          "n_pagadas_dentro_madurez": 30,
+          "borde_inferior_dias": 180,
+          "motivo": "probabilidad_global_por_muestra_corta"
+        }
+      },
+      "n_facturas_maduras": 161,
+      "tasa_global_pago": 0.6211180124223602
+    },
+    {
+      "corte": "2025-08-31",
+      "n_vivas": 49029,
+      "n_empresas": 656,
+      "amount_eur_sum": -582686058.7198267,
+      "n_no_vencidas": 12340,
+      "n_vencidas": 36599,
+      "n_sin_vencimiento": 90,
+      "n_valorables": 44091,
+      "n_sin_importe": 4849,
+      "n_sin_importe_nulo": 4832,
+      "n_sin_importe_fx_ambiguo": 17,
+      "n_sin_fecha_vencimiento": 89,
+      "n_no_valorable": 4938,
+      "importe_no_valorable_eur": -194723217.46999997,
+      "importe_esperado_eur": -281734920.43142176,
+      "empresas_vivas_con_retraso_global": 229,
+      "retraso": {
+        "mediana_global_dias": 0.0,
+        "n_empresas_con_pagos": 531,
+        "n_empresas_muestra_suficiente": 428,
+        "n_pagos_usados": 117561,
+        "empresas_muestra_corta": 103,
+        "cuantiles_mediana_empresa_dias": {
+          "0.1": 0.0,
+          "0.25": 0.0,
+          "0.5": 0.0,
+          "0.75": 1.0,
+          "0.9": 8.0
+        }
+      },
+      "probabilidades": {
+        "no_vencida": {
+          "p": 0.72619,
+          "n_en_riesgo": 252,
+          "n_pagadas_dentro_madurez": 183,
+          "borde_inferior_dias": null,
+          "motivo": null
+        },
+        "1_30": {
+          "p": 0.72619,
+          "n_en_riesgo": 150,
+          "n_pagadas_dentro_madurez": 81,
+          "borde_inferior_dias": 0,
+          "motivo": "probabilidad_global_por_muestra_corta"
+        },
+        "31_90": {
+          "p": 0.72619,
+          "n_en_riesgo": 119,
+          "n_pagadas_dentro_madurez": 50,
+          "borde_inferior_dias": 30,
+          "motivo": "probabilidad_global_por_muestra_corta"
+        },
+        "91_180": {
+          "p": 0.72619,
+          "n_en_riesgo": 112,
+          "n_pagadas_dentro_madurez": 43,
+          "borde_inferior_dias": 90,
+          "motivo": "probabilidad_global_por_muestra_corta"
+        },
+        "180_mas": {
+          "p": 0.72619,
+          "n_en_riesgo": 107,
+          "n_pagadas_dentro_madurez": 38,
+          "borde_inferior_dias": 180,
+          "motivo": "probabilidad_global_por_muestra_corta"
+        }
+      },
+      "n_facturas_maduras": 252,
+      "tasa_global_pago": 0.7261904761904762
+    },
+    {
+      "corte": "2025-09-30",
+      "n_vivas": 51602,
+      "n_empresas": 668,
+      "amount_eur_sum": -625127410.6139266,
+      "n_no_vencidas": 12950,
+      "n_vencidas": 38564,
+      "n_sin_vencimiento": 88,
+      "n_valorables": 46734,
+      "n_sin_importe": 4780,
+      "n_sin_importe_nulo": 4776,
+      "n_sin_importe_fx_ambiguo": 4,
+      "n_sin_fecha_vencimiento": 88,
+      "n_no_valorable": 4868,
+      "importe_no_valorable_eur": -194723207.47,
+      "importe_esperado_eur": -204979510.13619894,
+      "empresas_vivas_con_retraso_global": 231,
+      "retraso": {
+        "mediana_global_dias": 0.0,
+        "n_empresas_con_pagos": 547,
+        "n_empresas_muestra_suficiente": 440,
+        "n_pagos_usados": 134570,
+        "empresas_muestra_corta": 107,
+        "cuantiles_mediana_empresa_dias": {
+          "0.1": 0.0,
+          "0.25": 0.0,
+          "0.5": 0.0,
+          "0.75": 2.0,
+          "0.9": 9.100000000000023
+        }
+      },
+      "probabilidades": {
+        "no_vencida": {
+          "p": 0.840228,
+          "n_en_riesgo": 4738,
+          "n_pagadas_dentro_madurez": 3981,
+          "borde_inferior_dias": null,
+          "motivo": null
+        },
+        "1_30": {
+          "p": 0.643765,
+          "n_en_riesgo": 2125,
+          "n_pagadas_dentro_madurez": 1368,
+          "borde_inferior_dias": 0,
+          "motivo": null
+        },
+        "31_90": {
+          "p": 0.341166,
+          "n_en_riesgo": 1149,
+          "n_pagadas_dentro_madurez": 392,
+          "borde_inferior_dias": 30,
+          "motivo": null
+        },
+        "91_180": {
+          "p": 0.205666,
+          "n_en_riesgo": 953,
+          "n_pagadas_dentro_madurez": 196,
+          "borde_inferior_dias": 90,
+          "motivo": null
+        },
+        "180_mas": {
+          "p": 0.135845,
+          "n_en_riesgo": 876,
+          "n_pagadas_dentro_madurez": 119,
+          "borde_inferior_dias": 180,
+          "motivo": null
+        }
+      },
+      "n_facturas_maduras": 4738,
+      "tasa_global_pago": 0.840227944280287
+    },
+    {
+      "corte": "2025-10-31",
+      "n_vivas": 55252,
+      "n_empresas": 683,
+      "amount_eur_sum": -632543545.7280643,
+      "n_no_vencidas": 13893,
+      "n_vencidas": 41266,
+      "n_sin_vencimiento": 93,
+      "n_valorables": 50287,
+      "n_sin_importe": 4872,
+      "n_sin_importe_nulo": 4868,
+      "n_sin_importe_fx_ambiguo": 4,
+      "n_sin_fecha_vencimiento": 93,
+      "n_no_valorable": 4965,
+      "importe_no_valorable_eur": -194742974.51999998,
+      "importe_esperado_eur": -189410472.4454529,
+      "empresas_vivas_con_retraso_global": 234,
+      "retraso": {
+        "mediana_global_dias": 0.0,
+        "n_empresas_con_pagos": 562,
+        "n_empresas_muestra_suficiente": 457,
+        "n_pagos_usados": 153014,
+        "empresas_muestra_corta": 105,
+        "cuantiles_mediana_empresa_dias": {
+          "0.1": 0.0,
+          "0.25": 0.0,
+          "0.5": 0.0,
+          "0.75": 1.5,
+          "0.9": 10.0
+        }
+      },
+      "probabilidades": {
+        "no_vencida": {
+          "p": 0.82212,
+          "n_en_riesgo": 12441,
+          "n_pagadas_dentro_madurez": 10228,
+          "borde_inferior_dias": null,
+          "motivo": null
+        },
+        "1_30": {
+          "p": 0.613517,
+          "n_en_riesgo": 5726,
+          "n_pagadas_dentro_madurez": 3513,
+          "borde_inferior_dias": 0,
+          "motivo": null
+        },
+        "31_90": {
+          "p": 0.32858,
+          "n_en_riesgo": 3296,
+          "n_pagadas_dentro_madurez": 1083,
+          "borde_inferior_dias": 30,
+          "motivo": null
+        },
+        "91_180": {
+          "p": 0.201083,
+          "n_en_riesgo": 2770,
+          "n_pagadas_dentro_madurez": 557,
+          "borde_inferior_dias": 90,
+          "motivo": null
+        },
+        "180_mas": {
+          "p": 0.105497,
+          "n_en_riesgo": 2474,
+          "n_pagadas_dentro_madurez": 261,
+          "borde_inferior_dias": 180,
+          "motivo": null
+        }
+      },
+      "n_facturas_maduras": 12441,
+      "tasa_global_pago": 0.8221204083273049
+    },
+    {
+      "corte": "2025-11-30",
+      "n_vivas": 58741,
+      "n_empresas": 694,
+      "amount_eur_sum": -686617839.469042,
+      "n_no_vencidas": 14676,
+      "n_vencidas": 43969,
+      "n_sin_vencimiento": 96,
+      "n_valorables": 53411,
+      "n_sin_importe": 5234,
+      "n_sin_importe_nulo": 5230,
+      "n_sin_importe_fx_ambiguo": 4,
+      "n_sin_fecha_vencimiento": 96,
+      "n_no_valorable": 5330,
+      "importe_no_valorable_eur": -194756271.62,
+      "importe_esperado_eur": -208723276.22709876,
+      "empresas_vivas_con_retraso_global": 223,
+      "retraso": {
+        "mediana_global_dias": 0.0,
+        "n_empresas_con_pagos": 573,
+        "n_empresas_muestra_suficiente": 479,
+        "n_pagos_usados": 169869,
+        "empresas_muestra_corta": 94,
+        "cuantiles_mediana_empresa_dias": {
+          "0.1": 0.0,
+          "0.25": 0.0,
+          "0.5": 0.0,
+          "0.75": 1.25,
+          "0.9": 9.5
+        }
+      },
+      "probabilidades": {
+        "no_vencida": {
+          "p": 0.816348,
+          "n_en_riesgo": 21067,
+          "n_pagadas_dentro_madurez": 17198,
+          "borde_inferior_dias": null,
+          "motivo": null
+        },
+        "1_30": {
+          "p": 0.604558,
+          "n_en_riesgo": 9784,
+          "n_pagadas_dentro_madurez": 5915,
+          "borde_inferior_dias": 0,
+          "motivo": null
+        },
+        "31_90": {
+          "p": 0.320274,
+          "n_en_riesgo": 5692,
+          "n_pagadas_dentro_madurez": 1823,
+          "borde_inferior_dias": 30,
+          "motivo": null
+        },
+        "91_180": {
+          "p": 0.184615,
+          "n_en_riesgo": 4745,
+          "n_pagadas_dentro_madurez": 876,
+          "borde_inferior_dias": 90,
+          "motivo": null
+        },
+        "180_mas": {
+          "p": 0.090289,
+          "n_en_riesgo": 4253,
+          "n_pagadas_dentro_madurez": 384,
+          "borde_inferior_dias": 180,
+          "motivo": null
+        }
+      },
+      "n_facturas_maduras": 21067,
+      "tasa_global_pago": 0.8163478425974272
+    },
+    {
+      "corte": "2025-12-31",
+      "n_vivas": 64321,
+      "n_empresas": 709,
+      "amount_eur_sum": -758092955.8482888,
+      "n_no_vencidas": 15575,
+      "n_vencidas": 48648,
+      "n_sin_vencimiento": 98,
+      "n_valorables": 58633,
+      "n_sin_importe": 5590,
+      "n_sin_importe_nulo": 5585,
+      "n_sin_importe_fx_ambiguo": 5,
+      "n_sin_fecha_vencimiento": 98,
+      "n_no_valorable": 5688,
+      "importe_no_valorable_eur": -194768253.75,
+      "importe_esperado_eur": -221856860.02658233,
+      "empresas_vivas_con_retraso_global": 224,
+      "retraso": {
+        "mediana_global_dias": 0.0,
+        "n_empresas_con_pagos": 603,
+        "n_empresas_muestra_suficiente": 494,
+        "n_pagos_usados": 188290,
+        "empresas_muestra_corta": 109,
+        "cuantiles_mediana_empresa_dias": {
+          "0.1": 0.0,
+          "0.25": 0.0,
+          "0.5": 0.0,
+          "0.75": 1.0,
+          "0.9": 9.0
+        }
+      },
+      "probabilidades": {
+        "no_vencida": {
+          "p": 0.804962,
+          "n_en_riesgo": 31640,
+          "n_pagadas_dentro_madurez": 25469,
+          "borde_inferior_dias": null,
+          "motivo": null
+        },
+        "1_30": {
+          "p": 0.594839,
+          "n_en_riesgo": 15231,
+          "n_pagadas_dentro_madurez": 9060,
+          "borde_inferior_dias": 0,
+          "motivo": null
+        },
+        "31_90": {
+          "p": 0.321794,
+          "n_en_riesgo": 9099,
+          "n_pagadas_dentro_madurez": 2928,
+          "borde_inferior_dias": 30,
+          "motivo": null
+        },
+        "91_180": {
+          "p": 0.179388,
+          "n_en_riesgo": 7520,
+          "n_pagadas_dentro_madurez": 1349,
+          "borde_inferior_dias": 90,
+          "motivo": null
+        },
+        "180_mas": {
+          "p": 0.086454,
+          "n_en_riesgo": 6755,
+          "n_pagadas_dentro_madurez": 584,
+          "borde_inferior_dias": 180,
+          "motivo": null
+        }
+      },
+      "n_facturas_maduras": 31640,
+      "tasa_global_pago": 0.8049620733249052
+    },
+    {
+      "corte": "2026-01-31",
+      "n_vivas": 69496,
+      "n_empresas": 734,
+      "amount_eur_sum": -805942478.6162419,
+      "n_no_vencidas": 16925,
+      "n_vencidas": 52471,
+      "n_sin_vencimiento": 100,
+      "n_valorables": 63433,
+      "n_sin_importe": 5963,
+      "n_sin_importe_nulo": 5958,
+      "n_sin_importe_fx_ambiguo": 5,
+      "n_sin_fecha_vencimiento": 100,
+      "n_no_valorable": 6063,
+      "importe_no_valorable_eur": -194768452.19000003,
+      "importe_esperado_eur": -230840132.84709084,
+      "empresas_vivas_con_retraso_global": 210,
+      "retraso": {
+        "mediana_global_dias": 0.0,
+        "n_empresas_con_pagos": 650,
+        "n_empresas_muestra_suficiente": 533,
+        "n_pagos_usados": 207681,
+        "empresas_muestra_corta": 117,
+        "cuantiles_mediana_empresa_dias": {
+          "0.1": 0.0,
+          "0.25": 0.0,
+          "0.5": 0.0,
+          "0.75": 1.0,
+          "0.9": 10.0
+        }
+      },
+      "probabilidades": {
+        "no_vencida": {
+          "p": 0.80459,
+          "n_en_riesgo": 44660,
+          "n_pagadas_dentro_madurez": 35933,
+          "borde_inferior_dias": null,
+          "motivo": null
+        },
+        "1_30": {
+          "p": 0.595016,
+          "n_en_riesgo": 21549,
+          "n_pagadas_dentro_madurez": 12822,
+          "borde_inferior_dias": 0,
+          "motivo": null
+        },
+        "31_90": {
+          "p": 0.330598,
+          "n_en_riesgo": 13037,
+          "n_pagadas_dentro_madurez": 4310,
+          "borde_inferior_dias": 30,
+          "motivo": null
+        },
+        "91_180": {
+          "p": 0.172404,
+          "n_en_riesgo": 10545,
+          "n_pagadas_dentro_madurez": 1818,
+          "borde_inferior_dias": 90,
+          "motivo": null
+        },
+        "180_mas": {
+          "p": 0.082238,
+          "n_en_riesgo": 9509,
+          "n_pagadas_dentro_madurez": 782,
+          "borde_inferior_dias": 180,
+          "motivo": null
+        }
+      },
+      "n_facturas_maduras": 44660,
+      "tasa_global_pago": 0.804590237348858
+    },
+    {
+      "corte": "2026-02-28",
+      "n_vivas": 75745,
+      "n_empresas": 743,
+      "amount_eur_sum": -846423240.9145541,
+      "n_no_vencidas": 19859,
+      "n_vencidas": 55786,
+      "n_sin_vencimiento": 100,
+      "n_valorables": 69371,
+      "n_sin_importe": 6274,
+      "n_sin_importe_nulo": 6269,
+      "n_sin_importe_fx_ambiguo": 5,
+      "n_sin_fecha_vencimiento": 100,
+      "n_no_valorable": 6374,
+      "importe_no_valorable_eur": -194768452.19000003,
+      "importe_esperado_eur": -251105119.6128737,
+      "empresas_vivas_con_retraso_global": 195,
+      "retraso": {
+        "mediana_global_dias": 0.0,
+        "n_empresas_con_pagos": 668,
+        "n_empresas_muestra_suficiente": 556,
+        "n_pagos_usados": 227129,
+        "empresas_muestra_corta": 112,
+        "cuantiles_mediana_empresa_dias": {
+          "0.1": 0.0,
+          "0.25": 0.0,
+          "0.5": 0.0,
+          "0.75": 2.0,
+          "0.9": 10.0
+        }
+      },
+      "probabilidades": {
+        "no_vencida": {
+          "p": 0.796444,
+          "n_en_riesgo": 57419,
+          "n_pagadas_dentro_madurez": 45731,
+          "borde_inferior_dias": null,
+          "motivo": null
+        },
+        "1_30": {
+          "p": 0.590498,
+          "n_en_riesgo": 28542,
+          "n_pagadas_dentro_madurez": 16854,
+          "borde_inferior_dias": 0,
+          "motivo": null
+        },
+        "31_90": {
+          "p": 0.323807,
+          "n_en_riesgo": 17285,
+          "n_pagadas_dentro_madurez": 5597,
+          "borde_inferior_dias": 30,
+          "motivo": null
+        },
+        "91_180": {
+          "p": 0.164606,
+          "n_en_riesgo": 13991,
+          "n_pagadas_dentro_madurez": 2303,
+          "borde_inferior_dias": 90,
+          "motivo": null
+        },
+        "180_mas": {
+          "p": 0.075609,
+          "n_en_riesgo": 12644,
+          "n_pagadas_dentro_madurez": 956,
+          "borde_inferior_dias": 180,
+          "motivo": null
+        }
+      },
+      "n_facturas_maduras": 57419,
+      "tasa_global_pago": 0.7964436858879465
+    },
+    {
+      "corte": "2026-03-31",
+      "n_vivas": 83193,
+      "n_empresas": 756,
+      "amount_eur_sum": -934671937.2263277,
+      "n_no_vencidas": 22610,
+      "n_vencidas": 60482,
+      "n_sin_vencimiento": 101,
+      "n_valorables": 75808,
+      "n_sin_importe": 7284,
+      "n_sin_importe_nulo": 7279,
+      "n_sin_importe_fx_ambiguo": 5,
+      "n_sin_fecha_vencimiento": 101,
+      "n_no_valorable": 7385,
+      "importe_no_valorable_eur": -194768522.88,
+      "importe_esperado_eur": -293193088.42588,
+      "empresas_vivas_con_retraso_global": 172,
+      "retraso": {
+        "mediana_global_dias": 0.0,
+        "n_empresas_con_pagos": 692,
+        "n_empresas_muestra_suficiente": 590,
+        "n_pagos_usados": 252725,
+        "empresas_muestra_corta": 102,
+        "cuantiles_mediana_empresa_dias": {
+          "0.1": 0.0,
+          "0.25": 0.0,
+          "0.5": 0.0,
+          "0.75": 2.0,
+          "0.9": 10.0
+        }
+      },
+      "probabilidades": {
+        "no_vencida": {
+          "p": 0.800609,
+          "n_en_riesgo": 71603,
+          "n_pagadas_dentro_madurez": 57326,
+          "borde_inferior_dias": null,
+          "motivo": null
+        },
+        "1_30": {
+          "p": 0.601246,
+          "n_en_riesgo": 35804,
+          "n_pagadas_dentro_madurez": 21527,
+          "borde_inferior_dias": 0,
+          "motivo": null
+        },
+        "31_90": {
+          "p": 0.336077,
+          "n_en_riesgo": 21504,
+          "n_pagadas_dentro_madurez": 7227,
+          "borde_inferior_dias": 30,
+          "motivo": null
+        },
+        "91_180": {
+          "p": 0.16616,
+          "n_en_riesgo": 17122,
+          "n_pagadas_dentro_madurez": 2845,
+          "borde_inferior_dias": 90,
+          "motivo": null
+        },
+        "180_mas": {
+          "p": 0.07652,
+          "n_en_riesgo": 15460,
+          "n_pagadas_dentro_madurez": 1183,
+          "borde_inferior_dias": 180,
+          "motivo": null
+        }
+      },
+      "n_facturas_maduras": 71603,
+      "tasa_global_pago": 0.8006089130343701
+    },
+    {
+      "corte": "2026-04-30",
+      "n_vivas": 92591,
+      "n_empresas": 759,
+      "amount_eur_sum": -1091330064.8050861,
+      "n_no_vencidas": 26219,
+      "n_vencidas": 66270,
+      "n_sin_vencimiento": 102,
+      "n_valorables": 84010,
+      "n_sin_importe": 8479,
+      "n_sin_importe_nulo": 8473,
+      "n_sin_importe_fx_ambiguo": 6,
+      "n_sin_fecha_vencimiento": 102,
+      "n_no_valorable": 8581,
+      "importe_no_valorable_eur": -194771061.68,
+      "importe_esperado_eur": -395057389.9052161,
+      "empresas_vivas_con_retraso_global": 144,
+      "retraso": {
+        "mediana_global_dias": 0.0,
+        "n_empresas_con_pagos": 706,
+        "n_empresas_muestra_suficiente": 623,
+        "n_pagos_usados": 278770,
+        "empresas_muestra_corta": 83,
+        "cuantiles_mediana_empresa_dias": {
+          "0.1": 0.0,
+          "0.25": 0.0,
+          "0.5": 0.0,
+          "0.75": 2.0,
+          "0.9": 10.0
+        }
+      },
+      "probabilidades": {
+        "no_vencida": {
+          "p": 0.802289,
+          "n_en_riesgo": 84851,
+          "n_pagadas_dentro_madurez": 68075,
+          "borde_inferior_dias": null,
+          "motivo": null
+        },
+        "1_30": {
+          "p": 0.605029,
+          "n_en_riesgo": 42474,
+          "n_pagadas_dentro_madurez": 25698,
+          "borde_inferior_dias": 0,
+          "motivo": null
+        },
+        "31_90": {
+          "p": 0.344201,
+          "n_en_riesgo": 25581,
+          "n_pagadas_dentro_madurez": 8805,
+          "borde_inferior_dias": 30,
+          "motivo": null
+        },
+        "91_180": {
+          "p": 0.166948,
+          "n_en_riesgo": 20138,
+          "n_pagadas_dentro_madurez": 3362,
+          "borde_inferior_dias": 90,
+          "motivo": null
+        },
+        "180_mas": {
+          "p": 0.076517,
+          "n_en_riesgo": 18166,
+          "n_pagadas_dentro_madurez": 1390,
+          "borde_inferior_dias": 180,
+          "motivo": null
+        }
+      },
+      "n_facturas_maduras": 84851,
+      "tasa_global_pago": 0.8022887178701489
+    },
+    {
+      "corte": "2026-05-31",
+      "n_vivas": 101294,
+      "n_empresas": 761,
+      "amount_eur_sum": -1134502601.9869363,
+      "n_no_vencidas": 28471,
+      "n_vencidas": 72720,
+      "n_sin_vencimiento": 103,
+      "n_valorables": 91345,
+      "n_sin_importe": 9846,
+      "n_sin_importe_nulo": 9840,
+      "n_sin_importe_fx_ambiguo": 6,
+      "n_sin_fecha_vencimiento": 103,
+      "n_no_valorable": 9949,
+      "importe_no_valorable_eur": -194773070.28000003,
+      "importe_esperado_eur": -410673601.14530647,
+      "empresas_vivas_con_retraso_global": 122,
+      "retraso": {
+        "mediana_global_dias": 0.0,
+        "n_empresas_con_pagos": 717,
+        "n_empresas_muestra_suficiente": 649,
+        "n_pagos_usados": 304173,
+        "empresas_muestra_corta": 68,
+        "cuantiles_mediana_empresa_dias": {
+          "0.1": 0.0,
+          "0.25": 0.0,
+          "0.5": 0.0,
+          "0.75": 1.5,
+          "0.9": 10.0
+        }
+      },
+      "probabilidades": {
+        "no_vencida": {
+          "p": 0.806437,
+          "n_en_riesgo": 99296,
+          "n_pagadas_dentro_madurez": 80076,
+          "borde_inferior_dias": null,
+          "motivo": null
+        },
+        "1_30": {
+          "p": 0.613396,
+          "n_en_riesgo": 49715,
+          "n_pagadas_dentro_madurez": 30495,
+          "borde_inferior_dias": 0,
+          "motivo": null
+        },
+        "31_90": {
+          "p": 0.350522,
+          "n_en_riesgo": 29593,
+          "n_pagadas_dentro_madurez": 10373,
+          "borde_inferior_dias": 30,
+          "motivo": null
+        },
+        "91_180": {
+          "p": 0.170694,
+          "n_en_riesgo": 23176,
+          "n_pagadas_dentro_madurez": 3956,
+          "borde_inferior_dias": 90,
+          "motivo": null
+        },
+        "180_mas": {
+          "p": 0.075873,
+          "n_en_riesgo": 20798,
+          "n_pagadas_dentro_madurez": 1578,
+          "borde_inferior_dias": 180,
+          "motivo": null
+        }
+      },
+      "n_facturas_maduras": 99296,
+      "tasa_global_pago": 0.8064373187238156
+    },
+    {
+      "corte": "2026-06-30",
+      "n_vivas": 114648,
+      "n_empresas": 766,
+      "amount_eur_sum": -1262871184.293729,
+      "n_no_vencidas": 32474,
+      "n_vencidas": 82072,
+      "n_sin_vencimiento": 102,
+      "n_valorables": 103513,
+      "n_sin_importe": 11033,
+      "n_sin_importe_nulo": 11027,
+      "n_sin_importe_fx_ambiguo": 6,
+      "n_sin_fecha_vencimiento": 102,
+      "n_no_valorable": 11135,
+      "importe_no_valorable_eur": -194771061.68,
+      "importe_esperado_eur": -469059403.6495141,
+      "empresas_vivas_con_retraso_global": 110,
+      "retraso": {
+        "mediana_global_dias": 0.0,
+        "n_empresas_con_pagos": 723,
+        "n_empresas_muestra_suficiente": 663,
+        "n_pagos_usados": 330509,
+        "empresas_muestra_corta": 60,
+        "cuantiles_mediana_empresa_dias": {
+          "0.1": 0.0,
+          "0.25": 0.0,
+          "0.5": 0.0,
+          "0.75": 2.0,
+          "0.9": 9.0
+        }
+      },
+      "probabilidades": {
+        "no_vencida": {
+          "p": 0.80671,
+          "n_en_riesgo": 115857,
+          "n_pagadas_dentro_madurez": 93463,
+          "borde_inferior_dias": null,
+          "motivo": null
+        },
+        "1_30": {
+          "p": 0.614508,
+          "n_en_riesgo": 58092,
+          "n_pagadas_dentro_madurez": 35698,
+          "borde_inferior_dias": 0,
+          "motivo": null
+        },
+        "31_90": {
+          "p": 0.343919,
+          "n_en_riesgo": 34133,
+          "n_pagadas_dentro_madurez": 11739,
+          "borde_inferior_dias": 30,
+          "motivo": null
+        },
+        "91_180": {
+          "p": 0.169085,
+          "n_en_riesgo": 26951,
+          "n_pagadas_dentro_madurez": 4557,
+          "borde_inferior_dias": 90,
+          "motivo": null
+        },
+        "180_mas": {
+          "p": 0.073863,
+          "n_en_riesgo": 24180,
+          "n_pagadas_dentro_madurez": 1786,
+          "borde_inferior_dias": 180,
+          "motivo": null
+        }
+      },
+      "n_facturas_maduras": 115857,
+      "tasa_global_pago": 0.8067099959432749
+    },
+    {
+      "corte": "2026-07-31",
+      "n_vivas": 122050,
+      "n_empresas": 766,
+      "amount_eur_sum": -1390852129.8628228,
+      "n_no_vencidas": 32426,
+      "n_vencidas": 89522,
+      "n_sin_vencimiento": 102,
+      "n_valorables": 109685,
+      "n_sin_importe": 12263,
+      "n_sin_importe_nulo": 12257,
+      "n_sin_importe_fx_ambiguo": 6,
+      "n_sin_fecha_vencimiento": 102,
+      "n_no_valorable": 12365,
+      "importe_no_valorable_eur": -194771061.68,
+      "importe_esperado_eur": -510169708.6007726,
+      "empresas_vivas_con_retraso_global": 100,
+      "retraso": {
+        "mediana_global_dias": 0.0,
+        "n_empresas_con_pagos": 729,
+        "n_empresas_muestra_suficiente": 675,
+        "n_pagos_usados": 365797,
+        "empresas_muestra_corta": 54,
+        "cuantiles_mediana_empresa_dias": {
+          "0.1": 0.0,
+          "0.25": 0.0,
+          "0.5": 0.0,
+          "0.75": 2.0,
+          "0.9": 10.0
+        }
+      },
+      "probabilidades": {
+        "no_vencida": {
+          "p": 0.802374,
+          "n_en_riesgo": 135989,
+          "n_pagadas_dentro_madurez": 109114,
+          "borde_inferior_dias": null,
+          "motivo": null
+        },
+        "1_30": {
+          "p": 0.606239,
+          "n_en_riesgo": 68252,
+          "n_pagadas_dentro_madurez": 41377,
+          "borde_inferior_dias": 0,
+          "motivo": null
+        },
+        "31_90": {
+          "p": 0.334167,
+          "n_en_riesgo": 40363,
+          "n_pagadas_dentro_madurez": 13488,
+          "borde_inferior_dias": 30,
+          "motivo": null
+        },
+        "91_180": {
+          "p": 0.158315,
+          "n_en_riesgo": 31930,
+          "n_pagadas_dentro_madurez": 5055,
+          "borde_inferior_dias": 90,
+          "motivo": null
+        },
+        "180_mas": {
+          "p": 0.06807,
+          "n_en_riesgo": 28838,
+          "n_pagadas_dentro_madurez": 1963,
+          "borde_inferior_dias": 180,
+          "motivo": null
+        }
+      },
+      "n_facturas_maduras": 135989,
+      "tasa_global_pago": 0.802373721403937
+    },
+    {
+      "corte": "2026-08-31",
+      "n_vivas": 122086,
+      "n_empresas": 762,
+      "amount_eur_sum": -1427871632.8471155,
+      "n_no_vencidas": 25437,
+      "n_vencidas": 96547,
+      "n_sin_vencimiento": 102,
+      "n_valorables": 109527,
+      "n_sin_importe": 12457,
+      "n_sin_importe_nulo": 12450,
+      "n_sin_importe_fx_ambiguo": 7,
+      "n_sin_fecha_vencimiento": 102,
+      "n_no_valorable": 12559,
+      "importe_no_valorable_eur": -194759301.31,
+      "importe_esperado_eur": -490367636.5449896,
+      "empresas_vivas_con_retraso_global": 93,
+      "retraso": {
+        "mediana_global_dias": 0.0,
+        "n_empresas_con_pagos": 730,
+        "n_empresas_muestra_suficiente": 681,
+        "n_pagos_usados": 396677,
+        "empresas_muestra_corta": 49,
+        "cuantiles_mediana_empresa_dias": {
+          "0.1": 0.0,
+          "0.25": 0.0,
+          "0.5": 0.0,
+          "0.75": 2.0,
+          "0.9": 10.0
+        }
+      },
+      "probabilidades": {
+        "no_vencida": {
+          "p": 0.8043,
+          "n_en_riesgo": 153822,
+          "n_pagadas_dentro_madurez": 123719,
+          "borde_inferior_dias": null,
+          "motivo": null
+        },
+        "1_30": {
+          "p": 0.607651,
+          "n_en_riesgo": 76725,
+          "n_pagadas_dentro_madurez": 46622,
+          "borde_inferior_dias": 0,
+          "motivo": null
+        },
+        "31_90": {
+          "p": 0.335225,
+          "n_en_riesgo": 45283,
+          "n_pagadas_dentro_madurez": 15180,
+          "borde_inferior_dias": 30,
+          "motivo": null
+        },
+        "91_180": {
+          "p": 0.154149,
+          "n_en_riesgo": 35589,
+          "n_pagadas_dentro_madurez": 5486,
+          "borde_inferior_dias": 90,
+          "motivo": null
+        },
+        "180_mas": {
+          "p": 0.066197,
+          "n_en_riesgo": 32237,
+          "n_pagadas_dentro_madurez": 2134,
+          "borde_inferior_dias": 180,
+          "motivo": null
+        }
+      },
+      "n_facturas_maduras": 153822,
+      "tasa_global_pago": 0.8042997750646852
+    }
+  ],
+  "empresas_con_calendario_por_corte": {
+    "2024-11-30": 410,
+    "2024-12-31": 447,
+    "2025-01-31": 483,
+    "2025-02-28": 507,
+    "2025-03-31": 513,
+    "2025-04-30": 542,
+    "2025-05-31": 566,
+    "2025-06-30": 592,
+    "2025-07-31": 604,
+    "2025-08-31": 617,
+    "2025-09-30": 633,
+    "2025-10-31": 651,
+    "2025-11-30": 662,
+    "2025-12-31": 677,
+    "2026-01-31": 701,
+    "2026-02-28": 711,
+    "2026-03-31": 723,
+    "2026-04-30": 729,
+    "2026-05-31": 734,
+    "2026-06-30": 738,
+    "2026-07-31": 739,
+    "2026-08-31": 737
+  },
+  "corte_vivo": {
+    "corte": "2026-08-31",
+    "n_empresas_con_calendario": 737,
+    "horizontes": {
+      "30": {
+        "importe_esperado_eur": -356285520.8637233,
+        "n_facturas_valoradas": 101348
+      },
+      "60": {
+        "importe_esperado_eur": -417792684.06653124,
+        "n_facturas_valoradas": 106944
+      },
+      "90": {
+        "importe_esperado_eur": -439904229.94023615,
+        "n_facturas_valoradas": 108374
+      }
+    },
+    "importe_no_valorable_eur": -194759301.31,
+    "n_no_valorable": 12559,
+    "n_sin_importe": 12457,
+    "n_sin_importe_nulo": 12450,
+    "n_sin_importe_fx_ambiguo": 7,
+    "n_sin_fecha_vencimiento": 102,
+    "empresas_vivas_con_retraso_global": 93
+  },
+  "reproduccion_coordinador": {
+    "esperado": {
+      "n_vivas": 122086,
+      "n_empresas": 762,
+      "amount_eur_sum": -1427900000.0,
+      "n_no_vencidas": 25437,
+      "n_vencidas": 96547
+    },
+    "medido": {
+      "n_vivas": 122086,
+      "n_empresas": 762,
+      "amount_eur_sum": -1427871632.85,
+      "n_no_vencidas": 25437,
+      "n_vencidas": 96547
+    },
+    "coincide": true
+  },
+  "limitaciones": [
+    "point-in-time por fechas de emision/vencimiento, no por registro certificado (la fuente no trae fecha de importacion ni de cancelacion)",
+    "universo sin filtro de document_type_norm (unico que reproduce el censo del coordinador); difiere de debt_obligation.py",
+    "el calendario publica todas las fechas esperadas, no se trunca a 90 d",
+    "no se reutiliza el shrinkage de payment_delay_v2.py (ratio de severidad en EUR, no mediana de retraso en dias)"
+  ]
+}
