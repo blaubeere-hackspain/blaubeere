@@ -1,0 +1,594 @@
+{
+  "capa": "healthscore_v4 · factor de riesgo FX · F2 exposicion empresa-mes",
+  "grano": "(company_id, month), meses cerrados",
+  "filas": 30864,
+  "meses": 24,
+  "empresas_grid": 1286,
+  "empresas_con_cartera_viva_alguna_vez": 708,
+  "criterio_universo": "flow_side='inflow', document_type_norm='invoice', status_norm<>'cancel', issuance_date_ok <= fin de m (cartera viva de cobros: incluye lo aun no vencido) y NOT (status_norm='paid' AND payment_date_ok <= fin de m). payment_date_ok solo es fecha REAL si status_norm='paid'; en otro estado es fecha PREVISTA y se ignora (criterio status-aware).",
+  "filtro_emision": "emision frente a vencimiento: esta capa filtra por issuance_date_ok <= fin de m (la cartera viva incluye lo aun no vencido); debt_obligation.py filtra due_date_ok <= fin de m porque mide obligacion vencida. El criterio de impago status-aware es identico. `n_emitidas_no_vencidas` mide el subconjunto vivo, emitido y aun no vencido, en cada corte.",
+  "criterio_confidence": "ninguna=sin cartera viva de cobros en el corte; baja=facturas no valorables >=50% de la cartera (en numero); media=algun hueco de valoracion, o cartera valorable fina (<3 facturas o <2000 EUR), o divisa desconocida; alta=sin huecos y cartera gruesa",
+  "motivo_importe": "amount (nominal emitido) y NO pending_amount: pending_amount es el saldo TERMINAL del snapshot (=0 si la factura ya esta pagada) y usarlo en cortes pasados pondria a cero la exposicion de todo lo cobrado despues del corte (fuga). Medido: las 7.016 facturas terminal-paid vivas en el ultimo corte tienen pending_amount=0. amount es cota superior si hubo cobro parcial.",
+  "confidence_reparto": {
+    "ninguna": 19065,
+    "baja": 1450,
+    "media": 2630,
+    "alta": 7719
+  },
+  "titular_ultimo_corte": {
+    "corte": "2026-08-01",
+    "empresas_con_cartera": 667,
+    "n_facturas_vivas": 104577,
+    "n_eur": 90033,
+    "importe_eur": 1245924584.51,
+    "n_no_eur_valorable": 1534,
+    "importe_no_eur_valorable_eur": 42696674.96,
+    "n_no_valorable": 13010,
+    "n_divisa_desconocida": 0,
+    "divisas_valorables": [
+      "AED",
+      "BRL",
+      "CAD",
+      "CHF",
+      "CLP",
+      "COP",
+      "CZK",
+      "DKK",
+      "GBP",
+      "HUF",
+      "JPY",
+      "MXN",
+      "NOK",
+      "PEN",
+      "PLN",
+      "SGD",
+      "USD"
+    ],
+    "n_divisas_valorables": 17,
+    "divisas_no_valorables": [
+      "AED",
+      "ARS",
+      "AUD",
+      "BRL",
+      "CAD",
+      "CHF",
+      "CLP",
+      "COP",
+      "DKK",
+      "GBP",
+      "HKD",
+      "INR",
+      "ISK",
+      "JPY",
+      "MAD",
+      "MXN",
+      "MZN",
+      "NAD",
+      "NZD",
+      "PEN",
+      "SEK",
+      "SGD",
+      "USD",
+      "ZAR"
+    ],
+    "n_divisas_no_valorables": 24,
+    "n_no_eur_total": 14544,
+    "pct_no_eur_valorable": 0.1055,
+    "n_emitidas_no_vencidas": 16460,
+    "por_divisa": {
+      "AED": {
+        "n_facturas": 18,
+        "importe_original": 8531279.63,
+        "importe_eur": 12939.84,
+        "n_no_valorable": 11,
+        "importe_no_valorable_original": 8476273.87
+      },
+      "ARS": {
+        "n_facturas": 552,
+        "importe_original": 3825020313.25,
+        "importe_eur": 0.0,
+        "n_no_valorable": 552,
+        "importe_no_valorable_original": 3825020313.25
+      },
+      "AUD": {
+        "n_facturas": 448,
+        "importe_original": 7761444.72,
+        "importe_eur": 0.0,
+        "n_no_valorable": 448,
+        "importe_no_valorable_original": 7761444.72
+      },
+      "BRL": {
+        "n_facturas": 702,
+        "importe_original": 84443266.36,
+        "importe_eur": 184971.58,
+        "n_no_valorable": 694,
+        "importe_no_valorable_original": 83288921.72
+      },
+      "CAD": {
+        "n_facturas": 681,
+        "importe_original": 8237130.35,
+        "importe_eur": 855419.58,
+        "n_no_valorable": 653,
+        "importe_no_valorable_original": 6877820.52
+      },
+      "CHF": {
+        "n_facturas": 5,
+        "importe_original": 43889.68,
+        "importe_eur": 2150.54,
+        "n_no_valorable": 4,
+        "importe_no_valorable_original": 41889.68
+      },
+      "CLP": {
+        "n_facturas": 523,
+        "importe_original": 3733854894.0,
+        "importe_eur": 32660.48,
+        "n_no_valorable": 522,
+        "importe_no_valorable_original": 3698736064.0
+      },
+      "COP": {
+        "n_facturas": 589,
+        "importe_original": 13105122863.5,
+        "importe_eur": 50382.57,
+        "n_no_valorable": 587,
+        "importe_no_valorable_original": 12883953587.66
+      },
+      "CZK": {
+        "n_facturas": 3,
+        "importe_original": 3570.63,
+        "importe_eur": 146.46,
+        "n_no_valorable": 0,
+        "importe_no_valorable_original": 0.0
+      },
+      "DKK": {
+        "n_facturas": 411,
+        "importe_original": 8793355.76,
+        "importe_eur": 154753.35,
+        "n_no_valorable": 408,
+        "importe_no_valorable_original": 7638892.22
+      },
+      "EUR": {
+        "n_facturas": 90033,
+        "importe_original": 1245924584.51,
+        "importe_eur": 1245924584.51,
+        "n_no_valorable": 0,
+        "importe_no_valorable_original": 0.0
+      },
+      "GBP": {
+        "n_facturas": 3212,
+        "importe_original": 131160104.47,
+        "importe_eur": 3845118.34,
+        "n_no_valorable": 3148,
+        "importe_no_valorable_original": 127842368.26
+      },
+      "HKD": {
+        "n_facturas": 14,
+        "importe_original": 111638.31,
+        "importe_eur": 0.0,
+        "n_no_valorable": 14,
+        "importe_no_valorable_original": 111638.31
+      },
+      "HUF": {
+        "n_facturas": 3,
+        "importe_original": 24538.49,
+        "importe_eur": 5968.85,
+        "n_no_valorable": 0,
+        "importe_no_valorable_original": 0.0
+      },
+      "INR": {
+        "n_facturas": 5,
+        "importe_original": 36402116.8,
+        "importe_eur": 0.0,
+        "n_no_valorable": 5,
+        "importe_no_valorable_original": 36402116.8
+      },
+      "ISK": {
+        "n_facturas": 4,
+        "importe_original": 7049264.0,
+        "importe_eur": 0.0,
+        "n_no_valorable": 4,
+        "importe_no_valorable_original": 7049264.0
+      },
+      "JPY": {
+        "n_facturas": 8,
+        "importe_original": 1804242.01,
+        "importe_eur": 1914.58,
+        "n_no_valorable": 4,
+        "importe_no_valorable_original": 1474000.0
+      },
+      "MAD": {
+        "n_facturas": 3,
+        "importe_original": 525565.9,
+        "importe_eur": 0.0,
+        "n_no_valorable": 3,
+        "importe_no_valorable_original": 525565.9
+      },
+      "MXN": {
+        "n_facturas": 441,
+        "importe_original": 119662366.68,
+        "importe_eur": 135564.64,
+        "n_no_valorable": 431,
+        "importe_no_valorable_original": 116778098.12
+      },
+      "MZN": {
+        "n_facturas": 14,
+        "importe_original": 2095159.06,
+        "importe_eur": 0.0,
+        "n_no_valorable": 14,
+        "importe_no_valorable_original": 2095159.06
+      },
+      "NAD": {
+        "n_facturas": 22,
+        "importe_original": 1799282.61,
+        "importe_eur": 0.0,
+        "n_no_valorable": 22,
+        "importe_no_valorable_original": 1799282.61
+      },
+      "NOK": {
+        "n_facturas": 7,
+        "importe_original": 19019489.12,
+        "importe_eur": 1747820.94,
+        "n_no_valorable": 0,
+        "importe_no_valorable_original": 0.0
+      },
+      "NZD": {
+        "n_facturas": 83,
+        "importe_original": 768941.15,
+        "importe_eur": 0.0,
+        "n_no_valorable": 83,
+        "importe_no_valorable_original": 768941.15
+      },
+      "PEN": {
+        "n_facturas": 433,
+        "importe_original": 873205.57,
+        "importe_eur": 29788.42,
+        "n_no_valorable": 432,
+        "importe_no_valorable_original": 755243.42
+      },
+      "PLN": {
+        "n_facturas": 4,
+        "importe_original": 48204.95,
+        "importe_eur": 11289.22,
+        "n_no_valorable": 0,
+        "importe_no_valorable_original": 0.0
+      },
+      "SEK": {
+        "n_facturas": 9,
+        "importe_original": 215806.77,
+        "importe_eur": 0.0,
+        "n_no_valorable": 9,
+        "importe_no_valorable_original": 215806.77
+      },
+      "SGD": {
+        "n_facturas": 127,
+        "importe_original": 2377289.24,
+        "importe_eur": 655104.29,
+        "n_no_valorable": 115,
+        "importe_no_valorable_original": 1409133.17
+      },
+      "USD": {
+        "n_facturas": 6220,
+        "importe_original": 304469390.96,
+        "importe_eur": 34970681.31,
+        "n_no_valorable": 4844,
+        "importe_no_valorable_original": 264420282.72
+      },
+      "ZAR": {
+        "n_facturas": 3,
+        "importe_original": 16927.2,
+        "importe_eur": 0.0,
+        "n_no_valorable": 3,
+        "importe_no_valorable_original": 16927.2
+      }
+    }
+  },
+  "serie_mensual": [
+    {
+      "month": "2024-09-01",
+      "empresas_con_cartera": 234,
+      "n_facturas_vivas": 2914,
+      "n_eur": 2020,
+      "importe_eur": 16323790.65,
+      "n_no_eur_valorable": 43,
+      "importe_no_eur_valorable_eur": 4391083.8,
+      "n_no_valorable": 851,
+      "n_divisa_desconocida": 0,
+      "n_emitidas_no_vencidas": 1884
+    },
+    {
+      "month": "2024-10-01",
+      "empresas_con_cartera": 270,
+      "n_facturas_vivas": 5447,
+      "n_eur": 3967,
+      "importe_eur": 32586625.16,
+      "n_no_eur_valorable": 64,
+      "importe_no_eur_valorable_eur": 6659584.44,
+      "n_no_valorable": 1416,
+      "n_divisa_desconocida": 0,
+      "n_emitidas_no_vencidas": 2950
+    },
+    {
+      "month": "2024-11-01",
+      "empresas_con_cartera": 301,
+      "n_facturas_vivas": 7847,
+      "n_eur": 5832,
+      "importe_eur": 80995221.08,
+      "n_no_eur_valorable": 79,
+      "importe_no_eur_valorable_eur": 6580877.1,
+      "n_no_valorable": 1936,
+      "n_divisa_desconocida": 0,
+      "n_emitidas_no_vencidas": 3760
+    },
+    {
+      "month": "2024-12-01",
+      "empresas_con_cartera": 344,
+      "n_facturas_vivas": 11086,
+      "n_eur": 8324,
+      "importe_eur": 111541250.8,
+      "n_no_eur_valorable": 122,
+      "importe_no_eur_valorable_eur": 7249668.65,
+      "n_no_valorable": 2640,
+      "n_divisa_desconocida": 0,
+      "n_emitidas_no_vencidas": 4526
+    },
+    {
+      "month": "2025-01-01",
+      "empresas_con_cartera": 381,
+      "n_facturas_vivas": 14327,
+      "n_eur": 10879,
+      "importe_eur": 131239237.51,
+      "n_no_eur_valorable": 215,
+      "importe_no_eur_valorable_eur": 7787596.63,
+      "n_no_valorable": 3233,
+      "n_divisa_desconocida": 0,
+      "n_emitidas_no_vencidas": 5043
+    },
+    {
+      "month": "2025-02-01",
+      "empresas_con_cartera": 391,
+      "n_facturas_vivas": 17217,
+      "n_eur": 13514,
+      "importe_eur": 150105902.29,
+      "n_no_eur_valorable": 238,
+      "importe_no_eur_valorable_eur": 7961666.54,
+      "n_no_valorable": 3465,
+      "n_divisa_desconocida": 0,
+      "n_emitidas_no_vencidas": 5425
+    },
+    {
+      "month": "2025-03-01",
+      "empresas_con_cartera": 400,
+      "n_facturas_vivas": 20149,
+      "n_eur": 15853,
+      "importe_eur": 205811826.53,
+      "n_no_eur_valorable": 272,
+      "importe_no_eur_valorable_eur": 10798094.12,
+      "n_no_valorable": 4024,
+      "n_divisa_desconocida": 0,
+      "n_emitidas_no_vencidas": 4772
+    },
+    {
+      "month": "2025-04-01",
+      "empresas_con_cartera": 419,
+      "n_facturas_vivas": 22876,
+      "n_eur": 18453,
+      "importe_eur": 279061175.89,
+      "n_no_eur_valorable": 292,
+      "importe_no_eur_valorable_eur": 11771652.02,
+      "n_no_valorable": 4131,
+      "n_divisa_desconocida": 0,
+      "n_emitidas_no_vencidas": 5627
+    },
+    {
+      "month": "2025-05-01",
+      "empresas_con_cartera": 444,
+      "n_facturas_vivas": 26696,
+      "n_eur": 21896,
+      "importe_eur": 358546532.67,
+      "n_no_eur_valorable": 379,
+      "importe_no_eur_valorable_eur": 12780160.71,
+      "n_no_valorable": 4421,
+      "n_divisa_desconocida": 0,
+      "n_emitidas_no_vencidas": 6773
+    },
+    {
+      "month": "2025-06-01",
+      "empresas_con_cartera": 456,
+      "n_facturas_vivas": 30703,
+      "n_eur": 25332,
+      "importe_eur": 424707595.77,
+      "n_no_eur_valorable": 405,
+      "importe_no_eur_valorable_eur": 11188909.63,
+      "n_no_valorable": 4966,
+      "n_divisa_desconocida": 0,
+      "n_emitidas_no_vencidas": 7683
+    },
+    {
+      "month": "2025-07-01",
+      "empresas_con_cartera": 477,
+      "n_facturas_vivas": 35236,
+      "n_eur": 29014,
+      "importe_eur": 478770214.25,
+      "n_no_eur_valorable": 522,
+      "importe_no_eur_valorable_eur": 11718479.27,
+      "n_no_valorable": 5700,
+      "n_divisa_desconocida": 0,
+      "n_emitidas_no_vencidas": 8037
+    },
+    {
+      "month": "2025-08-01",
+      "empresas_con_cartera": 489,
+      "n_facturas_vivas": 37674,
+      "n_eur": 30639,
+      "importe_eur": 488926629.06,
+      "n_no_eur_valorable": 588,
+      "importe_no_eur_valorable_eur": 12747050.16,
+      "n_no_valorable": 6447,
+      "n_divisa_desconocida": 0,
+      "n_emitidas_no_vencidas": 6602
+    },
+    {
+      "month": "2025-09-01",
+      "empresas_con_cartera": 505,
+      "n_facturas_vivas": 40349,
+      "n_eur": 33034,
+      "importe_eur": 538970382.81,
+      "n_no_eur_valorable": 675,
+      "importe_no_eur_valorable_eur": 13300016.68,
+      "n_no_valorable": 6640,
+      "n_divisa_desconocida": 0,
+      "n_emitidas_no_vencidas": 6396
+    },
+    {
+      "month": "2025-10-01",
+      "empresas_con_cartera": 525,
+      "n_facturas_vivas": 43197,
+      "n_eur": 35568,
+      "importe_eur": 522333229.2,
+      "n_no_eur_valorable": 736,
+      "importe_no_eur_valorable_eur": 12603844.66,
+      "n_no_valorable": 6893,
+      "n_divisa_desconocida": 0,
+      "n_emitidas_no_vencidas": 7293
+    },
+    {
+      "month": "2025-11-01",
+      "empresas_con_cartera": 537,
+      "n_facturas_vivas": 45502,
+      "n_eur": 37508,
+      "importe_eur": 563717459.37,
+      "n_no_eur_valorable": 813,
+      "importe_no_eur_valorable_eur": 13873367.18,
+      "n_no_valorable": 7181,
+      "n_divisa_desconocida": 0,
+      "n_emitidas_no_vencidas": 6852
+    },
+    {
+      "month": "2025-12-01",
+      "empresas_con_cartera": 552,
+      "n_facturas_vivas": 50833,
+      "n_eur": 42154,
+      "importe_eur": 766058985.56,
+      "n_no_eur_valorable": 890,
+      "importe_no_eur_valorable_eur": 16341307.45,
+      "n_no_valorable": 7789,
+      "n_divisa_desconocida": 0,
+      "n_emitidas_no_vencidas": 9179
+    },
+    {
+      "month": "2026-01-01",
+      "empresas_con_cartera": 595,
+      "n_facturas_vivas": 54071,
+      "n_eur": 44972,
+      "importe_eur": 768249114.31,
+      "n_no_eur_valorable": 969,
+      "importe_no_eur_valorable_eur": 17357422.73,
+      "n_no_valorable": 8130,
+      "n_divisa_desconocida": 0,
+      "n_emitidas_no_vencidas": 8313
+    },
+    {
+      "month": "2026-02-01",
+      "empresas_con_cartera": 595,
+      "n_facturas_vivas": 58940,
+      "n_eur": 49516,
+      "importe_eur": 804234448.39,
+      "n_no_eur_valorable": 1037,
+      "importe_no_eur_valorable_eur": 19829159.41,
+      "n_no_valorable": 8387,
+      "n_divisa_desconocida": 0,
+      "n_emitidas_no_vencidas": 10659
+    },
+    {
+      "month": "2026-03-01",
+      "empresas_con_cartera": 616,
+      "n_facturas_vivas": 64131,
+      "n_eur": 54255,
+      "importe_eur": 865871625.77,
+      "n_no_eur_valorable": 1103,
+      "importe_no_eur_valorable_eur": 25320836.85,
+      "n_no_valorable": 8773,
+      "n_divisa_desconocida": 0,
+      "n_emitidas_no_vencidas": 11850
+    },
+    {
+      "month": "2026-04-01",
+      "empresas_con_cartera": 639,
+      "n_facturas_vivas": 71285,
+      "n_eur": 60370,
+      "importe_eur": 940370744.61,
+      "n_no_eur_valorable": 1164,
+      "importe_no_eur_valorable_eur": 29256623.29,
+      "n_no_valorable": 9751,
+      "n_divisa_desconocida": 0,
+      "n_emitidas_no_vencidas": 13832
+    },
+    {
+      "month": "2026-05-01",
+      "empresas_con_cartera": 642,
+      "n_facturas_vivas": 80676,
+      "n_eur": 68794,
+      "importe_eur": 983186633.26,
+      "n_no_eur_valorable": 1273,
+      "importe_no_eur_valorable_eur": 33649935.91,
+      "n_no_valorable": 10609,
+      "n_divisa_desconocida": 0,
+      "n_emitidas_no_vencidas": 14382
+    },
+    {
+      "month": "2026-06-01",
+      "empresas_con_cartera": 658,
+      "n_facturas_vivas": 91604,
+      "n_eur": 78394,
+      "importe_eur": 1103038154.92,
+      "n_no_eur_valorable": 1369,
+      "importe_no_eur_valorable_eur": 39685381.66,
+      "n_no_valorable": 11841,
+      "n_divisa_desconocida": 0,
+      "n_emitidas_no_vencidas": 18086
+    },
+    {
+      "month": "2026-07-01",
+      "empresas_con_cartera": 662,
+      "n_facturas_vivas": 99455,
+      "n_eur": 85115,
+      "importe_eur": 1192348762.96,
+      "n_no_eur_valorable": 1470,
+      "importe_no_eur_valorable_eur": 42902799.59,
+      "n_no_valorable": 12870,
+      "n_divisa_desconocida": 0,
+      "n_emitidas_no_vencidas": 19202
+    },
+    {
+      "month": "2026-08-01",
+      "empresas_con_cartera": 667,
+      "n_facturas_vivas": 104577,
+      "n_eur": 90033,
+      "importe_eur": 1245924584.51,
+      "n_no_eur_valorable": 1534,
+      "importe_no_eur_valorable_eur": 42696674.96,
+      "n_no_valorable": 13010,
+      "n_divisa_desconocida": 0,
+      "n_emitidas_no_vencidas": 16460
+    }
+  ],
+  "cruce_evaluables_v4": {
+    "corte": "2026-08-01",
+    "evaluables_v4": 957,
+    "evaluables_con_cartera_en_el_corte": 614,
+    "evaluables_con_exposicion_no_eur": 76,
+    "evaluables_con_exposicion_no_valorable": 54,
+    "evaluables_con_cartera_alguna_vez": 650,
+    "evaluables_con_exposicion_no_eur_alguna_vez": 91,
+    "evaluables_con_exposicion_no_valorable_alguna_vez": 61,
+    "nota": "no-EUR = factura valorable en divisa distinta de EUR; no valorable = factura viva sin amount_eur conocido o con fx_ambiguous. Cruce contra reports/score_v4/assessments.parquet con health_score no nulo y excluida=false."
+  },
+  "agujeros_valoracion": {
+    "empresa_mes_con_no_valorables": 1721,
+    "facturas_no_valorables_acumuladas": 155104,
+    "facturas_fx_ambiguous_acumuladas": 374,
+    "nota": "sumas acumuladas sobre cortes point-in-time: una factura cuenta en todos los cortes desde su emision hasta su cobro. fx_ambiguous invalida la conversion reportada de una divisa no-EUR (tipo 1 contradictorio); la identidad EUR no se invalida."
+  },
+  "limitacion_residual": "La fuente no tiene fecha de importacion: no puede demostrarse que una factura estuviera REGISTRADA en el sistema en el corte m, solo que su emision era anterior a m. Medida point-in-time por emision, no por disponibilidad de registro certificada.",
+  "fuente": "clean/invoices.parquet (document_type_norm='invoice', flow_side='inflow') + reports/score_v4/assessments.parquet (cruce)",
+  "no_consumido": "tipos de cambio, xray/fx_index.py, marts de stock reconstruido: NO entran en ninguna cifra publicada (los tipos son de F1; la union es de F3)"
+}
