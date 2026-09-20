@@ -29,6 +29,8 @@ jobs:
   deploy:
     runs-on: ubuntu-latest
     timeout-minutes: 45
+    env:
+      JIO_STATE_DIR: ${{ runner.temp }}/jio
     steps:
       - uses: actions/checkout@v6
         with:
@@ -50,16 +52,12 @@ jobs:
           curl -fsSL https://github.com/jiovannish/client/releases/download/v0.3.1/install.sh -o "$RUNNER_TEMP/install-jio.sh"
           JIO_INSTALL_DIR="$RUNNER_TEMP/bin" sh "$RUNNER_TEMP/install-jio.sh"
           echo "$RUNNER_TEMP/bin" >> "$GITHUB_PATH"
-      - name: Deploy and verify production
-        id: deploy
-        if: ${{ !inputs.access_only }}
+      - name: Prepare Jio session
         env:
           JIO_API_KEY: ${{ secrets.JIO_API_KEY }}
           JIO_SSH_KEY: ${{ secrets.JIO_SSH_KEY }}
           JIO_ENDPOINT: ${{ vars.JIO_ENDPOINT }}
           JIO_VM_ID: ${{ vars.JIO_VM_ID }}
-          JIO_STATE_DIR: ${{ runner.temp }}/jio
-          GIT_REF: ${{ github.sha }}
         run: |
           set -Eeuo pipefail
           umask 077
@@ -72,6 +70,17 @@ jobs:
           printf 'medium\n' > "$session/requested-size"
           # Jio pins the current host key through its authenticated API.
           unset JIO_SSH_KEY
+          [[ "$(jio usage)" == "Account: blaubeere ("* ]] || { echo 'Production access requires the blaubeere Jio account' >&2; exit 1; }
+      - name: Deploy and verify production
+        id: deploy
+        if: ${{ !inputs.access_only }}
+        env:
+          JIO_API_KEY: ${{ secrets.JIO_API_KEY }}
+          JIO_ENDPOINT: ${{ vars.JIO_ENDPOINT }}
+          JIO_VM_ID: ${{ vars.JIO_VM_ID }}
+          GIT_REF: ${{ github.sha }}
+        run: |
+          [[ -n "$JIO_ENDPOINT" ]] || unset JIO_ENDPOINT
           bash deploy/jio.sh
       - name: Grant requested company access
         if: ${{ success() && github.event_name == 'workflow_dispatch' && inputs.grant_email != '' }}
@@ -88,7 +97,7 @@ jobs:
           email, companies = os.environ['GRANT_EMAIL'], os.environ['GRANT_COMPANIES'].split(',')
           assert re.fullmatch(r'[A-Za-z0-9._+%-]+@[A-Za-z0-9.-]+', email), 'Invalid email'
           assert 1 <= len(companies) <= 20 and all(re.fullmatch(r'COMP_[0-9]{4}', c) for c in companies), 'Invalid company IDs'
-          command = 'set -a; . /var/lib/blaubeere/runtime.env; exec /var/lib/blaubeere/current/bin/blaubeere-api grant-company-access ' + shlex.join([email, *companies])
+          command = 'set -ae; cd /var/lib/blaubeere/data; . /var/lib/blaubeere/runtime.env; exec /var/lib/blaubeere/current/bin/blaubeere-api grant-company-access ' + shlex.join([email, *companies])
           subprocess.run(['jio', 'exec', os.environ['JIO_VM_ID'], 'sudo -n -u blaubeere bash -c ' + shlex.quote(command), '--timeout', '30'], check=True)
           PY
       - name: Landing URL
