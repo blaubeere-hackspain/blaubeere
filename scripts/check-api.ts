@@ -53,7 +53,7 @@ for (const company of accessibleCompanies.filter((company: {data_mode: string}) 
   assert.deepEqual(rest.metrics, health.result.structuredContent.metrics);
 }
 assert.ok((await rpc("tools/call", { name: "get_company_health", arguments: { company_id: "NOT_AUTHORISED" } })).error);
-const resource = await rpc("resources/read", { uri: "ui://blau/company-picker-v1.html" });
+const resource = await rpc("resources/read", { uri: "ui://blau/company-picker-v3.html" });
 assert.equal(resource.result.contents[0].mimeType, "text/html+skybridge");
 assert.ok((await rpc("tools/call", { name: "get_cash_outlook", arguments: { company_id: "NOT_AUTHORISED" } })).error);
 const goal = { metric: "min_cash", target_cents: 10000000, cash_floor_cents: 10000000, deadline: "2026-11-29", max_collection_days: 14, max_spend_reduction_pct: 10, max_funding_cents: 250000000, max_growth_pct: 0, business: null };

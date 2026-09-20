@@ -25,7 +25,7 @@ use serde::Deserialize;
 use serde_json::{Value, json};
 use std::sync::Arc;
 
-const COMPANY_PICKER: &str = "ui://blau/company-picker-v1.html";
+const COMPANY_PICKER: &str = "ui://blau/company-picker-v3.html";
 
 #[derive(Clone)]
 struct Principal(String);
