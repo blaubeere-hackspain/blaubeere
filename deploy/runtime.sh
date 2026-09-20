@@ -68,6 +68,10 @@ for name in app landing; do
   sudo -n install -d -m 755 -o blaubeere -g blaubeere "$image_cache"
   sudo -n -u blaubeere test -w "$image_cache"
 done
+# Releases are extracted into new directories while sharing Cargo's target cache.
+# Cached dep-info can still point at a retained old release. Rebuild our two crates;
+# keep third-party dependencies cached.
+cargo clean --release -p blaubeere-api -p blaubeere-mcp
 cargo test --locked --release --workspace
 cargo build --locked --release --workspace
 mkdir bin
