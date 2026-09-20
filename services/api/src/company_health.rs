@@ -328,10 +328,8 @@ mod tests {
 
     #[test]
     fn summaries_preserve_evidence_dates_currency_and_unknowns() {
-        let fixture: Value = serde_json::from_str(include_str!(
-            "../../../apps/landing/data/product-preview.json"
-        ))
-        .unwrap();
+        let fixture: Value =
+            serde_json::from_str(include_str!("../../../fixtures/company-health.json")).unwrap();
         let mut row = fixture["record"].clone();
         let mut previous = row.clone();
         previous["month"] = json!("2026-07-01");

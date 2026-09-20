@@ -455,10 +455,8 @@ mod tests {
             .await
             .unwrap();
         sqlx::raw_sql("CREATE TABLE dataset_companies(id TEXT PRIMARY KEY, group_id TEXT, name TEXT); CREATE TABLE parquet_records(source TEXT, record_key TEXT, company_id TEXT, period TEXT, payload TEXT); CREATE TABLE dataset_metadata(payload TEXT); INSERT INTO dataset_metadata VALUES ('{}'); INSERT INTO dataset_companies VALUES ('COMP_0006','GROUP_TEST','COMP_0006'),('COMP_PRIVATE','GROUP_PRIVATE','COMP_PRIVATE');").execute(&pool).await.unwrap();
-        let mut fixture: Value = serde_json::from_str(include_str!(
-            "../../../apps/landing/data/product-preview.json"
-        ))
-        .unwrap();
+        let mut fixture: Value =
+            serde_json::from_str(include_str!("../../../fixtures/company-health.json")).unwrap();
         fixture["record"]["confidence"] = json!("alta");
         fixture["record"]["beta_fx"] = json!(0.05);
         fixture["record"]["indice_fx_aplicado"] = json!(0.0);

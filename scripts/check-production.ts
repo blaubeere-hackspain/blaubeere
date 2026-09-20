@@ -61,7 +61,8 @@ assert.equal((await fetch(`${app}/api/demo/companies/DEMO_001/assessment`)).stat
 const homepage = await (await read(landing)).text();
 assert.ok(homepage.includes(app), "Landing must link to the deployed app");
 for (const title of ["Health score", "Cash flow", "Overdue collections", "Overdue payments", "Defaulting"]) assert.ok(homepage.includes(title), `Landing includes the actual dashboard panel: ${title}`);
-assert.ok(homepage.includes("COMP 6") && homepage.includes("35,572.28") && homepage.includes("15,564.58") && !homepage.includes("Mediterránea Supply"), "Landing uses the published COMP_0006 snapshot instead of the old mock");
+assert.ok(homepage.includes("Blau, Corp.") && homepage.includes("75,937.41") && homepage.includes("112,571.69") && homepage.includes("57.4") && !homepage.includes("COMP 6"), "Landing uses the published Blau snapshot instead of the old mock");
+assert.ok(homepage.includes(`${app}/demo?company=COMP_0318`) && homepage.includes('aria-controls="health cash"'), "Landing links to Blau and offers the dashboard forecast toggle");
 const pricing = await (await read(`${landing}/pricing`)).text();
 assert.ok(pricing.includes("$99") && pricing.includes("Enterprise") && pricing.includes("Contact sales"), "Pricing must display both plans and the sales CTA");
 const images = new Set([...homepage.matchAll(/<img[^>]+src="([^"]+)"/g)].map(match => match[1]));
