@@ -180,7 +180,7 @@ assert.ok(missingDefaulting.includes("Insufficient payment evidence") && !missin
 assert.ok(!missingDefaulting.includes("Currency risk") && !missingDefaulting.includes("fx-risk-title"), "A row without the FX layer renders no currency-risk half");
 const fxRow = { ...cashRecord, indice_fx: 0.32, indice_fx_aplicado: 0.32, penalizacion_fx_puntos: 1.21, beta_fx: 0.05 };
 const fxMarkup = renderToStaticMarkup(createElement(DefaultingCard, { row: fxRow }));
-assert.ok(fxMarkup.includes("Currency risk") && fxMarkup.includes("32%") && fxMarkup.includes("width:32%") && fxMarkup.includes("1.21 points") && fxMarkup.includes("Maximum reduction: 5%"), "Currency risk shows the observed index, its amber bar and the score reduction");
+assert.ok(fxMarkup.includes("Currency risk") && fxMarkup.includes("32%") && fxMarkup.includes("width:32%") && fxMarkup.includes("1.21 points"), "Currency risk shows the observed index, its amber bar and the score reduction");
 assert.ok(!fxMarkup.includes("NaN") && !fxMarkup.includes("undefined"));
 const fxIntervalRow = { ...cashRecord, indice_fx: null, indice_fx_min: 0.5, indice_es_intervalo: true, indice_fx_aplicado: 0.5 };
 const fxIntervalMarkup = renderToStaticMarkup(createElement(DefaultingCard, { row: fxIntervalRow }));
@@ -194,7 +194,7 @@ const fxZeroRow = { ...cashRecord, indice_fx: 0 };
 const fxZeroMarkup = renderToStaticMarkup(createElement(DefaultingCard, { row: fxZeroRow }));
 assert.ok(fxZeroMarkup.includes(">0%<") && !fxZeroMarkup.includes("FX evidence unavailable"), "A known zero FX index is shown as 0%, not as missing evidence");
 assert.ok(!fxZeroMarkup.includes("NaN") && !fxZeroMarkup.includes("undefined"));
-assert.ok(!fxMarkup.includes("points per unit") && fxMarkup.includes("5%") && fxMarkup.includes("Maximum reduction: 5%"), "The concise FX footer preserves the maximum percentage reduction, never points per index unit");
+assert.ok(!fxMarkup.includes("Maximum reduction:"), "Currency risk omits the maximum-reduction footer");
 assert.equal(modelReason("castigo_fx_indice_abc"), "castigo_fx_indice_abc", "A malformed FX reason code falls through to the raw code, never NaN");
 assert.ok(!modelReason("castigo_fx_indice_0.5000").includes("NaN") && modelReason("castigo_fx_indice_0.5000").includes("50%"), "A well-formed FX reason code stays readable");
 const fxIntervalUnknownRow = { ...cashRecord, indice_fx: null, indice_fx_min: 0.5, indice_es_intervalo: true, indice_fx_aplicado: null, penalizacion_fx_puntos: null };

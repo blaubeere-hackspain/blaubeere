@@ -81,7 +81,7 @@ export function DefaultingCard({ row }: { row: ModelRecord }) {
       <header className="financial-card-heading"><Coins size={17} aria-hidden/><div><h3 id="fx-risk-title">Currency risk</h3><p>Foreign-currency receivables</p></div></header>
       <div className="defaulting-summary"><span>FX risk index</span><strong className="num">{formatIndex(fxHeadline)}</strong>{fxHeadline !== null && <div className="fx-track" aria-hidden><GrowingBar width={`${fxHeadline * 100}%`}/></div>}{fxHeadline === null && <p>FX evidence unavailable; no adjustment.</p>}</div>
       <dl className="defaulting-bars"><div><dt>Applied index</dt><dd className="num">{formatIndex(row.indice_fx_aplicado)}</dd></div><div><dt>Score reduction</dt><dd className="num">{formatFxPoints(row.penalizacion_fx_puntos)}</dd></div></dl>
-      <footer className="financial-card-note">{row.indice_es_intervalo && <p>Incomplete FX coverage; minimum compatible penalty applied.</p>}{row.beta_fx != null && <p>Maximum reduction: {percentage(row.beta_fx)} of the score.</p>}</footer>
+      {row.indice_es_intervalo && <footer className="financial-card-note"><p>Incomplete FX coverage; minimum compatible penalty applied.</p></footer>}
     </section>}
   </section>;
 }
