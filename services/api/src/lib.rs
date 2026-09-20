@@ -1,4 +1,5 @@
 pub mod auth;
+pub mod company_health;
 mod daily_cash;
 pub mod dataset;
 pub mod dataset_import;
@@ -186,6 +187,7 @@ pub fn router(state: AppState) -> Router {
         .route("/api/connections/{id}/revoke", post(oauth::disconnect))
         .route("/api/companies", get(finance::companies))
         .route("/api/companies/{id}/assessment", get(finance::assessment))
+        .route("/api/companies/{id}/health", get(company_health::endpoint))
         .route("/api/companies/{id}/plans", post(finance::plans))
         .layer(DefaultBodyLimit::max(32 * 1024))
         .layer(middleware::from_fn_with_state(

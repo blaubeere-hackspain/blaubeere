@@ -124,6 +124,7 @@ pub async fn assessment(state: &AppState, id: &str) -> ApiResult<Option<Value>> 
             .map(decode)
             .transpose()?
             .unwrap_or(Value::Null);
+        row["health_status"] = crate::company_health::status(&row, records.last());
         records.push(row);
     }
     let metadata: String = sqlx::query_scalar("SELECT payload FROM dataset_metadata")
@@ -151,6 +152,49 @@ pub async fn grant_team_access(state: &AppState, email: &str) -> anyhow::Result<
     let ids: Vec<String> = sqlx::query_scalar("SELECT id FROM dataset_companies")
         .fetch_all(pool)
         .await?;
+    let mut tx = state.db.begin().await?;
+    for id in ids {
+        sqlx::query("INSERT OR IGNORE INTO memberships(user_id,company_id) VALUES (?,?)")
+            .bind(&user)
+            .bind(id)
+            .execute(&mut *tx)
+            .await?;
+    }
+    tx.commit().await?;
+    Ok(())
+}
+
+/// Administrative CLI only: add explicitly selected companies to an existing account.
+pub async fn grant_company_access(
+    state: &AppState,
+    email: &str,
+    ids: &[&str],
+) -> anyhow::Result<()> {
+    anyhow::ensure!(!ids.is_empty(), "Select at least one company");
+    let pool = state
+        .dataset
+        .as_ref()
+        .ok_or_else(|| anyhow::anyhow!("Dataset is not configured"))?;
+    let email = email.trim().to_lowercase();
+    anyhow::ensure!(
+        !email.ends_with("@demo.blaubeere.local"),
+        "Cannot grant private access to a demo visitor"
+    );
+    let user: Option<String> = sqlx::query_scalar("SELECT id FROM users WHERE email=?")
+        .bind(&email)
+        .fetch_optional(&state.db)
+        .await?;
+    let user = user.ok_or_else(|| {
+        anyhow::anyhow!("Account does not exist; create it through the sign-up page first")
+    })?;
+    for id in ids {
+        let exists: bool =
+            sqlx::query_scalar("SELECT EXISTS(SELECT 1 FROM dataset_companies WHERE id=?)")
+                .bind(id)
+                .fetch_one(pool)
+                .await?;
+        anyhow::ensure!(exists, "Company {id} is not in the imported dataset");
+    }
     let mut tx = state.db.begin().await?;
     for id in ids {
         sqlx::query("INSERT OR IGNORE INTO memberships(user_id,company_id) VALUES (?,?)")

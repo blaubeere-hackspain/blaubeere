@@ -12,6 +12,14 @@ One company dashboard and a dated health explanation page, built from published 
 
 The public demo exposes the explicitly published challenge snapshot without a session. The private dashboard shows only imported companies authorised for the signed-in identity. Neither view contains the removed hardcoded Mediterránea forecast or a mock fallback.
 
+## Company health in MCP
+
+The OAuth-protected `/mcp` endpoint exposes `get_company_health` with an exact `company_id` and optional `month` (`YYYY-MM`). It defaults to the latest month with company activity and returns the dated health state, issues, cash and payment metrics, original-currency totals, coverage and source provenance. `list_companies` lists only the signed-in account's memberships and renders a company picker in ChatGPT. Each selection is authorised again on the server.
+
+The same Rust logic supplies `GET /api/companies/{id}/health?month=YYYY-MM` and each dashboard record's `health_status`. Alerts cover a score below 40, a fall of at least 5 points from the preceding month, negative reconstructed cash, net cash outflow, overdue payments/collections and an observed debt-service shortfall. These are provisional attention rules, not calibrated credit-risk boundaries. Missing, excluded, confidence-none and degenerate scores are not treated as evidence of poor health. All issues retain their cutoff, source, units and evidence.
+
+Assign selected imported companies to an existing account through the administrative CLI, under the production runtime environment: `blaubeere-api grant-company-access EMAIL COMP_0006 COMP_0048 COMP_0176`. It validates every ID before writing, adds memberships idempotently and verifies the assigned data. The deployment workflow exposes this operation through optional manual `grant_email`, `grant_companies` and `access_only` inputs; no public administration endpoint is added. Accounts and grants persist in the existing identity SQLite database.
+
 ## Planning inputs
 
 The existing Rust planning API still supports the validated daily JSON assessment contract below. Historical monthly Parquet outputs do not establish an opening bank balance or dated future obligations, so the current company dashboard does not offer forecasts or planning from those records. Plans remain conditional calculations and never rewrite source records or saved ratings.

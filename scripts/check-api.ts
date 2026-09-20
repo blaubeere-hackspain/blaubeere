@@ -39,9 +39,22 @@ async function rpc(method: string, params: unknown) {
   return response.json();
 }
 assert.ok((await rpc("initialize", { protocolVersion: "2025-11-25", capabilities: {}, clientInfo: { name: "local-smoke", version: "1.0" } })).result);
-assert.equal((await rpc("tools/list", {})).result.tools.length, 3);
+assert.ok((await rpc("tools/list", {})).result.tools.some((tool: {name: string}) => tool.name === "get_company_health"));
 const tools = await rpc("tools/call", { name: "list_companies", arguments: {} });
-assert.equal(JSON.parse(tools.result.content[0].text)[0].id, "DEMO_001");
+const accessibleCompanies = JSON.parse(tools.result.content[0].text);
+assert.ok(accessibleCompanies.some((company: {id: string}) => company.id === "DEMO_001"));
+assert.deepEqual(tools.result.structuredContent.companies, accessibleCompanies);
+for (const company of accessibleCompanies.filter((company: {data_mode: string}) => company.data_mode === "challenge").slice(0, 3)) {
+  const health = await rpc("tools/call", { name: "get_company_health", arguments: { company_id: company.id } });
+  assert.equal(health.result.structuredContent.company.id, company.id);
+  const month = health.result.structuredContent.as_of.slice(0, 7);
+  const rest = await (await fetch(`${app}/api/companies/${company.id}/health?month=${month}`, { headers: browserHeaders })).json();
+  assert.deepEqual(rest.health, health.result.structuredContent.health, "REST and MCP use the same health and alerts");
+  assert.deepEqual(rest.metrics, health.result.structuredContent.metrics);
+}
+assert.ok((await rpc("tools/call", { name: "get_company_health", arguments: { company_id: "NOT_AUTHORISED" } })).error);
+const resource = await rpc("resources/read", { uri: "ui://blau/company-picker-v1.html" });
+assert.equal(resource.result.contents[0].mimeType, "text/html;profile=mcp-app");
 assert.ok((await rpc("tools/call", { name: "get_cash_outlook", arguments: { company_id: "NOT_AUTHORISED" } })).error);
 const goal = { metric: "min_cash", target_cents: 10000000, cash_floor_cents: 10000000, deadline: "2026-11-29", max_collection_days: 14, max_spend_reduction_pct: 10, max_funding_cents: 250000000, max_growth_pct: 0, business: null };
 const plans = JSON.parse((await rpc("tools/call", { name: "compare_plans", arguments: { company_id: "DEMO_001", goal } })).result.content[0].text);

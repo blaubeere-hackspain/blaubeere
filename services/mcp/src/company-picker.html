@@ -1,0 +1,70 @@
+<!doctype html>
+<html lang="en"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Blau · Your companies</title>
+<style>
+:root{color-scheme:light dark;font-family:Inter,system-ui,sans-serif;color:light-dark(#252724,#eee);background:light-dark(#fff,#202020);font-size:14px}*{box-sizing:border-box}body{margin:0;padding:20px}h1{font-size:20px;margin:0 0 6px}h2{font-size:18px;margin:0}p{line-height:1.5;margin:6px 0;color:light-dark(#676b65,#aaa)}button{font:inherit;color:inherit;background:transparent;border:1px solid light-dark(#e4e6e1,#555);border-radius:12px;padding:12px 16px;cursor:pointer;text-align:left;min-height:44px}button:hover,button[aria-pressed=true]{background:light-dark(#f1f5f0,#303d32)}button:focus-visible{outline:2px solid #719b86;outline-offset:3px}button:disabled{opacity:.6;cursor:wait}#companies{display:flex;flex-wrap:wrap;gap:8px;margin:16px 0}#result{border-top:1px solid light-dark(#e4e6e1,#555);padding-top:16px}dl{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px;margin:20px 0}dt{color:light-dark(#676b65,#aaa);font-size:12px}dd{font-size:20px;font-variant-numeric:tabular-nums;margin:5px 0;overflow-wrap:anywhere}ul{padding-left:20px}li{margin:10px 0;line-height:1.5}.alert{background:light-dark(#fff8e9,#3c3422);border:1px solid light-dark(#ead9b4,#776444);border-radius:12px;padding:12px;margin-top:16px}.note{font-size:12px}#status{min-height:21px}@media(max-width:360px){dl{grid-template-columns:1fr}}
+</style>
+<h1>Your companies</h1><p>Choose a company to see its financial health and what needs attention.</p>
+<div id="companies" aria-label="Choose a company"></div><p id="status" role="status">Loading your companies…</p><section id="result" hidden aria-label="Company health"></section>
+<script>
+const companies = document.getElementById('companies'), status = document.getElementById('status'), result = document.getElementById('result');
+const pending = new Map(); let requestId = 0, selection = 0;
+function request(method, params) {
+  return new Promise((resolve, reject) => {
+    const id = ++requestId;
+    const timer = setTimeout(() => { pending.delete(id); reject(new Error('The request timed out. Please retry.')); }, 30000);
+    pending.set(id, {resolve,reject,timer});
+    parent.postMessage({jsonrpc:'2.0',id,method,params}, '*');
+  });
+}
+function notify(method, params) { parent.postMessage({jsonrpc:'2.0',method,params}, '*'); }
+function element(tag, text, parentNode) { const node = document.createElement(tag); node.textContent = text; parentNode.append(node); return node; }
+function money(value) { return value == null ? 'Not available' : new Intl.NumberFormat('en-GB',{style:'currency',currency:'EUR',maximumFractionDigits:2}).format(value); }
+function renderCompanies(data) {
+  if (!Array.isArray(data?.companies)) return;
+  companies.replaceChildren(); status.textContent = data.companies.length ? 'Select a company.' : 'No companies are assigned to this account yet.';
+  for (const company of data.companies) {
+    const button = element('button', String(company.name).replace(/^COMP_0*(\d+)$/, 'COMP $1'), companies);
+    button.type = 'button'; button.setAttribute('aria-pressed','false');
+    button.onclick = () => selectCompany(company, button);
+  }
+}
+async function selectCompany(company, button) {
+  const current = ++selection;
+  for (const item of companies.children) item.setAttribute('aria-pressed', String(item === button));
+  result.hidden = true; status.textContent = 'Reading the latest available month…'; result.setAttribute('aria-busy','true');
+  try {
+    const response = await request('tools/call',{name:'get_company_health',arguments:{company_id:company.id}});
+    if (current !== selection) return;
+    if (response.isError) throw new Error(response.content?.find(c=>c.type==='text')?.text || 'Could not read this company.');
+    const data = response.structuredContent;
+    if (!data?.health || !data?.metrics) throw new Error('The company summary was unavailable.');
+    result.replaceChildren(); result.hidden = false; status.textContent = '';
+    element('h2', String(company.name).replace(/^COMP_0*(\d+)$/, 'COMP $1'), result);
+    element('p', `Month ending ${data.as_of} · ${data.data_age_days} days old`, result);
+    element('p', data.health.state === 'insufficient_evidence' ? 'Insufficient score evidence' : data.health.state === 'attention_needed' ? 'Needs attention' : 'No alerts in the available evidence', result);
+    const metrics = element('dl','',result);
+    for (const [label,value] of [['Health score',data.health.score == null ? 'Not available' : `${data.health.score.toFixed(1)} / 100`],['Net cash movement',money(data.metrics.monthly_net_movement)],['Reconstructed cash',money(data.metrics.reconstructed_cash)],['Overdue payments',money(data.metrics.overdue_supplier_payments)],['Overdue collections',money(data.metrics.overdue_customer_collections)],['Arrears index',data.metrics.payment_arrears_index == null ? 'Not available' : `${data.metrics.payment_arrears_index.toFixed(3)} / 1`]]) {
+      const item = element('div','',metrics); element('dt',label,item); element('dd',value,item);
+    }
+    if (data.health.issues.length) {
+      const alert = element('div','',result); alert.className = 'alert'; element('strong','What needs attention',alert);
+      const list = element('ul','',alert);
+      for (const issue of data.health.issues) { const item = element('li','',list); element('strong',issue.title,item); element('p',`${issue.detail}${issue.unit === 'EUR' ? ` Amount: ${money(issue.value)}.` : ''}`,item); }
+    }
+    element('p','Historical evidence, not live cash or a default prediction. Missing amounts remain unknown. The health score and alert thresholds are provisional.',result).className = 'note';
+    const explain = element('button','Discuss this company in chat',result);
+    explain.onclick = async () => { explain.disabled = true; try { await request('ui/message',{role:'user',content:[{type:'text',text:`Explain the financial health, issues and key metrics for ${company.id} at ${data.as_of}. Use the saved evidence and state its limitations.`}]}); } catch(error) { status.textContent = error.message || 'Could not send to chat.'; } finally { explain.disabled = false; } };
+    request('ui/update-model-context',{structuredContent:data}).catch(()=>{});
+  } catch (error) { if (current === selection) status.textContent = error.message || 'Could not load the company. Select it to retry.'; }
+  finally { if (current === selection) result.setAttribute('aria-busy','false'); }
+}
+window.addEventListener('message', event => {
+  if (event.source !== parent || event.data?.jsonrpc !== '2.0') return;
+  const message = event.data, call = pending.get(message.id);
+  if (call) { clearTimeout(call.timer); pending.delete(message.id); message.error ? call.reject(new Error(message.error.message || 'Request failed.')) : call.resolve(message.result); }
+  if (message.method === 'ui/notifications/tool-result') renderCompanies(message.params?.structuredContent);
+});
+request('ui/initialize',{appInfo:{name:'Blau company picker',version:'1.0.0'},appCapabilities:{},protocolVersion:'2026-01-26'}).then(() => notify('ui/notifications/initialized',{})).catch(error => { status.textContent = error.message; });
+new ResizeObserver(() => notify('ui/notifications/size-changed',{height:document.documentElement.scrollHeight})).observe(document.body);
+</script></html>

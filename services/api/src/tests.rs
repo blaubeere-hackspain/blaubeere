@@ -199,6 +199,78 @@ async fn parquet_snapshot_preserves_model_data_and_requires_membership() {
             .status(),
         StatusCode::FORBIDDEN
     );
+    assert!(
+        dataset::grant_company_access(&state, "missing@example.com", &["COMP_0006"])
+            .await
+            .is_err()
+    );
+    assert!(
+        dataset::grant_company_access(&state, "team@example.com", &["COMP_0006", "COMP_UNKNOWN"])
+            .await
+            .is_err()
+    );
+    let health_path = "/api/companies/COMP_0006/health?month=2026-08";
+    assert_eq!(
+        request(app.clone(), "GET", health_path, json!(null), None, None)
+            .await
+            .status(),
+        StatusCode::UNAUTHORIZED
+    );
+    assert_eq!(
+        request(
+            app.clone(),
+            "GET",
+            health_path,
+            json!(null),
+            Some(&cookie),
+            None
+        )
+        .await
+        .status(),
+        StatusCode::FORBIDDEN
+    );
+    dataset::grant_company_access(
+        &state,
+        "team@example.com",
+        &["COMP_0006", "COMP_0048", "COMP_0176"],
+    )
+    .await
+    .unwrap();
+    dataset::grant_company_access(&state, "team@example.com", &["COMP_0006"])
+        .await
+        .unwrap();
+    let assigned: i64 = sqlx::query_scalar("SELECT COUNT(*) FROM memberships JOIN users ON users.id=memberships.user_id WHERE users.email='team@example.com' AND company_id LIKE 'COMP_%'").fetch_one(&state.db).await.unwrap();
+    assert_eq!(
+        assigned, 3,
+        "Explicit grants are idempotent and do not grant every imported company"
+    );
+    let health = request(
+        app.clone(),
+        "GET",
+        health_path,
+        json!(null),
+        Some(&cookie),
+        None,
+    )
+    .await;
+    assert_eq!(health.status(), StatusCode::OK);
+    let health: Value =
+        serde_json::from_slice(&health.into_body().collect().await.unwrap().to_bytes()).unwrap();
+    assert_eq!(health["company"]["id"], "COMP_0006");
+    assert_eq!(health["metrics"]["overdue_supplier_payments"], 5870.98);
+    assert_eq!(
+        request(
+            app.clone(),
+            "GET",
+            "/api/companies/COMP_0048/health?month=2026-13",
+            json!(null),
+            Some(&cookie),
+            None
+        )
+        .await
+        .status(),
+        StatusCode::BAD_REQUEST
+    );
     dataset::grant_team_access(&state, "team@example.com")
         .await
         .unwrap();

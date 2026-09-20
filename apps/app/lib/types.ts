@@ -48,6 +48,11 @@ export type CashMonth = {
   closing_balance: number | null; days: DailyCash[];
 };
 export type ModelRecord = {
+  health_status?: {
+    state: "attention_needed" | "insufficient_evidence" | "no_flags";
+    score: number | null; confidence: string; low_score_threshold: number; policy_note: string;
+    issues: { code: string; severity: string; title: string; detail: string; value: number; unit: string; source: string }[];
+  };
   daily_cash?: CashMonth[] | null;
   version: string; company_id: string; group_id: string; month: string; as_of: string;
   health_score: number | null; excluida: boolean; confidence: string; n_meses_ventana: number; n_meses_con_actividad: number;

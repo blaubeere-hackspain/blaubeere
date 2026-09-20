@@ -3,7 +3,7 @@ use blaubeere_api::{AppState, Config, auth, router};
 #[tokio::main]
 async fn main() -> anyhow::Result<()> {
     let args: Vec<String> = std::env::args().skip(1).collect();
-    if !args.is_empty() {
+    if args.first().is_some_and(|arg| arg == "import-parquet") {
         anyhow::ensure!(
             args.len() == 4 && args[0] == "import-parquet",
             "Usage: blaubeere-api import-parquet ROOT DATABASE_DIRECTORY REVISION"
@@ -27,6 +27,40 @@ async fn main() -> anyhow::Result<()> {
     let mut state = AppState::new(&database, Config::from_env()?).await?;
     if let Ok(url) = std::env::var("DATASET_DATABASE_URL") {
         state.dataset = Some(blaubeere_api::dataset::connect(&url).await?);
+    }
+    if !args.is_empty() {
+        anyhow::ensure!(
+            args.len() >= 3 && args[0] == "grant-company-access",
+            "Usage: blaubeere-api grant-company-access EMAIL COMPANY_ID [COMPANY_ID...]"
+        );
+        let ids: Vec<&str> = args[2..].iter().map(String::as_str).collect();
+        blaubeere_api::dataset::grant_company_access(&state, &args[1], &ids).await?;
+        let user: String = sqlx::query_scalar("SELECT id FROM users WHERE email=?")
+            .bind(args[1].trim().to_lowercase())
+            .fetch_one(&state.db)
+            .await?;
+        for id in &ids {
+            auth::company_access(&state, &user, id)
+                .await
+                .map_err(|error| anyhow::anyhow!(error.1))?;
+            let summary = blaubeere_api::company_health::for_company(&state, id, None)
+                .await
+                .map_err(|error| anyhow::anyhow!(error.1))?;
+            println!(
+                "{}: {} at {}",
+                id, summary["health"]["state"], summary["as_of"]
+            );
+        }
+        println!(
+            "Assigned companies for {}: {}",
+            args[1],
+            auth::identity(&state, &user)
+                .await
+                .map_err(|error| anyhow::anyhow!(error.1))?
+                .company_ids
+                .join(", ")
+        );
+        return Ok(());
     }
     if let Ok(path) = std::env::var("ASSESSMENT_FILE") {
         state.companies = std::sync::Arc::new(blaubeere_api::finance::load(

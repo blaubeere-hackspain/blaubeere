@@ -6,11 +6,15 @@ use axum::{
     response::{IntoResponse, Response},
     routing::get,
 };
-use blaubeere_api::{AppState, Config, auth, finance, oauth};
+use blaubeere_api::{AppState, Config, auth, company_health, finance, oauth};
 use rmcp::{
     ErrorData, RoleServer, ServerHandler,
     handler::server::{router::tool::ToolRouter, wrapper::Parameters},
-    model::{CallToolResult, ContentBlock, ServerCapabilities, ServerInfo},
+    model::{
+        CallToolResult, ContentBlock, ListResourcesResult, PaginatedRequestParams,
+        ReadResourceRequestParams, ReadResourceResponse, ReadResourceResult, ServerCapabilities,
+        ServerInfo,
+    },
     service::RequestContext,
     tool, tool_handler, tool_router,
     transport::streamable_http_server::{
@@ -20,6 +24,8 @@ use rmcp::{
 use serde::Deserialize;
 use serde_json::{Value, json};
 use std::sync::Arc;
+
+const COMPANY_PICKER: &str = "ui://blau/company-picker-v1.html";
 
 #[derive(Clone)]
 struct Principal(String);
@@ -43,6 +49,14 @@ struct PlanInput {
     company_id: String,
     goal: finance::Goal,
 }
+#[derive(Deserialize, schemars::JsonSchema)]
+#[serde(deny_unknown_fields)]
+struct CompanyHealthInput {
+    /// Exact company ID from list_companies, for example COMP_0006.
+    company_id: String,
+    /// Optional YYYY-MM cutoff. Omit to use the latest month with company data.
+    month: Option<String>,
+}
 
 fn principal(ctx: &RequestContext<RoleServer>) -> Result<&str, ErrorData> {
     ctx.extensions
@@ -61,7 +75,30 @@ fn failure(error: blaubeere_api::ApiError) -> ErrorData {
 #[tool_router]
 impl FinanceTools {
     #[tool(
-        description = "List the companies this signed-in finance user may access. Read-only.",
+        description = "Get a company's financial health state, saved monthly score, risk alerts, current issues at that cutoff and valuable metrics: cash movements, reconstructed cash, overdue collections/payments, aging, arrears and original-currency totals. Use for 'How is COMP_0006 doing?' or 'What needs attention?'. Returns dated evidence and missing coverage, not a prediction or credit rating. Use list_companies for exact IDs. Read-only.",
+        annotations(
+            read_only_hint = true,
+            destructive_hint = false,
+            idempotent_hint = true,
+            open_world_hint = false
+        )
+    )]
+    async fn get_company_health(
+        &self,
+        Parameters(input): Parameters<CompanyHealthInput>,
+        ctx: RequestContext<RoleServer>,
+    ) -> Result<CallToolResult, ErrorData> {
+        auth::company_access(&self.state, principal(&ctx)?, &input.company_id)
+            .await
+            .map_err(failure)?;
+        let summary =
+            company_health::for_company(&self.state, &input.company_id, input.month.as_deref())
+                .await
+                .map_err(failure)?;
+        Ok(CallToolResult::structured(summary))
+    }
+    #[tool(
+        description = "Show the interactive company picker in ChatGPT and list only companies this signed-in finance user may access. Use when the user wants to choose a company or see their companies. Read-only.",
         annotations(
             read_only_hint = true,
             destructive_hint = false,
@@ -76,11 +113,12 @@ impl FinanceTools {
         let identity = auth::identity(&self.state, principal(&ctx)?)
             .await
             .map_err(failure)?;
-        Ok(result(
-            finance::company_summaries(&self.state, &identity.company_ids)
-                .await
-                .map_err(failure)?,
-        ))
+        let companies = finance::company_summaries(&self.state, &identity.company_ids)
+            .await
+            .map_err(failure)?;
+        let mut response = result(companies.clone());
+        response.structured_content = Some(json!({"companies":companies}));
+        Ok(response)
     }
     #[tool(
         description = "Read a dated cash outlook or imported monthly model assessments, evidence and missing inputs for an authorised company. Imported model inputs are EUR amounts; forecasts use integer cents. No forecast is inferred from relative cash movements. Demo fixtures and reconstructed history are labelled.",
@@ -137,8 +175,27 @@ impl FinanceTools {
 
 #[tool_handler(router = self.tool_router)]
 impl ServerHandler for FinanceTools {
+    async fn list_resources(
+        &self,
+        _: Option<PaginatedRequestParams>,
+        ctx: RequestContext<RoleServer>,
+    ) -> Result<ListResourcesResult, ErrorData> {
+        principal(&ctx)?;
+        Ok(serde_json::from_value(json!({"resources":[{"uri":COMPANY_PICKER,"name":"Blau company picker","mimeType":"text/html;profile=mcp-app"}]})).expect("valid resource list"))
+    }
+    async fn read_resource(
+        &self,
+        input: ReadResourceRequestParams,
+        ctx: RequestContext<RoleServer>,
+    ) -> Result<ReadResourceResponse, ErrorData> {
+        principal(&ctx)?;
+        if input.uri != COMPANY_PICKER {
+            return Err(ErrorData::invalid_params("Unknown resource", None));
+        }
+        Ok(serde_json::from_value::<ReadResourceResult>(json!({"contents":[{"uri":COMPANY_PICKER,"mimeType":"text/html;profile=mcp-app","text":include_str!("company-picker.html"),"_meta":{"ui":{"prefersBorder":true,"csp":{"connectDomains":[],"resourceDomains":[]}},"openai/widgetDescription":"Pick an authorised company and inspect its dated financial health, alerts and metrics."}}]})).expect("valid UI resource").into())
+    }
     fn get_info(&self) -> ServerInfo {
-        ServerInfo::new(ServerCapabilities::builder().enable_tools().build()).with_instructions("Blaubeere supports internal finance planning. Preserve source labels, dates, missing coverage and explicit assumptions in every answer. Scenarios are conditional, not guarantees. Never infer retention or profit from bank data. Each company is authorised independently.")
+        ServerInfo::new(ServerCapabilities::builder().enable_tools().enable_resources().build()).with_instructions("Blaubeere supports internal finance planning. Use list_companies to show the company picker; use get_company_health for a company's health, issues and metrics. Surface returned risk alerts and the assessment date; historical snapshots are not live financial status. Insufficient evidence is not poor health. Attention thresholds are provisional, not default probabilities. Preserve source labels, dates, missing coverage and explicit assumptions in every answer. Scenarios are conditional, not guarantees. Never infer retention or profit from bank data. Each company is authorised independently.")
     }
 }
 
@@ -195,9 +252,18 @@ fn router(state: AppState) -> Router {
     config.max_request_body_bytes = 32 * 1024;
     let service = StreamableHttpService::new(
         move || {
+            let mut tool_router = FinanceTools::tool_router();
+            for route in tool_router.map.values_mut() {
+                let mut meta = json!({"securitySchemes":[{"type":"oauth2","scopes":[oauth::SCOPE]}],"ui":{"visibility":["model","app"]}});
+                if route.attr.name == "list_companies" {
+                    meta["ui"]["resourceUri"] = json!(COMPANY_PICKER);
+                    meta["openai/outputTemplate"] = json!(COMPANY_PICKER);
+                }
+                route.attr.meta = Some(rmcp::model::MetaObject(meta.as_object().unwrap().clone()));
+            }
             Ok(FinanceTools {
                 state: tools_state.clone(),
-                tool_router: FinanceTools::tool_router(),
+                tool_router,
             })
         },
         Arc::new(LocalSessionManager::default()),
@@ -249,7 +315,7 @@ mod tests {
     use tower::ServiceExt;
     #[tokio::test]
     async fn transport_challenges_and_enforces_company_access() {
-        let state = AppState::new(
+        let mut state = AppState::new(
             "sqlite::memory:",
             Config {
                 demo_login: false,
@@ -265,10 +331,30 @@ mod tests {
             &state,
             "mcp@example.com",
             "test-password-long",
-            &["DEMO_001"],
+            &["DEMO_001", "COMP_0006"],
         )
         .await
         .unwrap();
+        let pool = sqlx::sqlite::SqlitePoolOptions::new()
+            .max_connections(1)
+            .connect("sqlite::memory:")
+            .await
+            .unwrap();
+        sqlx::raw_sql("CREATE TABLE dataset_companies(id TEXT PRIMARY KEY, group_id TEXT); CREATE TABLE parquet_records(source TEXT, record_key TEXT, company_id TEXT, period TEXT, payload TEXT); CREATE TABLE dataset_metadata(payload TEXT); INSERT INTO dataset_metadata VALUES ('{}'); INSERT INTO dataset_companies VALUES ('COMP_0006','GROUP_TEST'),('COMP_PRIVATE','GROUP_PRIVATE');").execute(&pool).await.unwrap();
+        let fixture: Value = serde_json::from_str(include_str!(
+            "../../../apps/landing/data/product-preview.json"
+        ))
+        .unwrap();
+        for (source, payload) in [
+            ("scores", &fixture["record"]),
+            ("cash", &fixture["record"]["cash"]),
+            ("payments", &fixture["record"]["payment"]),
+            ("debt", &fixture["record"]["debt"]),
+            ("daily_cash", &fixture["record"]["daily_cash"]),
+        ] {
+            sqlx::query("INSERT INTO parquet_records VALUES (?,'COMP_0006:2026-08','COMP_0006','2026-08-01',?)").bind(source).bind(payload.to_string()).execute(&pool).await.unwrap();
+        }
+        state.dataset = Some(pool);
         let user: String = sqlx::query_scalar("SELECT id FROM users")
             .fetch_one(&state.db)
             .await
@@ -313,12 +399,103 @@ mod tests {
             ("list_companies", json!({}), true),
             ("get_cash_outlook", json!({"company_id":"DEMO_001"}), true),
             ("get_cash_outlook", json!({"company_id":"DEMO_002"}), false),
+            (
+                "get_company_health",
+                json!({"company_id":"COMP_0006"}),
+                true,
+            ),
+            (
+                "get_company_health",
+                json!({"company_id":"COMP_0006","month":"2026-08"}),
+                true,
+            ),
+            (
+                "get_company_health",
+                json!({"company_id":"COMP_PRIVATE"}),
+                false,
+            ),
+            (
+                "get_company_health",
+                json!({"company_id":"COMP_0006","month":"2026-09"}),
+                false,
+            ),
+            (
+                "get_company_health",
+                json!({"company_id":"COMP_0006","month":"2026-13"}),
+                false,
+            ),
         ] {
             let request=Request::builder().method("POST").uri("/mcp").header("host","localhost:8081").header("authorization","Bearer test-access").header("content-type","application/json").header("accept","application/json, text/event-stream").header("mcp-protocol-version","2025-11-25").body(Body::from(json!({"jsonrpc":"2.0","id":1,"method":"tools/call","params":{"name":name,"arguments":args}}).to_string())).unwrap();
             let response = app.clone().oneshot(request).await.unwrap();
             let bytes = response.into_body().collect().await.unwrap().to_bytes();
             let value: Value = serde_json::from_slice(&bytes).unwrap();
             assert_eq!(value.get("error").is_none(), allowed, "{value}");
+            if allowed && name == "get_company_health" {
+                let summary = &value["result"]["structuredContent"];
+                assert_eq!(summary["company"]["id"], "COMP_0006");
+                assert_eq!(summary["as_of"], "2026-08-31");
+                assert_eq!(summary["metrics"]["overdue_supplier_payments"], 5870.98);
+                assert_eq!(summary["health"]["state"], "insufficient_evidence");
+                assert_eq!(summary["health"]["issues"][0]["code"], "overdue_payments");
+            }
+            if allowed && name == "list_companies" {
+                assert_eq!(
+                    value["result"]["structuredContent"]["companies"]
+                        .as_array()
+                        .unwrap()
+                        .len(),
+                    2
+                );
+                assert!(!value.to_string().contains("COMP_PRIVATE"));
+            }
+        }
+        for (method, params) in [
+            ("tools/list", json!({})),
+            ("resources/read", json!({"uri":COMPANY_PICKER})),
+        ] {
+            let request = Request::builder()
+                .method("POST")
+                .uri("/mcp")
+                .header("host", "localhost:8081")
+                .header("authorization", "Bearer test-access")
+                .header("content-type", "application/json")
+                .header("accept", "application/json, text/event-stream")
+                .body(Body::from(
+                    json!({"jsonrpc":"2.0","id":2,"method":method,"params":params}).to_string(),
+                ))
+                .unwrap();
+            let bytes = app
+                .clone()
+                .oneshot(request)
+                .await
+                .unwrap()
+                .into_body()
+                .collect()
+                .await
+                .unwrap()
+                .to_bytes();
+            let value: Value = serde_json::from_slice(&bytes).unwrap();
+            assert!(value.get("error").is_none(), "{value}");
+            if method == "tools/list" {
+                let picker = value["result"]["tools"]
+                    .as_array()
+                    .unwrap()
+                    .iter()
+                    .find(|t| t["name"] == "list_companies")
+                    .unwrap();
+                assert_eq!(picker["_meta"]["ui"]["resourceUri"], COMPANY_PICKER);
+            } else {
+                assert_eq!(
+                    value["result"]["contents"][0]["mimeType"],
+                    "text/html;profile=mcp-app"
+                );
+                assert!(
+                    value["result"]["contents"][0]["text"]
+                        .as_str()
+                        .unwrap()
+                        .contains("get_company_health")
+                );
+            }
         }
     }
 }

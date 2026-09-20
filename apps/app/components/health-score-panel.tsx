@@ -1,6 +1,7 @@
 "use client";
 import "@fontsource-variable/inter";
 import { useEffect, useRef, useState } from "react";
+import { TriangleAlert } from "lucide-react";
 import { date, monthlyTimeline } from "../lib/format";
 import type { ModelRecord } from "../lib/types";
 import { SegmentedGauge } from "./financial-cards";
@@ -38,6 +39,7 @@ export function HealthScorePanel({ records, row, detail = false, chartHeight = 2
   return <section className="card health-overview-panel" id="health" aria-labelledby="health-title">
     <div className="health-overview-main"><div className="card-heading"><div><h2 id="health-title">Health score</h2><p className="small muted mt-1">{detail ? "Published rating at this cutoff" : "How the company’s cash-flow health has changed"}</p></div></div>
       <div className="health-selected-score"><HealthScoreGauge row={row}/><div className="health-score-context"><span>{date(row.as_of,true)}</span><span>{delta === null ? "No comparable previous score" : `${delta > 0 ? "+" : ""}${modelNumber(delta)} points since ${date(previous.as_of)}`}</span></div></div>
+      {row.health_status && row.health_status.issues.length > 0 && <div className="health-risk-alert" role="status"><TriangleAlert size={17} aria-hidden/><div><strong>{row.health_status.issues[0].title}</strong><p>{date(row.as_of, true)} · {row.health_status.issues[0].unit === "EUR" ? new Intl.NumberFormat("en-GB", { style: "currency", currency: "EUR" }).format(row.health_status.issues[0].value) : `${modelNumber(row.health_status.issues[0].value)} points`}</p><details><summary>Review {row.health_status.issues.length === 1 ? "issue" : `${row.health_status.issues.length} issues`}</summary><ul>{row.health_status.issues.map(issue => <li key={issue.code}><strong>{issue.title}</strong><p>{issue.detail}{issue.unit === "EUR" && ` Amount: ${new Intl.NumberFormat("en-GB", { style: "currency", currency: "EUR" }).format(issue.value)}.`}</p></li>)}</ul><p>{row.health_status.policy_note}</p></details></div></div>}
       {!detail && <ScoreChart records={records.filter(record => record.as_of >= "2025-01-01")} row={row} height={chartHeight}/>}
     </div>
   </section>;
