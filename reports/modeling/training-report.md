@@ -1,10 +1,37 @@
-# Informe de entrenamiento del modelo de déficit operativo
+# Informe consolidado de entrenamiento y evaluación — v1, v2 y v3
 
-Fecha del experimento: **19 de septiembre de 2026**. Experimento: **`experiment-v1`**. Protocolo: **`deficit-v1`**. Modelo seleccionado: **`experiment-v1:hgb_leaf15`**.
+**Estado documental: 20 de septiembre de 2026.** Experimentos ejecutados sobre el dataset existente: `experiment-v1:hgb_leaf15` / `deficit-v1`, reglas y backtest `trajectory-v2`, y adaptación `financial-v3/dataset-v1` con experimento interno `model-v1` de cobros.
 
-Este informe describe lo que se ejecutó, contrastado con el código y los artefactos guardados. No introduce un entrenamiento nuevo ni una segunda evaluación del test. El checkpoint `c6174882ceff0f8697bb64cbec62cd2b83c2b204` conserva la implementación y los resultados; la ejecución original está identificada además por hashes de código, datos y parámetros.
+Este informe distingue implementación, resultados estadísticos y cumplimiento del brief. **El score financiero temporal como eje del producto sigue pendiente:** ni el proxy de déficit ni los proxies de cobros son un score global validado. El encargo exige leer el rastro, producir y explicar un score mensual, generalizar a empresas no vistas y construir un producto sobre ese score; las seis preguntas no están resueltas por haber pasado tests o integrado un dashboard.
 
-## 1. Resumen ejecutivo
+Las secciones **1–20 se conservan como registro histórico de v1/v2**, incluidos sus resultados, comandos ligados a aquel estado y conclusiones de entonces. Las secciones **21–26** describen lo efectivamente ejecutado en v3, las diferencias entre experimentos, la aceptación técnica enmendada y el trabajo pendiente. Esta edición sólo actualiza documentación: no entrena, reevalúa reservas, modifica parámetros ni cambia métricas.
+
+El checkpoint `c6174882ceff0f8697bb64cbec62cd2b83c2b204` conserva la implementación y resultados de v1, no los cambios posteriores de v2. Los manifests y recibos de cada etapa identifican código, datos y parámetros por sus hashes.
+
+## Lectura rápida: resultados que no deben confundirse
+
+| Etapa | Qué se construyó y evaluó | Resultado respaldado | Límite principal |
+| --- | --- | --- | --- |
+| **V1: clasificador entrenado** | Probabilidad del proxy de déficit en al menos dos de los próximos tres meses; selección de cuatro candidatos y test reservado por grupo/tiempo | AP **0,815603**; Brier **0,188429** frente a **0,251729** del baseline, mejora relativa **25,15 %** | 131 etiquetas observables de 299 casos; datos sintéticos, disponibilidad retrospectiva y probabilidad no calibrada |
+| **V2: reglas y backtest, sin nuevo entrenamiento** | Trayectoria observada y reglas fijas de dirección/confirmación, evaluadas contra transiciones sostenidas de mejora y deterioro | Candidato: **2/37 mejoras** y **1/41 deterioros** anticipados; falsas alertas resolubles **96,000 %** y **98,039 %** | **Anticipación no validada**; solo revisión descriptiva, sin alertas predictivas automáticas |
+| **V3: experimento interno de cobros y entrega financiera parcial** | Proxies de contracción/expansión y bache de cobros; componentes descriptivos, mora y caja inversa provisional separados del predictor | Persistencia seleccionada: AP **0,443001 / 0,410000**, Brier **0,211127 / 0,224609**; ambas utilidades fallidas, Q4 sin modelo por soporte | **28/345 etiquetas**, 8 grupos; selección y evaluación sobre la misma validación interna; score global `null`, sin anticipación útil demostrada |
+
+V3 mejora frente a una constante en algunas métricas de estos proxies, pero las regresiones no superan a persistencia por el criterio de selección. **No es una mejora demostrada respecto a v1 ni un score que responda a las seis preguntas.** La comparación sólo es válida dentro del mismo target y población.
+
+V2 **no es un reentrenamiento ni una nueva versión de los pesos de HGB**. La AP de v1 y el recall de eventos de v2 responden a objetivos, unidades y poblaciones diferentes: no son una comparación antes/después del mismo modelo. Las probabilidades v1 se reutilizan en la vista temporal, pero no definen la dirección ni se evaluaron como predicciones de los eventos v2.
+
+Ninguna etapa certifica un score oficial de salud financiera o resultados del leaderboard. El usuario comunica que el test oficial podría cambiar/cancelarse; no hay confirmación del organizador ni target, métrica o formato oficiales confirmados.
+
+**Guía de lectura:**
+
+- Secciones 1–12: entrenamiento, selección y test de v1.
+- Secciones 13–15: reglas, eventos y protocolo temporal de v2.
+- Secciones 16–17: resultados completos, cobertura e incertidumbre de v2.
+- Secciones 18–20: casos, API/UI, verificación, incidencias y conclusión histórica de v1/v2.
+- Secciones 21–24: alcance, features, targets, entrenamiento, selección y resultados reales de v3.
+- Secciones 25–26: entrega técnica, trazabilidad y brecha vigente frente al score central y las seis preguntas.
+
+## 1. Resumen ejecutivo de v1
 
 Se entrenó **un clasificador conjunto para todas las empresas elegibles**, no un modelo por empresa. Estima si habrá déficit operativo en al menos dos de los tres meses naturales siguientes, dentro del perímetro transaccional observado.
 
@@ -379,7 +406,7 @@ Fuentes: [replay observado](final-verification/replay.json), [código de replay]
 
 El [manifest del modelo](experiment-v1/model_manifest.json) enlaza además los inputs, el protocolo preparado y el código. La [verificación final](final-verification/summary.json) conserva comandos, resultados y hashes, incluyendo la integridad de los raw y del recibo de evaluación.
 
-## 12. Interpretación y trabajo que no se realizó
+## 12. Interpretación y límites de v1
 
 La conclusión respaldada es: **este clasificador mejora al baseline constante para el proxy y la población etiquetada definidos por el protocolo, con separación temporal y de grupos**. No permite afirmar precisión universal ni que una empresa tenga una probabilidad concreta de insolvencia.
 
@@ -393,4 +420,448 @@ Las limitaciones principales son:
 6. **Sin calibración, explicación causal ni incertidumbre individual:** ni Brier ni los intervalos agregados justifican esas afirmaciones.
 7. **Cobertura conservadora:** las abstenciones son parte del producto; reducirlas exige estudiar datos y validar de nuevo, no asignar cero o una probabilidad artificial.
 
-Una siguiente versión podría evaluar calibración y baselines adicionales en nuevos datos de desarrollo, ampliar cobertura con semántica verificada y realizar validación externa. Son propuestas, **no resultados obtenidos**. El test ya utilizado no debe convertirse en conjunto de tuning; cualquier extensión debe tener una nueva evaluación independiente.
+Una futura versión del predictor supervisado podría evaluar calibración y baselines adicionales en nuevos datos de desarrollo, ampliar cobertura con semántica verificada y realizar validación externa. Son propuestas, **no resultados obtenidos**. El test ya utilizado no debe convertirse en conjunto de tuning; cualquier extensión debe tener una nueva evaluación independiente.
+
+## 13. V2: objetivo, datos y ausencia de reentrenamiento
+
+V2 amplió el sistema para responder a preguntas que una probabilidad de déficit aislada no resuelve: **cómo evoluciona una empresa, qué cambió en sus flujos, cuándo aparece una señal y si esa señal anticipa una transición posterior**.
+
+Se conservaron el modelo v1, su configuración, features, recibo del test y resultados. Se implementaron por separado:
+
+1. Una serie mensual de estado operativo y dirección con evidencia numérica.
+2. Un candidato de alertas con persistencia de dos meses y un baseline sin esa persistencia.
+3. Eventos futuros de mejora/deterioro y un backtest temporal preregistrado.
+4. Una vista histórica que reutiliza el predictor v1 únicamente después de su corte válido.
+
+**No se entrenó un modelo supervisado v2, no se ajustaron pesos nuevos ni se calibró HGB.** Los umbrales y reglas de v2 son decisiones de diseño fijadas antes de consultar sus outcomes, no parámetros aprendidos de la reserva. Los pequeños datasets inventados pertenecen a tests de software; las métricas de eventos utilizan el mismo dataset sintético proporcionado por el reto y el mismo `panel_flujos` verificado que v1.
+
+El contrato `trajectory-v2` se escribió antes de medir resultados. Se sellaron código, dependencias e inputs, y se registró un recibo exclusivo antes de cada acceso real de desarrollo y reserva. Hubo una ejecución real de cada fase, sin tuning posterior ni repetición de la reserva. Los tests sobre fixtures y los replays de exportación no son nuevas evaluaciones de esa reserva.
+
+Fuentes: [protocolo v2](trajectory-v2/protocol.json), [recibo de protocolo](trajectory-v2/protocol-receipt.json), [manifest de ejecución](trajectory-v2/execution-manifest.json) y [recibo reservado](trajectory-v2/reserved-access.json).
+
+## 14. V2: estado, dirección y emisión de señales
+
+### 14.1. Estado operativo mensual
+
+Cada empresa conserva todos los meses cerrados entre septiembre de 2024 y agosto de 2026, incluidos huecos y meses no elegibles. El estado toma uno de estos valores:
+
+- `deficit`: cota superior operativa negativa, redondeada a céntimos, tanto en base como sin atípicos.
+- `non_deficit`: cota inferior no negativa, redondeada a céntimos, en ambas variantes.
+- `insufficient_evidence`: inputs no utilizables, incertidumbre o desacuerdo entre variantes.
+
+La elegibilidad exige mes cerrado presente, actividad de caja, EUR completo, gross finito y positivo y cotas finitas ordenadas. La información ausente no se transforma en cero. **El estado indica nivel de flujo operativo; no saldo de caja ni dirección de cambio.**
+
+### 14.2. Dirección: tres meses frente a los tres anteriores
+
+La dirección utiliza seis meses naturales consecutivos: los tres recientes, incluido el actual, y los tres anteriores. Se calculan medias aritméticas no ponderadas de los ratios mensuales de las cotas operativas sobre el gross observado. No es un ratio de sumas ni se inventa un gross recortado para la variante sin atípicos.
+
+Para cada variante base y sin atípicos:
+
+```text
+D_inferior = media(cota_inferior/gross, recientes) - media(cota_superior/gross, anteriores)
+D_superior = media(cota_superior/gross, recientes) - media(cota_inferior/gross, anteriores)
+```
+
+| Dirección | Regla en ambas variantes |
+| --- | --- |
+| `improving` | `D_inferior >= 0,05` |
+| `deteriorating` | `D_superior <= -0,05` |
+| `stable` | Intervalo completo estrictamente dentro de `(-0,05; 0,05)` |
+| `insufficient_evidence` | Cualquier otro caso: inputs incompletos, ambigüedad o falta de acuerdo |
+
+El umbral es **cinco puntos porcentuales del gross**, fijado por diseño, no optimizado. Las comparaciones utilizan aritmética binaria de doble precisión sin redondeo visual ni tolerancias añadidas para forzar una clasificación. Las cotas monetarias del estado sí se redondean a céntimos; son operaciones diferentes.
+
+Puede haber una empresa en déficit pero mejorando, o una empresa sin déficit pero deteriorándose. Los seis meses deben tener inputs utilizables, pero no es obligatorio que el estado mensual de cada uno sea clasificable: la incertidumbre de las cotas se propaga a la comparación. Son cotas de asignación operativa, **no intervalos estadísticos de confianza**.
+
+La explicación muestra ventanas, gross, cobros y pagos conocidos, cotas y descomposición:
+
+```text
+cambio del neto identificado relativo = cambio de cobros/gross - cambio de pagos/gross
+```
+
+Es una identidad aritmética de indicadores observados, **no una atribución causal, SHAP ni una explicación de por qué HGB asigna una probabilidad concreta**.
+
+### 14.3. Señal provisional, candidato y baseline
+
+- **Primer mes direccional:** se registra `watch`, una señal provisional.
+- **Candidato:** confirma una alerta en el segundo mes consecutivo del mismo signo, con fecha de ese segundo cierre.
+- **Baseline:** emite una alerta al primer mes de cada episodio direccional, sin exigir persistencia.
+- Cada método emite una sola alerta por racha. Estabilidad, huecos, evidencia insuficiente o cambio de signo rompen la racha anterior.
+- Una racha que cruza un límite de evaluación no se reinicia para fabricar una nueva alerta dentro del periodo.
+
+Se conservan `first_signal_at` y `confirmed_alert_at` por separado. La confirmación no se retrofecha al primer `watch`. Son **señales simuladas retrospectivamente**, no un registro de alertas que se emitieran realmente en esas fechas históricas.
+
+Fuentes: [reglas y umbrales](trajectory-v2/protocol.json), [cálculo de señales](../../scripts/trajectory_signals.py) y [pruebas temporales](../../tests/test_trajectory_signals.py).
+
+## 15. V2: eventos y protocolo de evaluación
+
+### 15.1. Eventos independientes de la señal
+
+Las etiquetas se construyen con el estado operativo robusto, no con los deltas de dirección, las alertas ni `p_proxy`:
+
+| Tipo | Patrón de meses consecutivos |
+| --- | --- |
+| Deterioro sostenido | Dos meses `non_deficit`, seguidos de dos meses `deficit` |
+| Mejora sostenida | Dos meses `deficit`, seguidos de dos meses `non_deficit` |
+| Bache recuperado, solo demo | Dos meses `non_deficit`, un mes `deficit` y dos meses `non_deficit` |
+
+En las transiciones sostenidas, el inicio es el primer mes del estado nuevo y la confirmación llega al cierre del segundo. Un hueco o estado insuficiente convierte el patrón en desconocido, no en ausencia de evento. El bache es una clasificación retrospectiva separada: la recuperación se confirma en el último de sus cinco meses y no se utiliza como target sostenido del backtest.
+
+### 15.2. Población y cortes temporales
+
+Se excluyeron **todos los 50 grupos del test v1**, en todas las fechas, antes de detectar eventos, evaluar alertas o elegir casos. La evaluación usa **200 grupos y 1.078 empresas** de las particiones train/validation de v1.
+
+| Fase v2 | Orígenes de alertas | Outcomes disponibles hasta | Inicios posibles de eventos |
+| --- | --- | --- | --- |
+| Desarrollo | Marzo–septiembre 2025 | 2025-12-31 | Abril–noviembre 2025 |
+| Reserva temporal | Marzo–mayo 2026 | 2026-08-31 | Abril–julio 2026 |
+
+La ventana de anticipación es **uno o dos meses naturales antes del inicio del evento**, no antes de su confirmación. Por ejemplo, una alerta emitida al cierre de mayo puede anticipar un inicio en junio o julio; el evento iniciado en julio se confirma al cierre de agosto.
+
+Esta reserva es **temporal y sobre empresas conocidas**, dentro del mismo corpus sintético y con preparación compartida. No se presenta como un nuevo test independiente de grupos desconocidos, una validación externa ni una repetición del test oficial. No se compararon las probabilidades v1 contra estos eventos, porque su target es distinto.
+
+### 15.3. Matching, misses y censura
+
+El denominador de eventos es común a candidato y baseline. Un evento confirmado entra si tiene al menos un origen con inputs de dirección elegibles dentro de su ventana de anticipación y del periodo evaluado; no se exige que el método hubiera emitido una señal correcta.
+
+Dentro de cada empresa y signo, las alertas se procesan por fecha. Cada una se asocia al primer evento futuro elegible no emparejado de esa empresa y signo, a uno o dos meses. Cada alerta y evento se usan como máximo una vez por método.
+
+- Evento elegible sin alerta asociada: **miss**.
+- Alerta sin match con seguimiento completo: **falsa alarma**.
+- Alerta sin match y seguimiento insuficiente: **censurada/desconocida**, no falsa por defecto.
+- Para declarar falsa una alerta de origen `o`, deben ser robustos y observables todos los estados desde `o-1` hasta `o+3`, cubriendo los dos posibles inicios y sus confirmaciones.
+- Un evento completamente observado puede dar un match aunque otro tramo del horizonte sea desconocido; la cobertura se informa aparte.
+- Las alertas adicionales no desaparecen porque otra alerta ya haya consumido el evento.
+
+```text
+Eventos = matches + misses
+Alertas = matches + falsas alarmas + censuradas
+Recall = matches / eventos elegibles
+FAS = falsas alarmas / (matches + falsas alarmas)
+```
+
+**FAS es la proporción de falsas entre alertas resolubles, no la tasa de falsos positivos (FPR)**. Las métricas con denominador cero y el lead sin matches quedan `null` con motivo explícito.
+
+Fuentes: [protocolo](trajectory-v2/protocol.json), [eventos y matching](../../scripts/trajectory_events.py) y [métricas](../../scripts/trajectory_metrics.py).
+
+## 16. V2: resultados observados
+
+### 16.1. Desarrollo y reserva, sin ocultar el baseline
+
+Todas las tasas siguientes son porcentajes. Los conteos son eventos o alertas, no empresas distintas.
+
+| Fase | Signo | Método | Eventos | Alertas | Matches | Misses | Falsas | Censuradas | Recall | FAS |
+| --- | --- | --- | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: |
+| Desarrollo | Mejora | Candidato, dos meses | 56 | 156 | 7 | 49 | 98 | 51 | 12,500 % | 93,333 % |
+| Desarrollo | Mejora | Baseline, un mes | 56 | 287 | 7 | 49 | 159 | 121 | 12,500 % | 95,783 % |
+| Desarrollo | Deterioro | Candidato, dos meses | 61 | 158 | 3 | 58 | 106 | 49 | 4,918 % | 97,248 % |
+| Desarrollo | Deterioro | Baseline, un mes | 61 | 262 | 8 | 53 | 156 | 98 | 13,115 % | 95,122 % |
+| **Reserva** | **Mejora** | **Candidato, dos meses** | **37** | **75** | **2** | **35** | **48** | **25** | **5,405 %** | **96,000 %** |
+| Reserva | Mejora | Baseline, un mes | 37 | 146 | 3 | 34 | 82 | 61 | 8,108 % | 96,471 % |
+| **Reserva** | **Deterioro** | **Candidato, dos meses** | **41** | **73** | **1** | **40** | **50** | **22** | **2,439 %** | **98,039 %** |
+| Reserva | Deterioro | Baseline, un mes | 41 | 151 | 7 | 34 | 70 | 74 | 17,073 % | 90,909 % |
+
+En la reserva, la FAS del candidato de mejora es `48 / (2 + 48) = 96 %`; las 25 censuradas no entran en ese denominador. Para deterioro es `50 / (1 + 50) = 98,039 %`, con 22 censuradas fuera del denominador. No significa que se haya comprobado el resultado de todas las alertas.
+
+### 16.2. Lead observado e intervalos de la reserva
+
+| Signo y método | Matches a 1 / 2 meses | Mediana lead, solo matches | IC95 recall | IC95 FAS |
+| --- | --- | ---: | --- | --- |
+| Mejora, candidato | 1 / 1 | 1,5 meses | [0,000 %; 15,798 %] | [89,357 %; 100,000 %] |
+| Mejora, baseline | 2 / 1 | 1,0 meses | [0,000 %; 18,750 %] | [91,664 %; 100,000 %] |
+| Deterioro, candidato | 0 / 1 | 2,0 meses | [0,000 %; 8,571 %] | [93,478 %; 100,000 %] |
+| Deterioro, baseline | 3 / 4 | 2,0 meses | [7,407 %; 27,786 %] | [84,415 %; 96,668 %] |
+
+**Solo hay tres matches de reserva del candidato.** Sus medianas de lead no justifican afirmar «el sistema anticipa los problemas dos meses»: describen exclusivamente esos pocos aciertos.
+
+### 16.3. Conclusión de eficacia
+
+**`anticipation_not_validated` / `descriptive_review_only`.** El candidato detecta pocos eventos y produce una proporción muy alta de falsas alertas entre las resolubles. En deterioro, además, tiene menor recall y mayor FAS que el baseline. En mejora, una FAS ligeramente menor no compensa por sí sola el menor recall ni demuestra superioridad.
+
+La confirmación de dos meses reduce el número de alertas emitidas, pero **menos alertas no equivale a mayor utilidad predictiva**. No se modificaron umbrales, eventos, ventanas ni casos para corregir estas cifras tras ver la reserva. Las alertas predictivas automáticas permanecen desactivadas; el producto muestra señales para revisión descriptiva.
+
+Este resultado negativo no contradice la mejora Brier de v1: **déficit futuro y transición de estado son desenlaces diferentes**. Tampoco las pruebas de software aprobadas convierten este backtest en un resultado predictivo satisfactorio.
+
+Fuentes: [desarrollo](trajectory-v2/development-report.json), [reserva](trajectory-v2/reserved-report.json) e [informe sellado de evaluación/exportación](trajectory-v2/assessment/report.md).
+
+## 17. V2: cobertura e incertidumbre
+
+### 17.1. Universo evaluable
+
+| Medida | Desarrollo | Reserva |
+| --- | ---: | ---: |
+| Empresas / grupos incluidos | 1.078 / 200 | 1.078 / 200 |
+| Oportunidades empresa-origen | 7.546 | 3.234 |
+| Orígenes con inputs elegibles para dirección | 3.250 | 2.101 |
+| Orígenes con inputs no elegibles | 4.296 | 1.133 |
+| Ventanas posibles de evento | 8.624 | 4.312 |
+| Ventanas observadas | 1.771 | 1.074 |
+| Ventanas desconocidas | 6.853 | 3.238 |
+| Eventos confirmados antes de exigir origen elegible | 145 | 88 |
+| Eventos excluidos por no tener origen elegible | 28 | 10 |
+| Eventos elegibles usados en recall | 117 | 78 |
+
+Las ventanas de evento, los orígenes de alerta y los eventos confirmados son unidades diferentes; no deben sumarse como si fueran filas equivalentes. La cobertura limitada por actividad, FX, cotas y ambigüedad condiciona las métricas. Los motivos pueden solaparse: sumar sus conteos no da necesariamente el total de excluidos.
+
+### 17.2. Bootstrap por grupos
+
+Se fijaron **1.000 réplicas**, semilla **1729**, muestreando con reemplazo los 200 grupos incluidos. Candidato y baseline comparten sorteos; se preservan las empresas y la cronología dentro de cada copia del grupo mediante sus conteos de matching. No se reentrena ni se modifica el evento en las réplicas.
+
+El protocolo exige al menos cinco eventos en cinco grupos y cinco grupos que contribuyan al denominador de cada métrica/método. Los intervalos son percentiles 2,5 y 97,5 con interpolación lineal. Se requieren al menos 950 réplicas finitas de 1.000; no se repiten sorteos para reemplazar resultados indefinidos. Con soporte insuficiente, el intervalo queda nulo con motivo y solo se presentan estadísticas descriptivas.
+
+Estos intervalos describen **rendimiento agregado de reglas fijas en los grupos observados**. No son intervalos de probabilidad individual ni resuelven el sesgo de cobertura, la disponibilidad retrospectiva o la falta de validación externa.
+
+Fuentes: [contrato de soporte y bootstrap](trajectory-v2/protocol.json), [implementación](../../scripts/trajectory_metrics.py) y reportes de las dos fases citados en la sección anterior.
+
+## 18. V2: casos, probabilidades y entrega API/UI
+
+### 18.1. Tres ejemplos de desarrollo, no elegidos por acierto
+
+Se eligió el primer patrón elegible por fecha de confirmación, empresa y mes de inicio, sin ordenar por magnitud, probabilidad o éxito de alertas. No se tomaron casos de la reserva ni de los 50 grupos de test v1.
+
+| Caso | Empresa | Inicio observado | Confirmado y visible desde | Qué debe verse sin ocultar resultados |
+| --- | --- | --- | --- | --- |
+| Deterioro sostenido | `COMP_0009` | 2025-04-01 | 2025-05-31 | Estado pasa a déficit; dirección insuficiente en el patrón; ningún match del candidato ni baseline |
+| Mejora sostenida | `COMP_0179` | 2025-04-01 | 2025-05-31 | Estado pasa a no-déficit; la dirección todavía es deteriorating en abril y improving en mayo; ningún match |
+| Bache recuperado | `COMP_0028` | 2025-04-01 | 2025-06-30 | Un mes en déficit entre meses sin déficit; recuperación conocida solo al cierre de junio; no es target sostenido |
+
+Las discrepancias son parte de la evidencia: **un evento observado de mejora puede coexistir con una dirección calculada todavía desfavorable**. No se sustituyeron los casos para hacer parecer eficaz la alerta. El caso completo se oculta en API/UI antes de su confirmación; la navegación a ejemplos se rotula como selección retrospectiva de desarrollo, no conocimiento del pasado.
+
+### 18.2. Reutilización del predictor v1
+
+La trayectoria descriptiva cubre 24 meses, pero la curva de probabilidad v1 solo puede tener valores elegibles desde abril de 2026, después de las etiquetas de entrenamiento/selección disponibles hasta el 31 de marzo. Antes de ese corte, `p_proxy=null` con motivo `before_training_cutoff`. Después, inputs no elegibles también producen abstención.
+
+| Cierre de inferencia | Empresas preservadas | Estimaciones disponibles |
+| --- | ---: | ---: |
+| Abril 2026 | 1.286 | 968 |
+| Mayo 2026 | 1.286 | 1.026 |
+| Junio 2026 | 1.286 | 1.032 |
+| Julio 2026 | 1.286 | 1.023 |
+| Agosto 2026 | 1.286 | 1.010 |
+
+Agosto coincide con las predicciones selladas de v1; no se ajustó otro modelo ni se consultaron sus targets para producir la curva. El modelo se entrenó físicamente en septiembre: los puntos de abril–agosto son una **simulación retrospectiva as-of**, no prueba de emisión histórica en vivo. Los ejemplos de desarrollo de 2025 no reciben probabilidades inventadas.
+
+### 18.3. Entrega e interpretación
+
+El nuevo modo `operating_trajectory` contiene **1.286 empresas × 24 meses = 30.864 puntos**. Las otras 208 empresas, pertenecientes a los 50 grupos excluidos, pueden visualizar sus indicadores y probabilidades, pero no tienen etiquetas de eventos ni casos seleccionados por el backtest v2.
+
+Se implementaron:
+
+- Carga y verificación del export y su manifest en servidor, con esquema tipado y referencias de diccionario locales; no se envía el dataset completo al navegador.
+- Consulta `as_of` por empresa autorizada y mes cerrado; se filtran puntos, fecha de assessment y fila actual, rechazando cortes inválidos en lugar de sustituirlos por el último.
+- Ocultación de todo el caso hasta su confirmación y de las métricas globales del backtest en vistas históricas. El informe global posterior se identifica como metodología retrospectiva.
+- Gráficos que no unen huecos y separan ratios operativos de la probabilidad; evidencia de periodos, denominadores, cobros/pagos, cotas y fechas.
+- Revisión manual no ejecutable; caja, buffer y salud siguen desconocidos y los planes se rechazan en este modo. Los modos cash de demo y proxy v1 se conservan.
+- Aviso explícito **“Anticipation not validated”**, sin alertas predictivas automáticas.
+
+El export ocupa 103.942.971 bytes y permanece en servidor; en el E2E registrado, la respuesta máxima por empresa/corte fue de 115.763 bytes. No se incorporó Jev a las reglas, los labels o la inferencia.
+
+Fuentes: [casos sellados](trajectory-v2/development-cases.json), [manifest del export y esquema](trajectory-v2/assessment/manifest.json), [evidencia E2E](trajectory-v2/app-verification/browser-2026-09-19T18-59-16.113Z.json) y [guía de uso](../../readme.md).
+
+## 19. V2: verificación, revisión y límites de las incidencias
+
+La verificación final de la implementación registró:
+
+| Comprobación | Resultado registrado |
+| --- | --- |
+| Suite Python completa | 254 tests, cero skips, aprobados |
+| Calidad y CSV frente a Parquet | Sin discrepancias; ocho tablas coinciden |
+| `bun run check` | Typecheck y build de ambas apps, checks web, tres tests web de trayectoria, fmt/clippy y once tests Rust ordinarios aprobados |
+| Exports reales en Rust | Cuatro tests que se ejecutan explícitamente: dos v2 y dos v1 |
+| Navegador Chromium con sandbox | 13 pasos, 78 respuestas históricas API, 26 cortes UI y cero errores de página |
+| Reproducción del export v2 | Bytes idénticos y 112 archivos protegidos sin cambios |
+| Replay de inferencia v1 | Probabilidades, features y metadatos exactos; error máximo de probabilidad 0,0 |
+
+No se repitieron las fases reales de evaluación durante estos checks. Los tests de fixtures sí ejercitan ajuste/evaluación sobre datos de prueba, separados de los artefactos y resultados reales.
+
+**Revisión independiente y fallo del servicio:** el evaluador de v2 recibió revisión independiente antes de abrir la reserva. Los dos intentos posteriores de revisión delegada final de la entrega fallaron por el límite del servicio de subagentes. La revisión final se hizo inline por el agente padre y **no es independiente**, como registra `final_delivery_independent: false`. No se debe presentar ese fallback como una segunda aprobación externa ni atribuirle una validación que no realizó.
+
+Los mensajes de conexión/cuota pertenecen al servicio de agentes; el backtest y las pruebas de aplicación sí produjeron resultados guardados. La causa exacta de los avisos genéricos de desconexión no quedó determinada. **El mal rendimiento de las alertas es el resultado del backtest completado**, no una métrica generada por el fallo de revisión.
+
+Los informes sellados conservan el estado de la fase en que se emitieron. En particular, el informe de exportación v2 menciona integración pendiente porque se generó antes de la etapa de API/UI. Se preserva para no romper sus hashes; esta sección y los registros finales documentan la integración posterior ya verificada.
+
+La presente consolidación modifica documentación, no código ni resultados. Los conteos anteriores son los registrados al verificar la implementación v2; no se afirma que se haya vuelto a ejecutar la suite o los backtests para redactar este Markdown.
+
+Fuente: [resumen de verificación final, comandos, hashes y limitaciones](trajectory-v2/final-verification/summary.json).
+
+## 20. Conclusión conjunta y reproducción segura
+
+### 20.1. Qué queda demostrado y qué no
+
+| Afirmación | Conclusión |
+| --- | --- |
+| El clasificador v1 mejora a su baseline en su proxy y test definidos | Respaldada dentro de su población observable y límites sintéticos/retrospectivos |
+| La misma AP demuestra anticipación de mejora/deterioro | No; es otro desenlace y otra evaluación |
+| Las reglas v2 son útiles como alertas predictivas | **No validado:** baja detección y alta FAS; no se promueven a uso predictivo automático |
+| La trayectoria se puede inspeccionar por fecha con evidencia y abstenciones | Implementado y probado en API/UI |
+| Pasar tests de software demuestra eficacia financiera | No; comprueba implementación e integración, no calibración ni utilidad externa |
+| Tenemos evaluación oficial o validación real externa | No disponible |
+
+Una siguiente investigación de anticipación tendría que definir otra hipótesis y una evaluación adecuada. No se debe ajustar contra esta reserva ya inspeccionada ni ocultar sus malos resultados. Tampoco hay una causa demostrada del bajo rendimiento más allá de lo medido: una explicación causal o una mejora prometida requerirían evidencia nueva.
+
+### 20.2. Verificar sin reabrir experimentos
+
+Desde el worktree y entorno ligados al snapshot original, los comandos de comprobación son:
+
+```sh
+.venv/bin/python -B -m scripts.trajectory_backtest verify
+.venv/bin/python -B -m scripts.trajectory_export --check
+.venv/bin/python -B scripts/replay_model.py --check
+```
+
+`verify` comprueba integridad y finalización de fases existentes, no recalcula métricas. El `--check` de exportación reconstruye indicadores descriptivos e inferencia para comparar bytes, sin detectar eventos ni ejecutar otra vez el backtest. No borrar recibos ni repetir `develop` / `evaluate-reserved`; se mantiene el límite de portabilidad y versiones exactas explicado en la sección 11.
+
+| Artefacto v2 | SHA-256 |
+| --- | --- |
+| `trajectory-v2/protocol.json` | `d37ee0cad9101b4e6ae1dbc39f69d471ff7457b2cf3c5dac8ac5bd786c70159d` |
+| `trajectory-v2/execution-manifest.json` | `5a2b05bb2a83757ceaf18465c81f6db48c812a0036dcc2dd82c9566eca5f9a33` |
+| `trajectory-v2/reserved-access.json` | `2decf275e47ef57fbfe4de17753455b121115185a5c3a66ed938c481abfc04b2` |
+| `trajectory-v2/reserved-report.json` | `9498d0798cc48caf04fd3020fe7a86cc9c1c7ed12d5f4ebfb674df1d61e683ac` |
+| `trajectory-v2/assessment/companies.json` | `2c9cbfd1cb5f8976cbff5184f7eabcc796fe86763de0e0cc512c2448a579a5c9` |
+
+Este documento consolida los resultados para lectura; los [JSON del protocolo](trajectory-v2/protocol.json), [desarrollo](trajectory-v2/development-report.json), [reserva](trajectory-v2/reserved-report.json) y [verificación final](trajectory-v2/final-verification/summary.json) conservan el detalle trazable. El vault, los artefactos sellados y los resultados originales de v1 no se modifican con esta actualización.
+
+## 21. V3: alcance real y diferencia respecto al brief
+
+El brief exige **leer el rastro financiero, producir un score temporal como eje, explicar ese score y construir un producto sobre él**. Las seis preguntas son salud/solidez, mejora, deterioro incipiente, bache o caída, explicación del cambio y anticipación. La referencia a **60–80 empresas no vistas** es un requisito comunicado; no es evidencia de haber recibido o superado ese test oficial.
+
+La ejecución v3 produjo un núcleo financiero genérico, una adaptación real de los 24 meses, un experimento de cobros y una entrega navegable. **El score global permanece `null`.** La secuencia déficit → reglas de trayectoria → cambios en cobros no sustituye el score requerido. La generalización probada por v1 para su proxy tampoco valida este objetivo integral.
+
+El usuario autorizó trabajar con el dataset existente sin exigir adquisición externa como condición de implementación/evaluación interna. Se mantienen los límites de disponibilidad, cobertura y exposición previa; ese permiso no convierte la validación explorada en una reserva independiente ni permite inventar información. No se reabrieron el test v1 o la reserva v2.
+
+## 22. V3: tres capas y cobertura del dataset
+
+| Capa | Implementación | Qué no demuestra |
+| --- | --- | --- |
+| Núcleo estricto de desarrollo | Caja nativa reconciliable, obligaciones y asignaciones, mora por días, crecimiento, cinco dimensiones y explicaciones; fixtures de no premiar impago | Los fixtures no son casos reales ni prueban utilidad financiera |
+| `dataset-v1` | 1.286 perfiles × 24 cierres, flujos/servicio/documentos/aging, componentes observados e intervalos, dos escenarios de caja inversa | No certifica caja disponible, deuda histórica total o score global |
+| `dataset-v1/model-v1` | Tres targets registrados; ajuste real para los dos binarios de cobros, abstención del modelo de bache | No es un predictor integral de salud ni anticipación económica validada |
+
+El núcleo estricto tiene pesos de desarrollo 25/25/20/15/15; la adaptación descriptiva usa un intervalo operativo de generación/crecimiento/estabilidad con pesos fijos 0,4/0,3/0,3. **Son contratos distintos**, ninguno aprendido como rating global. Las dimensiones faltantes permanecen inciertas; no se renormalizan los pesos por empresa para aparentar salud completa. El intervalo global `[0,100]` es no informativo, no un intervalo de confianza.
+
+La mora del núcleo usa multiplicadores 1/1,25/1,5/2/3/4 según días; la adaptación de aging de facturas conserva un multiplicador entre 1 y 1,25 para la primera banda de 1–30 días, porque no conoce el día exacto dentro de ella. El importe ponderado no aumenta la deuda legal ni modifica caja. Los componentes operativos descuentan el importe nominal de documentos AP con vencimiento, no la reducción de pagos bancarios; los tests comprueban que retener pagos no mejora esos componentes.
+
+| Cobertura de la adaptación | Puntos empresa-mes |
+| --- | ---: |
+| Total conservado | 30.864 |
+| Actividad de caja observada | 21.036 |
+| Neto de caja observado con EUR utilizable | 19.192 |
+| Reconstrucción provisional de caja | 21.718 |
+| Cobros operativos observados | 7.215 |
+| Servicio de deuda pagado identificable | 5.249 |
+| Estimación AP pendiente | 6.745 |
+| Intervalo de exposición por mora | 6.339 |
+| Proxy de importe nominal AP venciendo en el mes | 10.653 |
+| Crecimiento observado tres meses frente a tres | 1.585 |
+
+Estas poblaciones se solapan y no se suman. Caja inversa es por moneda nativa con dos cortes posibles del ancla; no se inventa FX de stocks ni se presenta como saldo disponible. AP/AR y pendientes son proxies retrospectivos basados en signo/estado final, no un ledger completo de asignaciones. El outstanding de extracción no se replica hacia atrás.
+
+Fuentes: [auditoría](financial-v3/audit-summary.json), [contrato estricto](financial-v3/protocol-development-v1.json), [política del adaptador](financial-v3/dataset-v1/policy.json), [cobertura](financial-v3/dataset-v1/coverage.json) y [verificación del adaptador](financial-v3/dataset-v1/verification.json).
+
+## 23. V3: inputs, targets y entrenamiento ejecutado
+
+### 23.1. Features y disponibilidad
+
+El clasificador real recibe **18 features**: valores del mes y medias de tres meses de cobros/pagos conocidos, cotas operativas, cobertura EUR y de clasificación, documentos AP/AR emitidos, importe AP con vencimiento mensual, contadores de vencimiento/FX desconocidos y servicio pagado conocido. IDs, stocks, saldos reconstruidos con ancla futura, estados/pagos finales de facturas y score no entran en X.
+
+La disponibilidad de movimientos contabilizados y campos de emisión/vencimiento al cierre es un **supuesto retrospectivo explícito**, no `known_on` histórico certificado. X admite subtotales de cobros conocidos; Y exige cobros clasificados completos. No son ventas ni solvencia.
+
+### 23.2. Targets registrados antes de calcularlos
+
+- `receipt_contraction_3m`: al menos dos de los tres meses siguientes tienen cobros ≤80 % de la media de `m-2..m`.
+- `receipt_expansion_3m`: la misma regla con ≥120 %.
+- `current_receipt_dip_3m`: se condiciona a una caída ya observada en `m`, ≤80 % de la media de `m-3..m-1`. En los tres meses posteriores, `recovered` exige dos consecutivos ≥90 % de esa referencia; `persistent`, al menos dos ≤80 %; el resto observado es `mixed`.
+
+Se requieren actividad de caja, EUR completo, cobros operativos no negativos clasificados, sin entradas ambiguas, y cuentas observadas idénticas en las ventanas exigidas. Si no hay seguimiento/comparabilidad suficiente, la etiqueta queda desconocida. No se transforma desconocido en negativo. Estas reglas se refieren a **cobros**, no a la mejora/deterioro financiero completo del brief.
+
+### 23.3. Partición y soporte
+
+| Etapa | Grupos asignados | Orígenes | Etiquetas hasta | Inputs elegibles | Etiquetas binarias observables |
+| --- | --- | --- | --- | ---: | ---: |
+| Fit | Train, 150 | Noviembre 2024–marzo 2025 | Junio 2025 | 1.536 / 4.240 | 212 |
+| Validación interna | Validation, 50 | Julio–septiembre 2025 | Diciembre 2025 | 345 / 690 | 28 |
+
+Abril–junio queda purgado. No hay grupos compartidos entre fit y validación; los 50 final_test no entran en features, etiquetas, ajuste, inferencia ni casos v3. No se consultan outcomes de 2026. Son **4.930 filas candidatas y 1.881 elegibles**, no 4.930 empresas independientes.
+
+Los 212 ejemplos de entrenamiento binario pertenecen a 25 grupos; los 28 de validación a 8 grupos y 11 empresas. El subconjunto observable es pequeño y las ventanas se solapan. Las causas de censura del informe son no exclusivas: no se suman como si fueran conjuntos disjuntos.
+
+### 23.4. Candidatos y selección
+
+Por target binario: constante de prevalencia, persistencia, tendencia fija y logística `C=0.1/1`. Persistencia aprende frecuencias por estado de cobros actual respecto a su media, suavizadas con dos pseudoobservaciones de prevalencia train. Para bache: constante y logística `C=1` multiclase.
+
+La logística imputa medianas train, añade un indicador por cada feature ausente y aplica escalado aprendido solo con train. Una columna totalmente ausente en train usa un placeholder cero más indicador; no se interpreta como deuda/cobros realmente nulos. Solver `lbfgs`, `max_iter=2000`, semilla 1729 y dos hilos.
+
+Se ejecutaron **cuatro ajustes logísticos reales**, dos por target binario, y se seleccionó **persistencia para ambos** por menor Brier medio por grupo en la validación fijada. La selección comparte muestra con las métricas publicadas: hay sesgo de selección, no aceptación independiente. Los dos baselines seleccionados se reajustaron sobre las 240 filas permitidas con etiquetas maduras hasta diciembre de 2025. No se añadieron otros orígenes.
+
+Fuentes: [protocolo ejecutado](financial-v3/dataset-v1/model-v1/protocol.json), [implementación de labels y ejecución](../../scripts/financial_v3_dataset_model.py), [estimadores](../../scripts/financial_v3_dataset_model_metrics.py) y [registro de ejecución](financial-v3/dataset-v1/model-v1/verification.json).
+
+## 24. V3: resultados y comparación correcta
+
+| Target | Candidato | AP | Brier por fila | Brier medio por grupo |
+| --- | --- | ---: | ---: | ---: |
+| Contracción | Constante | 0,321429 | 0,228742 | 0,241545 |
+| Contracción | **Persistencia, seleccionada** | **0,443001** | **0,211127** | **0,208977** |
+| Contracción | Tendencia | 0,395382 | 0,254286 | 0,271250 |
+| Contracción | Logística C=0,1 | 0,391648 | 0,267509 | 0,276246 |
+| Contracción | Logística C=1 | 0,471854 | 0,278113 | 0,295791 |
+| Expansión | Constante | 0,357143 | 0,243182 | 0,230828 |
+| Expansión | **Persistencia, seleccionada** | **0,410000** | **0,224609** | **0,229112** |
+| Expansión | Tendencia | 0,328571 | 0,382857 | 0,377500 |
+| Expansión | Logística C=0,1 | 0,357637 | 0,251694 | 0,245714 |
+| Expansión | Logística C=1 | 0,399762 | 0,270916 | 0,285604 |
+
+**Conclusión:** persistencia mejora a la constante, pero las regresiones no ganan por el criterio de selección. La logística C=1 ordena mejor la contracción por AP, a costa de peor error probabilístico; no se eligió por esa métrica secundaria. No comparar estas AP con 0,815603 de v1 para afirmar una degradación del mismo modelo: son distintos objetivos y muestras.
+
+Al umbral 0,6, persistencia no emite alertas: **recall 0 y precisión indefinida**. ECE de cinco bins: 0,162348 para contracción y 0,080160 para expansión. Los gates registrados de utilidad fallan en ambos signos, incluyendo soporte/cobertura y detección; mejoras de Brier por fila no sustituyen las comprobaciones ponderadas por grupo. No hay calibración demostrada ni bootstrap del experimento v3; no se fabrican intervalos individuales o de anticipación.
+
+| Clase de bache | Train: filas / grupos | Validación: filas / grupos |
+| --- | ---: | ---: |
+| Recuperado | 11 / 9 | 5 / 4 |
+| Persistente | 38 / 13 | 5 / 3 |
+| Mixto | 12 / 7 | 2 / 2 |
+
+Se exigían al menos 20 filas y 5 grupos por clase, además de 10 grupos totales. El soporte train no se cumple para recuperado/mixto: **no se ajusta el modelo de bache ni se emiten sus probabilidades**. No se confunde abstención con predicción de persistencia.
+
+Las probabilidades del overlay solo existen de **enero a agosto de 2026**, después del corte de selección de diciembre: 1.078 perfiles potenciales, **6.289 puntos elegibles por target binario**. Antes son `null`; las 208 empresas de final_test se mantienen como abstenciones de modelo. Cobertura de inferencia no equivale a rendimiento validado sobre esos meses.
+
+Fuentes: [métricas resumidas por candidato](financial-v3/dataset-v1/model-v1/metrics-summary.json), [métricas completas](financial-v3/dataset-v1/model-v1/metrics.json), [manifest](financial-v3/dataset-v1/model-v1/manifest.json) y [verificación](financial-v3/dataset-v1/model-v1/verification.json).
+
+## 25. V3: artefacto de entrega y verificaciones históricas
+
+La entrega objetivo es un **artefacto sencillo** centrado en el score y su evidencia. El [generador de informe local](../../scripts/render_model_report.py) consume perfiles JSON y métricas sellados para producir HTML autónomo, sin entrenar, inferir ni reevaluar. Su existencia no completa el score global ni demuestra utilidad predictiva.
+
+La selección mensual y la caja inversa son retrospectivas: un ancla posterior no demuestra conocimiento histórico. Flujos/servicio/facturas usan EUR; caja reconstruida conserva la moneda de cada cuenta. El artefacto no ejecuta alertas o decisiones financieras.
+
+La tabla siguiente conserva las **verificaciones registradas de una fase técnica anterior**. Esta revisión documental no las vuelve a ejecutar ni certifica el estado de frontend/backend.
+
+| Verificación de entrega enmendada | Resultado registrado sobre las fuentes finales |
+| --- | --- |
+| Tests de enmienda de caché | 20 aprobados |
+| Suites Python puras seleccionadas | 127 aprobados |
+| `bun run check` | Typecheck/build, ocho tests TS y doce Rust ordinarios aprobados |
+| Exports reales Rust ejecutados explícitamente | Ocho aprobados |
+| Navegador | 15 pasos, 112 cortes API v3, 17 UI v3, 72 API v2 y cero errores de página |
+| Integridad enmendada | 3.025 referencias históricas exactas, una caché regenerable autorizada, 26 fuentes actuales vinculadas |
+
+Los 189 tests Python anteriores a la integración son evidencia histórica de otro estado; no se suman a los anteriores ni se presentan como una ejecución actual completa. La revisión independiente aprobó el adaptador para desarrollo acotado. La revisión final de entrega recurrió a **fallback inline no independiente** por cuota del servicio; eso no certifica utilidad financiera.
+
+El build regeneró `apps/app/tsconfig.tsbuildinfo`, incluido en un sello anterior. No se recuperaron sus bytes: se conserva el fallo y el intento de recuperación. Una enmienda explícitamente autorizada permite solo esa caché regenerable, sin modificar sellos originales ni datos/modelos. **El bloqueo técnico está resuelto bajo esa enmienda; no lo está el objetivo predictivo.**
+
+Esta actualización de siete documentos captura sus versiones previas y registra sus cambios por separado. La comprobación documental verifica los vínculos del código analítico y los artefactos científicos, la conservación de las secciones históricas 1–20 y del preregistro v2, las cifras publicadas y los enlaces locales. El estado de frontend/backend queda fuera de esta comprobación. No se reejecutan entrenamientos, reservas ni pruebas de aplicación para redactar este informe.
+
+Fuentes: [entrega original y STOP histórico](financial-v3/dataset-v1/delivery-v1/verification.json), [enmienda y checks finales](financial-v3/dataset-v1/delivery-v1/amendment-v2/verification.json), [revisión del padre](financial-v3/dataset-v1/delivery-v1/amendment-v2/check-parent-review-20260920-v1.json) y [verificador de esta revisión documental](financial-v3/dataset-v1/delivery-v1/amendment-v2/documentation-v1/verify_artifact_docs.py).
+
+## 26. Estado frente a las seis preguntas y siguiente prioridad
+
+| Pregunta | Estado vigente |
+| --- | --- |
+| Quién está sano | Score global indisponible; solidez excepcional no validada |
+| Quién está mejorando | Cambios descriptivos y proxy de expansión de cobros; no mejora financiera general validada |
+| Quién empieza a torcerse | Proxy limitado, sin aviso financiero temprano útil demostrado |
+| Bache o caída | Métodos genéricos probados; predictor real sin soporte suficiente |
+| Por qué ha cambiado | Aritmética de componentes, no explicación de un score global todavía pendiente |
+| Cuándo se vio venir | Anticipación útil no validada; v3 no reporta lead de eventos económicos |
+
+**Prioridad:** volver al score como eje, diagnosticar la pérdida de cobertura y revisar qué supuestos o restricciones del diseño son demasiado conservadores, sin rellenar desconocidos como cero. Después: explicación de nivel/delta, persistencia/bache, anticipación, generalización por empresa/grupo y producto. Todo sobre los 24 meses actuales, con nueva versión de protocolo antes de nuevos experimentos y sin retocar los resultados ya sellados.
+
+CFO/tesorería es un perfil de usuario considerado. El brief señala a la empresa proveedora de datos como comprador probable; es una hipótesis comercial por concretar, no una venta validada. El artefacto sencillo debe apoyarse en el score y su evidencia: producir un informe no demuestra disposición a pagar ni compensa la falta del score central. Véanse [contexto analítico](../../docs/DATA-MODEL-CONTEXT.md), [producto](../../docs/PRODUCT.md) y [requisitos](../../docs/REQUIREMENTS.md).

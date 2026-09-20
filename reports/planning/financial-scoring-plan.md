@@ -1,6 +1,214 @@
 # Plan de desarrollo: scoring financiero y predicción temporal
 
-**Estado: PROPUESTA.** Los 23 artefactos de datos versionados (ocho raw, ocho clean y siete marts) son punteros Git LFS no materializados. El pipeline ejecutable `xray` y sus siete marts existen; informes y `reports/build_manifest.json` registran una ejecución histórica `20260919T022951Z-83143e8d` en revisión `86439b6`, no una reproducción local del `HEAD` actual. No hay modelo predictivo entrenado ni target oficial aceptado; los targets proxy existentes son candidatos que requieren aprobación/evaluación.
+## Estado vigente — 20 de septiembre de 2026
+
+**V3 tiene métodos implementados, perfiles analíticos y un experimento real; no tiene todavía el score central ni utilidad predictiva validada.** La entrega objetivo es un artefacto sencillo centrado en el score y sus explicaciones. El brief exige leer el rastro, construir un score temporal, explicarlo y apoyar un producto en él. Los proxies de déficit y de cambios en cobros no son sustitutos de ese eje. La infraestructura ha avanzado más que el objetivo analítico.
+
+Se trabaja con **los 24 meses existentes**, por decisión del usuario. Obtener datos externos no es un prerrequisito de implementación o validación interna; tampoco se finge disponibilidad histórica, cobertura total o un test independiente. La referencia del brief a **60–80 empresas no vistas** es una exigencia de generalización pendiente de demostrar, no un resultado oficial obtenido.
+
+### Hechos ejecutados, sin reinterpretar el resultado
+
+- V1: HGB para déficit operativo, AP 0,815603 / Brier 0,188429 en su test; población observable y límites propios.
+- V2: trayectoria y reglas, 2/37 mejoras y 1/41 deterioros anticipados; resultado negativo, sin nuevo ajuste de v1.
+- V3: núcleo financiero con fixtures; adaptación de **1.286 × 24 = 30.864 puntos**; experimento real de cobros con **18 inputs**, 4.930 candidatos / 1.881 elegibles, fit noviembre 2024–marzo 2025 y validación julio–septiembre 2025 con purga y grupos separados.
+- El experimento v3 ajustó cuatro logísticas reales; ganó persistencia en ambos targets. Solo **28/345 etiquetas de validación**, en 8 grupos; AP 0,443001 / 0,410000 y Brier 0,211127 / 0,224609, recall 0 al umbral 0,6. Ambas utilidades fallaron. Bache/recuperación sin modelo por soporte insuficiente.
+- Las verificaciones técnicas históricas y la enmienda de caché quedan registradas; la revisión final fue inline, **no independiente**. La entrega objetivo es un artefacto sencillo; hay un generador HTML local basado en exports. Ninguno de esos hechos demuestra aceptación de las seis preguntas.
+
+No comparar las métricas de las tres etapas como si midieran el mismo modelo. Fuente consolidada: [informe de entrenamiento, secciones 21–26](../modeling/training-report.md); detalle del experimento: [protocolo](../modeling/financial-v3/dataset-v1/model-v1/protocol.json) y [métricas](../modeling/financial-v3/dataset-v1/model-v1/metrics-summary.json).
+
+### Brecha vigente y orden de trabajo
+
+| Prioridad | Trabajo requerido | Criterio de avance |
+| --- | --- | --- |
+| 1. Score como eje | Definir nivel y trayectoria financiera con las señales del dataset, no solo cobros; distinguir solidez excepcional de ausencia de déficit | Score mensual interpretable, cobertura declarada y significado económico consistente |
+| 2. Cobertura | Diagnosticar meses incompletos, clasificación, cambios de cuentas y supuestos retrospectivos que reducen las etiquetas | Separar falta real de información de restricciones de diseño demasiado conservadoras, sin rellenar desconocidos ni elegir casos por acierto |
+| 3. Explicación | Reconciliar score/delta, deuda, mora, crecimiento y caja bajo sus unidades y fuentes | Por qué da ese número y qué cambió desde el mes anterior, sin causalidad inventada |
+| 4. Bache y dirección | Definir resultados económicos independientes del score; distinguir mejora, deterioro incipiente y persistencia | No sustituir predicción por constatación retrospectiva ni un target financiero por uno de cobros sin declarar el cambio |
+| 5. Anticipación y generalización | Nueva versión de protocolo antes del experimento; separación temporal/grupos, maduración, baselines y métricas de ambos signos | Medir lead antes del inicio junto a recall, falsas alertas, cobertura y estabilidad; declarar reutilización de corpus y límites de independencia |
+| 6. Artefacto y comprador | Sintetizar score y evidencia en un artefacto sencillo; concretar la empresa proveedora de datos como comprador probable | Propuesta de valor validada, no inferida de generar un informe; CFO/tesorería es un público considerado, no una venta demostrada |
+
+Esta es una priorización de trabajo pendiente, **no otro experimento ya ejecutado ni una autorización para reabrir los anteriores**. La ejecución de `model-v1` y los recibos de v1/v2 permanecen consumidos. No rebajar umbrales tras ver resultados, cambiar etiquetas para declarar éxito o inventar una reserva nueva. La validación interna autorizada no sustituye una prueba externa.
+
+### Límites que deben permanecer visibles
+
+El headline global sigue `null`; los componentes/intervalos operativos no son salud completa. No pagar no puede mejorar el score por retener caja: obligación pendiente y penalización por mora se mantienen sin fabricar un gasto o pago. Deuda pagada no es saldo pendiente total; financiación no es crecimiento. La caja inversa es provisional y retrospectiva, no caja disponible ni información conocida en el pasado.
+
+Los documentos vigentes son [contexto de datos/modelos](../../docs/DATA-MODEL-CONTEXT.md), [producto](../../docs/PRODUCT.md), [requisitos](../../docs/REQUIREMENTS.md) y [dashboard](../../docs/DASHBOARD.md). Esta revisión es documental: conserva versiones previas, secciones históricas del informe y el JSON preregistrado inferior; no modifica código, datos, modelos o métricas.
+
+## Registro histórico — estado y Goal v2
+
+**Lo que sigue describe el alcance y decisiones de v2 en su fecha.** No es el estado vigente de v3. Su criterio de medir honestamente incluso un resultado negativo no satisface por sí solo el nuevo objetivo centrado en el score. El preregistro JSON permanece sin cambios.
+
+**V1 cerrado; v2 implementado y backtest medido. Anticipación no validada.** El [informe histórico v1](../modeling/training-report.md) conserva los resultados del proxy `target_deficit_3m`; no se reabre su test ni se reentrena. El [informe v2](../modeling/trajectory-v2/assessment/report.md) documenta trayectoria, casos de desarrollo y una evaluación temporal separada: el candidato anticipó 2/37 mejoras y 1/41 deterioros; la proporción de falsas alertas entre las resolubles fue 96% y 98,039%. La entrega API/MCP/dashboard permite revisión descriptiva, no alertas predictivas automáticas. No se transforma ninguno de estos outputs en score oficial.
+
+**Goal v2:** entregar una trayectoria operativa mensual as-of con estado actual, dirección `improving` / `stable` / `deteriorating` / `insufficient_evidence` y explicación numérica; mostrar por separado la curva del predictor v1 únicamente en fechas válidas posteriores a su corte de selección/entrenamiento; preparar una demo navegable de mejora, deterioro y bache recuperado; medir alertas de ambos signos frente a eventos independientes, aunque el resultado sea recall cero o anticipación no estimable. No hay criterio numérico de «ganar».
+
+El contexto de producto comunicado del estudio X-Ray del 18 de septiembre pide ambas direcciones, trayectoria, explicación, buyer y demo navegable; la anticipación era bonus y ahora forma parte del alcance interno v2 aprobado. El usuario ha comunicado que el test oficial **podría cancelarse o cambiar**: no es confirmación del organizador. No hay target, métrica ni formato oficiales confirmados. El comprador sigue siendo CFO/tesorería/equipo financiero; conservar Blaubeere, el modo cash de demo y el dashboard actual, sin rebranding ActionDesk ni cuatro páginas nuevas. Véanse [producto](../../docs/PRODUCT.md), [requisitos](../../docs/REQUIREMENTS.md) y [dashboard](../../docs/DASHBOARD.md).
+
+**Secuencia ejecutada:** preregistro → implementación y fixtures → sellado de código/inputs → desarrollo y una evaluación reservada → export e integración. Se conserva el [manifest de ejecución](../modeling/trajectory-v2/execution-manifest.json) y el [recibo de acceso reservado](../modeling/trajectory-v2/reserved-access.json). No repetir fases consumidas ni retocar reglas para mejorar la reserva. El workflow y su estado viven fuera del protocolo. Las propuestas antiguas de Jev, cash forecasting, score y validación no amplían esta autorización.
+
+### Preregistro v2
+
+Contrato de diseño fijado **antes de consultar nuevos outcomes**, ya materializado sin cambios de semántica, valores ni bytes del bloque inferior en [trajectory-v2/protocol.json](../modeling/trajectory-v2/protocol.json). Su SHA-256 es `d37ee0cad9101b4e6ae1dbc39f69d471ff7457b2cf3c5dac8ac5bd786c70159d`; el [recibo exclusivo](../modeling/trajectory-v2/protocol-receipt.json) lo preserva junto con los hashes de inputs y conteos de asignación. No se requiere otra autorización para este artefacto. El recibo de contrato es distinto del recibo posterior de acceso reservado y del manifest del código evaluado: los tres se conservan. El bloque siguiente permanece idéntico al preregistro, incluidas sus descripciones prospectivas; no es una invitación a repetir la evaluación.
+
+Los SHA-256 siguientes proceden de [protocol-v1/protocol.json](../modeling/protocol-v1/protocol.json), [prepared.json](../modeling/protocol-v1/prepared.json) y [model_manifest.json](../modeling/experiment-v1/model_manifest.json). El verificador contractual ya comprobó identidad de bytes de los metadatos fijados, modelo, panel y manifest de run, y coherencia de sus enlaces, **sin interpretar Parquet ni cargar el modelo**. La asignación JSON confirma 150 grupos train, 50 validation y 50 final_test: 200 incluidos y 50 excluidos. El único input de valores de trayectoria/eventos fue `panel_flujos` del run fijado, consultado después del sellado y con filtros de grupos/fechas. No se utilizó `targets_proxy` ni resultados v1 como etiquetas de eventos v2.
+
+```json
+{
+  "protocol_version": "trajectory-v2",
+  "scope": "Synthetic retrospective monthly operating trajectory and bidirectional alert backtest; not an official health score, cash stock, default probability or causal diagnosis",
+  "source": {
+    "run_id": "20260919T124814Z-e5302b58",
+    "run_relative_panel": "data/marts/panel_flujos.parquet",
+    "binding_rule": "Resolve this relative artifact inside the pinned run, never through a mutable current pointer or a new build",
+    "run_manifest_sha256": "88059a142248927f2c6ae0816993eae6e1177abf3138f089df09d93bc642ce6b",
+    "panel_sha256": "af5cf4be59d9e3e1a98841208b69b029127345cd9c02a47a553e986dc0c7ebd7",
+    "perimeter": "booked checking/saving/wallet; bounded operating EUR flows; verified conversions only; not full company accounts",
+    "raw_policy": "Immutable; no raw reads or rebuild required by this contract",
+    "availability": "available_at = last_day(month); require every contributing row available_at <= as_of; retrospective assumption, not certified historical known_on",
+    "calendar": {"first_month": "2024-09-01", "last_month": "2026-08-01", "months_per_company": 24},
+    "row_policy": "Retain every company x calendar month, including absent/ineligible months with nulls and explicit reasons; never compress gaps or impute zero",
+    "identity_checks": "Unique company/month and stable company/group; reject unexpected schema, keys or hashes before outcome access"
+  },
+  "metadata_inputs_sha256": {
+    "reports/modeling/protocol-v1/protocol.json": "b313de697e5daded3027db6ea18f4221649efcb899f23312768b5fcb4f2f9034",
+    "reports/modeling/protocol-v1/feature_contract.json": "fc63dd509e547fdf41f89a6b05012947531e9f1590e5f71771219f83a0539fab",
+    "reports/modeling/protocol-v1/group_assignment.json": "180e6373477e1c2fd12c69677bb43781a6c7c52334f38efc362d6b30d54217e4"
+  },
+  "monthly_state": {
+    "name": "deficit_state",
+    "values": ["deficit", "non_deficit", "insufficient_evidence"],
+    "eligibility": "Present closed month, cash activity true, n_sin_eur=0, finite gross>0, finite ordered lower/upper operating bounds in base AND trim",
+    "gross": "volumen_caja_conocido_eur",
+    "base_bounds": ["operativo_min_eur", "operativo_max_eur"],
+    "trim_bounds": ["operativo_min_sin_atipicos_eur", "operativo_max_sin_atipicos_eur"],
+    "rounding_for_state_only": "Round bounds to EUR cents half-away-from-zero, as v1 robust_deficit",
+    "deficit": "Rounded upper<0 in base AND trim",
+    "non_deficit": "Rounded lower>=0 in base AND trim",
+    "otherwise": "insufficient_evidence; retain reasons for gaps, activity, FX, gross, bounds, ambiguity or trim disagreement",
+    "separation": "Deficit is a level, not deterioration; non_deficit is not improvement; no quality penalty or 0-100 score"
+  },
+  "direction": {
+    "values": ["improving", "stable", "deteriorating", "insufficient_evidence"],
+    "prior_month_offsets": [-5, -4, -3],
+    "recent_month_offsets": [-2, -1, 0],
+    "input_eligibility": "All six contiguous calendar months pass monthly input eligibility; a robust deficit/non_deficit classification is NOT required",
+    "ratios": "For each variant, lower/gross and upper/gross; use the same observed base gross for base AND trim; no invented trimmed denominator",
+    "aggregation": "Unweighted arithmetic means of monthly ratios, NOT ratio of sums",
+    "delta_interval": {"lower": "recent_lower_mean - prior_upper_mean", "upper": "recent_upper_mean - prior_lower_mean"},
+    "threshold": 0.05,
+    "threshold_unit": "5 percentage points of gross; fixed design decision, not optimised",
+    "improving": "delta_lower>=0.05 in base AND trim",
+    "deteriorating": "delta_upper<=-0.05 in base AND trim",
+    "stable": "Entire delta interval strictly inside (-0.05,0.05) in base AND trim",
+    "otherwise": "insufficient_evidence; reason ambiguous_direction or input eligibility reasons; never relabel uncertainty as stable",
+    "comparison_precision": "Finite binary64 arithmetic; chronological sums divided by 3; no display rounding, cents rounding or epsilon before direction comparisons",
+    "explanation": "Show recent/prior known operating in/gross and out/gross, base/trim intervals and delta; delta identified net ratio = delta in ratio - delta out ratio",
+    "explanation_limits": "Known-flow arithmetic, not SHAP, causal attribution, model points or a decomposition of uncertainty bounds; keep denominator changes and unknown classification visible"
+  },
+  "alerts": {
+    "sign_map": {"improving": "improvement", "deteriorating": "deterioration"},
+    "candidate": "First directional month is provisional watch; second consecutive calendar month of same sign emits one confirmed alert at that second month-end; no more alerts in that run",
+    "baseline": "One alert at first directional month of each same-sign episode; no persistence; comparison only",
+    "run_break": "Stable, insufficient_evidence, missing month or opposite sign ends the previous run; opposite sign starts a new run immediately",
+    "history_initialisation": "Process chronologically from calendar start using only past/current rows; carry run state across period boundaries, never restart an ongoing episode to create an evaluation alert",
+    "dates": "Store first_signal_at separately from confirmed_alert_at; issue at actual month-end, never backdate confirmation to watch"
+  },
+  "events": {
+    "unit": "company + sign + onset_month; built only from robust monthly deficit_state, independent of direction, alerts and probabilities",
+    "deterioration": "non_deficit at s-2,s-1 then deficit at s,s+1",
+    "improvement": "deficit at s-2,s-1 then non_deficit at s,s+1",
+    "onset": "Month s, first month of new state",
+    "confirmation": "last_day(s+1); all four contiguous states observed and robust by confirmation",
+    "gap_rule": "Any missing/insufficient state makes the pattern unknown, not a no-event",
+    "recovered_dip_demo_only": "non_deficit at s-2,s-1; deficit at s; non_deficit at s+1,s+2; recovery confirmed last_day(s+2), not backdated; not a sustained event target"
+  },
+  "evaluation": {
+    "group_assignment": "reports/modeling/protocol-v1/group_assignment.json",
+    "included_assignments": ["train", "validation"],
+    "included_groups_by_v1_design": 200,
+    "excluded_assignment": "final_test",
+    "excluded_groups_by_v1_design": 50,
+    "exclusion_scope": "Exclude ALL v1 final_test groups before development, event detection, alert evaluation or case selection at ANY date; never rerun v1 test",
+    "product_only_exception": "Their observed as-of trajectories may be displayed without event labels, matching or outcome-based selection; no reserved outcome inspection before the one-shot evaluation",
+    "independence": "Temporal reserve on known companies; NOT a new independent group holdout or external validation; shared synthetic corpus and upstream preparation limit independence",
+    "development": {"alert_origin_first": "2025-03-01", "alert_origin_last": "2025-09-01", "outcomes_through": "2025-12-31"},
+    "reserved": {"alert_origin_first": "2026-03-01", "alert_origin_last": "2026-05-01", "outcomes_through": "2026-08-31", "possible_event_onsets": ["2026-04-01", "2026-05-01", "2026-06-01", "2026-07-01"]},
+    "lead_months": [1, 2],
+    "lead_definition": "Calendar month difference onset - actual issued alert origin; not time to confirmation; no zero or negative lead credited",
+    "event_denominator": "Confirmed event within outcome cutoff with at least one direction-input-eligible origin in its [s-2,s-1] window AND the specified alert-origin period; independent of sign prediction and persistence",
+    "same_denominator": "Use the same eligible observed events for candidate and baseline; do not require that an alert was possible under that method's run state",
+    "matching": "Separately per method, company and sign: sort issued alerts by origin; match each to earliest unmatched eligible future event with lead 1 or 2; each alert/event used at most once",
+    "ties": "Sort by company_id, sign and month; reject duplicate identities; no score-based tie breaking",
+    "unmatched_alert": "false_alarm only with complete follow-up; otherwise censored_unknown; an extra alert does not disappear because another alert matched that event",
+    "complete_followup": "For alert origin o, every monthly state from o-1 through o+3 must be observed and robust and last_day(o+3)<=outcome cutoff; covers both possible onsets and their prior/confirmation months",
+    "matched_with_other_gaps": "A fully observed matched event suffices for a match even if other months in the alert follow-up are unknown; disclose coverage separately",
+    "miss": "Eligible observed event with no matched alert for that method; unknown event patterns are not misses or negatives",
+    "left_censoring": "Require s-2,s-1 history for an event and six-month history for eligible origins; report exclusions and pre-period alert episodes, never shift an issue date into the period",
+    "right_censoring": "Require event confirmation and full o+3 follow-up for an unmatched alert to be false; immature windows stay censored_unknown",
+    "coverage": "Report all company/origin opportunities, direction-input-eligible and ineligible origins/reasons, fully observed and unknown event windows, event exclusions without an eligible origin and alerts with incomplete follow-up; no filling unknowns or selecting denominators by success",
+    "no_prediction_comparison": "p_proxy predicts target_deficit_3m, not these transitions; no event-performance metrics for v1 probabilities"
+  },
+  "reporting": {
+    "strata": "Development and reserve separately; improvement and deterioration separately; candidate and baseline separately",
+    "counts": ["events", "alerts", "matches", "misses", "false_alarms", "censored_unknown"],
+    "identities": ["events = matches + misses", "alerts = matches + false_alarms + censored_unknown"],
+    "recall": "matches/events",
+    "false_alert_share": "false_alarms/(matches+false_alarms); NOT false positive rate",
+    "lead_time": "Matched events only: counts at 1 and 2 calendar months and median; no lead claim when no matches",
+    "zero_denominator": "null plus explicit reason, never zero or invented estimate",
+    "bootstrap": {
+      "metrics": ["recall", "false_alert_share"],
+      "support": "At least 5 observed eligible events across at least 5 event-bearing groups per sign/period; additionally at least 5 denominator-contributing groups for each metric/method",
+      "unit": "Sample all 200 included groups with replacement, preserving all companies and chronology within each sampled group copy; shared draws for candidate/baseline, no row bootstrap or new fits",
+      "replicates": 1000,
+      "seed": 1729,
+      "interval": "95% percentile, linear quantiles 0.025/0.975; report support and number of finite/undefined replicates for each metric",
+      "undefined_replicates": "No redraw; use defined replicates only if at least 950/1000 are finite, otherwise CI null with reason; disclose conditioning on defined replicates",
+      "low_support": "Descriptive counts/rates only, label insufficient support; no uncertainty or superiority claim"
+    },
+    "success_policy": "Measure honestly; no required improvement, recall, lead or false-alert threshold and no tuning on reserve"
+  },
+  "v1_probability_overlay": {
+    "model_version": "experiment-v1:hgb_leaf15",
+    "model_sha256": "2ac7cffd080d6c0a22422c90a3b806ae2f053d585eb4b7330078ca9c588bcbf5",
+    "model_manifest_sha256": "9b30c24feeb75fb0c2f17bca9a2eb178a508dd3e24759ac53c713424dd531dc8",
+    "training_and_selection_labels_through": "2026-03-31",
+    "first_permitted_as_of": "2026-04-30",
+    "last_permitted_as_of": "2026-08-31",
+    "eligibility": "Original v1 features and prospective input eligibility, same order and sealed model; inputs through each origin only; no new fit or calibration",
+    "before_cutoff_or_ineligible": "p_proxy null with reason; never backcast, interpolate or pad the 24-month curve",
+    "display": "Separate retrospective uncalibrated probability of target_deficit_3m with horizon m+1..m+3 and model/input versions; never a 0-100 health score or a direction label",
+    "limits": "Model physically trained in September 2026; April-August is an as-of simulation under the retrospective availability assumption, not proof of live historical issuance"
+  },
+  "demo_cases": {
+    "source": "Development groups and development outcomes only, confirmed no later than 2025-12-31; never reserved v2 or final_test v1",
+    "types": ["improvement", "deterioration", "recovered_dip"],
+    "selection": "Per type use the earliest confirmed qualifying pattern with onset in the development lead-window union and at least one eligible development origin; break ties by company_id then onset; do not rank by alert match, probability or outcome magnitude",
+    "absence": "If none exists, report unavailable; no substituted reserved case or fabricated real-data example",
+    "dates": "Show state, direction, watch, actual confirmation and retrospective event confirmation as distinct facts; development dates have no v1 probability overlay"
+  },
+  "preservation": {
+    "protocol": "Exclusive immutable file before any event/outcome backtest; existing different bytes block; amendments require a new version before reserve inspection",
+    "execution_manifest": "Later manifest binds protocol hash, implementation code, input/assignment/model hashes, environment, outputs and results; no results invented in this contract",
+    "reserved_access": "Exclusive persisted receipt tied to protocol and code hashes before reserved outcome access; one evaluation; after interruption inspect receipt and existing outputs, never blind replay or delete receipt",
+    "frozen_assets": "No modification of raw/runs/marts, v1 scripts/tests, protocol-v1, experiment-v1 or assessment-v1; no new fits or v1 target evaluation",
+    "workflow": "Runtime task state, retry budgets and goal tracking are not protocol fields"
+  }
+}
+```
+
+**Decisiones de diseño y límites:** la media de ratios da el mismo peso a cada mes; el gross común evita inventar un denominador trim que no está en el contrato de features. Sólo el estado redondea a céntimos; la dirección usa los ratios sin redondeo visual. `insufficient_evidence` puede deberse a huecos o a intervalos ambiguos aun con inputs completos; no reduce salud ni elimina filas. La persistencia añade latencia deliberadamente: se compara con el baseline sin esconder esa demora. El denominador de eventos no depende del signo emitido, para no premiar abstenciones. El seguimiento completo `o-1..o+3` protege contra falsos negativos fabricados a partir de huecos. La reserva termina en agosto porque un origen de mayo permite onset en julio y confirmación en agosto.
+
+**Verificación del contrato completada, sin outcomes:** [scripts/trajectory_contract.py](../../scripts/trajectory_contract.py) comprueba contrato inmutable, constantes, fechas/cortes, paths dentro del root, asignación y hashes/enlaces de inputs; no consulta Parquet ni carga pickle. La primera ejecución correcta de `--check` crea el recibo con apertura exclusiva y `fsync`; si existe, verifica su contenido sin modificarlo. El [test contractual](../../tests/test_trajectory_contract.py) pasó 11 tests con fixtures, incluidos identidad exacta JSON/Markdown, reglas inválidas, path escape, exclusiones, cutoff, hashes, preservación del recibo y carrera de escritura exclusiva. No son pruebas de la implementación futura de eventos.
+
+Comandos ejecutados: `python3 -B -m unittest tests.test_trajectory_contract -v` y `python3 -B scripts/trajectory_contract.py --check`. Ambos terminaron con exit 0; el segundo informó `outcome_values_read=0`. SHA-256 del recibo: `c81ae93923bebd08c7b43cb6053698c75b627f9e7e1947010df7be77d2122aa5`. El verificador no altera el protocolo ni tiene estados de tarea, permisos o reintentos.
+
+**Ejecución posterior observada:** los [resultados de desarrollo](../modeling/trajectory-v2/development-report.json) y [reserva](../modeling/trajectory-v2/reserved-report.json) están sellados y no se recalculan durante la exportación o el uso de la app. La entrega conserva 1.286 empresas × 24 meses; los tres casos de desarrollo son `COMP_0009`, `COMP_0179` y `COMP_0028`, con confirmaciones visibles desde mayo, mayo y junio de 2025 respectivamente. La [evidencia de aplicación](../modeling/trajectory-v2/app-verification/) registra carga del export real, consultas históricas, autorización, modo cash/proxy anterior y recorrido de navegador. El resultado negativo de anticipación no se oculta ni se presenta como éxito predictivo; las señales sirven para inspección descriptiva. Futuras mejoras requieren un protocolo/evaluación nuevos, no tuning de esta reserva.
+
+## Registro histórico de la propuesta inicial
+
+**Estado histórico: PROPUESTA, anterior al entrenamiento v1.** En ese corte los 23 artefactos de datos versionados (ocho raw, ocho clean y siete marts) se describían como punteros Git LFS no materializados. El pipeline ejecutable `xray` y sus siete marts existían; informes y `reports/build_manifest.json` registraban una ejecución histórica `20260919T022951Z-83143e8d` en revisión `86439b6`, no una reproducción local del `HEAD` de entonces. La afirmación «no hay modelo predictivo entrenado» correspondía a ese momento y quedó superada por v1; el target oficial sigue sin confirmarse. Se preservan a continuación las secciones 1–12, sus checklists, decisiones y próximos pasos **como registro histórico**, no como estado vigente ni autorización de nuevas ejecuciones. Para el alcance actual prevalecen Goal v2 y el preregistro anteriores.
 
 **Recomendación:** validar fuentes y semántica → producir datos derivados auditables → aprobar preparación para un alcance concreto → congelar target y validación → baseline → un modelo competidor → explicación y entrega. Si una fuente opcional no es fiable, reducir alcance; no inventar información para conservarla.
 
