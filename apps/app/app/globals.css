@@ -113,8 +113,12 @@ body { background: #f1f1ee; }
 .sidebar-privacy { display: flex; align-items: center; gap: 6px; padding: 8px 8px 0; font-size: .75rem; color: var(--subtle); }
 .sidebar-privacy svg { width: 12px; height: 12px; }
 .app-content { margin-left: 268px; flex: 1; min-width: 0; }
+.topbar { position: sticky; top: 0; z-index: 10; display: flex; align-items: center; justify-content: space-between; gap: 12px; min-height: 56px; padding: 6px 20px; background: var(--surface); border-bottom: 1px solid var(--line); font-size: var(--text-caption); }
+.topbar-context { display: flex; align-items: center; gap: 8px; }
+.current-view { color: var(--muted); }
+.topbar-link { display: inline-flex; align-items: center; gap: 8px; min-height: 44px; padding: 8px 12px; border-radius: 999px; color: var(--muted); text-decoration: none; }
 .desktop-sidebar-toggle { position: absolute; top: 16px; right: 10px; }
-.mobile-sidebar-toggle { display: none; margin-bottom: 12px; }
+.mobile-sidebar-toggle { display: none; }
 @media (min-width: 961px) {
   .app-shell[data-sidebar-collapsed="true"] > .sidebar { width: 64px; }
   .app-shell[data-sidebar-collapsed="true"] > .app-content { margin-left: 64px; }
@@ -129,7 +133,7 @@ body { background: #f1f1ee; }
 .navigation-dialog .sidebar-brand { padding-right: 40px; }
 @media (hover: hover) and (pointer: fine) {
   .company-picker-trigger:not(:disabled):hover, .company-picker-option:hover { background: #f4f4f2; color: var(--ink); }
-  .nav-link:not(:disabled):hover { background: #ededeb; color: var(--ink); }
+  .nav-link:not(:disabled):hover, .topbar-link:hover { background: #ededeb; color: var(--ink); }
   .assistant-shortcut:not(:disabled):hover { background: var(--canvas); }
 }
 @media (prefers-reduced-motion: no-preference) {
@@ -299,6 +303,7 @@ body { background: #f1f1ee; }
   .app-content { margin-left: 0; }
   .desktop-sidebar-toggle { display: none; }
   .mobile-sidebar-toggle { display: inline-grid; }
+  .topbar { padding-inline: 12px; }
   .insight-grid { grid-template-columns: 1.5fr 1fr; }
 }
 @media (max-width: 700px) { .desktop-label { display: none; } .dashboard-main { padding: 16px 12px; } .page-heading { align-items: flex-start; flex-direction: column; gap: 12px; } .page-heading > button { width: 100%; } .context-row { gap: 8px; } .company-selector { width: 100%; } .company-selector select { max-width: none; width: 100%; } .context-date { font-size: 12px; } .horizon-select { margin: 8px 0 0; width: 100%; justify-content: space-between; } .stats-grid { grid-template-columns: 1fr 1fr; gap: 10px; } .stat-card { padding: 14px; } .stat-card > div { min-height: 30px; margin-bottom: 12px; align-items: flex-start; } .stat-value { font-size: clamp(1.125rem,5.1vw,1.25rem); } .stat-card p { font-size: var(--text-caption); } .card-heading { padding: 16px 16px 12px; } .card-heading > .badge { font-size: 12px; } .cash-chart { padding: 0 8px; } .cash-chart > svg { min-height: 180px; } .cash-chart svg text { font-size: 12px; } .chart-legend { gap: 10px; font-size: var(--text-caption); padding-inline: 8px; } .chart-inspector { align-items: flex-start; flex-direction: column; gap: 8px; padding: 12px 8px; } .chart-inspector input { width: 120px; min-height: 44px; } .chart-inspector output { flex-wrap: wrap; gap: 8px; } .chart-note { padding: 4px 8px 16px; } .checkpoints > div { padding: 14px 12px; } .checkpoints strong { font-size: 15px; } .insight-grid { grid-template-columns: 1fr; gap: 16px; } .driver-list { padding: 0 16px; } .coverage-grid { grid-template-columns: 1fr; padding-inline: 16px; } .source-records > summary { padding: 16px; } .source-records > summary .badge { display: none; } .dashboard-footer { flex-direction: column; gap: 8px; } .planning-dialog { margin: 0; width: 100%; max-height: 100svh; height: 100svh; border-radius: 0; } .panel-head { padding: 20px; } .panel-head h2 { font-size: 21px; } .panel-body { padding: 20px; } .form-grid { grid-template-columns: 1fr; gap: 16px; } .planner-submit { flex-direction: column; align-items: stretch; } .plan-grid { grid-template-columns: 1fr; } .plan-card { padding: 20px; } .plan-card > .button { font-size: var(--text-caption); } .skeleton-stats { grid-template-columns: 1fr 1fr; } .plan-overlay-banner { margin-inline: 16px; } }
@@ -500,7 +505,7 @@ body { background: #f1f1ee; }
 .model-stats .stat-card { padding: 16px; }
 .model-stats .stat-card > div { margin-bottom: 12px; }
 .model-stats .stat-value { display: flex; align-items: center; min-height: 44px; }
-.model-dashboard section[id], #payments { scroll-margin-top: 24px; }
+.dashboard-main, .model-dashboard section[id], #payments { scroll-margin-top: 80px; }
 .model-dashboard .model-chart circle { cursor: default; }
 
 @media (max-width: 700px) { .app-shell input, .app-shell select { font-size: 16px; } }

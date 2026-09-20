@@ -74,8 +74,11 @@ export function Dashboard({ demo = false, scoreDate }: { demo?: boolean; scoreDa
       <div className="sidebar-content" id="workspace-sidebar" hidden={sidebarCollapsed}>{sidebar()}</div>
     </aside>
     <div className="app-content">
-      <main id="main" className="dashboard-main" tabIndex={-1}>
+      <header className="topbar"><div className="topbar-context">
         <button className="icon-button mobile-sidebar-toggle" aria-label="Open navigation" aria-haspopup="dialog" onClick={() => setMobileNavigation(true)}><PanelLeft aria-hidden/></button>
+        <span className="current-view">{scoreDate ? "Health assessment" : "Financial health"}</span>
+      </div>{demo && <a className="topbar-link" href="/login">Sign in<ArrowRight size={14} aria-hidden/></a>}</header>
+      <main id="main" className="dashboard-main" tabIndex={-1}>
         {error && <div className="error error-retry" role="alert"><span>{error}</span><button className="button secondary" onClick={() => setRetry(retry + 1)}>Try again</button></div>}
         <p className="refresh-status small" role="status">{loading && model && <><LoaderCircle className="spinner" size={14} aria-hidden/>Updating… Showing the previous assessment.</>}</p>
         {loading && !model && <div className="dashboard-skeleton" role="status"><span className="sr-only">Loading company health and source records…</span><div className="skeleton-chart"/><div className="skeleton-stats">{[1,2,3,4].map(n => <div key={n}/>)}</div></div>}
