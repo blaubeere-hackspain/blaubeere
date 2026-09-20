@@ -83,6 +83,28 @@ class PredictiveBundleTests(unittest.TestCase):
         self.assertEqual(self.bundle.predict(TARGETS[1], values),
                          {'0': 0.685082304526749, '1': 0.31491769547325105})
 
+    def test_archived_available_predictions_match(self):
+        """Replay published features only; never evaluate labels or excluded groups."""
+        original = ROOT / SOURCE_DIRECTORY
+        index = json.loads((original / 'index.json').read_bytes())
+        matched = 0
+        for entry in index['companies']:
+            payload = (original / entry['path']).read_bytes()
+            self.assertEqual(sha256(payload), entry['sha256'])
+            profile = json.loads(payload)
+            for point in profile['points']:
+                for target, forecast in point['forecast'].items():
+                    expected = forecast['probabilities']
+                    if expected is None:
+                        continue
+                    with self.subTest(company=entry['company_id'], as_of=point['as_of'], target=target):
+                        self.assertNotIn(profile['company_id'], self.bundle.excluded_company_ids)
+                        self.assertNotIn(profile['group_id'], self.bundle.excluded_group_ids)
+                        actual = self.bundle.predict(target, point['features'])
+                        self.assertEqual(actual, expected)
+                        matched += 1
+        self.assertGreater(matched, 0)
+
     def test_metadata_exclusions_and_exact_sources(self):
         original = ROOT / SOURCE_DIRECTORY
         self.assertEqual(sha256((original / 'manifest.json').read_bytes()), SOURCE_MANIFEST_SHA256)
