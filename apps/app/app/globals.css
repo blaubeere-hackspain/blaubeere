@@ -236,12 +236,6 @@ body { background: #f1f1ee; }
 .empty-message { display: grid; justify-items: center; gap: 16px; padding: 28px 20px 20px; min-width: 0; }
 .empty-message :is(h2, h3) { font-family: var(--font-editorial); font-size: 30px; line-height: 1.15; font-weight: 400; overflow-wrap: anywhere; }
 .empty-message p { font-size: var(--text-ui); color: var(--muted); max-width: 420px; line-height: 1.65; }
-.connection-dialog .painted-empty-state { margin: 0; }
-.connection-dialog .empty-painting img { height: 180px; object-position: center; }
-.connection-dialog .empty-message { padding: 24px 20px; }
-.connection-dialog .panel-head h2 { font-size: var(--text-title); }
-.connection-dialog .empty-message :is(h2, h3) { font-size: 22px; line-height: 1.4; }
-.connection-dialog .empty-message p { font-size: var(--text-caption); }
 
 .skeleton-line { display: block; width: 70%; max-width: 100%; height: 12px; border-radius: 4px; background: var(--line); }
 .skeleton-title { width: 140px; height: 1em; margin-block: .1em; }
@@ -262,11 +256,10 @@ body { background: #f1f1ee; }
 .skeleton-row .skeleton-line { width: 40%; }
 .dashboard-skeleton .aging-buckets .skeleton-row { display: flex; }
 @media (max-width: 700px) { .dashboard-skeleton .stat-card p { min-height: 3em; } }
-.planning-dialog, .connection-dialog { color: var(--ink); border: 0; background: var(--surface); padding: 0; border-radius: 28px; max-height: calc(100svh - 48px); width: min(1040px, calc(100% - 48px)); max-width: none; box-shadow: var(--shadow-raised), 0 24px 100px #131a2430; }
+.planning-dialog { color: var(--ink); border: 0; background: var(--surface); padding: 0; border-radius: 28px; max-height: calc(100svh - 48px); width: min(1040px, calc(100% - 48px)); max-width: none; box-shadow: var(--shadow-raised), 0 24px 100px #131a2430; }
 .planning-dialog { display: none; width: min(640px, calc(100% - 24px)); height: calc(100svh - 24px); max-height: none; margin: 12px 12px 12px auto; border-radius: 16px; overflow: hidden; box-shadow: var(--shadow-raised), -16px 0 64px -24px oklch(0 0 0 / .16); }
 .planning-dialog[open] { display: flex; flex-direction: column; }
-.connection-dialog { width: min(560px, calc(100% - 32px)); margin: auto; }
-.planning-dialog::backdrop, .connection-dialog::backdrop { background: #131a2466; backdrop-filter: blur(2px); }
+.planning-dialog::backdrop { background: #131a2466; backdrop-filter: blur(2px); }
 .panel-head { display: flex; align-items: center; justify-content: space-between; gap: 16px; padding: 24px 32px; border-bottom: 1px solid var(--line); background: var(--surface); position: sticky; top: 0; z-index: 2; }
 .panel-head h2 { font-size: 24px; margin-top: 6px; }
 .panel-head .eyebrow { font-size: 12px; }
@@ -305,9 +298,6 @@ body { background: #f1f1ee; }
 .assumption-details ul { padding-left: 20px; display: grid; gap: 8px; }
 .plan-overlay-banner { margin: 0 24px 12px; border-radius: 6px; padding: 0 8px 0 12px; background: var(--good-soft); color: var(--good); font-size: 12px; display: flex; align-items: center; justify-content: space-between; }
 .plan-overlay-banner > span { display: flex; align-items: center; gap: 8px; }
-.copy-field { display: flex; gap: 8px; }
-.copy-field input { min-width: 0; font-size: 12px; }
-.client-row { display: flex; align-items: center; justify-content: space-between; gap: 16px; padding: 12px 0; border-bottom: 1px solid var(--line); }
 @media (min-width: 1600px) { .dashboard-main { padding: 24px; } }
 @media (max-width: 1200px) { .dashboard-main { padding: 20px; } .stat-card { padding: 16px; } .stat-card > div { font-size: var(--text-caption); } .stat-card > div svg { display: none; } .coverage-grid { grid-template-columns: 1fr 1fr; } .health-number .badge { display: inline-flex; } }
 @media (max-width: 960px) {
@@ -326,13 +316,6 @@ body { background: #f1f1ee; }
 .chart-inspector output strong { margin-left: 6px; font-weight: 500; }
 .driver .disclosure-chevron { margin-top: 4px; }
 .driver-source { overflow-wrap: anywhere; }
-.connection-steps { margin: 0; padding-left: 20px; display: grid; gap: 10px; color: var(--muted); }
-.connection-steps li::marker { color: var(--accent); font-weight: 500; }
-.copy-field .icon-button { background: var(--canvas); }
-.copy-status { min-height: 36px; padding-top: 10px; color: var(--good); }
-.client-row > span { display: flex; align-items: center; gap: 10px; min-width: 0; }
-.client-row strong { overflow-wrap: anywhere; font-weight: 500; font-size: var(--text-caption); }
-.client-row > span svg { color: var(--accent); }
 .button.danger { color: var(--bad); }
 @media (hover: hover) and (pointer: fine) { .button.danger:not(:disabled):hover { background: var(--bad-soft); border-color: var(--bad); } }
 @media (max-width: 700px) {
@@ -341,10 +324,6 @@ body { background: #f1f1ee; }
   .chart-inspector output { font-size: var(--text-caption); }
   .health-number .badge { margin-left: 12px; }
   .source-records > summary { flex-wrap: wrap; }
-  .connection-dialog { max-height: calc(100svh - 24px); }
-  .connection-dialog .panel-head { padding: 20px; }
-  .client-row { align-items: flex-start; flex-direction: column; gap: 8px; }
-  .client-row .button { align-self: flex-end; }
   .stat-value { font-size: clamp(1.125rem,5.1vw,1.25rem); }
 }
 
