@@ -6,5 +6,6 @@ export const metadata = pageMetadata(appOrigin, "/register", "Create an account 
 
 export default async function Register({ searchParams }: { searchParams: Promise<{ returnTo?: string | string[] }> }) {
   const { returnTo } = await searchParams;
-  return <AuthLayout><LoginForm register returnTo={typeof returnTo === "string" ? returnTo : undefined}/></AuthLayout>;
+  const destination = typeof returnTo === "string" ? returnTo : undefined;
+  return <AuthLayout returnTo={destination}><LoginForm register returnTo={destination}/></AuthLayout>;
 }

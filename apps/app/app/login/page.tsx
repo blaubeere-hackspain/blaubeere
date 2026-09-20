@@ -6,5 +6,6 @@ export const metadata = pageMetadata(appOrigin, "/login", "Sign in | blau", "Ope
 
 export default async function Login({ searchParams }: { searchParams: Promise<{ returnTo?: string | string[] }> }) {
   const { returnTo } = await searchParams;
-  return <AuthLayout><LoginForm returnTo={typeof returnTo === "string" ? returnTo : undefined}/></AuthLayout>;
+  const destination = typeof returnTo === "string" ? returnTo : undefined;
+  return <AuthLayout returnTo={destination}><LoginForm returnTo={destination}/></AuthLayout>;
 }

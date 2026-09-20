@@ -13,6 +13,13 @@ assert.equal(login.status, 200, await login.clone().text());
 const cookie = login.headers.get("set-cookie")!.split(";")[0];
 assert.ok(login.headers.get("set-cookie")!.includes("HttpOnly"));
 const browserHeaders = { Cookie: cookie, Origin: app, "Content-Type": "application/json" };
+for (const path of ["/login", "/register"]) {
+  const signedIn = await fetch(`${app}${path}`, { headers: { Cookie: cookie }, redirect: "manual" });
+  assert.equal(signedIn.status, 307);
+  assert.equal(new URL(signedIn.headers.get("location")!, app).pathname, "/dashboard");
+  const expired = await fetch(`${app}${path}`, { headers: { Cookie: "blaubeere_session=expired" }, redirect: "manual" });
+  assert.equal(expired.status, 200);
+}
 assert.equal((await fetch(`${api}/api/companies/NOT_AUTHORISED/assessment`, { headers: browserHeaders })).status, 403);
 const assessment = await (await fetch(`${app}/api/companies/DEMO_001/assessment`, { headers: browserHeaders })).json();
 assert.equal(assessment.forecast.funding_needed_cents, 210000000);
