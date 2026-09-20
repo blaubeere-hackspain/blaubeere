@@ -1,5 +1,6 @@
 use axum::{
     Json, Router,
+    body::{Body, to_bytes},
     extract::{Request, State},
     http::{HeaderValue, StatusCode, header},
     middleware::{self, Next},
@@ -25,7 +26,13 @@ use serde::Deserialize;
 use serde_json::{Value, json};
 use std::sync::Arc;
 
-const COMPANY_PICKER: &str = "ui://blau/company-picker-v3.html";
+const COMPANY_PICKER: &str = "ui://blau/company-picker-v4.html";
+const PICKER_VERSIONS: &[&str] = &[
+    COMPANY_PICKER,
+    "ui://blau/company-picker-v1.html",
+    "ui://blau/company-picker-chatgpt-v2.html",
+    "ui://blau/company-picker-v3.html",
+];
 
 #[derive(Clone)]
 struct Principal(String);
@@ -180,18 +187,23 @@ impl ServerHandler for FinanceTools {
         _: Option<PaginatedRequestParams>,
         _ctx: RequestContext<RoleServer>,
     ) -> Result<ListResourcesResult, ErrorData> {
-        Ok(serde_json::from_value(json!({"resources":[{"uri":COMPANY_PICKER,"name":"Blau company picker","mimeType":"text/html+skybridge"}]})).expect("valid resource list"))
+        Ok(serde_json::from_value(json!({"resources":[{"uri":COMPANY_PICKER,"name":"Blau company picker","mimeType":"text/html;profile=mcp-app"}]})).expect("valid resource list"))
     }
     async fn read_resource(
         &self,
         input: ReadResourceRequestParams,
         _ctx: RequestContext<RoleServer>,
     ) -> Result<ReadResourceResponse, ErrorData> {
-        if input.uri != COMPANY_PICKER {
+        if !PICKER_VERSIONS.contains(&input.uri.as_str()) {
             return Err(ErrorData::invalid_params("Unknown resource", None));
         }
-        println!("Serving MCP UI template");
-        Ok(serde_json::from_value::<ReadResourceResult>(json!({"contents":[{"uri":input.uri,"mimeType":"text/html+skybridge","text":include_str!("company-picker.html"),"_meta":{"ui":{"prefersBorder":true,"csp":{"connectDomains":[],"resourceDomains":[]}},"openai/widgetPrefersBorder":true,"openai/widgetCSP":{"connect_domains":[],"resource_domains":[]},"openai/widgetDescription":"Pick an authorised company and inspect its dated financial health, alerts and metrics."}}]})).expect("valid UI resource").into())
+        println!("Serving MCP UI template {}", input.uri);
+        let mime = if input.uri.ends_with("v3.html") || input.uri.ends_with("chatgpt-v2.html") {
+            "text/html+skybridge"
+        } else {
+            "text/html;profile=mcp-app"
+        };
+        Ok(serde_json::from_value::<ReadResourceResult>(json!({"contents":[{"uri":input.uri,"mimeType":mime,"text":include_str!("company-picker.html"),"_meta":{"ui":{"prefersBorder":true,"csp":{"connectDomains":[],"resourceDomains":[]}},"openai/widgetPrefersBorder":true,"openai/widgetCSP":{"connect_domains":[],"resource_domains":[]},"openai/widgetDescription":"Pick an authorised company and inspect its dated financial health, alerts and metrics."}}]})).expect("valid UI resource").into())
     }
     fn get_info(&self) -> ServerInfo {
         ServerInfo::new(ServerCapabilities::builder().enable_tools().enable_resources().build()).with_instructions("Blaubeere supports internal finance planning. Use list_companies to show the company picker; use get_company_health for a company's health, issues and metrics. Surface returned risk alerts and the assessment date; historical snapshots are not live financial status. Insufficient evidence is not poor health. Attention thresholds are provisional, not default probabilities. Preserve source labels, dates, missing coverage and explicit assumptions in every answer. Scenarios are conditional, not guarantees. Never infer retention or profit from bank data. Each company is authorised independently.")
@@ -199,6 +211,35 @@ impl ServerHandler for FinanceTools {
 }
 
 async fn authorize(State(state): State<AppState>, mut request: Request, next: Next) -> Response {
+    // Discovery and this static HTML contain no account data. ChatGPT's app
+    // refresh/template loader can request them without the user's OAuth token.
+    if request.method() == axum::http::Method::POST {
+        let (parts, body) = request.into_parts();
+        let Ok(bytes) = to_bytes(body, 32 * 1024).await else {
+            return StatusCode::PAYLOAD_TOO_LARGE.into_response();
+        };
+        let public = serde_json::from_slice::<Value>(&bytes).is_ok_and(|rpc| {
+            rpc["jsonrpc"] == "2.0"
+                && (matches!(
+                    rpc["method"].as_str(),
+                    Some(
+                        "initialize"
+                            | "notifications/initialized"
+                            | "ping"
+                            | "tools/list"
+                            | "resources/list"
+                            | "resources/templates/list"
+                    )
+                ) || (rpc["method"] == "resources/read"
+                    && rpc["params"]["uri"]
+                        .as_str()
+                        .is_some_and(|uri| PICKER_VERSIONS.contains(&uri))))
+        });
+        request = Request::from_parts(parts, Body::from(bytes));
+        if public {
+            return next.run(request).await;
+        }
+    }
     match oauth::access_user(&state, request.headers()).await {
         Ok(user) => {
             request.extensions_mut().insert(Principal(user));
@@ -259,7 +300,17 @@ fn router(state: AppState) -> Router {
             for route in tool_router.map.values_mut() {
                 let mut meta = json!({"securitySchemes":[{"type":"oauth2","scopes":[oauth::SCOPE]}],"ui":{"visibility":["model","app"]},"openai/widgetAccessible":true});
                 if route.attr.name == "list_companies" {
+                    meta["ui"]["resourceUri"] = json!(COMPANY_PICKER);
                     meta["openai/outputTemplate"] = json!(COMPANY_PICKER);
+                    route.attr.output_schema = Some(Arc::new(json!({
+                        "type":"object", "required":["companies"], "properties": {
+                            "companies": {"type":"array", "items": {
+                                "type":"object", "required":["id","name","currency"], "properties": {
+                                    "id":{"type":"string"}, "name":{"type":"string"}, "currency":{"type":"string"}
+                                }
+                            }}
+                        }
+                    }).as_object().unwrap().clone()));
                 }
                 route.attr.meta = Some(rmcp::model::MetaObject(meta.as_object().unwrap().clone()));
             }
@@ -397,6 +448,26 @@ mod tests {
                 .unwrap()
                 .contains("resource_metadata")
         );
+        for body in [
+            json!({"jsonrpc":"2.0","id":1,"method":"tools/call","params":{"name":"list_companies","arguments":{}}}),
+            json!({"jsonrpc":"2.0","id":1,"method":"tools/call","params":{"name":"get_company_health","arguments":{"company_id":"COMP_0006"}}}),
+            json!({"jsonrpc":"2.0","id":1,"method":"resources/read","params":{"uri":"file:///private"}}),
+            json!([{"jsonrpc":"2.0","id":1,"method":"tools/list"},{"jsonrpc":"2.0","id":2,"method":"tools/call","params":{"name":"list_companies"}}]),
+        ] {
+            let response = app
+                .clone()
+                .oneshot(
+                    Request::builder()
+                        .method("POST")
+                        .uri("/mcp")
+                        .header("content-type", "application/json")
+                        .body(Body::from(body.to_string()))
+                        .unwrap(),
+                )
+                .await
+                .unwrap();
+            assert_eq!(response.status(), StatusCode::UNAUTHORIZED);
+        }
         for (name, args, allowed) in [
             ("list_companies", json!({}), true),
             ("get_cash_outlook", json!({"company_id":"DEMO_001"}), true),
@@ -452,14 +523,21 @@ mod tests {
             }
         }
         for (method, params) in [
+            (
+                "initialize",
+                json!({"protocolVersion":"2025-11-25","capabilities":{},"clientInfo":{"name":"unauthenticated-widget-loader","version":"1"}}),
+            ),
             ("tools/list", json!({})),
+            ("resources/list", json!({})),
             ("resources/read", json!({"uri":COMPANY_PICKER})),
+            ("resources/read", json!({"uri":PICKER_VERSIONS[1]})),
+            ("resources/read", json!({"uri":PICKER_VERSIONS[2]})),
+            ("resources/read", json!({"uri":PICKER_VERSIONS[3]})),
         ] {
             let request = Request::builder()
                 .method("POST")
                 .uri("/mcp")
                 .header("host", "localhost:8081")
-                .header("authorization", "Bearer test-access")
                 .header("content-type", "application/json")
                 .header("accept", "application/json, text/event-stream")
                 .body(Body::from(
@@ -486,12 +564,16 @@ mod tests {
                     .find(|t| t["name"] == "list_companies")
                     .unwrap();
                 assert_eq!(picker["_meta"]["openai/outputTemplate"], COMPANY_PICKER);
+                assert_eq!(picker["_meta"]["ui"]["resourceUri"], COMPANY_PICKER);
                 assert_eq!(picker["_meta"]["openai/widgetAccessible"], true);
-            } else {
-                assert_eq!(
-                    value["result"]["contents"][0]["mimeType"],
-                    "text/html+skybridge"
-                );
+                assert_eq!(picker["outputSchema"]["required"], json!(["companies"]));
+            } else if method == "resources/read" {
+                let content = &value["result"]["contents"][0];
+                assert_eq!(content["uri"], params["uri"]);
+                assert_eq!(content["_meta"]["ui"]["csp"]["connectDomains"], json!([]));
+                if params["uri"] == COMPANY_PICKER {
+                    assert_eq!(content["mimeType"], "text/html;profile=mcp-app");
+                }
                 assert!(
                     value["result"]["contents"][0]["text"]
                         .as_str()
