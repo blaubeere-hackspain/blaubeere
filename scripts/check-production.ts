@@ -18,10 +18,13 @@ assert.ok(demo.includes("Workspace navigation") && !demo.includes("Mediterránea
 assert.ok(!demo.includes('Why this number') && !demo.includes('Why this score'), "Cash metrics must not have explanation popups");
 const companies = await (await read(`${app}/api/demo/companies`)).json();
 assert.ok(companies.length > 1 && companies.every((company: { data_mode: string; id: string }) => company.data_mode === "challenge" && company.id !== "DEMO_001"));
-for (const company of [companies[0], companies.at(-1)]) {
+const blau = companies.find((company: { id: string }) => company.id === "COMP_0318");
+assert.equal(blau?.name, "Blau");
+for (const company of [companies[0], companies.at(-1), blau]) {
   const assessment = await (await read(`${app}/api/demo/companies/${company.id}/assessment`)).json();
   assert.equal(assessment.kind, "model");
   assert.equal(assessment.company.id, company.id);
+  assert.equal(assessment.company.name, company.name);
   assert.equal(assessment.provenance.model_summary.model_version, "healthscore_v4");
   assert.equal(assessment.provenance.schema_version, 3);
   assert.ok(assessment.records.every((row: { version: string; health_score: number | null; excluida: boolean }) => row.version === "healthscore_v4" && (!row.excluida || row.health_score === null)), "Serve only v4 ratings and preserve exclusions");

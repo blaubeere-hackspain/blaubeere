@@ -37,12 +37,21 @@ fn decode(payload: &str) -> ApiResult<Value> {
         )
     })
 }
+fn company(id: &str, group: &str) -> Value {
+    // Stable demo display name; source IDs still identify every financial record.
+    let name = if id == "COMP_0318" { "Blau" } else { id };
+    json!({"id":id,"name":name,"group":group,"currency":"EUR","data_mode":"challenge"})
+}
+
 pub async fn companies(pool: &SqlitePool) -> ApiResult<Vec<Value>> {
     let rows: Vec<(String, String)> =
         sqlx::query_as("SELECT id, group_id FROM dataset_companies ORDER BY id")
             .fetch_all(pool)
             .await?;
-    Ok(rows.into_iter().map(|(id, group)| json!({"id":id,"name":id,"group":group,"currency":"EUR","data_mode":"challenge"})).collect())
+    Ok(rows
+        .into_iter()
+        .map(|(id, group)| company(&id, &group))
+        .collect())
 }
 
 // Public demo reads only the explicitly published challenge snapshot. Private
@@ -131,7 +140,7 @@ pub async fn assessment(state: &AppState, id: &str) -> ApiResult<Option<Value>> 
         .fetch_one(pool)
         .await?;
     Ok(Some(
-        json!({"kind":"model","company":{"id":id,"name":id,"group":group,"currency":"EUR","data_mode":"challenge"},"records":records,"provenance":decode(&metadata)?}),
+        json!({"kind":"model","company":company(id, &group),"records":records,"provenance":decode(&metadata)?}),
     ))
 }
 

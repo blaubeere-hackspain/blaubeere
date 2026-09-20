@@ -99,6 +99,14 @@ async fn parquet_snapshot_preserves_model_data_and_requires_membership() {
     let list: Value =
         serde_json::from_slice(&list.into_body().collect().await.unwrap().to_bytes()).unwrap();
     assert_eq!(list.as_array().unwrap().len(), 1286);
+    assert_eq!(
+        list.as_array()
+            .unwrap()
+            .iter()
+            .find(|company| company["id"] == "COMP_0318")
+            .unwrap()["name"],
+        "Blau"
+    );
     assert!(
         list.as_array()
             .unwrap()
@@ -306,6 +314,12 @@ async fn parquet_snapshot_preserves_model_data_and_requires_membership() {
     for id in ["COMP_0318", "COMP_0048", "COMP_0176"] {
         assert!(assigned_after.iter().any(|assigned| assigned == id));
     }
+    let blau = company_health::for_company(&state, "COMP_0318", None)
+        .await
+        .unwrap();
+    assert_eq!(blau["company"]["id"], "COMP_0318");
+    assert_eq!(blau["company"]["name"], "Blau");
+    assert!(blau["health"]["score"].as_f64().is_some());
     dataset::grant_team_access(&state, "team@example.com")
         .await
         .unwrap();

@@ -93,7 +93,7 @@ fn failure(error: blaubeere_api::ApiError) -> ErrorData {
 #[tool_router]
 impl FinanceTools {
     #[tool(
-        description = "Get a company's financial health state, saved monthly score, risk alerts, current issues at that cutoff and valuable metrics: cash movements, reconstructed cash, overdue collections/payments, aging, arrears and original-currency totals. Use for 'How is COMP_0006 doing?' or 'What needs attention?'. Returns dated evidence and missing coverage, not a prediction or credit rating. Use list_companies for exact IDs. Read-only.",
+        description = "Get a company's financial health state, saved monthly score, risk alerts, current issues at that cutoff and valuable metrics: cash movements, reconstructed cash, overdue collections/payments, aging, arrears and original-currency totals. Use for 'How is Blau doing?' or 'What needs attention?'. Returns dated evidence and missing coverage, not a prediction or credit rating. Use list_companies to resolve the company name to its exact ID. Read-only.",
         annotations(
             read_only_hint = true,
             destructive_hint = false,
