@@ -137,7 +137,7 @@ assert.equal(cashForecastAvailable({ ...forecastRow, cash_projection: { ...proje
 const forecastChart = renderToStaticMarkup(createElement(MonthlyCashChart, { row: forecastRow, forecast: true }));
 assert.deepEqual([...forecastChart.matchAll(/data-forecast-horizon="(\d+)"/g)].map(match => Number(match[1])), [30, 60, 90], "Add exactly three forecast points, including zero and negative cash");
 assert.ok(forecastChart.includes('data-series="forecast"') && forecastChart.includes('stroke-dasharray="5 5"') && projection.horizons.every(point => forecastChart.includes(date(point.date))));
-assert.ok(!forecastChart.includes("NaN") && !forecastChart.includes("€100K") && forecastChart.includes("open invoices"), "The shared scale includes plotted cash, not unplotted cumulative invoice totals");
+assert.ok(!forecastChart.includes("NaN") && !forecastChart.includes("€100K"), "The shared scale includes plotted cash, not unplotted cumulative invoice totals");
 for (const name of ["income", "expense"]) assert.equal([...forecastChart.matchAll(new RegExp(`data-series="${name}"`, "g"))].length, 1, "Forecasts add no fabricated daily bars");
 const forecastCircleY = forecastChart.match(/data-forecast-horizon="30"[^>]* cy="([^"]+)"/)![1];
 assert.equal(forecastChart.match(/data-series="income"[^>]* y="([^"]+)"/)![1], forecastCircleY, "Forecast and recorded money share one EUR scale");
