@@ -52,21 +52,22 @@
 .financial-card-note { color: var(--muted); font-size: var(--text-caption); line-height: 1.6; }
 .financial-card > footer { margin-top: auto; padding-top: 16px; }
 .financial-card-note p + p { margin-top: 8px; }
-.defaulting-summary { padding: 16px 0 12px; }
+.defaulting-summary { display: grid; grid-template-columns: minmax(0,1fr) auto; align-items: baseline; gap: 8px; padding: 12px 0; }
 .defaulting-summary > span, .defaulting-summary p { color: var(--muted); font-size: var(--text-caption); }
-.defaulting-summary > strong { display: block; font-size: 24px; font-weight: 500; letter-spacing: -.04em; margin-block: 8px; overflow-wrap: anywhere; }
-.defaulting-summary p { line-height: 1.6; }
-.defaulting-bars { display: grid; gap: 12px; padding-block: 12px; border-top: 1px solid var(--line); }
-.defaulting-bars > div { display: grid; grid-template-columns: minmax(0,1fr) minmax(0,auto); gap: 12px; font-size: var(--text-caption); }
+.defaulting-summary > strong { display: block; font-size: 24px; font-weight: 500; letter-spacing: -.04em; margin: 0; overflow-wrap: anywhere; }
+.defaulting-summary p, .defaulting-summary .fx-track { grid-column: 1 / -1; }
+.defaulting-summary p { line-height: 1.5; }
+.defaulting-card > footer { margin-top: 0; padding-top: 4px; }
+.defaulting-bars { display: grid; gap: 10px; padding-block: 10px; border-top: 1px solid var(--line); }
+.defaulting-bars > div { display: grid; grid-template-columns: minmax(0,1fr) minmax(0,auto); gap: 6px; font-size: var(--text-caption); }
 .defaulting-bars dt { color: var(--muted); }
 .defaulting-bars dd { font-weight: 500; text-align: right; overflow-wrap: anywhere; }
-.defaulting-track { grid-column: 1 / -1; height: 10px; border-radius: 4px; background: var(--canvas); overflow: hidden; }
+.defaulting-track { grid-column: 1 / -1; height: 4px; border-radius: 4px; background: var(--canvas); overflow: hidden; }
 .defaulting-track i { display: block; height: 100%; border-radius: inherit; background: #b65f56; }
-.defaulting-fx { border-top: 1px solid var(--line); margin-top: 16px; padding-top: 16px; }
-.defaulting-fx > .financial-card-heading { margin-bottom: 12px; }
+.defaulting-fx { border-top: 1px solid var(--line); margin-top: 12px; padding-top: 12px; }
 .defaulting-fx h3 { font-size: var(--text-ui); font-weight: 500; }
-.defaulting-fx .defaulting-bars { gap: 10px; padding-block: 12px; }
-.fx-track { height: 10px; border-radius: 4px; background: var(--canvas); overflow: hidden; margin-block: 10px; }
+.defaulting-fx .defaulting-bars { gap: 8px; padding-block: 10px; }
+.fx-track { height: 4px; border-radius: 4px; background: var(--canvas); overflow: hidden; margin: 0; }
 .fx-track i { display: block; height: 100%; border-radius: inherit; background: #d1a34c; }
 @media (max-width:1200px) { .obligation-cards { grid-template-columns: repeat(2,minmax(0,1fr)); } .defaulting-card { grid-column: 1 / -1; } }
 @media (max-width:700px) { .obligation-cards { grid-template-columns: 1fr; } .aging-total strong { font-size: 24px; } }
