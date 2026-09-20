@@ -1,4 +1,6 @@
 "use client";
+import Image from "next/image";
+import painting from "../../landing/public/cash-horizon-oil.png";
 import { useEffect, useState } from "react";
 import { Activity, ArrowRight, LoaderCircle, PanelLeft, PanelLeftClose, ShieldCheck, X } from "lucide-react";
 import { ApiError, api } from "../lib/api";
@@ -66,7 +68,7 @@ export function Dashboard({ demo = false, scoreDate }: { demo?: boolean; scoreDa
   const overviewHref = `${demo ? "/demo" : "/dashboard"}${selected ? `?company=${encodeURIComponent(selected)}` : ""}`;
   const sidebar = (mobile = false) => <Sidebar selectorId={mobile ? "mobile-company" : "sidebar-company"} canInspect={Boolean(model)} overviewHref={scoreDate ? overviewHref : undefined} demo={demo} companies={companies} recentCompanies={recent.flatMap(id => companies?.find(company => company.id === id) ?? [])} selected={selected} identity={identity} logoutBusy={logoutBusy}
     onCompany={id => { setSelected(id); setMobileNavigation(false); }} onConnections={() => { setMobileNavigation(false); setConnections(true); }} onLogout={logout} onNavigate={() => setMobileNavigation(false)}/>;
-  return <div className="app-shell" data-sidebar-collapsed={sidebarCollapsed}><a href="#main" className="skip-link">Skip to financial health</a>
+  return <div className="app-shell" data-sidebar-collapsed={sidebarCollapsed}><div className="dashboard-painting" aria-hidden="true"><Image src={painting} alt="" fill sizes="100vw" priority/></div><a href="#main" className="skip-link">Skip to financial health</a>
     <aside className="sidebar" id="workspace-sidebar" aria-label="Workspace navigation">{sidebar()}</aside>
     <div className="app-content"><header className="topbar"><div className="topbar-context">
       <button className="icon-button desktop-sidebar-toggle" aria-label={sidebarCollapsed ? "Show sidebar" : "Hide sidebar"} aria-expanded={!sidebarCollapsed} aria-controls="workspace-sidebar" onClick={() => setSidebarCollapsed(!sidebarCollapsed)}><span className="icon-swap" aria-hidden><PanelLeft data-visible={sidebarCollapsed}/><PanelLeftClose data-visible={!sidebarCollapsed}/></span></button>
