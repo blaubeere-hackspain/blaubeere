@@ -20,6 +20,8 @@ The same Rust logic supplies `GET /api/companies/{id}/health?month=YYYY-MM` and 
 
 Assign selected imported companies to an existing account through the administrative CLI, under the production runtime environment: `blaubeere-api grant-company-access EMAIL COMP_0006 COMP_0048 COMP_0176`. It validates every ID before writing, adds memberships idempotently and verifies the assigned data. The deployment workflow exposes this operation through optional manual `grant_email`, `grant_companies` and `access_only` inputs; no public administration endpoint is added. Accounts and grants persist in the existing identity SQLite database.
 
+Replace one membership atomically with `blaubeere-api replace-company-access EMAIL OLD_ID NEW_ID`, or set the workflow's `replace_company` and a single `grant_companies` ID. The new company is validated before the old membership is removed; other memberships are preserved.
+
 ## Planning inputs
 
 The existing Rust planning API still supports the validated daily JSON assessment contract below. Historical monthly Parquet outputs do not establish an opening bank balance or dated future obligations, so the current company dashboard does not offer forecasts or planning from those records. Plans remain conditional calculations and never rewrite source records or saved ratings.

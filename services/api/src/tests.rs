@@ -200,14 +200,19 @@ async fn parquet_snapshot_preserves_model_data_and_requires_membership() {
         StatusCode::FORBIDDEN
     );
     assert!(
-        dataset::grant_company_access(&state, "missing@example.com", &["COMP_0006"])
+        dataset::grant_company_access(&state, "missing@example.com", &["COMP_0006"], None)
             .await
             .is_err()
     );
     assert!(
-        dataset::grant_company_access(&state, "team@example.com", &["COMP_0006", "COMP_UNKNOWN"])
-            .await
-            .is_err()
+        dataset::grant_company_access(
+            &state,
+            "team@example.com",
+            &["COMP_0006", "COMP_UNKNOWN"],
+            None
+        )
+        .await
+        .is_err()
     );
     let health_path = "/api/companies/COMP_0006/health?month=2026-08";
     assert_eq!(
@@ -233,10 +238,11 @@ async fn parquet_snapshot_preserves_model_data_and_requires_membership() {
         &state,
         "team@example.com",
         &["COMP_0006", "COMP_0048", "COMP_0176"],
+        None,
     )
     .await
     .unwrap();
-    dataset::grant_company_access(&state, "team@example.com", &["COMP_0006"])
+    dataset::grant_company_access(&state, "team@example.com", &["COMP_0006"], None)
         .await
         .unwrap();
     let assigned: i64 = sqlx::query_scalar("SELECT COUNT(*) FROM memberships JOIN users ON users.id=memberships.user_id WHERE users.email='team@example.com' AND company_id LIKE 'COMP_%'").fetch_one(&state.db).await.unwrap();
@@ -271,6 +277,35 @@ async fn parquet_snapshot_preserves_model_data_and_requires_membership() {
         .status(),
         StatusCode::BAD_REQUEST
     );
+    assert!(
+        dataset::grant_company_access(
+            &state,
+            "team@example.com",
+            &["COMP_UNKNOWN"],
+            Some("COMP_0006")
+        )
+        .await
+        .is_err()
+    );
+    let assigned_before: Vec<String> = sqlx::query_scalar("SELECT company_id FROM memberships JOIN users ON users.id=memberships.user_id WHERE users.email='team@example.com'").fetch_all(&state.db).await.unwrap();
+    assert!(
+        assigned_before.iter().any(|id| id == "COMP_0006"),
+        "An invalid replacement cannot revoke the old company"
+    );
+    dataset::grant_company_access(
+        &state,
+        "team@example.com",
+        &["COMP_0318"],
+        Some("COMP_0006"),
+    )
+    .await
+    .unwrap();
+    let assigned_after: Vec<String> = sqlx::query_scalar("SELECT company_id FROM memberships JOIN users ON users.id=memberships.user_id WHERE users.email='team@example.com'").fetch_all(&state.db).await.unwrap();
+    assert_eq!(assigned_after.len(), assigned_before.len());
+    assert!(!assigned_after.iter().any(|id| id == "COMP_0006"));
+    for id in ["COMP_0318", "COMP_0048", "COMP_0176"] {
+        assert!(assigned_after.iter().any(|assigned| assigned == id));
+    }
     dataset::grant_team_access(&state, "team@example.com")
         .await
         .unwrap();

@@ -17,6 +17,10 @@ on:
         description: Comma-separated imported company IDs (optional)
         type: string
         required: false
+      replace_company:
+        description: Company to replace with the single ID in grant_companies (optional)
+        type: string
+        required: false
       mcp_diagnostics:
         description: Read recent MCP service diagnostics
         type: boolean
@@ -95,6 +99,7 @@ jobs:
           JIO_VM_ID: ${{ vars.JIO_VM_ID }}
           GRANT_EMAIL: ${{ inputs.grant_email }}
           GRANT_COMPANIES: ${{ inputs.grant_companies }}
+          REPLACE_COMPANY: ${{ inputs.replace_company }}
         run: |
           [[ -n "$JIO_ENDPOINT" ]] || unset JIO_ENDPOINT
           python3 - <<'PY'
@@ -102,7 +107,10 @@ jobs:
           email, companies = os.environ['GRANT_EMAIL'], os.environ['GRANT_COMPANIES'].split(',')
           assert re.fullmatch(r'[A-Za-z0-9._+%-]+@[A-Za-z0-9.-]+', email), 'Invalid email'
           assert 1 <= len(companies) <= 20 and all(re.fullmatch(r'COMP_[0-9]{4}', c) for c in companies), 'Invalid company IDs'
-          command = 'set -ae; cd /var/lib/blaubeere/data; . /var/lib/blaubeere/runtime.env; exec /var/lib/blaubeere/current/bin/blaubeere-api grant-company-access ' + shlex.join([email, *companies])
+          old = os.environ['REPLACE_COMPANY']
+          assert not old or (re.fullmatch(r'COMP_[0-9]{4}', old) and len(companies) == 1 and old != companies[0]), 'Choose one replacement company'
+          args = ['replace-company-access', email, old, companies[0]] if old else ['grant-company-access', email, *companies]
+          command = 'set -ae; cd /var/lib/blaubeere/data; . /var/lib/blaubeere/runtime.env; exec /var/lib/blaubeere/current/bin/blaubeere-api ' + shlex.join(args)
           subprocess.run(['jio', 'exec', os.environ['JIO_VM_ID'], 'sudo -n -u blaubeere bash -c ' + shlex.quote(command), '--timeout', '30'], check=True)
           PY
       - name: MCP diagnostics

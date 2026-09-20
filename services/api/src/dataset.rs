@@ -169,8 +169,13 @@ pub async fn grant_company_access(
     state: &AppState,
     email: &str,
     ids: &[&str],
+    replace: Option<&str>,
 ) -> anyhow::Result<()> {
     anyhow::ensure!(!ids.is_empty(), "Select at least one company");
+    anyhow::ensure!(
+        replace.is_none_or(|old| !ids.contains(&old)),
+        "Replacement must be a different company"
+    );
     let pool = state
         .dataset
         .as_ref()
@@ -200,6 +205,13 @@ pub async fn grant_company_access(
         sqlx::query("INSERT OR IGNORE INTO memberships(user_id,company_id) VALUES (?,?)")
             .bind(&user)
             .bind(id)
+            .execute(&mut *tx)
+            .await?;
+    }
+    if let Some(old) = replace {
+        sqlx::query("DELETE FROM memberships WHERE user_id=? AND company_id=?")
+            .bind(&user)
+            .bind(old)
             .execute(&mut *tx)
             .await?;
     }

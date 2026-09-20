@@ -29,12 +29,16 @@ async fn main() -> anyhow::Result<()> {
         state.dataset = Some(blaubeere_api::dataset::connect(&url).await?);
     }
     if !args.is_empty() {
-        anyhow::ensure!(
-            args.len() >= 3 && args[0] == "grant-company-access",
-            "Usage: blaubeere-api grant-company-access EMAIL COMPANY_ID [COMPANY_ID...]"
-        );
-        let ids: Vec<&str> = args[2..].iter().map(String::as_str).collect();
-        blaubeere_api::dataset::grant_company_access(&state, &args[1], &ids).await?;
+        let (ids, replace): (Vec<&str>, Option<&str>) = match args[0].as_str() {
+            "grant-company-access" if args.len() >= 3 => {
+                (args[2..].iter().map(String::as_str).collect(), None)
+            }
+            "replace-company-access" if args.len() == 4 => (vec![&args[3]], Some(&args[2])),
+            _ => anyhow::bail!(
+                "Usage: grant-company-access EMAIL COMPANY_ID [...] or replace-company-access EMAIL OLD_ID NEW_ID"
+            ),
+        };
+        blaubeere_api::dataset::grant_company_access(&state, &args[1], &ids, replace).await?;
         let user: String = sqlx::query_scalar("SELECT id FROM users WHERE email=?")
             .bind(args[1].trim().to_lowercase())
             .fetch_one(&state.db)
