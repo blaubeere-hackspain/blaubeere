@@ -298,6 +298,9 @@ body { background: #f1f1ee; }
 .assumption-details ul { padding-left: 20px; display: grid; gap: 8px; }
 .plan-overlay-banner { margin: 0 24px 12px; border-radius: 6px; padding: 0 8px 0 12px; background: var(--good-soft); color: var(--good); font-size: 12px; display: flex; align-items: center; justify-content: space-between; }
 .plan-overlay-banner > span { display: flex; align-items: center; gap: 8px; }
+.copy-field { display: flex; gap: 8px; }
+.copy-field input { min-width: 0; font-size: 12px; }
+.client-row { display: flex; align-items: center; justify-content: space-between; gap: 16px; padding: 12px 0; border-bottom: 1px solid var(--line); }
 @media (min-width: 1600px) { .dashboard-main { padding: 24px; } }
 @media (max-width: 1200px) { .dashboard-main { padding: 20px; } .stat-card { padding: 16px; } .stat-card > div { font-size: var(--text-caption); } .stat-card > div svg { display: none; } .coverage-grid { grid-template-columns: 1fr 1fr; } .health-number .badge { display: inline-flex; } }
 @media (max-width: 960px) {
@@ -316,6 +319,14 @@ body { background: #f1f1ee; }
 .chart-inspector output strong { margin-left: 6px; font-weight: 500; }
 .driver .disclosure-chevron { margin-top: 4px; }
 .driver-source { overflow-wrap: anywhere; }
+.connection-steps { color: var(--muted); font-size: var(--text-ui); }
+.connection-dialog .copy-status { min-height: 28px; padding-top: 6px; }
+.connection-dialog .client-row:last-child { border-bottom: 0; padding-bottom: 0; }
+.copy-field .icon-button { background: var(--canvas); }
+.copy-status { min-height: 36px; padding-top: 10px; color: var(--good); }
+.client-row > span { display: flex; align-items: center; gap: 10px; min-width: 0; }
+.client-row strong { overflow-wrap: anywhere; font-weight: 500; font-size: var(--text-caption); }
+.client-row > span svg { color: var(--accent); }
 .button.danger { color: var(--bad); }
 @media (hover: hover) and (pointer: fine) { .button.danger:not(:disabled):hover { background: var(--bad-soft); border-color: var(--bad); } }
 @media (max-width: 700px) {
@@ -324,6 +335,8 @@ body { background: #f1f1ee; }
   .chart-inspector output { font-size: var(--text-caption); }
   .health-number .badge { margin-left: 12px; }
   .source-records > summary { flex-wrap: wrap; }
+  .client-row { align-items: flex-start; flex-direction: column; gap: 8px; }
+  .client-row .button { align-self: flex-end; }
   .stat-value { font-size: clamp(1.125rem,5.1vw,1.25rem); }
 }
 

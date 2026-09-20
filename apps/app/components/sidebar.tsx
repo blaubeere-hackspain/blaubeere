@@ -2,17 +2,17 @@
 import Image from "next/image";
 import { useEffect, useState } from "react";
 import logo from "../../brand/blau.svg";
-import { ChartNoAxesCombined, LayoutGrid, LoaderCircle, LogOut, ReceiptText, ShieldCheck, Wallet } from "lucide-react";
+import { ChartNoAxesCombined, LayoutGrid, LoaderCircle, LogOut, Plug, ReceiptText, ShieldCheck, Wallet } from "lucide-react";
 import type { CompanySummary, Identity } from "../lib/types";
 import { CompanyPicker } from "./company-picker";
 
 type Props = {
   companies: CompanySummary[] | null; recentCompanies: CompanySummary[]; selected: string; identity: Identity | null;
   canInspect: boolean; logoutBusy: boolean; demo?: boolean; overviewHref?: string; selectorId: string;
-  onCompany: (id: string) => void; onLogout: () => void; onNavigate: () => void;
+  onCompany: (id: string) => void; onConnections: () => void; onLogout: () => void; onNavigate: () => void;
 };
 
-export function Sidebar({ overviewHref, demo = false, selectorId, companies, recentCompanies, selected, identity, canInspect, logoutBusy, onCompany, onLogout, onNavigate }: Props) {
+export function Sidebar({ overviewHref, demo = false, selectorId, companies, recentCompanies, selected, identity, canInspect, logoutBusy, onCompany, onConnections, onLogout, onNavigate }: Props) {
   const [section, setSection] = useState("");
   useEffect(() => {
     const update = () => setSection(window.location.hash);
@@ -30,6 +30,7 @@ export function Sidebar({ overviewHref, demo = false, selectorId, companies, rec
         <a {...navProps("#health")} href={`${overviewHref ?? ""}#health`} onClick={onNavigate} aria-disabled={!canInspect} tabIndex={canInspect ? undefined : -1}><ChartNoAxesCombined aria-hidden/>Health history</a>
         <a {...navProps("#cash")} href={`${overviewHref ?? ""}#cash`} onClick={onNavigate} aria-disabled={!canInspect} tabIndex={canInspect ? undefined : -1}><Wallet aria-hidden/>Cash movements</a>
         <a {...navProps("#payments")} href={`${overviewHref ?? ""}#payments`} onClick={onNavigate} aria-disabled={!canInspect} tabIndex={canInspect ? undefined : -1}><ReceiptText aria-hidden/>Payments &amp; debt</a>
+        <button className="nav-link" onClick={onConnections} disabled={!demo && !identity}><Plug aria-hidden/>Integrations</button>
       </nav>
       {recentCompanies.length > 0 && <nav className="sidebar-section sidebar-recents" aria-label="Recent companies"><span className="nav-label">Recents</span>{recentCompanies.map(company => <button key={company.id} className="nav-link" onClick={() => onCompany(company.id)} aria-pressed={company.id === selected}>{company.name}{company.id === selected && <span className="recent-current" aria-hidden/>}</button>)}</nav>}
     </div>

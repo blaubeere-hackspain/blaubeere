@@ -7,6 +7,7 @@ import { ApiError, api } from "../lib/api";
 import type { CompanySummary, Identity, ModelAssessment } from "../lib/types";
 import { ModelDashboard } from "./model-dashboard";
 import { DashboardSkeleton } from "./dashboard-skeleton";
+import { Connections } from "./connections";
 import { WelcomeOnboarding } from "./welcome-onboarding";
 import { Sidebar } from "./sidebar";
 import { Dialog } from "./dialog";
@@ -22,6 +23,7 @@ export function Dashboard({ demo = false, scoreDate }: { demo?: boolean; scoreDa
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(true);
   const [retry, setRetry] = useState(0);
+  const [connections, setConnections] = useState(false);
   const [logoutBusy, setLogoutBusy] = useState(false);
   const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
   const [mobileNavigation, setMobileNavigation] = useState(false);
@@ -67,7 +69,7 @@ export function Dashboard({ demo = false, scoreDate }: { demo?: boolean; scoreDa
   const welcome = companies !== null && (identity || demo) && <WelcomeOnboarding scope={demo ? "demo" : identity!.email} hasCompanies={companies.length > 0} demo={demo} autoOpen={!scoreDate}/>;
   const overviewHref = `${demo ? "/demo" : "/dashboard"}${selected ? `?company=${encodeURIComponent(selected)}` : ""}`;
   const sidebar = (mobile = false) => <Sidebar selectorId={mobile ? "mobile-company" : "sidebar-company"} canInspect={Boolean(model)} overviewHref={scoreDate ? overviewHref : undefined} demo={demo} companies={companies} recentCompanies={recent.flatMap(id => companies?.find(company => company.id === id) ?? [])} selected={selected} identity={identity} logoutBusy={logoutBusy}
-    onCompany={id => { setSelected(id); setMobileNavigation(false); }} onLogout={logout} onNavigate={() => setMobileNavigation(false)}/>;
+    onCompany={id => { setSelected(id); setMobileNavigation(false); }} onConnections={() => { setMobileNavigation(false); setConnections(true); }} onLogout={logout} onNavigate={() => setMobileNavigation(false)}/>;
   return <div className="app-shell" data-sidebar-collapsed={sidebarCollapsed}><div className="dashboard-painting" aria-hidden="true"><Image src={painting} alt="" fill sizes="100vw" priority/></div><a href="#main" className="skip-link">Skip to financial health</a>
     <aside className="sidebar" aria-label="Workspace navigation">
       <button className="icon-button desktop-sidebar-toggle" aria-label={sidebarCollapsed ? "Show sidebar" : "Hide sidebar"} aria-expanded={!sidebarCollapsed} aria-controls="workspace-sidebar" onClick={() => setSidebarCollapsed(!sidebarCollapsed)}><span className="icon-swap" aria-hidden><PanelLeft data-visible={sidebarCollapsed}/><PanelLeftClose data-visible={!sidebarCollapsed}/></span></button>
@@ -85,5 +87,6 @@ export function Dashboard({ demo = false, scoreDate }: { demo?: boolean; scoreDa
       </main>
     </div>
     <Dialog open={mobileNavigation} onClose={() => setMobileNavigation(false)} className="navigation-dialog" titleId="navigation-title"><h2 id="navigation-title" className="sr-only">Workspace navigation</h2><button className="icon-button close-navigation" aria-label="Close navigation" onClick={() => setMobileNavigation(false)}><X/></button>{mobileNavigation && sidebar(true)}</Dialog>
+    {(identity || demo) && <Connections demo={demo} endpoint={identity?.mcp_resource ?? ""} open={connections} onClose={() => setConnections(false)}/>}
   </div>;
 }
