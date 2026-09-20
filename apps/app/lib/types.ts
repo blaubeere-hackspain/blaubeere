@@ -48,6 +48,7 @@ export type CashMonth = {
   closing_balance: number | null; days: DailyCash[];
 };
 export type ModelRecord = {
+  predictive?: ReceiptOutlook;
   health_status?: {
     state: "attention_needed" | "insufficient_evidence" | "no_flags";
     score: number | null; confidence: string; low_score_threshold: number; policy_note: string;
@@ -85,6 +86,14 @@ export type ModelRecord = {
     servicio_esperado_eur: number | null; servicio_observado_eur: number | null; deficit_servicio_eur: number | null;
     obligacion_vencida_eur: number | null; multiplicador_deuda: number | null; confidence: string;
   } | null;
+};
+export type ReceiptOutlook = {
+  schema_version: "receipt-outlook-1"; model_version: string; as_of: string;
+  horizon_start: string; horizon_end: string; view: "reconstructed_retrospective";
+  calibration: "uncalibrated_internal_retrospective"; automatic_alerts: false;
+  predictions: Record<"receipt_contraction_3m" | "receipt_expansion_3m" | "current_receipt_dip_3m", {
+    probabilities: { "0": number; "1": number } | null; reasons: string[];
+  }>;
 };
 export type ModelAssessment = {
   kind: "model"; company: CompanySummary; records: ModelRecord[];
