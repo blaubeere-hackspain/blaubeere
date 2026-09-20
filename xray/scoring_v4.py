@@ -5,7 +5,7 @@ adaptador. Consume el contrato de entrada cerrado (monthly_rows) y produce un
 dict serializable con json.dumps(..., allow_nan=False). Mismo contrato de
 pureza que xray/scoring_v3.py, que se lee como referencia; v3 CONVIVE intacto.
 
-Formula v4 (decision cerrada del usuario; no modificar aqui):
+Formula v4 (decision de producto del usuario; ver DECISION FX abajo):
 
   Ventana: la misma de v3 (expansiva hasta 6 meses, luego movil de 6).
   C6 = cobros conocidos en la ventana (igual que v3)
@@ -46,12 +46,47 @@ Formula v4 (decision cerrada del usuario; no modificar aqui):
   H       = 100 * (C6 + colchon_aplicable + k * R_hist)
                  / (C6 + colchon_aplicable + T6_efectivo + k)
   H_final = H * (1 - beta * mora_indice) * multiplicador_deuda
-      Ambos factores SOLO a la baja y acotados: mora_indice y
-      multiplicador_deuda estan en [0, 1]; None = sin ajuste, con motivo
-      registrado, nunca ajuste a cero. H_final queda siempre en [0, 100] (H
-      no puede pasar de 100 por construccion: el colchon aplicable esta
-      acotado por alpha*T6 y R_hist <= 1; se acota defensivamente y con
-      motivo si un caso limite escapa).
+              * (1 - beta_fx * indice_fx)
+      Los TRES factores SOLO a la baja y acotados: mora_indice,
+      multiplicador_deuda e indice_fx estan en [0, 1]; None = sin ajuste,
+      con motivo registrado, nunca ajuste a cero. H_final queda siempre en
+      [0, 100] (H no puede pasar de 100 por construccion: el colchon
+      aplicable esta acotado por alpha*T6 y R_hist <= 1; se acota
+      defensivamente y con motivo si un caso limite escapa).
+
+DECISION FX (producto del usuario; AUTORIZA el cuarto factor)
+-------------------------------------------------------------
+Este modulo decia originalmente: "La formula NO se cambia aqui sin decision
+de producto". Esa decision EXISTE, es del usuario, y es esta, LITERAL, del
+2026-09-19:
+
+    "yo lo que haria, es meterlo en la formula pero con un peso muy bajo. De
+     esta forma, decimos que es algo que contemplamos en el algoritmo pero el
+     feature real es el indice de forex que podriamos implementar en nuestro
+     producto"
+
+Por tanto el indice de inestabilidad de divisa (capa F3,
+reports/fx_risk/fx_risk_monthly.parquet) ENTRA en la formula con peso
+DELIBERADAMENTE BAJO (DEFAULT_BETA_FX = 0.05) y solo a la baja. Reglas de
+aplicacion, que son las que evitan que el factor haga dano:
+  R1. Empresa SIN exposicion no-EUR -> factor EXACTAMENTE 1.0: no se
+      multiplica (nada de "casi 1" por aritmetica de punto flotante).
+  R2. indice_fx ausente o NULL -> factor EXACTAMENTE 1.0 y motivo en reasons
+      ('indice_fx_desconocido'). Nulo NUNCA es cero y nunca castiga: una
+      empresa cuya exposicion no conocemos no puede salir perjudicada por
+      nuestra ignorancia.
+  R3. indice_es_intervalo = true (mezcla de divisas opacas sin tipo BCE):
+      no hay valor puntual. Se aplica indice_fx_min, el castigo MINIMO
+      compatible con lo conocido, y se registra en reasons
+      ('castigo_fx_acotado_por_intervalo'). Castigar por el maximo seria
+      penalizar a la empresa por un dato que no tenemos.
+  R4. Cuando el factor aplicado es < 1, reasons registra el castigo con su
+      valor; el valor exacto queda ademas en inputs.indice_fx_aplicado y
+      adjustments.penalizacion_fx_puntos.
+El indice se lee SOLO del mes de corte (as_of), igual que mora_indice y
+multiplicador_deuda; no agrega el historial de la ventana. Con beta_fx = 0.10
+el p90 del castigo medido por F3 era 3.00 puntos; a 0.05 queda en torno a la
+mitad (reports/fx_risk/contrafactual.json).
 
 Guardas de no-nota, evaluadas en orden antes de calcular H (sin nota NO se
 inventa ningun numero):
@@ -95,6 +130,10 @@ combinacion no negativa):
                   T6_efectivo.
   beta  = 0.25    intensidad de la mora: con mora_indice = 1 la nota cae un
                   25% como maximo por ese canal.
+  beta_fx = 0.05  intensidad del riesgo de divisa, DECISION DE PRODUCTO del
+                  usuario (no calibrado): con indice_fx = 1 la nota cae un
+                  5% como maximo por ese canal. Deliberadamente bajo; a
+                  0.10 el p90 del castigo medido por F3 era 3.00 puntos.
 
 Calibracion (xray/calibrate_params_v4.py, informe
 reports/calibration_v4/report.md, 2026-09-19): k, alpha y beta fueron
@@ -124,6 +163,10 @@ CONFIDENCE_INPUTS = ('alta', 'media', 'baja', 'ninguna')
 DEFAULT_K = 4178.45
 DEFAULT_ALPHA = 3.0
 DEFAULT_BETA = 0.25
+# Peso DELIBERADAMENTE BAJO del factor FX: decision de producto del usuario
+# (2026-09-19, literal en el docstring del modulo). A 0.10 el p90 del castigo
+# medido por F3 era 3.00 puntos; a 0.05 queda en torno a la mitad.
+DEFAULT_BETA_FX = 0.05
 
 LIMITACIONES = (
     'Parametros k, alpha y beta PROVISIONALES pendientes de recalibracion '
@@ -141,8 +184,12 @@ LIMITACIONES = (
     'La obligacion vencida alimenta tres canales a la vez (denominador, '
     'multiplicador de deuda y mora del lado pago): riesgo de triple conteo '
     'medido en el informe, pendiente de decision de calibracion.',
-    'La mora y el multiplicador aplicados son los del mes de corte; no '
-    'agregan el historial de la ventana.',
+    'La mora, el multiplicador y el indice_fx aplicados son los del mes de '
+    'corte; no agregan el historial de la ventana.',
+    'El factor FX usa el indice de inestabilidad de divisa de la capa F3, '
+    'ponderado por dinero y con severidad declarada por tramo. Las divisas '
+    'sin cobertura BCE (opacas) no se valoran: una empresa con mezcla recibe '
+    'el castigo MINIMO compatible (indice_fx_min), nunca el maximo.',
     'El colchon es el NIVEL de caja reconstruido en reversa (saldo_reversa); '
     'el ancla de reconstruccion es posterior a todos los cortes y la '
     'medida point-in-time de las facturas es por vencimiento, no por '
@@ -201,6 +248,15 @@ def _ratio(value, field):
     return result
 
 
+def _intervalo(value):
+    """Bandera de intervalo FX: bool; None (campo ausente o nulo) es False."""
+    if value is None:
+        return False
+    if type(value) is not bool:
+        raise ValueError('indice_es_intervalo: debe ser booleano')
+    return value
+
+
 def _confianza(value):
     if value not in CONFIDENCE_INPUTS:
         raise ValueError("confianza_entradas: debe ser 'alta', 'media', "
@@ -239,7 +295,8 @@ def _sum_field(rows, field):
 
 
 def score_company(company_id, group_id, monthly_rows, as_of, *,
-                  k=DEFAULT_K, alpha=DEFAULT_ALPHA, beta=DEFAULT_BETA):
+                  k=DEFAULT_K, alpha=DEFAULT_ALPHA, beta=DEFAULT_BETA,
+                  beta_fx=DEFAULT_BETA_FX):
     """Puntua una empresa con la formula healthscore_v4.
 
     Contrato de entrada (cerrado):
@@ -253,9 +310,17 @@ def score_company(company_id, group_id, monthly_rows, as_of, *,
         None), mora_indice (float en [0,1] o None; None = sin cartera
         observable, NO cero) y confianza_entradas
         ('alta'|'media'|'baja'|'ninguna').
+        Campos FX OPCIONALES (solo si el adaptador cablea la capa F3):
+        indice_fx (float en [0,1] o None; None = desconocido o intervalo),
+        indice_fx_min (float en [0,1] o None; cota inferior para las
+        empresas con mezcla opaca) e indice_es_intervalo (bool). Si la clave
+        'indice_fx' NO esta presente en la fila, el motor no aplica ningun
+        factor FX (modo --sin-fx, salida bit-identica a la v4 anterior);
+        si esta presente con valor NULL se registra el motivo y el factor es
+        exactamente 1.0 (nulo nunca castiga).
       as_of: date, ultimo dia de un mes cerrado. Las filas con month posterior
         a as_of se ignoran por completo (disciplina point-in-time).
-      k, alpha, beta: parametros inyectados, finitos y no negativos.
+      k, alpha, beta, beta_fx: parametros inyectados, finitos y no negativos.
 
     Devuelve un dict serializable con json.dumps(..., allow_nan=False).
     No muta monthly_rows.
@@ -264,6 +329,7 @@ def score_company(company_id, group_id, monthly_rows, as_of, *,
     k = _param(k, 'k')
     alpha = _param(alpha, 'alpha')
     beta = _param(beta, 'beta')
+    beta_fx = _param(beta_fx, 'beta_fx')
 
     try:
         raw_rows = list(monthly_rows)
@@ -311,6 +377,13 @@ def score_company(company_id, group_id, monthly_rows, as_of, *,
             'multiplicador_deuda': _ratio(item.get('multiplicador_deuda'),
                                           'multiplicador_deuda'),
             'mora_indice': _ratio(item.get('mora_indice'), 'mora_indice'),
+            'indice_fx': _ratio(item.get('indice_fx'), 'indice_fx'),
+            'indice_fx_min': _ratio(item.get('indice_fx_min'),
+                                    'indice_fx_min'),
+            'indice_es_intervalo': _intervalo(item.get('indice_es_intervalo')),
+            # La CLAVE presente distingue la capa FX cableada (--con-fx) de
+            # su ausencia (--sin-fx): sin capa no hay razon ni factor.
+            'tiene_capa_fx': 'indice_fx' in item,
             'confianza_entradas': _confianza(item.get('confianza_entradas')),
         })
 
@@ -396,6 +469,30 @@ def score_company(company_id, group_id, monthly_rows, as_of, *,
     if multiplicador is None:
         reasons.append('multiplicador_deuda_desconocido')
 
+    # --- Factor FX: SOLO a la baja, acotado y con el castigo MINIMO --------
+    # Mismas reglas que mora/multiplicador: None = sin ajuste con motivo,
+    # nunca ajuste a cero. 'tiene_capa_fx' distingue la capa cableada
+    # (--con-fx) de su ausencia (--sin-fx, sin razon ni factor).
+    con_capa_fx = as_of_row is not None and as_of_row['tiene_capa_fx']
+    indice_fx = as_of_row['indice_fx'] if con_capa_fx else None
+    indice_fx_min = as_of_row['indice_fx_min'] if con_capa_fx else None
+    indice_es_intervalo = (as_of_row['indice_es_intervalo']
+                           if con_capa_fx else False)
+    indice_fx_aplicado = None
+    if con_capa_fx:
+        if indice_es_intervalo:
+            # R3: mezcla opaca, no hay valor puntual. Se aplica la COTA
+            # INFERIOR (castigo minimo compatible con lo que sabemos).
+            indice_fx_aplicado = indice_fx_min
+            reasons.append('castigo_fx_acotado_por_intervalo')
+            if indice_fx_aplicado is None:
+                reasons.append('indice_fx_intervalo_sin_cota_inferior')
+        elif indice_fx is None:
+            # R2: nulo nunca castiga.
+            reasons.append('indice_fx_desconocido')
+        else:
+            indice_fx_aplicado = indice_fx
+
     colchon_aplicable = 0.0
     cap = alpha * t6_efectivo
     if colchon_v4 > cap:
@@ -420,8 +517,10 @@ def score_company(company_id, group_id, monthly_rows, as_of, *,
     h_antes_de_ajustes = None
     after_mora = None
     after_mult = None
+    after_fx = None
     penalizacion_mora = 0.0
     penalizacion_mult = 0.0
+    penalizacion_fx = 0.0
     if not any_activity:
         reasons.insert(0, 'sin_actividad_de_caja_observada')
         if c6 == 0.0 and t6_efectivo == 0.0:
@@ -445,13 +544,30 @@ def score_company(company_id, group_id, monthly_rows, as_of, *,
                       if multiplicador is not None else after_mora)
         penalizacion_mult = after_mora - after_mult
         health_score = after_mult
+        # R1: si el indice aplicable es 0.0 (empresa sin exposicion no-EUR) o
+        # no hay capa FX, el factor es EXACTAMENTE 1.0: NO se multiplica, la
+        # nota queda bit-identica a la v4 anterior.
+        if (indice_fx_aplicado is not None and indice_fx_aplicado > 0.0):
+            after_fx = after_mult * (1.0 - beta_fx * indice_fx_aplicado)
+            penalizacion_fx = after_mult - after_fx
+            # R4: el motivo lleva su valor; el exacto tambien va en
+            # inputs.indice_fx_aplicado y adjustments.penalizacion_fx_puntos.
+            reasons.append(
+                f'castigo_fx_indice_{indice_fx_aplicado:.4f}')
+            health_score = after_fx
+        else:
+            after_fx = after_mult
         if health_score < 0.0 or health_score > 100.0:
             # Defensivo: por construccion no deberia ocurrir (colchon
-            # aplicable <= alpha*T6 y ambos factores en [0,1]). Si un caso
+            # aplicable <= alpha*T6 y los tres factores en [0,1]). Si un caso
             # limite escapa por punto flotante, se acota con motivo.
             reasons.append('nota_acotada_al_rango_0_100')
             health_score = min(100.0, max(0.0, health_score))
-        penalizacion_mult = after_mora - health_score
+        # El efecto del clamp defensivo lo absorbe el ULTIMO canal aplicado
+        # (FX si actuo, multiplicador si no), para que la descomposicion
+        # mora + multiplicador + fx sume h_antes_de_ajustes - health_score.
+        penalizacion_fx = after_mult - health_score
+        penalizacion_mult = after_mora - after_mult
 
     # --- Confianza: criterio declarado y determinista -----------------------
     # Base: la peor confianza_entradas declarada entre los meses con actividad
@@ -506,13 +622,20 @@ def score_company(company_id, group_id, monthly_rows, as_of, *,
             'saldo_reversa_m': saldo_reversa,
             'mora_indice': mora,
             'multiplicador_deuda': multiplicador,
+            'indice_fx': indice_fx,
+            'indice_fx_min': indice_fx_min,
+            'indice_es_intervalo': indice_es_intervalo,
+            'indice_fx_aplicado': indice_fx_aplicado,
         },
-        'params': {'k': k, 'alpha': alpha, 'beta': beta},
+        'params': {'k': k, 'alpha': alpha, 'beta': beta, 'beta_fx': beta_fx},
         'adjustments': {
             'h_antes_de_ajustes': h_antes_de_ajustes,
             'after_mora': after_mora,
             'penalizacion_mora_puntos': penalizacion_mora,
+            'after_multiplicador': after_mult,
             'penalizacion_multiplicador_puntos': penalizacion_mult,
+            'after_fx': after_fx,
+            'penalizacion_fx_puntos': penalizacion_fx,
         },
         'reasons': reasons,
         'limitaciones': list(LIMITACIONES),

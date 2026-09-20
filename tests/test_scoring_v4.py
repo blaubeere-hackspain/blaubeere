@@ -39,6 +39,12 @@ def full_rows(meses=(1, 2, 3, 4, 5, 6), **kwargs):
     return [row(m, **kwargs) for m in meses]
 
 
+def con_fx(rows, indice, indice_min=None, intervalo=False):
+    """Copia las filas anadiendo los campos FX opcionales de la capa F3."""
+    return [dict(r, indice_fx=indice, indice_fx_min=indice_min,
+                 indice_es_intervalo=intervalo) for r in rows]
+
+
 class ScoringV4Test(unittest.TestCase):
     def score(self, rows=None, as_of='2024-06-30', **kwargs):
         return score_company('A', 'G', full_rows() if rows is None else rows,
@@ -156,6 +162,88 @@ class ScoringV4Test(unittest.TestCase):
                         if result['health_score'] is not None:
                             self.assertGreaterEqual(result['health_score'], 0.0)
                             self.assertLessEqual(result['health_score'], 100.0)
+
+    # --- Obligatorio 6: invariancia FX (empresa sin exposicion no-EUR) -----
+    def test_fx_invariancia_sin_exposicion_bit_identico(self):
+        # La empresa sin exposicion no-EUR (indice 0.0) y la de exposicion
+        # DESCONOCIDA (NULL) tienen health_score BIT-IDENTICO al de la v4 sin
+        # capa FX: el factor debe ser exactamente 1.0, sin aritmetica que
+        # arrastre error. Si una sola empresa cambia, hay un bug.
+        base = full_rows(mora=0.3, mult=0.8, oblig=1500.0, deficit=75.0)
+        sin_capa = self.score(base)
+        cero = self.score(con_fx(base, 0.0, indice_min=0.0))
+        nulo = self.score(con_fx(base, None, None))
+        self.assertEqual(cero['health_score'], sin_capa['health_score'])
+        self.assertEqual(nulo['health_score'], sin_capa['health_score'])
+        self.assertEqual(cero['adjustments']['penalizacion_fx_puntos'], 0.0)
+        self.assertEqual(nulo['adjustments']['penalizacion_fx_puntos'], 0.0)
+        # Cero conocido no mete motivo FX; NULL desconocido SI lo declara y
+        # aun asi no castiga (nulo nunca es cero y nunca penaliza).
+        self.assertFalse(any('indice_fx' in r for r in cero['reasons']))
+        self.assertIn('indice_fx_desconocido', nulo['reasons'])
+        # Sin la clave 'indice_fx' (--sin-fx) no hay ningun motivo FX.
+        self.assertFalse(any('indice_fx' in r for r in sin_capa['reasons']))
+        self.assertFalse(any('fx' in r for r in sin_capa['reasons']))
+
+    def test_fx_factor_acotado_h_final_en_0_100(self):
+        base = full_rows(mora=0.5, mult=0.7, oblig=10_000.0, deficit=250.0)
+        for indice in (0.0, 0.25, 0.5, 1.0):
+            rows = con_fx(base, indice)
+            for beta_fx in (0.0, 0.05, 0.5, 1.0, 10.0):
+                result = self.score(rows, beta_fx=beta_fx)
+                h = result['health_score']
+                self.assertIsNotNone(h)
+                self.assertGreaterEqual(h, 0.0)
+                self.assertLessEqual(h, 100.0)
+
+    def test_fx_nulo_no_castiga_y_mete_motivo(self):
+        rows = con_fx(full_rows(mora=0.2, mult=0.9), None, None)
+        result = self.score(rows)
+        self.assertIn('indice_fx_desconocido', result['reasons'])
+        self.assertEqual(result['adjustments']['penalizacion_fx_puntos'], 0.0)
+        self.assertAlmostEqual(result['health_score'],
+                               result['adjustments']['after_multiplicador'])
+
+    def test_fx_intervalo_usa_indice_min_y_no_el_max(self):
+        # Mezcla de divisas opacas: no hay valor puntual. El motor SOLO ve
+        # indice_fx_min; el castigo es el MINIMO compatible y queda acotado.
+        rows = con_fx(full_rows(mora=0.2, mult=0.9), None, indice_min=0.4,
+                      intervalo=True)
+        result = self.score(rows)
+        self.assertIn('castigo_fx_acotado_por_intervalo', result['reasons'])
+        self.assertEqual(result['inputs']['indice_fx_aplicado'], 0.4)
+        self.assertEqual(result['inputs']['indice_es_intervalo'], True)
+        after_mult = result['adjustments']['after_multiplicador']
+        self.assertAlmostEqual(result['health_score'], after_mult * (1 - 0.05 * 0.4))
+        self.assertAlmostEqual(result['adjustments']['penalizacion_fx_puntos'],
+                               after_mult * 0.05 * 0.4)
+
+    def test_fx_aplicado_registra_el_valor_en_reasons(self):
+        rows = con_fx(full_rows(mora=0.2, mult=0.9), 0.75)
+        result = self.score(rows)
+        self.assertIn('castigo_fx_indice_0.7500', result['reasons'])
+        after_mult = result['adjustments']['after_multiplicador']
+        self.assertAlmostEqual(result['health_score'], after_mult * (1 - 0.05 * 0.75))
+        self.assertAlmostEqual(result['adjustments']['penalizacion_fx_puntos'],
+                               after_mult * 0.05 * 0.75)
+        # La descomposicion de los TRES canales suma la perdida total.
+        h = result['adjustments']['h_antes_de_ajustes']
+        total = (result['adjustments']['penalizacion_mora_puntos']
+                 + result['adjustments']['penalizacion_multiplicador_puntos']
+                 + result['adjustments']['penalizacion_fx_puntos'])
+        self.assertAlmostEqual(h - result['health_score'], total)
+
+    def test_fx_contrato_invalido_y_beta_fx(self):
+        with self.assertRaises(ValueError):
+            self.score(con_fx(full_rows(), 1.5))
+        with self.assertRaises(ValueError):
+            self.score(con_fx(full_rows(), -0.1))
+        with self.assertRaises(ValueError):
+            self.score(con_fx(full_rows(), 0.5, indice_min=2.0, intervalo=True))
+        with self.assertRaises(ValueError):
+            self.score(full_rows(), beta_fx=-0.1)
+        with self.assertRaises(ValueError):
+            self.score(full_rows(), beta_fx=float('inf'))
 
     # --- Obligatorio 5: mora NULL / multiplicador NULL sin ajuste -----------
     def test_mora_null_y_multiplicador_null_sin_ajuste(self):

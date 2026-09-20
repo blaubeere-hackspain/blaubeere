@@ -18,7 +18,7 @@
   "efecto_corte_referencia": {
     "n_con_nota_antes": 904,
     "n_con_nota_despues": 876,
-    "mediana_antes": 36.88820563305704,
+    "mediana_antes": 36.79072459519959,
     "mediana_despues": 37.79383963168285
   },
   "actividad_real_excluidas": {
@@ -106,7 +106,7 @@
       "n_meses_con_nota": 19,
       "n_meses_con_nota_menor_1": 19,
       "proporcion": 1.0,
-      "health_score_corte_referencia": 1.938650134249377e-05,
+      "health_score_corte_referencia": 1.936896246030414e-05,
       "c6_corte": 0.0,
       "p6_corte": 170.76,
       "t6_efectivo_corte": 966147.5331186678,
@@ -122,7 +122,7 @@
       "n_meses_con_nota": 23,
       "n_meses_con_nota_menor_1": 22,
       "proporcion": 0.9565217391304348,
-      "health_score_corte_referencia": 36.77067215203397,
+      "health_score_corte_referencia": 36.638767523699045,
       "c6_corte": 0.0,
       "p6_corte": 0.0,
       "t6_efectivo_corte": 59005.31,
@@ -154,7 +154,7 @@
       "n_meses_con_nota": 23,
       "n_meses_con_nota_menor_1": 22,
       "proporcion": 0.9565217391304348,
-      "health_score_corte_referencia": 15.56825036231666,
+      "health_score_corte_referencia": 15.179044103258743,
       "c6_corte": 0.0,
       "p6_corte": 0.0,
       "t6_efectivo_corte": 306360.94,
@@ -170,7 +170,7 @@
       "n_meses_con_nota": 21,
       "n_meses_con_nota_menor_1": 20,
       "proporcion": 0.9523809523809523,
-      "health_score_corte_referencia": 34.97526776488027,
+      "health_score_corte_referencia": 34.100886070758264,
       "c6_corte": 0.0,
       "p6_corte": 0.0,
       "t6_efectivo_corte": 15283.709999999997,
@@ -178,7 +178,7 @@
       "obligacion_vencida_m_corte": 15283.709999999997,
       "n_transacciones_total": 1127,
       "n_entradas_dinero": 471,
-      "importe_entradas_dinero_eur": 1559482.9845684199
+      "importe_entradas_dinero_eur": 1559482.9845684196
     },
     {
       "company_id": "COMP_0361",
@@ -226,7 +226,7 @@
       "obligacion_vencida_m_corte": 106.0,
       "n_transacciones_total": 1022,
       "n_entradas_dinero": 509,
-      "importe_entradas_dinero_eur": 838328199.8999991
+      "importe_entradas_dinero_eur": 838328199.8999996
     },
     {
       "company_id": "COMP_0556",
@@ -234,7 +234,7 @@
       "n_meses_con_nota": 5,
       "n_meses_con_nota_menor_1": 5,
       "proporcion": 1.0,
-      "health_score_corte_referencia": 0.5643406704022119,
+      "health_score_corte_referencia": 0.5631635070536448,
       "c6_corte": 0.0,
       "p6_corte": 0.0,
       "t6_efectivo_corte": 16.0,
@@ -250,7 +250,7 @@
       "n_meses_con_nota": 23,
       "n_meses_con_nota_menor_1": 22,
       "proporcion": 0.9565217391304348,
-      "health_score_corte_referencia": 33.21439555012656,
+      "health_score_corte_referencia": 31.55367577262023,
       "c6_corte": 0.0,
       "p6_corte": 0.0,
       "t6_efectivo_corte": 67976.91,
@@ -314,7 +314,7 @@
       "n_meses_con_nota": 21,
       "n_meses_con_nota_menor_1": 20,
       "proporcion": 0.9523809523809523,
-      "health_score_corte_referencia": 53.446160399321876,
+      "health_score_corte_referencia": 52.11000638933883,
       "c6_corte": 0.0,
       "p6_corte": 0.0,
       "t6_efectivo_corte": 295557.36999999994,
@@ -346,7 +346,7 @@
       "n_meses_con_nota": 21,
       "n_meses_con_nota_menor_1": 20,
       "proporcion": 0.9523809523809523,
-      "health_score_corte_referencia": 31.447866978414826,
+      "health_score_corte_referencia": 30.661670303954455,
       "c6_corte": 0.0,
       "p6_corte": 0.0,
       "t6_efectivo_corte": 371697.82999999996,
@@ -386,7 +386,7 @@
       "obligacion_vencida_m_corte": 921649.6000000001,
       "n_transacciones_total": 3165,
       "n_entradas_dinero": 950,
-      "importe_entradas_dinero_eur": 72745976.56000002
+      "importe_entradas_dinero_eur": 72745976.56000003
     },
     {
       "company_id": "COMP_0948",
@@ -402,7 +402,7 @@
       "obligacion_vencida_m_corte": 2700713.21,
       "n_transacciones_total": 2112,
       "n_entradas_dinero": 870,
-      "importe_entradas_dinero_eur": 5967186.369999999
+      "importe_entradas_dinero_eur": 5967186.37
     },
     {
       "company_id": "COMP_0961",
@@ -442,7 +442,7 @@
       "n_meses_con_nota": 20,
       "n_meses_con_nota_menor_1": 19,
       "proporcion": 0.95,
-      "health_score_corte_referencia": 31.688812732989774,
+      "health_score_corte_referencia": 30.89659241466503,
       "c6_corte": 0.0,
       "p6_corte": 0.0,
       "t6_efectivo_corte": 6196.66,
@@ -498,7 +498,7 @@
       "obligacion_vencida_m_corte": null,
       "n_transacciones_total": 9159,
       "n_entradas_dinero": 4573,
-      "importe_entradas_dinero_eur": 10118966.111984344
+      "importe_entradas_dinero_eur": 10118966.11198434
     },
     {
       "company_id": "COMP_1085",
@@ -522,7 +522,7 @@
       "n_meses_con_nota": 24,
       "n_meses_con_nota_menor_1": 23,
       "proporcion": 0.9583333333333334,
-      "health_score_corte_referencia": 29.323007163613696,
+      "health_score_corte_referencia": 28.589931984523353,
       "c6_corte": 0.0,
       "p6_corte": 0.0,
       "t6_efectivo_corte": 1369882.2399999998,
@@ -546,7 +546,7 @@
       "obligacion_vencida_m_corte": 572642.5800000001,
       "n_transacciones_total": 1893,
       "n_entradas_dinero": 768,
-      "importe_entradas_dinero_eur": 9244637.607388088
+      "importe_entradas_dinero_eur": 9244637.60738809
     },
     {
       "company_id": "COMP_1207",
@@ -562,7 +562,7 @@
       "obligacion_vencida_m_corte": 1045319.0599999997,
       "n_transacciones_total": 2586,
       "n_entradas_dinero": 739,
-      "importe_entradas_dinero_eur": 38571902.63999999
+      "importe_entradas_dinero_eur": 38571902.639999986
     }
   ]
 }

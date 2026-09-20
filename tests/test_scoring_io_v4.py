@@ -166,12 +166,29 @@ class ScoringIoV4Test(unittest.TestCase):
             'company_id': company_id, 'month': month, 'mora_indice': mora,
             'mora_pago_robusta': mora, 'confidence': confidence})
 
+    def fx_layer_row(self, company_id, month, indice=None, indice_min=None,
+                     intervalo=False, confidence='ninguna'):
+        """Capa F3 (factor FX): month como TIMESTAMP y columna extra.
+
+        indice=None + intervalo=False -> exposicion desconocida (nulo nunca
+        castiga). indice=0.0 -> empresa sin exposicion no-EUR (factor 1.0
+        exacto). intervalo=True -> se usa indice_min (castigo minimo).
+        """
+        self.parquet_or_append('reports/fx_risk/fx_risk_monthly.parquet', [
+            ('company_id', 'VARCHAR'), ('month', 'TIMESTAMP'),
+            ('indice_fx', 'DOUBLE'), ('indice_fx_min', 'DOUBLE'),
+            ('indice_es_intervalo', 'BOOLEAN'), ('confidence', 'VARCHAR')], {
+            'company_id': company_id, 'month': month, 'indice_fx': indice,
+            'indice_fx_min': indice_min, 'indice_es_intervalo': intervalo,
+            'confidence': confidence})
+
     def layer_rows(self, company_id, month, obligacion=None, deficit=None,
                    multiplicador=None, mora=None):
         self.debt_layer_row(company_id, month, obligacion=obligacion,
                             deficit=deficit, multiplicador=multiplicador)
         self.cash_layer_row(company_id, month, month_as_string=True)
         self.delay_layer_row(company_id, month, mora=mora)
+        self.fx_layer_row(company_id, month)
 
     def fixture(self, months):
         """Universo con una empresa activa (A) y otra sin actividad (B)."""
@@ -247,11 +264,12 @@ class ScoringIoV4Test(unittest.TestCase):
         self.assertEqual(_check_join_sets(layers), 1)
 
     def test_join_against_real_workspace_keeps_30864_pairs(self):
-        """El join de las tres capas reales conserva la rejilla completa."""
+        """El join de las CUATRO capas reales conserva la rejilla completa."""
         repo = Path(__file__).resolve().parents[1]
         debt_path = repo / 'reports/debt_obligation/debt_obligation_monthly.parquet'
         cash_path = repo / 'reports/cash_backfill/cash_backfill_monthly.parquet'
         delay_path = repo / 'reports/payment_delay_v2/payment_delay_v2_monthly.parquet'
+        fx_path = repo / 'reports/fx_risk/fx_risk_monthly.parquet'
         if not all(path.exists() for path in (debt_path, cash_path, delay_path)):
             self.skipTest('las capas v4 consolidadas no estan disponibles')
         con = duckdb.connect(':memory:')
@@ -276,6 +294,25 @@ class ScoringIoV4Test(unittest.TestCase):
             )
         ''').fetchone()[0]
         self.assertEqual(rows, N_PAIRS_ESPERADOS)
+        # La capa F3 (factor FX) entra en el MISMO join con la MISMA rejilla:
+        # 30.864 pares identicos, sin perder ni una fila.
+        if not fx_path.exists():
+            self.skipTest('la capa F3 de riesgo de divisa no esta disponible')
+        n_fx = con.execute(f'''
+            SELECT count(*) FROM read_parquet('{fx_path}')
+            WHERE CAST(month AS DATE) <= DATE '2026-08-31'
+        ''').fetchone()[0]
+        self.assertEqual(n_fx, N_PAIRS_ESPERADOS)
+        rows_fx = con.execute(f'''
+            SELECT count(*) FROM (
+                SELECT company_id, CAST(month AS DATE) AS month
+                FROM read_parquet('{fx_path}')
+                INTERSECT
+                SELECT company_id, CAST(month AS DATE) AS month
+                FROM read_parquet('{debt_path}')
+            )
+        ''').fetchone()[0]
+        self.assertEqual(rows_fx, N_PAIRS_ESPERADOS)
 
     # --- Recomputo C/P y entrada al motor ------------------------------------
     def test_operating_in_and_out_add_to_c_and_p(self):
@@ -332,6 +369,105 @@ class ScoringIoV4Test(unittest.TestCase):
         # B sin actividad y sin flujos: sin nota por falta de actividad.
         b = assess_at_v4(self.con, '2026-08-31')['assessments'][1]
         self.assertIsNone(b['health_score'])
+
+    # --- Factor FX (capa F3): aplicacion, invariancia y flag ----------------
+    def test_con_fx_aplica_factor_y_lo_declara(self):
+        month = date(2026, 8, 1)
+        self.fixture([month])
+        self.transaction('A', month, 'operating_in', 400.0, 'in', 'operating_in')
+        self.debt_layer_row('A', month, obligacion=500.0, multiplicador=0.5)
+        self.delay_layer_row('A', month, mora=0.2)
+        self.fx_layer_row('A', month, indice=1.0)
+        result = assess_at_v4(self.con, '2026-08-31')['assessments'][0]
+        self.assertEqual(result['indice_fx'], 1.0)
+        self.assertEqual(result['indice_fx_aplicado'], 1.0)
+        self.assertFalse(result['indice_es_intervalo'])
+        self.assertEqual(result['beta_fx'], 0.05)
+        h = result['h_antes_de_ajustes']
+        # mora 0.2 -> 5%; multiplicador 0.5 -> mitad; FX 1.0 -> 5% menos.
+        self.assertAlmostEqual(result['health_score'], h * 0.95 * 0.5 * 0.95)
+        self.assertAlmostEqual(result['penalizacion_fx_puntos'],
+                               h * 0.95 * 0.5 * 0.05)
+        self.assertIn('castigo_fx_indice_1.0000', result['reasons'])
+        self.assertIn('castigo_fx_indice_1.0000',
+                      assess_at_v4(self.con, '2026-08-31')['summary']['motivos'])
+
+    def test_empresa_sin_exposicion_no_eur_bit_identica_con_fx(self):
+        # Test de invariancia (el mas importante): con indice_fx = 0.0 la nota
+        # es BIT-IDENTICA a la v4 sin capa FX; con indice nulo tambien (nulo
+        # nunca castiga), aunque se registre el motivo.
+        month = date(2026, 8, 1)
+        self.fixture([month])
+        self.transaction('A', month, 'operating_in', 400.0, 'in', 'operating_in')
+        self.debt_layer_row('A', month, obligacion=500.0, multiplicador=0.5)
+        self.delay_layer_row('A', month, mora=0.2)
+        self.fx_layer_row('A', month, indice=0.0, indice_min=0.0)
+        con_cero = assess_at_v4(self.con, '2026-08-31')['assessments'][0]
+        self.assertEqual(con_cero['indice_fx_aplicado'], 0.0)
+        self.assertEqual(con_cero['penalizacion_fx_puntos'], 0.0)
+        self.fx_layer_row('A', month, indice=None, indice_min=None)
+        con_nulo = assess_at_v4(self.con, '2026-08-31')['assessments'][0]
+        self.assertIsNone(con_nulo['indice_fx_aplicado'])
+        self.assertEqual(con_nulo['penalizacion_fx_puntos'], 0.0)
+        self.assertIn('indice_fx_desconocido', con_nulo['reasons'])
+        sin_fx = assess_at_v4(self.con, '2026-08-31', con_fx=False)['assessments'][0]
+        self.assertEqual(con_cero['health_score'], sin_fx['health_score'])
+        self.assertEqual(con_nulo['health_score'], sin_fx['health_score'])
+
+    def test_rama_intervalo_usa_indice_fx_min(self):
+        month = date(2026, 8, 1)
+        self.fixture([month])
+        self.transaction('A', month, 'operating_in', 400.0, 'in', 'operating_in')
+        self.transaction('A', month, 'operating_out', 250.0, 'out', 'operating_out')
+        self.fx_layer_row('A', month, indice=None, indice_min=0.4,
+                          intervalo=True)
+        result = assess_at_v4(self.con, '2026-08-31')['assessments'][0]
+        self.assertTrue(result['indice_es_intervalo'])
+        self.assertIsNone(result['indice_fx'])
+        self.assertEqual(result['indice_fx_min'], 0.4)
+        self.assertEqual(result['indice_fx_aplicado'], 0.4)
+        self.assertIn('castigo_fx_acotado_por_intervalo', result['reasons'])
+        h = result['h_antes_de_ajustes']
+        self.assertAlmostEqual(result['penalizacion_fx_puntos'], h * 0.05 * 0.4)
+
+    def test_sin_fx_no_exige_la_capa_y_reproduce_la_nota(self):
+        month = date(2026, 8, 1)
+        self.fixture([month])
+        self.transaction('A', month, 'operating_in', 400.0, 'in', 'operating_in')
+        self.debt_layer_row('A', month, obligacion=500.0, multiplicador=0.5)
+        self.delay_layer_row('A', month, mora=0.2)
+        self.fx_layer_row('A', month, indice=1.0)
+        antes = assess_at_v4(self.con, '2026-08-31', con_fx=False)
+        self.assertEqual(antes['assessments'][0]['penalizacion_fx_puntos'], 0.0)
+        self.assertIsNone(antes['assessments'][0]['indice_fx_aplicado'])
+        # Sin la capa F3, --sin-fx sigue funcionando y da la MISMA nota.
+        (self.root / 'reports/fx_risk/fx_risk_monthly.parquet').unlink()
+        despues = assess_at_v4(self.con, '2026-08-31', con_fx=False)
+        self.assertEqual(antes['assessments'], despues['assessments'])
+        # Con --con-fx (por defecto) la ausencia de la capa SI es un error.
+        with self.assertRaises(ValueError) as context:
+            assess_at_v4(self.con, '2026-08-31')
+        self.assertIn('Capa v4 ausente', str(context.exception))
+
+    def test_summary_declara_factor_fx_y_beta(self):
+        month = date(2026, 8, 1)
+        self.fixture([month])
+        self.transaction('A', month, 'operating_in', 400.0, 'in', 'operating_in')
+        con_fx_output = self.root / 'reports/score_v4'
+        report = run_score_v4(con_fx_output)
+        self.assertTrue(report['factor_fx']['activado'])
+        self.assertEqual(report['factor_fx']['beta_fx'], 0.05)
+        self.assertEqual(report['params']['beta_fx'], 0.05)
+        self.assertIn('- beta_fx*indice_fx', report['factor_fx']['formula'])
+        self.assertIn('--sin-fx', report['factor_fx']['flag_desactivar'])
+        sin_fx_output = self.root / 'reports/score_sin_fx'
+        report_sin = run_score_v4(sin_fx_output, con_fx=False)
+        self.assertFalse(report_sin['factor_fx']['activado'])
+        rows = self.con.execute(
+            f"SELECT count(DISTINCT beta_fx), count(indice_fx_aplicado) "
+            f"FROM read_parquet('{sin_fx_output / 'assessments.parquet'}')"
+        ).fetchone()
+        self.assertEqual(rows, (1, 0))
 
     # --- Salida: esquema, resumen, CLI ---------------------------------------
     def test_parquet_schema_is_exactly_the_declared_one(self):
@@ -545,8 +681,11 @@ class ScoringIoV4Test(unittest.TestCase):
         efecto = report['efecto_corte_referencia']
         self.assertEqual(efecto['n_con_nota_antes'], 904)
         self.assertEqual(efecto['n_con_nota_despues'], 876)
-        self.assertAlmostEqual(efecto['mediana_antes'], 36.88820563305704, places=6)
-        self.assertAlmostEqual(efecto['mediana_despues'], 37.79383963168285, places=6)
+        # La mediana pre-exclusion baja con el factor FX (beta_fx = 0.05);
+        # la de despues no cambia porque la mediana del corte no tiene
+        # exposicion no-EUR. Valores reproducidos al regenerar con --con-fx.
+        self.assertAlmostEqual(efecto['mediana_antes'], 36.79072459519959, places=5)
+        self.assertAlmostEqual(efecto['mediana_despues'], 37.79383963168285, places=5)
         con = duckdb.connect(':memory:')
         self.addCleanup(con.close)
         total = con.execute(

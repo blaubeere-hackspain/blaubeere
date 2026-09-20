@@ -20,13 +20,23 @@ Entradas consumidas (todas point-in-time, no se modifican):
     `colchon` de cash_position, que era invariante al ancla).
   - reports/payment_delay_v2/payment_delay_v2_monthly.parquet (capa C v4):
     mora_indice (indice de morosidad robusto; sustituye al mora_ratio de v1).
+  - reports/fx_risk/fx_risk_monthly.parquet (capa F3, factor FX):
+    indice_fx (inestabilidad de divisa empresa-mes en [0,1]), indice_fx_min
+    (cota inferior para empresas con mezcla de divisas opacas sin tipo BCE)
+    e indice_es_intervalo. Se cablea con --con-fx (VALOR POR DEFECTO) y se
+    puede apagar con --sin-fx para reproducir la v4 anterior sin tocar
+    codigo. Reglas del motor: empresa sin exposicion no-EUR -> factor
+    exactamente 1.0; indice NULL -> tambien 1.0 con motivo (nulo nunca
+    castiga); empresa con intervalo -> se aplica indice_fx_min (castigo
+    minimo compatible). Peso beta_fx bajo por decision de producto del
+    usuario (ver xray/scoring_v4.py).
 
 AVISO DE DTYPE: cash_backfill guarda `month` con dtype distinto de las otras
-dos capas (las capas A y C lo guardan como datetime64[ms]). El join
-NORMALIZA siempre con CAST(month AS DATE). Tras el join se VERIFICA que los
-tres conjuntos de (company_id, month) de meses cerrados son identicos
-(30.864 pares en el workspace canonico); un join que devuelva menos es un
-bug y aborta con el diagnostico de diferencias.
+dos capas (las capas A y C lo guardan como datetime64[ms]) y la capa F3 lo
+guarda como TIMESTAMP. El join NORMALIZA siempre con CAST(month AS DATE).
+Tras el join se VERIFICA que TODOS los conjuntos de (company_id, month) de
+meses cerrados son identicos (30.864 pares en el workspace canonico); un join
+que devuelva menos es un bug y aborta con el diagnostico de diferencias.
 
 Motivos de no-nota (guardas del motor, en orden):
   falta_de_actividad              <- 'sin_actividad_de_caja_observada'
@@ -67,6 +77,7 @@ from xray.score_exclusions_v4 import (DECLARACION_PLANTILLA as DECLARACION_EXCLU
                                       MOTIVO_EXCLUSION, UMBRAL_NOTA_BAJA,
                                       UMBRAL_PROPORCION, build_exclusion_report,
                                       excluded_ids, write_exclusions_json)
+from xray.scoring_v4 import DEFAULT_BETA_FX
 from xray.scoring_v4 import LIMITACIONES as MOTOR_LIMITACIONES
 from xray.scoring_v4 import VERSION, score_company
 
@@ -74,6 +85,21 @@ MODEL_VERSION = VERSION
 DEFAULT_K = 4178.45
 DEFAULT_ALPHA = 3.0
 DEFAULT_BETA = 0.25
+# beta_fx: peso DELIBERADAMENTE BAJO del factor FX, decision de producto del
+# usuario (2026-09-19; literal en el docstring de xray/scoring_v4.py). El
+# DEFAULT vive en el motor (DEFAULT_BETA_FX) y aqui solo se reexpone.
+FACTOR_FX_DECISION = (
+    'Decision de producto del usuario (2026-09-19): "yo lo que haria, es '
+    'meterlo en la formula pero con un peso muy bajo. De esta forma, decimos '
+    'que es algo que contemplamos en el algoritmo pero el feature real es el '
+    'indice de forex que podriamos implementar en nuestro producto". El '
+    'indice de inestabilidad de divisa de la capa F3 entra en la formula con '
+    'beta_fx bajo y solo a la baja; se puede apagar con --sin-fx.'
+)
+FACTOR_FX_FORMULA = (
+    'H_final = H * (1 - beta*mora_indice) * multiplicador_deuda '
+    '* (1 - beta_fx*indice_fx)'
+)
 CONFIDENCE_INPUTS = ('alta', 'media', 'baja', 'ninguna')
 # NOTA (calibracion v4, 2026-09-19): k = 4178.45 es el valor ORIGINALMENTE
 # MEDIDO sobre la rejilla v3 (reports/calibration_k/report.md) y fue
@@ -120,8 +146,12 @@ ASSESSMENT_SCHEMA = (
     ('mora_indice', 'DOUBLE'), ('multiplicador_deuda', 'DOUBLE'),
     ('h_antes_de_ajustes', 'DOUBLE'), ('penalizacion_mora_puntos', 'DOUBLE'),
     ('penalizacion_multiplicador_puntos', 'DOUBLE'),
+    ('indice_fx', 'DOUBLE'), ('indice_fx_min', 'DOUBLE'),
+    ('indice_es_intervalo', 'BOOLEAN'), ('indice_fx_aplicado', 'DOUBLE'),
+    ('penalizacion_fx_puntos', 'DOUBLE'),
     ('volumen_ambiguo_eur', 'DOUBLE'), ('volumen_ambiguo_pct', 'DOUBLE'),
     ('k', 'DOUBLE'), ('alpha', 'DOUBLE'), ('beta', 'DOUBLE'),
+    ('beta_fx', 'DOUBLE'),
     ('reasons', 'VARCHAR[]'), ('excluida', 'BOOLEAN'),
 )
 
@@ -306,7 +336,7 @@ def _tx_tables(con, cutoff, company_id, selected):
 
 
 def assess_at_v4(con, as_of, company_id=None, *, k=DEFAULT_K, alpha=DEFAULT_ALPHA,
-                 beta=DEFAULT_BETA):
+                 beta=DEFAULT_BETA, beta_fx=DEFAULT_BETA_FX, con_fx=True):
     """Evalua healthscore_v4 para el corte as_of sobre las capas derivadas.
 
     Devuelve dict serializable con as_of, model_version='healthscore_v4',
@@ -315,6 +345,11 @@ def assess_at_v4(con, as_of, company_id=None, *, k=DEFAULT_K, alpha=DEFAULT_ALPH
     interna '_monthly_rows' (filas construidas para el motor) permite
     reevaluar contrafactuales del analisis de triple conteo; no se
     serializa ni se publica.
+
+    con_fx: True (VALOR POR DEFECTO) une la capa F3
+    (reports/fx_risk/fx_risk_monthly.parquet) y aplica el factor FX con
+    beta_fx; False (--sin-fx) la omite por completo y reproduce la v4
+    anterior (ni siquiera exige que el parquet de F3 exista).
     """
     cutoff = _cutoff(as_of)
     as_of_month = cutoff.replace(day=1)
@@ -345,8 +380,11 @@ def assess_at_v4(con, as_of, company_id=None, *, k=DEFAULT_K, alpha=DEFAULT_ALPH
     tx_agg = _tx_tables(con, cutoff, company_id, selected)
 
     # --- capas v4: obligacion (A), caja reversa (B), mora robusta (C) -------
-    layer_paths = {name: _layer_path(name)
-                   for name in ('debt_obligation', 'cash_backfill', 'payment_delay_v2')}
+    # y, con --con-fx (por defecto), la capa F3 de riesgo de divisa.
+    names = ['debt_obligation', 'cash_backfill', 'payment_delay_v2']
+    if con_fx:
+        names.append('fx_risk')
+    layer_paths = {name: _layer_path(name) for name in names}
     for name, path in layer_paths.items():
         if not path.exists():
             raise ValueError(f'Capa v4 ausente: {path}')
@@ -364,10 +402,16 @@ def assess_at_v4(con, as_of, company_id=None, *, k=DEFAULT_K, alpha=DEFAULT_ALPH
             con, layer_paths['payment_delay_v2'], ('mora_indice', 'confidence'),
             selected, cutoff, company_id),
     }
+    if con_fx:
+        layers['fx_risk'] = _load_layer(
+            con, layer_paths['fx_risk'],
+            ('indice_fx', 'indice_fx_min', 'indice_es_intervalo'),
+            selected, cutoff, company_id)
     n_pairs = _check_join_sets(layers)
     debt = layers['debt_obligation']
     cash = layers['cash_backfill']
     delay = layers['payment_delay_v2']
+    fx = layers.get('fx_risk')
 
     # --- filas mensuales y motor -------------------------------------------
     primer_mes = {}
@@ -385,6 +429,7 @@ def assess_at_v4(con, as_of, company_id=None, *, k=DEFAULT_K, alpha=DEFAULT_ALPH
         debt_row = debt.get((company, month))
         cash_row = cash.get((company, month))
         delay_row = delay.get((company, month))
+        fx_row = fx.get((company, month)) if fx is not None else None
         panel_deuda = panels['panel_deuda'].get((company, month))
         agg = tx_agg.get((company, month))
         c_desconocido = (flow['tiene_actividad_caja'] and agg is not None
@@ -413,6 +458,18 @@ def assess_at_v4(con, as_of, company_id=None, *, k=DEFAULT_K, alpha=DEFAULT_ALPH
         volumen_caja = flow['volumen_caja_conocido_eur']
         pct = (volumen_ambiguo / volumen_caja
                if volumen_caja is not None and volumen_caja > 0 else None)
+        fx_fields = {}
+        if con_fx:
+            # Claves FX SIEMPRE presentes cuando la capa esta cableada:
+            # NULL es dato ausente (nulo nunca castiga), no "sin exposicion".
+            fx_fields = {
+                'indice_fx': (fx_row['indice_fx']
+                              if fx_row is not None else None),
+                'indice_fx_min': (fx_row['indice_fx_min']
+                                  if fx_row is not None else None),
+                'indice_es_intervalo': (bool(fx_row['indice_es_intervalo'])
+                                        if fx_row is not None else False),
+            }
         monthly_rows[company].append({
             'month': month,
             'c_eur': c_eur,
@@ -425,13 +482,14 @@ def assess_at_v4(con, as_of, company_id=None, *, k=DEFAULT_K, alpha=DEFAULT_ALPH
             'multiplicador_deuda': multiplicador,
             'mora_indice': mora,
             'confianza_entradas': _confianza_entradas(c_desconocido, p_desconocido, cash_row, delay_row),
+            **fx_fields,
         })
         volume[(company, month)] = (volumen_ambiguo, pct)
 
     assessments = []
     for company, group in selected.items():
         engine = score_company(company, group, monthly_rows[company], cutoff,
-                               k=k, alpha=alpha, beta=beta)
+                               k=k, alpha=alpha, beta=beta, beta_fx=beta_fx)
         volumen_ambiguo, volumen_ambiguo_pct = volume.get((company, as_of_month), (0.0, None))
         health = engine['health_score']
         if health is None:
@@ -470,11 +528,17 @@ def assess_at_v4(con, as_of, company_id=None, *, k=DEFAULT_K, alpha=DEFAULT_ALPH
             'h_antes_de_ajustes': engine['adjustments']['h_antes_de_ajustes'],
             'penalizacion_mora_puntos': engine['adjustments']['penalizacion_mora_puntos'],
             'penalizacion_multiplicador_puntos': engine['adjustments']['penalizacion_multiplicador_puntos'],
+            'indice_fx': inputs['indice_fx'],
+            'indice_fx_min': inputs['indice_fx_min'],
+            'indice_es_intervalo': inputs['indice_es_intervalo'],
+            'indice_fx_aplicado': inputs['indice_fx_aplicado'],
+            'penalizacion_fx_puntos': engine['adjustments']['penalizacion_fx_puntos'],
             'volumen_ambiguo_eur': volumen_ambiguo,
             'volumen_ambiguo_pct': volumen_ambiguo_pct,
             'k': engine['params']['k'],
             'alpha': engine['params']['alpha'],
             'beta': engine['params']['beta'],
+            'beta_fx': engine['params']['beta_fx'],
             'reasons': engine['reasons'],
             '_motivo_sin_nota': motivo,
         })
@@ -492,6 +556,13 @@ def assess_at_v4(con, as_of, company_id=None, *, k=DEFAULT_K, alpha=DEFAULT_ALPH
         'reparto_confidence': dict(sorted(Counter(row['confidence'] for row in assessments).items())),
         'motivos': dict(sorted(Counter(reason for row in assessments for reason in row['reasons']).items())),
         'empresa_mes_con_volumen_ambiguo': sum(row['volumen_ambiguo_eur'] > 0 for row in assessments),
+        'empresas_mes_con_castigo_fx': sum(
+            (row['indice_fx_aplicado'] or 0.0) > 0.0 for row in assessments),
+        'empresas_mes_rama_intervalo_fx': sum(
+            bool(row['indice_es_intervalo']) for row in assessments),
+        'empresas_mes_indice_fx_desconocido': sum(
+            row['indice_fx'] is None and not row['indice_es_intervalo']
+            for row in assessments),
         'pares_capas_join': n_pairs,
     }
     assert (summary['n_con_nota'] + summary['n_sin_nota_por_falta_de_actividad']
@@ -503,8 +574,20 @@ def assess_at_v4(con, as_of, company_id=None, *, k=DEFAULT_K, alpha=DEFAULT_ALPH
     return {
         'as_of': cutoff.isoformat(),
         'model_version': MODEL_VERSION,
-        'params': {'k': float(k), 'alpha': float(alpha), 'beta': float(beta)},
-        'params_calibrados': {'k': False, 'alpha': False, 'beta': False},
+        'params': {'k': float(k), 'alpha': float(alpha), 'beta': float(beta),
+                   'beta_fx': float(beta_fx)},
+        'params_calibrados': {'k': False, 'alpha': False, 'beta': False,
+                              'beta_fx': False},
+        'factor_fx': {
+            'activado': bool(con_fx),
+            'beta_fx': float(beta_fx),
+            'formula': FACTOR_FX_FORMULA,
+            'origen': 'reports/fx_risk/fx_risk_monthly.parquet (capa F3)',
+            'decision_producto': FACTOR_FX_DECISION,
+            'flag_activar': '--con-fx',
+            'flag_desactivar': '--sin-fx',
+            'valor_por_defecto': 'activado (--con-fx); --sin-fx lo apaga',
+        },
         'advertencia': ADVERTENCIA_CALIBRACION,
         'data_workspace': str(workspace),
         'summary': summary,
@@ -934,6 +1017,14 @@ def _public_summary(result, declaracion_exclusion=None):
         'health_score_p90': _percentile(con_nota, 0.90) if con_nota else None,
         'empresa_mes_con_volumen_ambiguo': sum(
             row['volumen_ambiguo_eur'] > 0 for row in rows if not row.get('excluida')),
+        'n_con_castigo_fx': sum(
+            (row['indice_fx_aplicado'] or 0.0) > 0.0 for row in rows
+            if row['health_score'] is not None and not row.get('excluida')),
+        'n_rama_intervalo_fx': sum(
+            bool(row['indice_es_intervalo']) for row in rows
+            if row['health_score'] is not None and not row.get('excluida')),
+        'poblacion_factor_fx': 'empresas-mes del corte CON nota y no excluidas '
+                               '(n_con_castigo_fx, n_rama_intervalo_fx)',
     }
     if declaracion_exclusion is not None:
         public['declaracion_exclusion'] = declaracion_exclusion
@@ -941,7 +1032,8 @@ def _public_summary(result, declaracion_exclusion=None):
 
 
 def run_score_v4(output: Path, k=DEFAULT_K, alpha=DEFAULT_ALPHA, beta=DEFAULT_BETA,
-                 excluir_cero_persistente=True):
+                 beta_fx=DEFAULT_BETA_FX, excluir_cero_persistente=True,
+                 con_fx=True):
     """Genera assessments.parquet y summary.json para todos los meses cerrados.
 
     La exclusion de empresas con nota 0 persistente es un PARAMETRO de
@@ -954,6 +1046,10 @@ def run_score_v4(output: Path, k=DEFAULT_K, alpha=DEFAULT_ALPHA, beta=DEFAULT_BE
         NULL, excluida = true y el motivo en reasons;
       - recalcula TODAS las estadisticas de poblacion sin ellas, declarando
         explicitamente sobre que poblacion se calcula cada cifra.
+
+    con_fx: True (VALOR POR DEFECTO) aplica el cuarto factor de riesgo de
+    divisa (capa F3) con peso beta_fx; False (--sin-fx) reproduce la v4
+    anterior sin tocar codigo.
 
     Devuelve el informe publicado por stdout: resumen del ultimo corte,
     comparativa v3 vs v4 (poblacion declarada) y analisis de triple conteo.
@@ -975,7 +1071,8 @@ def run_score_v4(output: Path, k=DEFAULT_K, alpha=DEFAULT_ALPHA, beta=DEFAULT_BE
         ultimo_result = None
         for month in months:
             cutoff = month.replace(day=monthrange(month.year, month.month)[1])
-            result = assess_at_v4(con, cutoff, None, k=k, alpha=alpha, beta=beta)
+            result = assess_at_v4(con, cutoff, None, k=k, alpha=alpha,
+                                  beta=beta, beta_fx=beta_fx, con_fx=con_fx)
             assessments.extend(result['assessments'])
             pares_por_corte[result['as_of']] = result['summary']['pares_capas_join']
             ultimo_result = result
@@ -1048,10 +1145,34 @@ def run_score_v4(output: Path, k=DEFAULT_K, alpha=DEFAULT_ALPHA, beta=DEFAULT_BE
 
         report = {
             'model_version': MODEL_VERSION,
-            'params': {'k': float(k), 'alpha': float(alpha), 'beta': float(beta)},
-            'params_calibrados': {'k': False, 'alpha': False, 'beta': False},
+            'params': {'k': float(k), 'alpha': float(alpha), 'beta': float(beta),
+                       'beta_fx': float(beta_fx)},
+            'params_calibrados': {'k': False, 'alpha': False, 'beta': False,
+                                  'beta_fx': False},
             'advertencia': ADVERTENCIA_CALIBRACION,
             'limitaciones': list(MOTOR_LIMITACIONES),
+            'factor_fx': {
+                'activado': bool(con_fx),
+                'beta_fx': float(beta_fx),
+                'formula': FACTOR_FX_FORMULA,
+                'origen': 'reports/fx_risk/fx_risk_monthly.parquet (capa F3)',
+                'decision_producto': FACTOR_FX_DECISION,
+                'flag_activar': '--con-fx',
+                'flag_desactivar': '--sin-fx',
+                'valor_por_defecto': 'activado (--con-fx); --sin-fx lo apaga',
+                'reglas': [
+                    'empresa sin exposicion no-EUR -> factor exactamente 1.0',
+                    'indice_fx NULL -> factor exactamente 1.0 con motivo '
+                    '(indice_fx_desconocido): nulo nunca castiga',
+                    'indice_es_intervalo=true -> se aplica indice_fx_min '
+                    '(castigo minimo compatible) con motivo '
+                    'castigo_fx_acotado_por_intervalo',
+                    'cuando el factor < 1, reasons registra el castigo con su '
+                    'valor; el exacto va en indice_fx_aplicado y '
+                    'penalizacion_fx_puntos',
+                    'cuarto factor SOLO a la baja y acotado: H_final en [0,100]',
+                ],
+            },
             'exclusion': exclusion_bloque,
             'por_corte': por_corte,
             'ultimo_corte': ultimo_resumen,
@@ -1075,6 +1196,18 @@ def main(argv=None):
     parser.add_argument('--k', type=float, default=DEFAULT_K)
     parser.add_argument('--alpha', type=float, default=DEFAULT_ALPHA)
     parser.add_argument('--beta', type=float, default=DEFAULT_BETA)
+    parser.add_argument('--beta-fx', type=float, default=DEFAULT_BETA_FX,
+                        help='peso del factor FX (capa F3); por defecto '
+                             f'{DEFAULT_BETA_FX} (decision de producto del '
+                             'usuario: peso deliberadamente bajo)')
+    fx = parser.add_mutually_exclusive_group()
+    fx.add_argument('--con-fx', dest='con_fx', action='store_true',
+                    default=True,
+                    help='aplica el cuarto factor de riesgo de divisa (capa '
+                         'F3); es el VALOR POR DEFECTO')
+    fx.add_argument('--sin-fx', dest='con_fx', action='store_false',
+                    help='NO aplica el factor FX: reproduce la v4 anterior '
+                         '(no exige el parquet de F3)')
     exclusions = parser.add_mutually_exclusive_group()
     exclusions.add_argument('--excluir-cero-persistente', dest='excluir',
                             action='store_true', default=True,
@@ -1093,7 +1226,8 @@ def main(argv=None):
         print('La salida ya existe; usa --output con una ruta nueva para '
               'conservar artefactos previos', file=sys.stderr)
         return 1
-    for name, value in (('k', args.k), ('alpha', args.alpha), ('beta', args.beta)):
+    for name, value in (('k', args.k), ('alpha', args.alpha),
+                        ('beta', args.beta), ('beta_fx', args.beta_fx)):
         if value != value or value < 0:
             print(f'--{name}: debe ser un numero finito no negativo', file=sys.stderr)
             return 1
@@ -1113,7 +1247,9 @@ def main(argv=None):
             setattr(paths, name, value)
     try:
         report = run_score_v4(args.output, args.k, args.alpha, args.beta,
-                              excluir_cero_persistente=args.excluir)
+                              args.beta_fx,
+                              excluir_cero_persistente=args.excluir,
+                              con_fx=args.con_fx)
     except (ValueError, KeyError) as error:
         print(f'Error: {error}', file=sys.stderr)
         return 1
