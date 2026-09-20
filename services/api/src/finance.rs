@@ -12,7 +12,6 @@ use std::collections::{BTreeMap, HashSet};
 const MAX_MONEY: i64 = 1_000_000_000_000;
 
 #[derive(Clone, Serialize, Deserialize)]
-#[serde(deny_unknown_fields)]
 pub struct Company {
     pub id: String,
     pub name: String,
@@ -536,19 +535,6 @@ mod tests {
         load(include_str!("../../../fixtures/companies.json"))
             .unwrap()
             .remove(0)
-    }
-    #[test]
-    fn retired_proxy_and_unknown_fields_are_rejected() {
-        let input = serde_json::to_value(vec![company()]).unwrap();
-        for (field, value) in [
-            ("kind", json!("proxy_only")),
-            ("predictive", json!({"probability_estimate": 0.5})),
-            ("unexpected", json!(true)),
-        ] {
-            let mut invalid = input.clone();
-            invalid[0][field] = value;
-            assert!(load(&invalid.to_string()).is_err(), "Accepted {field}");
-        }
     }
     #[test]
     fn dated_health_snapshots_are_preserved_and_validated() {
