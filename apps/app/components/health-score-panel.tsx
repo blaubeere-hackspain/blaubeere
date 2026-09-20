@@ -48,9 +48,8 @@ function ScoreChart({ records, row, height }: { records: ScorePoint[]; row: Mode
     : <line x1={x(selected)} x2={x(selected)} y1="18" y2={height - 34} stroke="var(--accent)" strokeDasharray="4 4"/>)}{timeline.map((day,index) => index===0 || index===timeline.length-1 || (width > 540 && index===Math.floor(timeline.length/2)) ? <text key={day} x={x(index)} y={height - 11} textAnchor={index===0?"start":index===timeline.length-1?"end":"middle"}>{timeline.length > records.length && index===timeline.length-1 ? "Today" : date(day,true)}</text> : null)}</svg>
     {!records.some(record => record.health_score !== null) && <p className="chart-note">No score was returned for this company. Its available source data is shown below.</p>}
     <p className="chart-note">Monthly observations{records.length ? ` through ${date(records.at(-1)!.as_of, true)}` : " from 2025 are not available"}. Missing ratings stay empty; no daily scores are interpolated.</p></div>;
-  // Proveedor propio por si la grafica se monta fuera de un ChartMotion:
-  // anidar LazyMotion es inofensivo y evita el fallo de strict sin features.
-  return animate ? <ChartMotion>{content}</ChartMotion> : content;
+  // Keep the provider mounted so enabling motion does not detach the observed SVG.
+  return <ChartMotion>{content}</ChartMotion>;
 }
 
 function HealthScoreGauge({ row }: { row: ModelRecord }) {

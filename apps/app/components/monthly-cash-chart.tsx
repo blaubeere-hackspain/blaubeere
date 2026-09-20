@@ -108,9 +108,8 @@ export function DailyCashPlot({ series, height = 290 }: { series: CashMonth; hei
     <div className="cash-inspected-period" aria-live="polite">{inspected ? date(inspected.date, true) : `Month totals · ${monthLabel.format(new Date(`${days[0].date}T00:00:00Z`))}`}</div>
     <dl className="checkpoints cash-flow-totals" aria-label={inspected ? `Cash flow for ${date(inspected.date, true)}` : "Selected month cash totals"}>{([["income", "Income", totals.income], ["expense", "Expenses", totals.expense], ["balance", inspected ? "Closing cash" : "Month-end cash", totals.balance]] as const).map(([name, label, value]) => <div key={name}><dt><i className={`cash-flow-swatch ${name}`}/>{label}</dt><dd className="num">{amount(value, currency)}</dd></div>)}</dl>
   </>;
-  // Proveedor propio por si la grafica se monta fuera de un ChartMotion:
-  // anidar LazyMotion es inofensivo y evita el fallo de strict sin features.
-  return animate ? <ChartMotion>{content}</ChartMotion> : content;
+  // Keep the provider mounted so enabling motion does not detach the observed plot.
+  return <ChartMotion>{content}</ChartMotion>;
 }
 
 export function MonthlyCashChart({ row, chartHeight = 290 }: { row: ModelRecord; chartHeight?: number }) {
