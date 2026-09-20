@@ -1,0 +1,1128 @@
+{
+  "version": "cashflow_forecast_v1",
+  "generador": "xray/cashflow_forecast.py",
+  "comando_reproduccion": "PYTHONPATH=. .venv/bin/python -B -m xray.cashflow_forecast --panel reports/daily_flows/panel_diario.parquet --censo reports/daily_flows/censo.json --output-dir reports/cashflow_forecast",
+  "entradas": {
+    "panel_diario": {
+      "path": "reports/daily_flows/panel_diario.parquet",
+      "existe": true,
+      "bytes": 29553728,
+      "sha256": "348f2550ee87a08ef7292554177d8c5b72eb3db8e3cdea8facde850f9d3479b6"
+    },
+    "censo_daily": {
+      "path": "reports/daily_flows/censo.json",
+      "existe": true,
+      "bytes": 51825,
+      "sha256": "77ffb29e38ba01e3a5ccaf516f7abc697203701b7e12a1cbe24e3ae1e5cfbebd"
+    },
+    "assessments_v4": {
+      "path": "reports/score_v4/assessments.parquet",
+      "existe": true,
+      "bytes": 1407000,
+      "sha256": "3012709a8b08b7a15282a8ea1586635d0a248862f6a5fae997aafefd1d1923f5"
+    }
+  },
+  "contrato": {
+    "objetivo": "flujo de caja (no health_score)",
+    "horizontes_dias": [
+      30,
+      60,
+      90
+    ],
+    "objetivos_publicados": [
+      "flujo_neto_acumulado",
+      "saldo_proyectado"
+    ],
+    "intervalo_de_target": "El target acumula/observa el intervalo ABIERTO por la izquierda y CERRADO por la derecha: (corte, corte+h]. El dia del corte queda EXCLUIDO del flujo acumulado y el dia corte+h queda INCLUIDO. El saldo proyectado es el saldo reconstruido de la fila corte+h. Es el mismo convenio para targets y para el flujo de persistencia de B1, de modo que B1 en h=30 repite literalmente el flujo observado en el intervalo inmediatamente anterior.",
+    "punto_leak_saldo": "PRECISION: `saldo_reversa_eur` es una reconstruccion hacia atras desde el ancla 2026-09-01 y su `saldo_reversa_available_at` es el ancla, posterior a todos los cortes. El modulo NO recalcula el saldo: lee el valor ya almacenado en la fila del corte. El panel diario documenta esa reconstruccion como recuperacion de un nivel de caja que la empresa conocia en su momento; se mantiene aqui por coherencia con la tarea P0 y se declara como limitacion. El test de no-fuga verifica que ninguna prediccion cambia si se eliminan o alteran las filas posteriores al corte.",
+    "baselines": {
+      "B1_persistencia": "flujo neto de los h dias previos al corte (corte-h, corte] repetido como prediccion de (corte, corte+h]; saldo = saldo_reversa(corte) + prediccion de flujo",
+      "B2_media_movil_28d": "media diaria de flujo_neto en la ventana trailing de 28 dias (4 semanas completas, cancela la estacionalidad semanal y no coincide con ningun horizonte) x h; saldo = saldo_reversa(corte) + prediccion de flujo",
+      "B3_mediana_global": "mediana cross-empresa del flujo acumulado h calculada SOLO con origenes cuyo periodo cerro antes del corte (origen + h <= corte); saldo = saldo_reversa(corte) + prediccion de flujo"
+    },
+    "metrica_escalada": "error absoluto de flujo / max(escala_empresa_h, 1 EUR), donde escala_empresa_h = suma de |flujo_neto| en los h dias previos al corte (volumen bruto del mismo tramo). Normaliza por el tamano de actividad de la empresa, es del mismo orden que el target acumulado y evita el infinito cuando no hubo movimiento; se publica cuantos trios caen en el suelo.",
+    "banda_neutra_tendencia": "referencia = mediana de las predicciones de las dos lineas base especificas de la empresa (B1 y B2); banda = (max - min) / 2 de esas dos predicciones. positiva si referencia > banda, negativa si referencia < -banda, neutra en otro caso. La banda es EX-ANTE (solo usa predicciones) y equivale a no declarar direccion cuando B1 y B2 no coinciden en el signo. B3 no entra en la tendencia por ser una referencia global identica para todas las empresas."
+  },
+  "panel": {
+    "filas": 637471,
+    "empresas": 1286,
+    "rango_dias": [
+      "2024-09-01",
+      "2026-09-01"
+    ],
+    "ultimo_dia_cerrado": "2026-08-31",
+    "granularidad": "(company_id, day); dia de APUNTE, no fecha valor"
+  },
+  "censo_densidad": {
+    "criterio": "span >= W dias Y hueco_maximo <= W-1 Y mediana de dias con movimiento por ventana movil de W dias >= ceil(W/7)",
+    "empresas_universo": 1278,
+    "empresas_evaluables_v4": 957,
+    "declaracion_ventana_60": "La ventana de 60 dias NO esta en el censo publicado: la constante `WINDOWS_DENSIDAD = (30, 90)` de `xray/daily_flows.py` fija las ventanas y este modulo no puede editar ese fichero. La ventana 60 se calcula aqui replicando el criterio primario (span >= 60, ninguna ventana movil de 60 dias vacia y mediana de dias con movimiento por ventana >= ceil(60/7) = 9) sobre los MISMOS helpers importados de daily_flows (`build_density`, `_window_counts`, `_gap_runs`, `_median`). La replica se valida porque las ventanas 30 y 90 reproducen exactamente los 732 y 790 evaluables v4 del censo existente.",
+    "ventanas": {
+      "30": {
+        "criterio_primario": "span >= 30 dias Y ninguna ventana movil de 30 dias vacia (hueco_maximo <= 29) Y mediana de dias con movimiento por ventana >= 5 (actividad al menos semanal, ceil(30/7))",
+        "umbral_dias_con_movimiento_en_la_ventana_tipica": 5,
+        "empresas_universo": 1017,
+        "empresas_evaluables_v4": 732,
+        "pct_universo": 79.58
+      },
+      "60": {
+        "criterio_primario": "span >= 60 dias Y ninguna ventana movil de 60 dias vacia (hueco_maximo <= 59) Y mediana de dias con movimiento por ventana >= 9 (actividad al menos semanal, ceil(60/7))",
+        "umbral_dias_con_movimiento_en_la_ventana_tipica": 9,
+        "empresas_universo": 1076,
+        "empresas_evaluables_v4": 780,
+        "pct_universo": 84.19
+      },
+      "90": {
+        "criterio_primario": "span >= 90 dias Y ninguna ventana movil de 90 dias vacia (hueco_maximo <= 89) Y mediana de dias con movimiento por ventana >= 13 (actividad al menos semanal, ceil(90/7))",
+        "umbral_dias_con_movimiento_en_la_ventana_tipica": 13,
+        "empresas_universo": 1087,
+        "empresas_evaluables_v4": 790,
+        "pct_universo": 85.05
+      }
+    }
+  },
+  "verificacion_censo_existente": {
+    "30": {
+      "recomputado": 732,
+      "censo_publicado": 732,
+      "esperado_en_el_encargo": 732,
+      "coincide": true
+    },
+    "90": {
+      "recomputado": 790,
+      "censo_publicado": 790,
+      "esperado_en_el_encargo": 790,
+      "coincide": true
+    }
+  },
+  "poblacion_por_horizonte": {
+    "30": {
+      "universo_densidad": 1017,
+      "evaluables_v4_en_poblacion": 732
+    },
+    "60": {
+      "universo_densidad": 1076,
+      "evaluables_v4_en_poblacion": 780
+    },
+    "90": {
+      "universo_densidad": 1087,
+      "evaluables_v4_en_poblacion": 790
+    }
+  },
+  "cortes": {
+    "criterio": "fin de mes cerrado >= primer dia del panel + 90 dias (historia previa) Y corte + h <= 2026-08-31 (target observable)",
+    "fines_de_mes_considerados": [
+      "2024-09-30",
+      "2024-10-31",
+      "2024-11-30",
+      "2024-12-31",
+      "2025-01-31",
+      "2025-02-28",
+      "2025-03-31",
+      "2025-04-30",
+      "2025-05-31",
+      "2025-06-30",
+      "2025-07-31",
+      "2025-08-31",
+      "2025-09-30",
+      "2025-10-31",
+      "2025-11-30",
+      "2025-12-31",
+      "2026-01-31",
+      "2026-02-28",
+      "2026-03-31",
+      "2026-04-30",
+      "2026-05-31",
+      "2026-06-30",
+      "2026-07-31",
+      "2026-08-31"
+    ],
+    "por_horizonte": {
+      "30": [
+        "2024-11-30",
+        "2024-12-31",
+        "2025-01-31",
+        "2025-02-28",
+        "2025-03-31",
+        "2025-04-30",
+        "2025-05-31",
+        "2025-06-30",
+        "2025-07-31",
+        "2025-08-31",
+        "2025-09-30",
+        "2025-10-31",
+        "2025-11-30",
+        "2025-12-31",
+        "2026-01-31",
+        "2026-02-28",
+        "2026-03-31",
+        "2026-04-30",
+        "2026-05-31",
+        "2026-06-30",
+        "2026-07-31"
+      ],
+      "60": [
+        "2024-11-30",
+        "2024-12-31",
+        "2025-01-31",
+        "2025-02-28",
+        "2025-03-31",
+        "2025-04-30",
+        "2025-05-31",
+        "2025-06-30",
+        "2025-07-31",
+        "2025-08-31",
+        "2025-09-30",
+        "2025-10-31",
+        "2025-11-30",
+        "2025-12-31",
+        "2026-01-31",
+        "2026-02-28",
+        "2026-03-31",
+        "2026-04-30",
+        "2026-05-31",
+        "2026-06-30"
+      ],
+      "90": [
+        "2024-11-30",
+        "2024-12-31",
+        "2025-01-31",
+        "2025-02-28",
+        "2025-03-31",
+        "2025-04-30",
+        "2025-05-31",
+        "2025-06-30",
+        "2025-07-31",
+        "2025-08-31",
+        "2025-09-30",
+        "2025-10-31",
+        "2025-11-30",
+        "2025-12-31",
+        "2026-01-31",
+        "2026-02-28",
+        "2026-03-31",
+        "2026-04-30",
+        "2026-05-31"
+      ]
+    },
+    "n_por_horizonte": {
+      "30": 21,
+      "60": 20,
+      "90": 19
+    }
+  },
+  "censo_trios": {
+    "definicion": "trio (empresa, corte, h) con la empresa en la poblacion de densidad de h, corte valido para h, rejilla con h dias de historia previa y target observable en corte+h <= 2026-08-31",
+    "horizontes": [
+      30,
+      60,
+      90
+    ],
+    "por_h": {
+      "30": {
+        "n_trios": 14796,
+        "n_empresas": 1017,
+        "n_origenes": 21,
+        "n_trios_evaluables_v4": 11207,
+        "por_origen": [
+          {
+            "origen": "2024-11-30",
+            "trios": 373,
+            "empresas": 373
+          },
+          {
+            "origen": "2024-12-31",
+            "trios": 380,
+            "empresas": 380
+          },
+          {
+            "origen": "2025-01-31",
+            "trios": 439,
+            "empresas": 439
+          },
+          {
+            "origen": "2025-02-28",
+            "trios": 512,
+            "empresas": 512
+          },
+          {
+            "origen": "2025-03-31",
+            "trios": 533,
+            "empresas": 533
+          },
+          {
+            "origen": "2025-04-30",
+            "trios": 564,
+            "empresas": 564
+          },
+          {
+            "origen": "2025-05-31",
+            "trios": 577,
+            "empresas": 577
+          },
+          {
+            "origen": "2025-06-30",
+            "trios": 592,
+            "empresas": 592
+          },
+          {
+            "origen": "2025-07-31",
+            "trios": 604,
+            "empresas": 604
+          },
+          {
+            "origen": "2025-08-31",
+            "trios": 629,
+            "empresas": 629
+          },
+          {
+            "origen": "2025-09-30",
+            "trios": 654,
+            "empresas": 654
+          },
+          {
+            "origen": "2025-10-31",
+            "trios": 682,
+            "empresas": 682
+          },
+          {
+            "origen": "2025-11-30",
+            "trios": 722,
+            "empresas": 722
+          },
+          {
+            "origen": "2025-12-31",
+            "trios": 753,
+            "empresas": 753
+          },
+          {
+            "origen": "2026-01-31",
+            "trios": 817,
+            "empresas": 817
+          },
+          {
+            "origen": "2026-02-28",
+            "trios": 915,
+            "empresas": 915
+          },
+          {
+            "origen": "2026-03-31",
+            "trios": 994,
+            "empresas": 994
+          },
+          {
+            "origen": "2026-04-30",
+            "trios": 1008,
+            "empresas": 1008
+          },
+          {
+            "origen": "2026-05-31",
+            "trios": 1014,
+            "empresas": 1014
+          },
+          {
+            "origen": "2026-06-30",
+            "trios": 1017,
+            "empresas": 1017
+          },
+          {
+            "origen": "2026-07-31",
+            "trios": 1017,
+            "empresas": 1017
+          }
+        ]
+      },
+      "60": {
+        "n_trios": 13859,
+        "n_empresas": 1073,
+        "n_origenes": 20,
+        "n_trios_evaluables_v4": 10654,
+        "por_origen": [
+          {
+            "origen": "2024-11-30",
+            "trios": 363,
+            "empresas": 363
+          },
+          {
+            "origen": "2024-12-31",
+            "trios": 392,
+            "empresas": 392
+          },
+          {
+            "origen": "2025-01-31",
+            "trios": 402,
+            "empresas": 402
+          },
+          {
+            "origen": "2025-02-28",
+            "trios": 414,
+            "empresas": 414
+          },
+          {
+            "origen": "2025-03-31",
+            "trios": 541,
+            "empresas": 541
+          },
+          {
+            "origen": "2025-04-30",
+            "trios": 565,
+            "empresas": 565
+          },
+          {
+            "origen": "2025-05-31",
+            "trios": 599,
+            "empresas": 599
+          },
+          {
+            "origen": "2025-06-30",
+            "trios": 610,
+            "empresas": 610
+          },
+          {
+            "origen": "2025-07-31",
+            "trios": 628,
+            "empresas": 628
+          },
+          {
+            "origen": "2025-08-31",
+            "trios": 643,
+            "empresas": 643
+          },
+          {
+            "origen": "2025-09-30",
+            "trios": 671,
+            "empresas": 671
+          },
+          {
+            "origen": "2025-10-31",
+            "trios": 711,
+            "empresas": 711
+          },
+          {
+            "origen": "2025-11-30",
+            "trios": 729,
+            "empresas": 729
+          },
+          {
+            "origen": "2025-12-31",
+            "trios": 771,
+            "empresas": 771
+          },
+          {
+            "origen": "2026-01-31",
+            "trios": 803,
+            "empresas": 803
+          },
+          {
+            "origen": "2026-02-28",
+            "trios": 848,
+            "empresas": 848
+          },
+          {
+            "origen": "2026-03-31",
+            "trios": 976,
+            "empresas": 976
+          },
+          {
+            "origen": "2026-04-30",
+            "trios": 1053,
+            "empresas": 1053
+          },
+          {
+            "origen": "2026-05-31",
+            "trios": 1067,
+            "empresas": 1067
+          },
+          {
+            "origen": "2026-06-30",
+            "trios": 1073,
+            "empresas": 1073
+          }
+        ]
+      },
+      "90": {
+        "n_trios": 12002,
+        "n_empresas": 1070,
+        "n_origenes": 19,
+        "n_trios_evaluables_v4": 9334,
+        "por_origen": [
+          {
+            "origen": "2024-11-30",
+            "trios": 104,
+            "empresas": 104
+          },
+          {
+            "origen": "2024-12-31",
+            "trios": 367,
+            "empresas": 367
+          },
+          {
+            "origen": "2025-01-31",
+            "trios": 397,
+            "empresas": 397
+          },
+          {
+            "origen": "2025-02-28",
+            "trios": 402,
+            "empresas": 402
+          },
+          {
+            "origen": "2025-03-31",
+            "trios": 434,
+            "empresas": 434
+          },
+          {
+            "origen": "2025-04-30",
+            "trios": 548,
+            "empresas": 548
+          },
+          {
+            "origen": "2025-05-31",
+            "trios": 572,
+            "empresas": 572
+          },
+          {
+            "origen": "2025-06-30",
+            "trios": 606,
+            "empresas": 606
+          },
+          {
+            "origen": "2025-07-31",
+            "trios": 620,
+            "empresas": 620
+          },
+          {
+            "origen": "2025-08-31",
+            "trios": 640,
+            "empresas": 640
+          },
+          {
+            "origen": "2025-09-30",
+            "trios": 653,
+            "empresas": 653
+          },
+          {
+            "origen": "2025-10-31",
+            "trios": 681,
+            "empresas": 681
+          },
+          {
+            "origen": "2025-11-30",
+            "trios": 721,
+            "empresas": 721
+          },
+          {
+            "origen": "2025-12-31",
+            "trios": 740,
+            "empresas": 740
+          },
+          {
+            "origen": "2026-01-31",
+            "trios": 781,
+            "empresas": 781
+          },
+          {
+            "origen": "2026-02-28",
+            "trios": 811,
+            "empresas": 811
+          },
+          {
+            "origen": "2026-03-31",
+            "trios": 868,
+            "empresas": 868
+          },
+          {
+            "origen": "2026-04-30",
+            "trios": 987,
+            "empresas": 987
+          },
+          {
+            "origen": "2026-05-31",
+            "trios": 1070,
+            "empresas": 1070
+          }
+        ]
+      }
+    }
+  },
+  "cobertura_baselines": {
+    "30": {
+      "n_trios": 14491,
+      "B1_persistencia": 14491,
+      "B2_media_movil_28d": 14491,
+      "B3_mediana_global": 14491,
+      "n_trios_comunes_flow": 14491,
+      "n_trios_comunes_saldo": 12990
+    },
+    "60": {
+      "n_trios": 13579,
+      "B1_persistencia": 13579,
+      "B2_media_movil_28d": 13579,
+      "B3_mediana_global": 13579,
+      "n_trios_comunes_flow": 13579,
+      "n_trios_comunes_saldo": 12211
+    },
+    "90": {
+      "n_trios": 11767,
+      "B1_persistencia": 11767,
+      "B2_media_movil_28d": 11767,
+      "B3_mediana_global": 11663,
+      "n_trios_comunes_flow": 11663,
+      "n_trios_comunes_saldo": 10571
+    }
+  },
+  "metricas": {
+    "flujo_neto_acumulado": {
+      "30": {
+        "B1_persistencia": {
+          "n": 14491,
+          "mae_eur": 889923.6294954871,
+          "mediana_error_abs_eur": 48956.09999999999,
+          "error_abs_p50_eur": 48956.09999999999,
+          "error_abs_p75_eur": 213593.86002949995,
+          "error_abs_p90_eur": 852565.9299999996,
+          "sesgo_eur": 176764.92854957364,
+          "rmse_eur": 34449169.05381807,
+          "mae_escalado": 6978.293213723107,
+          "mediana_error_abs_escalado": 0.25953029900310015,
+          "n_escala_en_suelo": 1379
+        },
+        "B2_media_movil_28d": {
+          "n": 14491,
+          "mae_eur": 936063.2202820653,
+          "mediana_error_abs_eur": 49765.67999999999,
+          "error_abs_p50_eur": 49765.67999999999,
+          "error_abs_p75_eur": 214557.6204168572,
+          "error_abs_p90_eur": 890054.3792857146,
+          "sesgo_eur": 181041.138688289,
+          "rmse_eur": 36774191.15422671,
+          "mae_escalado": 6978.300593306353,
+          "mediana_error_abs_escalado": 0.26517848756126206,
+          "n_escala_en_suelo": 1379
+        },
+        "B3_mediana_global": {
+          "n": 14491,
+          "mae_eur": 392406.8033712838,
+          "mediana_error_abs_eur": 28119.290000000005,
+          "error_abs_p50_eur": 28119.290000000005,
+          "error_abs_p75_eur": 125241.29499999998,
+          "error_abs_p90_eur": 490426.08999999997,
+          "sesgo_eur": -72867.73264882494,
+          "rmse_eur": 8631983.097949957,
+          "mae_escalado": 6978.161076759354,
+          "mediana_error_abs_escalado": 0.14172639214356206,
+          "n_escala_en_suelo": 1379
+        }
+      },
+      "60": {
+        "B1_persistencia": {
+          "n": 13579,
+          "mae_eur": 2221153.4190082136,
+          "mediana_error_abs_eur": 68531.66,
+          "error_abs_p50_eur": 68531.66,
+          "error_abs_p75_eur": 288299.81999999995,
+          "error_abs_p90_eur": 1144695.9506800005,
+          "sesgo_eur": 567183.513422486,
+          "rmse_eur": 70937596.12753709,
+          "mae_escalado": 12880.756599537328,
+          "mediana_error_abs_escalado": 0.17085288645679203,
+          "n_escala_en_suelo": 1148
+        },
+        "B2_media_movil_28d": {
+          "n": 13579,
+          "mae_eur": 2046329.8877512184,
+          "mediana_error_abs_eur": 85424.03714285721,
+          "error_abs_p50_eur": 85424.03714285721,
+          "error_abs_p75_eur": 362667.0028571429,
+          "error_abs_p90_eur": 1460141.1294285734,
+          "sesgo_eur": 153978.56606130305,
+          "rmse_eur": 82243662.60544764,
+          "mae_escalado": 12880.828120727814,
+          "mediana_error_abs_escalado": 0.2165143849094521,
+          "n_escala_en_suelo": 1148
+        },
+        "B3_mediana_global": {
+          "n": 13579,
+          "mae_eur": 903838.2596221698,
+          "mediana_error_abs_eur": 38640.72,
+          "error_abs_p50_eur": 38640.72,
+          "error_abs_p75_eur": 168051.64,
+          "error_abs_p90_eur": 684832.5040000007,
+          "sesgo_eur": -440901.0069228864,
+          "rmse_eur": 36538005.789645955,
+          "mae_escalado": 12880.654242113664,
+          "mediana_error_abs_escalado": 0.09544305933128151,
+          "n_escala_en_suelo": 1148
+        }
+      },
+      "90": {
+        "B1_persistencia": {
+          "n": 11663,
+          "mae_eur": 2181161.4728799732,
+          "mediana_error_abs_eur": 79042.76999999993,
+          "error_abs_p50_eur": 79042.76999999993,
+          "error_abs_p75_eur": 337534.7306245,
+          "error_abs_p90_eur": 1307239.3080000007,
+          "sesgo_eur": 1152342.1698443443,
+          "rmse_eur": 66970953.98339856,
+          "mae_escalado": 21625.02059455575,
+          "mediana_error_abs_escalado": 0.12717679160465034,
+          "n_escala_en_suelo": 891
+        },
+        "B2_media_movil_28d": {
+          "n": 11663,
+          "mae_eur": 2440391.9621862057,
+          "mediana_error_abs_eur": 114515.30785714285,
+          "error_abs_p50_eur": 114515.30785714285,
+          "error_abs_p75_eur": 497729.9322863929,
+          "error_abs_p90_eur": 1974279.3462857155,
+          "sesgo_eur": 891460.9852378513,
+          "rmse_eur": 119643006.3762052,
+          "mae_escalado": 21625.12665212321,
+          "mediana_error_abs_escalado": 0.1920758707250809,
+          "n_escala_en_suelo": 891
+        },
+        "B3_mediana_global": {
+          "n": 11663,
+          "mae_eur": 582926.4321029751,
+          "mediana_error_abs_eur": 44217.23999999997,
+          "error_abs_p50_eur": 44217.23999999997,
+          "error_abs_p75_eur": 197581.24,
+          "error_abs_p90_eur": 745227.746,
+          "sesgo_eur": -73757.95099428183,
+          "rmse_eur": 9700487.944333635,
+          "mae_escalado": 21626.08779900328,
+          "mediana_error_abs_escalado": 0.06930940276264758,
+          "n_escala_en_suelo": 891
+        }
+      }
+    },
+    "saldo_proyectado": {
+      "30": {
+        "B1_persistencia": {
+          "n": 12990,
+          "mae_eur": 949125.9373711674,
+          "mediana_error_abs_eur": 53545.705,
+          "error_abs_p50_eur": 53545.705,
+          "error_abs_p75_eur": 223823.31,
+          "error_abs_p90_eur": 878889.8104615007,
+          "sesgo_eur": 198316.5062103787,
+          "rmse_eur": 36369200.29147042,
+          "mae_escalado": null,
+          "mediana_error_abs_escalado": null,
+          "n_escala_en_suelo": 0
+        },
+        "B2_media_movil_28d": {
+          "n": 12990,
+          "mae_eur": 997256.7263379036,
+          "mediana_error_abs_eur": 54023.32821428579,
+          "error_abs_p50_eur": 54023.32821428579,
+          "error_abs_p75_eur": 223227.24714285752,
+          "error_abs_p90_eur": 922274.196980613,
+          "sesgo_eur": 201370.75903846635,
+          "rmse_eur": 38824554.122343734,
+          "mae_escalado": null,
+          "mediana_error_abs_escalado": null,
+          "n_escala_en_suelo": 0
+        },
+        "B3_mediana_global": {
+          "n": 12990,
+          "mae_eur": 411527.5101288532,
+          "mediana_error_abs_eur": 30989.57,
+          "error_abs_p50_eur": 30989.57,
+          "error_abs_p75_eur": 129262.43,
+          "error_abs_p90_eur": 507866.4784828,
+          "sesgo_eur": -76228.8544527762,
+          "rmse_eur": 9085442.933649782,
+          "mae_escalado": null,
+          "mediana_error_abs_escalado": null,
+          "n_escala_en_suelo": 0
+        }
+      },
+      "60": {
+        "B1_persistencia": {
+          "n": 12211,
+          "mae_eur": 2397695.224041368,
+          "mediana_error_abs_eur": 74464.96225800004,
+          "error_abs_p50_eur": 74464.96225800004,
+          "error_abs_p75_eur": 294056.277006,
+          "error_abs_p90_eur": 1181876.7499999998,
+          "sesgo_eur": 654801.900856114,
+          "rmse_eur": 74787747.4141246,
+          "mae_escalado": null,
+          "mediana_error_abs_escalado": null,
+          "n_escala_en_suelo": 0
+        },
+        "B2_media_movil_28d": {
+          "n": 12211,
+          "mae_eur": 2184391.0989216566,
+          "mediana_error_abs_eur": 93399.84285714285,
+          "error_abs_p50_eur": 93399.84285714285,
+          "error_abs_p75_eur": 373129.90953564295,
+          "error_abs_p90_eur": 1477069.4871428572,
+          "sesgo_eur": 183928.58922471516,
+          "rmse_eur": 86701305.89108641,
+          "mae_escalado": null,
+          "mediana_error_abs_escalado": null,
+          "n_escala_en_suelo": 0
+        },
+        "B3_mediana_global": {
+          "n": 12211,
+          "mae_eur": 955205.4412844618,
+          "mediana_error_abs_eur": 42507.51,
+          "error_abs_p50_eur": 42507.51,
+          "error_abs_p75_eur": 173276.20999999993,
+          "error_abs_p90_eur": 701236.2899999999,
+          "sesgo_eur": -467606.41324290837,
+          "rmse_eur": 38504799.508444786,
+          "mae_escalado": null,
+          "mediana_error_abs_escalado": null,
+          "n_escala_en_suelo": 0
+        }
+      },
+      "90": {
+        "B1_persistencia": {
+          "n": 10571,
+          "mae_eur": 2333705.539386544,
+          "mediana_error_abs_eur": 84818.08000000002,
+          "error_abs_p50_eur": 84818.08000000002,
+          "error_abs_p75_eur": 341417.7450000001,
+          "error_abs_p90_eur": 1340374.2300000004,
+          "sesgo_eur": 1306074.5658387518,
+          "rmse_eur": 70324900.78945982,
+          "mae_escalado": null,
+          "mediana_error_abs_escalado": null,
+          "n_escala_en_suelo": 0
+        },
+        "B2_media_movil_28d": {
+          "n": 10571,
+          "mae_eur": 2593403.6908762027,
+          "mediana_error_abs_eur": 124654.77571428564,
+          "error_abs_p50_eur": 124654.77571428564,
+          "error_abs_p75_eur": 507549.0,
+          "error_abs_p90_eur": 1989606.5964285715,
+          "sesgo_eur": 1019844.3176471186,
+          "rmse_eur": 125658199.2015526,
+          "mae_escalado": null,
+          "mediana_error_abs_escalado": null,
+          "n_escala_en_suelo": 0
+        },
+        "B3_mediana_global": {
+          "n": 10571,
+          "mae_eur": 586036.5578355191,
+          "mediana_error_abs_eur": 48195.2,
+          "error_abs_p50_eur": 48195.2,
+          "error_abs_p75_eur": 200471.605,
+          "error_abs_p90_eur": 772016.99,
+          "sesgo_eur": -51493.95141341383,
+          "rmse_eur": 10052391.562124956,
+          "mae_escalado": null,
+          "mediana_error_abs_escalado": null,
+          "n_escala_en_suelo": 0
+        }
+      }
+    }
+  },
+  "diagnosticos": {
+    "B3_predicciones_no_nulas": 39733,
+    "B3_predicciones_igual_a_cero": 38969,
+    "B3_pct_cero_sobre_no_nulas": 98.08,
+    "lectura": "B3 (mediana cross-empresa del flujo acumulado) produce casi siempre 0 porque la mediana de la distribucion de flujos acumulados esta centrada en cero. En la practica B3 es el baseline \"predice flujo neto cero\"."
+  },
+  "outliers": {
+    "n_trios_escala_en_suelo_1eur": 3423,
+    "n_trios_total": 39837,
+    "peor_error_escalado": {
+      "company_id": "COMP_0469",
+      "corte": "2026-03-31",
+      "h": 90,
+      "target_flujo_neto_acumulado_eur": 81834063.63636401,
+      "escala_empresa_h_eur": 0.0,
+      "error_escalado": 81834063.63636401
+    },
+    "nota": "El flow neto diario tiene cola gruesa: un unico movimiento grande dentro de una ventana previa sin flujo NETO deja la escala en el suelo y dispara el error escalado. La media del error escalado esta dominada por ese caso; por eso el ranking escalado usa la MEDIANA."
+  },
+  "ranking": {
+    "flujo_neto_acumulado": {
+      "30": {
+        "por_mae_eur": [
+          "B3_mediana_global",
+          "B1_persistencia",
+          "B2_media_movil_28d"
+        ],
+        "por_error_escalado_mediana": [
+          "B3_mediana_global",
+          "B1_persistencia",
+          "B2_media_movil_28d"
+        ],
+        "por_error_escalado_media": [
+          "B3_mediana_global",
+          "B1_persistencia",
+          "B2_media_movil_28d"
+        ],
+        "ganador_mae_eur": "B3_mediana_global",
+        "ganador_error_escalado": "B3_mediana_global",
+        "coincide_ranking": true,
+        "ganador_mae_eur_coincide_con_media_escalada": true
+      },
+      "60": {
+        "por_mae_eur": [
+          "B3_mediana_global",
+          "B2_media_movil_28d",
+          "B1_persistencia"
+        ],
+        "por_error_escalado_mediana": [
+          "B3_mediana_global",
+          "B1_persistencia",
+          "B2_media_movil_28d"
+        ],
+        "por_error_escalado_media": [
+          "B3_mediana_global",
+          "B1_persistencia",
+          "B2_media_movil_28d"
+        ],
+        "ganador_mae_eur": "B3_mediana_global",
+        "ganador_error_escalado": "B3_mediana_global",
+        "coincide_ranking": false,
+        "ganador_mae_eur_coincide_con_media_escalada": true
+      },
+      "90": {
+        "por_mae_eur": [
+          "B3_mediana_global",
+          "B1_persistencia",
+          "B2_media_movil_28d"
+        ],
+        "por_error_escalado_mediana": [
+          "B3_mediana_global",
+          "B1_persistencia",
+          "B2_media_movil_28d"
+        ],
+        "por_error_escalado_media": [
+          "B1_persistencia",
+          "B2_media_movil_28d",
+          "B3_mediana_global"
+        ],
+        "ganador_mae_eur": "B3_mediana_global",
+        "ganador_error_escalado": "B3_mediana_global",
+        "coincide_ranking": true,
+        "ganador_mae_eur_coincide_con_media_escalada": false
+      }
+    },
+    "saldo_proyectado": {
+      "30": {
+        "por_mae_eur": [
+          "B3_mediana_global",
+          "B1_persistencia",
+          "B2_media_movil_28d"
+        ],
+        "por_error_escalado_mediana": [],
+        "por_error_escalado_media": [],
+        "ganador_mae_eur": "B3_mediana_global",
+        "ganador_error_escalado": null,
+        "coincide_ranking": null,
+        "ganador_mae_eur_coincide_con_media_escalada": null
+      },
+      "60": {
+        "por_mae_eur": [
+          "B3_mediana_global",
+          "B2_media_movil_28d",
+          "B1_persistencia"
+        ],
+        "por_error_escalado_mediana": [],
+        "por_error_escalado_media": [],
+        "ganador_mae_eur": "B3_mediana_global",
+        "ganador_error_escalado": null,
+        "coincide_ranking": null,
+        "ganador_mae_eur_coincide_con_media_escalada": null
+      },
+      "90": {
+        "por_mae_eur": [
+          "B3_mediana_global",
+          "B1_persistencia",
+          "B2_media_movil_28d"
+        ],
+        "por_error_escalado_mediana": [],
+        "por_error_escalado_media": [],
+        "ganador_mae_eur": "B3_mediana_global",
+        "ganador_error_escalado": null,
+        "coincide_ranking": null,
+        "ganador_mae_eur_coincide_con_media_escalada": null
+      }
+    }
+  },
+  "tendencia": {
+    "30": {
+      "n": 14491,
+      "distribucion_predicha": {
+        "positiva": 5694,
+        "negativa": 6122,
+        "neutra": 2675
+      },
+      "distribucion_observada": {
+        "positiva": 6749,
+        "negativa": 6299,
+        "neutra": 1443
+      },
+      "matriz_confusion_predicha_filas_observada_columnas": {
+        "positiva": {
+          "positiva": 2527,
+          "negativa": 3127,
+          "neutra": 40
+        },
+        "negativa": {
+          "positiva": 3470,
+          "negativa": 2594,
+          "neutra": 58
+        },
+        "neutra": {
+          "positiva": 752,
+          "negativa": 578,
+          "neutra": 1345
+        }
+      },
+      "acierto": 0.4462079911669312,
+      "acierto_por_clase_recall": {
+        "positiva": 0.3744258408653134,
+        "negativa": 0.4118113986347039,
+        "neutra": 0.932085932085932
+      },
+      "precision_por_clase": {
+        "positiva": 0.44380049174569725,
+        "negativa": 0.4237177393008821,
+        "neutra": 0.502803738317757
+      },
+      "trivial_clase_mayoritaria": 0.4657373542198606,
+      "clase_mayoritaria_observada": "positiva",
+      "supera_trivial": false,
+      "direccional": {
+        "n": 11816,
+        "acierto": 0.43339539607312116,
+        "distribucion_observada": {
+          "positiva": 5997,
+          "negativa": 5721,
+          "neutra": 98
+        },
+        "trivial_clase_mayoritaria": 0.5075321597833446,
+        "supera_trivial": false
+      }
+    },
+    "60": {
+      "n": 13579,
+      "distribucion_predicha": {
+        "positiva": 4206,
+        "negativa": 4511,
+        "neutra": 4862
+      },
+      "distribucion_observada": {
+        "positiva": 6541,
+        "negativa": 5806,
+        "neutra": 1232
+      },
+      "matriz_confusion_predicha_filas_observada_columnas": {
+        "positiva": {
+          "positiva": 1784,
+          "negativa": 2403,
+          "neutra": 19
+        },
+        "negativa": {
+          "positiva": 2791,
+          "negativa": 1679,
+          "neutra": 41
+        },
+        "neutra": {
+          "positiva": 1966,
+          "negativa": 1724,
+          "neutra": 1172
+        }
+      },
+      "acierto": 0.3413358862950144,
+      "acierto_por_clase_recall": {
+        "positiva": 0.2727411710747592,
+        "negativa": 0.2891836031691354,
+        "neutra": 0.9512987012987013
+      },
+      "precision_por_clase": {
+        "positiva": 0.4241559676652401,
+        "negativa": 0.37220128574595435,
+        "neutra": 0.24105306458247636
+      },
+      "trivial_clase_mayoritaria": 0.4816996833345607,
+      "clase_mayoritaria_observada": "positiva",
+      "supera_trivial": false,
+      "direccional": {
+        "n": 8717,
+        "acierto": 0.397269702879431,
+        "distribucion_observada": {
+          "positiva": 4575,
+          "negativa": 4082,
+          "neutra": 60
+        },
+        "trivial_clase_mayoritaria": 0.524836526327865,
+        "supera_trivial": false
+      }
+    },
+    "90": {
+      "n": 11767,
+      "distribucion_predicha": {
+        "positiva": 3441,
+        "negativa": 3650,
+        "neutra": 4676
+      },
+      "distribucion_observada": {
+        "positiva": 5655,
+        "negativa": 5126,
+        "neutra": 986
+      },
+      "matriz_confusion_predicha_filas_observada_columnas": {
+        "positiva": {
+          "positiva": 1440,
+          "negativa": 1993,
+          "neutra": 8
+        },
+        "negativa": {
+          "positiva": 2267,
+          "negativa": 1361,
+          "neutra": 22
+        },
+        "neutra": {
+          "positiva": 1948,
+          "negativa": 1772,
+          "neutra": 956
+        }
+      },
+      "acierto": 0.3192827398657262,
+      "acierto_por_clase_recall": {
+        "positiva": 0.2546419098143236,
+        "negativa": 0.2655091689426453,
+        "neutra": 0.9695740365111561
+      },
+      "precision_por_clase": {
+        "positiva": 0.4184829991281604,
+        "negativa": 0.3728767123287671,
+        "neutra": 0.20444824636441403
+      },
+      "trivial_clase_mayoritaria": 0.48058128664910343,
+      "clase_mayoritaria_observada": "positiva",
+      "supera_trivial": false,
+      "direccional": {
+        "n": 7091,
+        "acierto": 0.3950077563108165,
+        "distribucion_observada": {
+          "positiva": 3707,
+          "negativa": 3354,
+          "neutra": 30
+        },
+        "trivial_clase_mayoritaria": 0.5227753490339867,
+        "supera_trivial": false
+      }
+    }
+  },
+  "limitaciones": [
+    "PRECISION: `saldo_reversa_eur` es una reconstruccion hacia atras desde el ancla 2026-09-01 y su `saldo_reversa_available_at` es el ancla, posterior a todos los cortes. El modulo NO recalcula el saldo: lee el valor ya almacenado en la fila del corte. El panel diario documenta esa reconstruccion como recuperacion de un nivel de caja que la empresa conocia en su momento; se mantiene aqui por coherencia con la tarea P0 y se declara como limitacion. El test de no-fuga verifica que ninguna prediccion cambia si se eliminan o alteran las filas posteriores al corte.",
+    "La poblacion es el universo con densidad suficiente para cada horizonte (no solo las evaluables v4). El censo publica ambos conteos; las metricas se miden sobre el universo para no encoger la muestra.",
+    "B1 y B2 predicen en todos los trios; B3 no predice en los primeros cortes porque exige un origen anterior ya cerrado. El ranking se calcula sobre la interseccion comun por horizonte (misma poblacion para los tres baselines), y se publica el n de cada baseline.",
+    "La densidad se mide sobre el span completo observado de la empresa, no localmente alrededor del corte; un trio exige ademas h dias de rejilla previa y target observable, de modo que la historia del corte si esta garantizada.",
+    "El saldo proyectado hereda los huecos FX del panel: si saldo_reversa_eur es nulo en el corte o en corte+h, el objetivo/prediccion de saldo no existe y se descarta de las metricas de saldo (nunca se imputa)."
+  ]
+}
