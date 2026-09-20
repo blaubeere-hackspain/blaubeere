@@ -22,7 +22,7 @@ pub async fn connect(url: &str) -> anyhow::Result<SqlitePool> {
         .await?;
     let metadata: Value = serde_json::from_str(&metadata)?;
     anyhow::ensure!(
-        metadata["schema_version"] == 3
+        metadata["schema_version"] == 4
             && metadata["model_summary"]["model_version"] == "healthscore_v4",
         "Dataset requires a fresh v4 import; run the API import-parquet command"
     );
@@ -37,20 +37,18 @@ fn decode(payload: &str) -> ApiResult<Value> {
         )
     })
 }
-fn company(id: &str, group: &str) -> Value {
-    // Stable demo display name; source IDs still identify every financial record.
-    let name = if id == "COMP_0318" { "Blau" } else { id };
+fn company(id: &str, group: &str, name: &str) -> Value {
     json!({"id":id,"name":name,"group":group,"currency":"EUR","data_mode":"challenge"})
 }
 
 pub async fn companies(pool: &SqlitePool) -> ApiResult<Vec<Value>> {
-    let rows: Vec<(String, String)> =
-        sqlx::query_as("SELECT id, group_id FROM dataset_companies ORDER BY id")
+    let rows: Vec<(String, String, String)> =
+        sqlx::query_as("SELECT id, group_id, name FROM dataset_companies ORDER BY id")
             .fetch_all(pool)
             .await?;
     Ok(rows
         .into_iter()
-        .map(|(id, group)| company(&id, &group))
+        .map(|(id, group, name)| company(&id, &group, &name))
         .collect())
 }
 
@@ -86,12 +84,14 @@ pub async fn assessment(state: &AppState, id: &str) -> ApiResult<Option<Value>> 
     let Some(pool) = &state.dataset else {
         return Ok(None);
     };
-    let group: Option<String> =
-        sqlx::query_scalar("SELECT group_id FROM dataset_companies WHERE id=?")
+    let company_row: Option<(String, String)> =
+        sqlx::query_as("SELECT group_id, name FROM dataset_companies WHERE id=?")
             .bind(id)
             .fetch_optional(pool)
             .await?;
-    let Some(group) = group else { return Ok(None) };
+    let Some((group, name)) = company_row else {
+        return Ok(None);
+    };
     type JoinedRecord = (
         Option<String>,
         String,
@@ -147,7 +147,7 @@ pub async fn assessment(state: &AppState, id: &str) -> ApiResult<Option<Value>> 
         .fetch_one(pool)
         .await?;
     Ok(Some(
-        json!({"kind":"model","company":company(id, &group),"records":records,"provenance":decode(&metadata)?}),
+        json!({"kind":"model","company":company(id, &group, &name),"records":records,"provenance":decode(&metadata)?}),
     ))
 }
 

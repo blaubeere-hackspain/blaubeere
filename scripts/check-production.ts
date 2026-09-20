@@ -19,14 +19,14 @@ assert.ok(!demo.includes('Why this number') && !demo.includes('Why this score'),
 const companies = await (await read(`${app}/api/demo/companies`)).json();
 assert.ok(companies.length > 1 && companies.every((company: { data_mode: string; id: string }) => company.data_mode === "challenge" && company.id !== "DEMO_001"));
 const blau = companies.find((company: { id: string }) => company.id === "COMP_0318");
-assert.equal(blau?.name, "Blau");
+assert.equal(blau?.name, "Blau, Corp.");
 for (const company of [companies[0], companies.at(-1), blau]) {
   const assessment = await (await read(`${app}/api/demo/companies/${company.id}/assessment`)).json();
   assert.equal(assessment.kind, "model");
   assert.equal(assessment.company.id, company.id);
   assert.equal(assessment.company.name, company.name);
   assert.equal(assessment.provenance.model_summary.model_version, "healthscore_v4");
-  assert.equal(assessment.provenance.schema_version, 3);
+  assert.equal(assessment.provenance.schema_version, 4);
   assert.ok(assessment.records.every((row: { version: string; health_score: number | null; excluida: boolean }) => row.version === "healthscore_v4" && (!row.excluida || row.health_score === null)), "Serve only v4 ratings and preserve exclusions");
   const sources = assessment.provenance.files.map((file: { path: string }) => file.path);
   for (const path of ["reports/score_v4/assessments.parquet", "reports/cash_backfill/cash_backfill_monthly.parquet", "reports/payment_delay_v2/payment_delay_v2_monthly.parquet", "reports/debt_obligation/debt_obligation_monthly.parquet", "data/clean/transactions.parquet", "data/clean/balances.parquet"]) assert.ok(sources.includes(path), `Missing source: ${path}`);

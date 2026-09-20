@@ -74,7 +74,7 @@ pub async fn build(root: &Path, directory: &Path, revision: &str) -> anyhow::Res
     let summary_hash = hash(&root.join(SUMMARY))?;
     let batch = format!(
         "{:x}",
-        Sha256::digest(serde_json::to_vec(&json!([7, files, summary_hash]))?)
+        Sha256::digest(serde_json::to_vec(&json!([8, files, summary_hash]))?)
     );
     std::fs::create_dir_all(directory)?;
     let target = directory
@@ -104,7 +104,7 @@ pub async fn build(root: &Path, directory: &Path, revision: &str) -> anyhow::Res
             .await?;
     let mut tx = db.begin().await?;
     sqlx::raw_sql("CREATE TABLE dataset_metadata(payload TEXT NOT NULL CHECK(json_valid(payload)));
-        CREATE TABLE dataset_companies(id TEXT PRIMARY KEY,group_id TEXT NOT NULL);
+        CREATE TABLE dataset_companies(id TEXT PRIMARY KEY,group_id TEXT NOT NULL,name TEXT NOT NULL);
         CREATE TABLE parquet_records(source TEXT NOT NULL,record_key TEXT NOT NULL,company_id TEXT,period TEXT,payload TEXT NOT NULL CHECK(json_valid(payload)),PRIMARY KEY(source,record_key)) WITHOUT ROWID;
         CREATE INDEX dataset_company_period ON parquet_records(source,company_id,period);")
         .execute(&mut *tx).await?;
@@ -234,9 +234,15 @@ pub async fn build(root: &Path, directory: &Path, revision: &str) -> anyhow::Res
         projection_counts[0]
     );
     for (company, group) in companies {
-        sqlx::query("INSERT INTO dataset_companies VALUES (?,?)")
-            .bind(company)
+        let name = if company == "COMP_0318" {
+            "Blau, Corp."
+        } else {
+            &company
+        };
+        sqlx::query("INSERT INTO dataset_companies (id,group_id,name) VALUES (?,?,?)")
+            .bind(&company)
             .bind(group)
+            .bind(name)
             .execute(&mut *tx)
             .await?;
     }
@@ -249,7 +255,7 @@ pub async fn build(root: &Path, directory: &Path, revision: &str) -> anyhow::Res
             && summary["advertencia"].is_string(),
         "Missing v4 model summary or limitations"
     );
-    let metadata = json!({"schema_version":3,"batch_id":batch,"source_revision":revision,"imported_at":Utc::now().to_rfc3339(),"files":files,"summary_sha256":summary_hash,"model_summary":summary});
+    let metadata = json!({"schema_version":4,"batch_id":batch,"source_revision":revision,"imported_at":Utc::now().to_rfc3339(),"files":files,"summary_sha256":summary_hash,"model_summary":summary});
     sqlx::query("INSERT INTO dataset_metadata VALUES (?)")
         .bind(metadata.to_string())
         .execute(&mut *tx)

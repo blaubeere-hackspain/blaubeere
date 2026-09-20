@@ -107,7 +107,7 @@ async fn parquet_snapshot_preserves_model_data_and_requires_membership() {
             .iter()
             .find(|company| company["id"] == "COMP_0318")
             .unwrap()["name"],
-        "Blau"
+        "Blau, Corp."
     );
     assert!(
         list.as_array()
@@ -320,7 +320,7 @@ async fn parquet_snapshot_preserves_model_data_and_requires_membership() {
         .await
         .unwrap();
     assert_eq!(blau["company"]["id"], "COMP_0318");
-    assert_eq!(blau["company"]["name"], "Blau");
+    assert_eq!(blau["company"]["name"], "Blau, Corp.");
     assert!(blau["health"]["score"].as_f64().is_some());
     dataset::grant_team_access(&state, "team@example.com")
         .await
@@ -357,7 +357,7 @@ async fn parquet_snapshot_preserves_model_data_and_requires_membership() {
         result["provenance"]["model_summary"]["model_version"],
         "healthscore_v4"
     );
-    assert_eq!(result["provenance"]["schema_version"], 3);
+    assert_eq!(result["provenance"]["schema_version"], 4);
     assert!(record.get("t6_efectivo").is_some() && record.get("t6").is_none());
     assert!(record["cash"].get("saldo_reversa_eur").is_some());
     assert!(record["payment"].get("mora_indice").is_some());
