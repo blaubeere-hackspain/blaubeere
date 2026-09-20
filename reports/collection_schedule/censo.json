@@ -1,0 +1,2964 @@
+{
+  "version": "collection_schedule_v1",
+  "generador": "xray/collection_schedule.py",
+  "cortes": [
+    "2024-11-30",
+    "2024-12-31",
+    "2025-01-31",
+    "2025-02-28",
+    "2025-03-31",
+    "2025-04-30",
+    "2025-05-31",
+    "2025-06-30",
+    "2025-07-31",
+    "2025-08-31",
+    "2025-09-30",
+    "2025-10-31",
+    "2025-11-30",
+    "2025-12-31",
+    "2026-01-31",
+    "2026-02-28",
+    "2026-03-31",
+    "2026-04-30",
+    "2026-05-31",
+    "2026-06-30",
+    "2026-07-31",
+    "2026-08-31"
+  ],
+  "corte_vivo": "2026-08-31",
+  "horizontes": [
+    30,
+    60,
+    90
+  ],
+  "w_prob_dias": 180,
+  "min_pagadas_empresa": 10,
+  "min_obs_prob": 100,
+  "warmup_dias": 90,
+  "por_corte": [
+    {
+      "version": "collection_schedule_v1",
+      "corte": "2024-11-30",
+      "corte_vivo": false,
+      "universo": "flow_side='inflow'",
+      "excluir_cancel": true,
+      "criterio_universo": "flow_side='inflow', issuance_date_ok <= corte, NOT (status_norm='paid' AND payment_date_ok <= corte) y status_norm<>'cancel'. payment_date_ok solo es fecha REAL si status_norm='paid'; en otro estado (overdue) es fecha PREVISTA (payment_date_ok = due_date_ok) y se ignora (criterio status-aware).",
+      "criterio_probabilidad": "Probabilidad por tramo = P(cobro) estimada point-in-time. Para el tramo 'no_vencida' es la tasa de cura INCONDICIONAL P(pagada dentro de 180 dias desde el vencimiento) sobre cohortes ya vencidas y observables (due_date_ok <= corte - 180). Para los tramos vencidos es la tasa de cura RESIDUAL condicionada en seguir impagada al entrar en el tramo a = borde_inferior: P(pagada en (a, a+180] | impagada en a). Solo usa pagos con fecha <= corte. Un tramo con menos de 100 observaciones cae a la tasa global.",
+      "intervalo": "El horizonte acumula el intervalo ABIERTO por la izquierda y CERRADO por la derecha (corte, corte+h]: el dia del corte queda excluido y el dia corte+h incluido. Mismo convenio que xray/cashflow_forecast.py.",
+      "n_facturas": 366666,
+      "n_vivas": 9610,
+      "n_empresas": 339,
+      "importe_vivo_eur": 89826102.86334729,
+      "n_no_vencidas": 4149,
+      "n_vencidas": 5461,
+      "n_sin_fecha_vencimiento": 0,
+      "n_no_valorable": 1948,
+      "importe_no_valorable_eur": 0.0,
+      "motivos_no_valorable": {
+        "sin_importe_eur": {
+          "n": 1948,
+          "eur": 0.0
+        }
+      },
+      "n_empresas_con_calendario": 303,
+      "n_facturas_en_calendario": 7347,
+      "importe_esperado_total_eur": 16842394.286877617,
+      "importe_esperado_fuera_de_ventana_max_eur": 349354.449375,
+      "retraso_mediano_global_dias": 0.0,
+      "retraso_empresas_p25_dias": 0.0,
+      "retraso_empresas_p50_dias": 0.0,
+      "retraso_empresas_p75_dias": 3.0,
+      "n_empresas_con_retraso_propio": 208,
+      "n_empresas_muestra_corta": 131,
+      "probabilidad_global": 0.1875,
+      "tabla_probabilidad": [
+        {
+          "tramo": "no_vencida",
+          "n_facturas": 4149,
+          "importe_vivo_eur": 59679479.6757184,
+          "prob_cobro": 0.1875,
+          "importe_esperado_eur": 11189902.439197198,
+          "detalle_estimacion": {
+            "borde_inferior_dias": null,
+            "prob": 0.1875,
+            "n_estim": 16,
+            "fallback": false
+          }
+        },
+        {
+          "tramo": "0_30",
+          "n_facturas": 2796,
+          "importe_vivo_eur": 16087955.503706831,
+          "prob_cobro": 0.1875,
+          "importe_esperado_eur": 3016491.656945031,
+          "detalle_estimacion": {
+            "borde_inferior_dias": 0,
+            "prob": 0.1875,
+            "n_estim": 13,
+            "fallback": true,
+            "motivo": "probabilidad_global_por_muestra_corta"
+          }
+        },
+        {
+          "tramo": "31_60",
+          "n_facturas": 1285,
+          "importe_vivo_eur": 5913789.356304312,
+          "prob_cobro": 0.1875,
+          "importe_esperado_eur": 1108835.5043070584,
+          "detalle_estimacion": {
+            "borde_inferior_dias": 31,
+            "prob": 0.1875,
+            "n_estim": 11,
+            "fallback": true,
+            "motivo": "probabilidad_global_por_muestra_corta"
+          }
+        },
+        {
+          "tramo": "61_90",
+          "n_facturas": 1347,
+          "importe_vivo_eur": 8105201.237617759,
+          "prob_cobro": 0.1875,
+          "importe_esperado_eur": 1519725.2320533297,
+          "detalle_estimacion": {
+            "borde_inferior_dias": 61,
+            "prob": 0.1875,
+            "n_estim": 8,
+            "fallback": true,
+            "motivo": "probabilidad_global_por_muestra_corta"
+          }
+        },
+        {
+          "tramo": "91_180",
+          "n_facturas": 20,
+          "importe_vivo_eur": 38159.19,
+          "prob_cobro": 0.1875,
+          "importe_esperado_eur": 7154.8481249999995,
+          "detalle_estimacion": {
+            "borde_inferior_dias": 91,
+            "prob": 0.1875,
+            "n_estim": 6,
+            "fallback": true,
+            "motivo": "probabilidad_global_por_muestra_corta"
+          }
+        },
+        {
+          "tramo": "180_mas",
+          "n_facturas": 13,
+          "importe_vivo_eur": 1517.9,
+          "prob_cobro": 0.1875,
+          "importe_esperado_eur": 284.60625000000005,
+          "detalle_estimacion": {
+            "borde_inferior_dias": 181,
+            "prob": 0.1875,
+            "n_estim": 4,
+            "fallback": true,
+            "motivo": "probabilidad_global_por_muestra_corta"
+          }
+        }
+      ],
+      "esperado_por_horizonte": {
+        "30": {
+          "importe_esperado_eur": 13898534.562234761,
+          "n_facturas_en_ventana": 5941
+        },
+        "60": {
+          "importe_esperado_eur": 15208827.955002617,
+          "n_facturas_en_ventana": 6755
+        },
+        "90": {
+          "importe_esperado_eur": 16493039.837502617,
+          "n_facturas_en_ventana": 7347
+        }
+      }
+    },
+    {
+      "version": "collection_schedule_v1",
+      "corte": "2024-12-31",
+      "corte_vivo": false,
+      "universo": "flow_side='inflow'",
+      "excluir_cancel": true,
+      "criterio_universo": "flow_side='inflow', issuance_date_ok <= corte, NOT (status_norm='paid' AND payment_date_ok <= corte) y status_norm<>'cancel'. payment_date_ok solo es fecha REAL si status_norm='paid'; en otro estado (overdue) es fecha PREVISTA (payment_date_ok = due_date_ok) y se ignora (criterio status-aware).",
+      "criterio_probabilidad": "Probabilidad por tramo = P(cobro) estimada point-in-time. Para el tramo 'no_vencida' es la tasa de cura INCONDICIONAL P(pagada dentro de 180 dias desde el vencimiento) sobre cohortes ya vencidas y observables (due_date_ok <= corte - 180). Para los tramos vencidos es la tasa de cura RESIDUAL condicionada en seguir impagada al entrar en el tramo a = borde_inferior: P(pagada en (a, a+180] | impagada en a). Solo usa pagos con fecha <= corte. Un tramo con menos de 100 observaciones cae a la tasa global.",
+      "intervalo": "El horizonte acumula el intervalo ABIERTO por la izquierda y CERRADO por la derecha (corte, corte+h]: el dia del corte queda excluido y el dia corte+h incluido. Mismo convenio que xray/cashflow_forecast.py.",
+      "n_facturas": 366666,
+      "n_vivas": 13296,
+      "n_empresas": 386,
+      "importe_vivo_eur": 131184154.12520742,
+      "n_no_vencidas": 4846,
+      "n_vencidas": 8450,
+      "n_sin_fecha_vencimiento": 0,
+      "n_no_valorable": 2692,
+      "importe_no_valorable_eur": 0.0,
+      "motivos_no_valorable": {
+        "sin_importe_eur": {
+          "n": 2692,
+          "eur": 0.0
+        }
+      },
+      "n_empresas_con_calendario": 350,
+      "n_facturas_en_calendario": 10234,
+      "importe_esperado_total_eur": 32796038.531301852,
+      "importe_esperado_fuera_de_ventana_max_eur": 2486610.4515384613,
+      "retraso_mediano_global_dias": 0.0,
+      "retraso_empresas_p25_dias": 0.0,
+      "retraso_empresas_p50_dias": 0.0,
+      "retraso_empresas_p75_dias": 1.0,
+      "n_empresas_con_retraso_propio": 243,
+      "n_empresas_muestra_corta": 143,
+      "probabilidad_global": 0.25,
+      "tabla_probabilidad": [
+        {
+          "tramo": "no_vencida",
+          "n_facturas": 4846,
+          "importe_vivo_eur": 56723969.78886117,
+          "prob_cobro": 0.25,
+          "importe_esperado_eur": 14180992.44721529,
+          "detalle_estimacion": {
+            "borde_inferior_dias": null,
+            "prob": 0.25,
+            "n_estim": 36,
+            "fallback": false
+          }
+        },
+        {
+          "tramo": "0_30",
+          "n_facturas": 3582,
+          "importe_vivo_eur": 48050142.9463052,
+          "prob_cobro": 0.25,
+          "importe_esperado_eur": 12012535.7365763,
+          "detalle_estimacion": {
+            "borde_inferior_dias": 0,
+            "prob": 0.25,
+            "n_estim": 28,
+            "fallback": true,
+            "motivo": "probabilidad_global_por_muestra_corta"
+          }
+        },
+        {
+          "tramo": "31_60",
+          "n_facturas": 2038,
+          "importe_vivo_eur": 11540608.059631936,
+          "prob_cobro": 0.25,
+          "importe_esperado_eur": 2885152.014907984,
+          "detalle_estimacion": {
+            "borde_inferior_dias": 31,
+            "prob": 0.25,
+            "n_estim": 20,
+            "fallback": true,
+            "motivo": "probabilidad_global_por_muestra_corta"
+          }
+        },
+        {
+          "tramo": "61_90",
+          "n_facturas": 1251,
+          "importe_vivo_eur": 6514149.888739996,
+          "prob_cobro": 0.25,
+          "importe_esperado_eur": 1628537.472184999,
+          "detalle_estimacion": {
+            "borde_inferior_dias": 61,
+            "prob": 0.25,
+            "n_estim": 18,
+            "fallback": true,
+            "motivo": "probabilidad_global_por_muestra_corta"
+          }
+        },
+        {
+          "tramo": "91_180",
+          "n_facturas": 1552,
+          "importe_vivo_eur": 8339226.311669121,
+          "prob_cobro": 0.25,
+          "importe_esperado_eur": 2084806.5779172801,
+          "detalle_estimacion": {
+            "borde_inferior_dias": 91,
+            "prob": 0.25,
+            "n_estim": 10,
+            "fallback": true,
+            "motivo": "probabilidad_global_por_muestra_corta"
+          }
+        },
+        {
+          "tramo": "180_mas",
+          "n_facturas": 27,
+          "importe_vivo_eur": 16057.130000000001,
+          "prob_cobro": 0.25,
+          "importe_esperado_eur": 4014.2825000000003,
+          "detalle_estimacion": {
+            "borde_inferior_dias": 181,
+            "prob": 0.25,
+            "n_estim": 7,
+            "fallback": true,
+            "motivo": "probabilidad_global_por_muestra_corta"
+          }
+        }
+      ],
+      "esperado_por_horizonte": {
+        "30": {
+          "importe_esperado_eur": 22603755.11325261,
+          "n_facturas_en_ventana": 8428
+        },
+        "60": {
+          "importe_esperado_eur": 26975187.426534392,
+          "n_facturas_en_ventana": 9968
+        },
+        "90": {
+          "importe_esperado_eur": 30309428.07976339,
+          "n_facturas_en_ventana": 10234
+        }
+      }
+    },
+    {
+      "version": "collection_schedule_v1",
+      "corte": "2025-01-31",
+      "corte_vivo": false,
+      "universo": "flow_side='inflow'",
+      "excluir_cancel": true,
+      "criterio_universo": "flow_side='inflow', issuance_date_ok <= corte, NOT (status_norm='paid' AND payment_date_ok <= corte) y status_norm<>'cancel'. payment_date_ok solo es fecha REAL si status_norm='paid'; en otro estado (overdue) es fecha PREVISTA (payment_date_ok = due_date_ok) y se ignora (criterio status-aware).",
+      "criterio_probabilidad": "Probabilidad por tramo = P(cobro) estimada point-in-time. Para el tramo 'no_vencida' es la tasa de cura INCONDICIONAL P(pagada dentro de 180 dias desde el vencimiento) sobre cohortes ya vencidas y observables (due_date_ok <= corte - 180). Para los tramos vencidos es la tasa de cura RESIDUAL condicionada en seguir impagada al entrar en el tramo a = borde_inferior: P(pagada en (a, a+180] | impagada en a). Solo usa pagos con fecha <= corte. Un tramo con menos de 100 observaciones cae a la tasa global.",
+      "intervalo": "El horizonte acumula el intervalo ABIERTO por la izquierda y CERRADO por la derecha (corte, corte+h]: el dia del corte queda excluido y el dia corte+h incluido. Mismo convenio que xray/cashflow_forecast.py.",
+      "n_facturas": 366666,
+      "n_vivas": 17000,
+      "n_empresas": 427,
+      "importe_vivo_eur": 152824791.72070098,
+      "n_no_vencidas": 5375,
+      "n_vencidas": 11625,
+      "n_sin_fecha_vencimiento": 0,
+      "n_no_valorable": 3271,
+      "importe_no_valorable_eur": 0.0,
+      "motivos_no_valorable": {
+        "sin_importe_eur": {
+          "n": 3271,
+          "eur": 0.0
+        }
+      },
+      "n_empresas_con_calendario": 389,
+      "n_facturas_en_calendario": 13366,
+      "importe_esperado_total_eur": 7127307.479582589,
+      "importe_esperado_fuera_de_ventana_max_eur": 1360761.404807049,
+      "retraso_mediano_global_dias": 0.0,
+      "retraso_empresas_p25_dias": 0.0,
+      "retraso_empresas_p50_dias": 0.0,
+      "retraso_empresas_p75_dias": 3.0,
+      "n_empresas_con_retraso_propio": 284,
+      "n_empresas_muestra_corta": 143,
+      "probabilidad_global": 0.09782608695652174,
+      "tabla_probabilidad": [
+        {
+          "tramo": "no_vencida",
+          "n_facturas": 5375,
+          "importe_vivo_eur": 66483965.525646746,
+          "prob_cobro": 0.09782608695652174,
+          "importe_esperado_eur": 6503866.192726314,
+          "detalle_estimacion": {
+            "borde_inferior_dias": null,
+            "prob": 0.09782608695652174,
+            "n_estim": 184,
+            "fallback": false
+          }
+        },
+        {
+          "tramo": "0_30",
+          "n_facturas": 4029,
+          "importe_vivo_eur": 22315862.036628094,
+          "prob_cobro": 0.01775147928994083,
+          "importe_esperado_eur": 396139.56278038037,
+          "detalle_estimacion": {
+            "borde_inferior_dias": 0,
+            "prob": 0.01775147928994083,
+            "n_estim": 169,
+            "fallback": false
+          }
+        },
+        {
+          "tramo": "31_60",
+          "n_facturas": 2562,
+          "importe_vivo_eur": 36368275.85214335,
+          "prob_cobro": 0.00625,
+          "importe_esperado_eur": 227301.7240758959,
+          "detalle_estimacion": {
+            "borde_inferior_dias": 31,
+            "prob": 0.00625,
+            "n_estim": 160,
+            "fallback": false
+          }
+        },
+        {
+          "tramo": "61_90",
+          "n_facturas": 1941,
+          "importe_vivo_eur": 13495357.924663762,
+          "prob_cobro": 0.0,
+          "importe_esperado_eur": 0.0,
+          "detalle_estimacion": {
+            "borde_inferior_dias": 61,
+            "prob": 0.0,
+            "n_estim": 149,
+            "fallback": false
+          }
+        },
+        {
+          "tramo": "91_180",
+          "n_facturas": 2927,
+          "importe_vivo_eur": 13875349.243832259,
+          "prob_cobro": 0.0,
+          "importe_esperado_eur": 0.0,
+          "detalle_estimacion": {
+            "borde_inferior_dias": 91,
+            "prob": 0.0,
+            "n_estim": 147,
+            "fallback": false
+          }
+        },
+        {
+          "tramo": "180_mas",
+          "n_facturas": 166,
+          "importe_vivo_eur": 285981.1377867715,
+          "prob_cobro": 0.0,
+          "importe_esperado_eur": 0.0,
+          "detalle_estimacion": {
+            "borde_inferior_dias": 181,
+            "prob": 0.0,
+            "n_estim": 132,
+            "fallback": false
+          }
+        }
+      ],
+      "esperado_por_horizonte": {
+        "30": {
+          "importe_esperado_eur": 2577982.7752026278,
+          "n_facturas_en_ventana": 11667
+        },
+        "60": {
+          "importe_esperado_eur": 5569728.83534346,
+          "n_facturas_en_ventana": 13057
+        },
+        "90": {
+          "importe_esperado_eur": 5766546.074775541,
+          "n_facturas_en_ventana": 13366
+        }
+      }
+    },
+    {
+      "version": "collection_schedule_v1",
+      "corte": "2025-02-28",
+      "corte_vivo": false,
+      "universo": "flow_side='inflow'",
+      "excluir_cancel": true,
+      "criterio_universo": "flow_side='inflow', issuance_date_ok <= corte, NOT (status_norm='paid' AND payment_date_ok <= corte) y status_norm<>'cancel'. payment_date_ok solo es fecha REAL si status_norm='paid'; en otro estado (overdue) es fecha PREVISTA (payment_date_ok = due_date_ok) y se ignora (criterio status-aware).",
+      "criterio_probabilidad": "Probabilidad por tramo = P(cobro) estimada point-in-time. Para el tramo 'no_vencida' es la tasa de cura INCONDICIONAL P(pagada dentro de 180 dias desde el vencimiento) sobre cohortes ya vencidas y observables (due_date_ok <= corte - 180). Para los tramos vencidos es la tasa de cura RESIDUAL condicionada en seguir impagada al entrar en el tramo a = borde_inferior: P(pagada en (a, a+180] | impagada en a). Solo usa pagos con fecha <= corte. Un tramo con menos de 100 observaciones cae a la tasa global.",
+      "intervalo": "El horizonte acumula el intervalo ABIERTO por la izquierda y CERRADO por la derecha (corte, corte+h]: el dia del corte queda excluido y el dia corte+h incluido. Mismo convenio que xray/cashflow_forecast.py.",
+      "n_facturas": 366666,
+      "n_vivas": 20868,
+      "n_empresas": 442,
+      "importe_vivo_eur": 174118510.30592346,
+      "n_no_vencidas": 5812,
+      "n_vencidas": 15056,
+      "n_sin_fecha_vencimiento": 0,
+      "n_no_valorable": 3506,
+      "importe_no_valorable_eur": 0.0,
+      "motivos_no_valorable": {
+        "sin_importe_eur": {
+          "n": 3506,
+          "eur": 0.0
+        }
+      },
+      "n_empresas_con_calendario": 406,
+      "n_facturas_en_calendario": 16847,
+      "importe_esperado_total_eur": 46337021.612323396,
+      "importe_esperado_fuera_de_ventana_max_eur": 7191486.01180116,
+      "retraso_mediano_global_dias": 0.0,
+      "retraso_empresas_p25_dias": 0.0,
+      "retraso_empresas_p50_dias": 0.0,
+      "retraso_empresas_p75_dias": 3.5,
+      "n_empresas_con_retraso_propio": 305,
+      "n_empresas_muestra_corta": 137,
+      "probabilidad_global": 0.4826629680998613,
+      "tabla_probabilidad": [
+        {
+          "tramo": "no_vencida",
+          "n_facturas": 5812,
+          "importe_vivo_eur": 72597026.61578032,
+          "prob_cobro": 0.4826629680998613,
+          "importe_esperado_eur": 35039896.34159716,
+          "detalle_estimacion": {
+            "borde_inferior_dias": null,
+            "prob": 0.4826629680998613,
+            "n_estim": 721,
+            "fallback": false
+          }
+        },
+        {
+          "tramo": "0_30",
+          "n_facturas": 5995,
+          "importe_vivo_eur": 30547008.794740126,
+          "prob_cobro": 0.3479020979020979,
+          "importe_esperado_eur": 10627368.444323927,
+          "detalle_estimacion": {
+            "borde_inferior_dias": 0,
+            "prob": 0.3479020979020979,
+            "n_estim": 572,
+            "fallback": false
+          }
+        },
+        {
+          "tramo": "31_60",
+          "n_facturas": 2737,
+          "importe_vivo_eur": 24838205.574279726,
+          "prob_cobro": 0.010638297872340425,
+          "importe_esperado_eur": 264236.2295136141,
+          "detalle_estimacion": {
+            "borde_inferior_dias": 31,
+            "prob": 0.010638297872340425,
+            "n_estim": 188,
+            "fallback": false
+          }
+        },
+        {
+          "tramo": "61_90",
+          "n_facturas": 2159,
+          "importe_vivo_eur": 28464789.992269576,
+          "prob_cobro": 0.010638297872340425,
+          "importe_esperado_eur": 302816.91481137846,
+          "detalle_estimacion": {
+            "borde_inferior_dias": 61,
+            "prob": 0.010638297872340425,
+            "n_estim": 181,
+            "fallback": false,
+            "monotone_clamped": true
+          }
+        },
+        {
+          "tramo": "91_180",
+          "n_facturas": 3975,
+          "importe_vivo_eur": 17356922.271066964,
+          "prob_cobro": 0.005917159763313609,
+          "importe_esperado_eur": 102703.6820773193,
+          "detalle_estimacion": {
+            "borde_inferior_dias": 91,
+            "prob": 0.005917159763313609,
+            "n_estim": 169,
+            "fallback": false
+          }
+        },
+        {
+          "tramo": "180_mas",
+          "n_facturas": 190,
+          "importe_vivo_eur": 314557.05778677156,
+          "prob_cobro": 0.0,
+          "importe_esperado_eur": 0.0,
+          "detalle_estimacion": {
+            "borde_inferior_dias": 181,
+            "prob": 0.0,
+            "n_estim": 133,
+            "fallback": false
+          }
+        }
+      ],
+      "esperado_por_horizonte": {
+        "30": {
+          "importe_esperado_eur": 22982750.00441715,
+          "n_facturas_en_ventana": 14691
+        },
+        "60": {
+          "importe_esperado_eur": 37970160.71516433,
+          "n_facturas_en_ventana": 16490
+        },
+        "90": {
+          "importe_esperado_eur": 39145535.600522235,
+          "n_facturas_en_ventana": 16847
+        }
+      }
+    },
+    {
+      "version": "collection_schedule_v1",
+      "corte": "2025-03-31",
+      "corte_vivo": false,
+      "universo": "flow_side='inflow'",
+      "excluir_cancel": true,
+      "criterio_universo": "flow_side='inflow', issuance_date_ok <= corte, NOT (status_norm='paid' AND payment_date_ok <= corte) y status_norm<>'cancel'. payment_date_ok solo es fecha REAL si status_norm='paid'; en otro estado (overdue) es fecha PREVISTA (payment_date_ok = due_date_ok) y se ignora (criterio status-aware).",
+      "criterio_probabilidad": "Probabilidad por tramo = P(cobro) estimada point-in-time. Para el tramo 'no_vencida' es la tasa de cura INCONDICIONAL P(pagada dentro de 180 dias desde el vencimiento) sobre cohortes ya vencidas y observables (due_date_ok <= corte - 180). Para los tramos vencidos es la tasa de cura RESIDUAL condicionada en seguir impagada al entrar en el tramo a = borde_inferior: P(pagada en (a, a+180] | impagada en a). Solo usa pagos con fecha <= corte. Un tramo con menos de 100 observaciones cae a la tasa global.",
+      "intervalo": "El horizonte acumula el intervalo ABIERTO por la izquierda y CERRADO por la derecha (corte, corte+h]: el dia del corte queda excluido y el dia corte+h incluido. Mismo convenio que xray/cashflow_forecast.py.",
+      "n_facturas": 366666,
+      "n_vivas": 24070,
+      "n_empresas": 451,
+      "importe_vivo_eur": 233352254.10435048,
+      "n_no_vencidas": 5089,
+      "n_vencidas": 18981,
+      "n_sin_fecha_vencimiento": 0,
+      "n_no_valorable": 4084,
+      "importe_no_valorable_eur": 0.0,
+      "motivos_no_valorable": {
+        "sin_importe_eur": {
+          "n": 4084,
+          "eur": 0.0
+        }
+      },
+      "n_empresas_con_calendario": 411,
+      "n_facturas_en_calendario": 19471,
+      "importe_esperado_total_eur": 76086315.19291948,
+      "importe_esperado_fuera_de_ventana_max_eur": 14874932.394222792,
+      "retraso_mediano_global_dias": 0.0,
+      "retraso_empresas_p25_dias": 0.0,
+      "retraso_empresas_p50_dias": 0.0,
+      "retraso_empresas_p75_dias": 2.0,
+      "n_empresas_con_retraso_propio": 318,
+      "n_empresas_muestra_corta": 133,
+      "probabilidad_global": 0.6321033210332103,
+      "tabla_probabilidad": [
+        {
+          "tramo": "no_vencida",
+          "n_facturas": 5089,
+          "importe_vivo_eur": 81770278.9332757,
+          "prob_cobro": 0.6321033210332103,
+          "importe_esperado_eur": 51687264.87553552,
+          "detalle_estimacion": {
+            "borde_inferior_dias": null,
+            "prob": 0.6321033210332103,
+            "n_estim": 5420,
+            "fallback": false
+          }
+        },
+        {
+          "tramo": "0_30",
+          "n_facturas": 4987,
+          "importe_vivo_eur": 56921153.9343622,
+          "prob_cobro": 0.3963063881320012,
+          "importe_esperado_eur": 22558216.924032737,
+          "detalle_estimacion": {
+            "borde_inferior_dias": 0,
+            "prob": 0.3963063881320012,
+            "n_estim": 3303,
+            "fallback": false
+          }
+        },
+        {
+          "tramo": "31_60",
+          "n_facturas": 4937,
+          "importe_vivo_eur": 25500055.786976043,
+          "prob_cobro": 0.05054151624548736,
+          "importe_esperado_eur": 1288811.4838182838,
+          "detalle_estimacion": {
+            "borde_inferior_dias": 31,
+            "prob": 0.05054151624548736,
+            "n_estim": 554,
+            "fallback": false
+          }
+        },
+        {
+          "tramo": "61_90",
+          "n_facturas": 2434,
+          "importe_vivo_eur": 20281896.661313977,
+          "prob_cobro": 0.008928571428571428,
+          "importe_esperado_eur": 181088.36304744624,
+          "detalle_estimacion": {
+            "borde_inferior_dias": 61,
+            "prob": 0.008928571428571428,
+            "n_estim": 336,
+            "fallback": false
+          }
+        },
+        {
+          "tramo": "91_180",
+          "n_facturas": 4806,
+          "importe_vivo_eur": 41544557.20637392,
+          "prob_cobro": 0.008928571428571428,
+          "importe_esperado_eur": 370933.54648548143,
+          "detalle_estimacion": {
+            "borde_inferior_dias": 91,
+            "prob": 0.008928571428571428,
+            "n_estim": 310,
+            "fallback": false,
+            "monotone_clamped": true
+          }
+        },
+        {
+          "tramo": "180_mas",
+          "n_facturas": 1817,
+          "importe_vivo_eur": 7334311.582048613,
+          "prob_cobro": 0.0,
+          "importe_esperado_eur": 0.0,
+          "detalle_estimacion": {
+            "borde_inferior_dias": 181,
+            "prob": 0.0,
+            "n_estim": 241,
+            "fallback": false
+          }
+        }
+      ],
+      "esperado_por_horizonte": {
+        "30": {
+          "importe_esperado_eur": 41732173.19483598,
+          "n_facturas_en_ventana": 17791
+        },
+        "60": {
+          "importe_esperado_eur": 57245749.42830865,
+          "n_facturas_en_ventana": 18620
+        },
+        "90": {
+          "importe_esperado_eur": 61211382.798696674,
+          "n_facturas_en_ventana": 19471
+        }
+      }
+    },
+    {
+      "version": "collection_schedule_v1",
+      "corte": "2025-04-30",
+      "corte_vivo": false,
+      "universo": "flow_side='inflow'",
+      "excluir_cancel": true,
+      "criterio_universo": "flow_side='inflow', issuance_date_ok <= corte, NOT (status_norm='paid' AND payment_date_ok <= corte) y status_norm<>'cancel'. payment_date_ok solo es fecha REAL si status_norm='paid'; en otro estado (overdue) es fecha PREVISTA (payment_date_ok = due_date_ok) y se ignora (criterio status-aware).",
+      "criterio_probabilidad": "Probabilidad por tramo = P(cobro) estimada point-in-time. Para el tramo 'no_vencida' es la tasa de cura INCONDICIONAL P(pagada dentro de 180 dias desde el vencimiento) sobre cohortes ya vencidas y observables (due_date_ok <= corte - 180). Para los tramos vencidos es la tasa de cura RESIDUAL condicionada en seguir impagada al entrar en el tramo a = borde_inferior: P(pagada en (a, a+180] | impagada en a). Solo usa pagos con fecha <= corte. Un tramo con menos de 100 observaciones cae a la tasa global.",
+      "intervalo": "El horizonte acumula el intervalo ABIERTO por la izquierda y CERRADO por la derecha (corte, corte+h]: el dia del corte queda excluido y el dia corte+h incluido. Mismo convenio que xray/cashflow_forecast.py.",
+      "n_facturas": 366666,
+      "n_vivas": 27154,
+      "n_empresas": 474,
+      "importe_vivo_eur": 322045417.5327475,
+      "n_no_vencidas": 5971,
+      "n_vencidas": 21183,
+      "n_sin_fecha_vencimiento": 0,
+      "n_no_valorable": 4213,
+      "importe_no_valorable_eur": 0.0,
+      "motivos_no_valorable": {
+        "sin_importe_eur": {
+          "n": 4213,
+          "eur": 0.0
+        }
+      },
+      "n_empresas_con_calendario": 434,
+      "n_facturas_en_calendario": 22352,
+      "importe_esperado_total_eur": 125260112.1110752,
+      "importe_esperado_fuera_de_ventana_max_eur": 31975253.831996497,
+      "retraso_mediano_global_dias": 0.0,
+      "retraso_empresas_p25_dias": 0.0,
+      "retraso_empresas_p50_dias": 0.0,
+      "retraso_empresas_p75_dias": 3.75,
+      "n_empresas_con_retraso_propio": 343,
+      "n_empresas_muestra_corta": 131,
+      "probabilidad_global": 0.6715811359984879,
+      "tabla_probabilidad": [
+        {
+          "tramo": "no_vencida",
+          "n_facturas": 5971,
+          "importe_vivo_eur": 134193634.72676939,
+          "prob_cobro": 0.6715811359984879,
+          "importe_esperado_eur": 90121913.65356992,
+          "detalle_estimacion": {
+            "borde_inferior_dias": null,
+            "prob": 0.6715811359984879,
+            "n_estim": 10581,
+            "fallback": false
+          }
+        },
+        {
+          "tramo": "0_30",
+          "n_facturas": 5127,
+          "importe_vivo_eur": 66820281.191857405,
+          "prob_cobro": 0.4393352694417554,
+          "importe_esperado_eur": 29356506.241598535,
+          "detalle_estimacion": {
+            "borde_inferior_dias": 0,
+            "prob": 0.4393352694417554,
+            "n_estim": 6198,
+            "fallback": false
+          }
+        },
+        {
+          "tramo": "31_60",
+          "n_facturas": 2953,
+          "importe_vivo_eur": 29602207.437771674,
+          "prob_cobro": 0.1480836236933798,
+          "importe_esperado_eur": 4383602.146708349,
+          "detalle_estimacion": {
+            "borde_inferior_dias": 31,
+            "prob": 0.1480836236933798,
+            "n_estim": 2296,
+            "fallback": false
+          }
+        },
+        {
+          "tramo": "61_90",
+          "n_facturas": 4575,
+          "importe_vivo_eur": 23576162.928143043,
+          "prob_cobro": 0.030685920577617327,
+          "importe_esperado_eur": 723456.2631379634,
+          "detalle_estimacion": {
+            "borde_inferior_dias": 61,
+            "prob": 0.030685920577617327,
+            "n_estim": 554,
+            "fallback": false
+          }
+        },
+        {
+          "tramo": "91_180",
+          "n_facturas": 5671,
+          "importe_vivo_eur": 55180164.231942825,
+          "prob_cobro": 0.011428571428571429,
+          "importe_esperado_eur": 630630.4483650608,
+          "detalle_estimacion": {
+            "borde_inferior_dias": 91,
+            "prob": 0.011428571428571429,
+            "n_estim": 350,
+            "fallback": false
+          }
+        },
+        {
+          "tramo": "180_mas",
+          "n_facturas": 2857,
+          "importe_vivo_eur": 12672967.01626321,
+          "prob_cobro": 0.003472222222222222,
+          "importe_esperado_eur": 44003.357695358354,
+          "detalle_estimacion": {
+            "borde_inferior_dias": 181,
+            "prob": 0.003472222222222222,
+            "n_estim": 288,
+            "fallback": false
+          }
+        }
+      ],
+      "esperado_por_horizonte": {
+        "30": {
+          "importe_esperado_eur": 71025093.89559455,
+          "n_facturas_en_ventana": 19684
+        },
+        "60": {
+          "importe_esperado_eur": 83885933.44910653,
+          "n_facturas_en_ventana": 21216
+        },
+        "90": {
+          "importe_esperado_eur": 93284858.27907869,
+          "n_facturas_en_ventana": 22352
+        }
+      }
+    },
+    {
+      "version": "collection_schedule_v1",
+      "corte": "2025-05-31",
+      "corte_vivo": false,
+      "universo": "flow_side='inflow'",
+      "excluir_cancel": true,
+      "criterio_universo": "flow_side='inflow', issuance_date_ok <= corte, NOT (status_norm='paid' AND payment_date_ok <= corte) y status_norm<>'cancel'. payment_date_ok solo es fecha REAL si status_norm='paid'; en otro estado (overdue) es fecha PREVISTA (payment_date_ok = due_date_ok) y se ignora (criterio status-aware).",
+      "criterio_probabilidad": "Probabilidad por tramo = P(cobro) estimada point-in-time. Para el tramo 'no_vencida' es la tasa de cura INCONDICIONAL P(pagada dentro de 180 dias desde el vencimiento) sobre cohortes ya vencidas y observables (due_date_ok <= corte - 180). Para los tramos vencidos es la tasa de cura RESIDUAL condicionada en seguir impagada al entrar en el tramo a = borde_inferior: P(pagada en (a, a+180] | impagada en a). Solo usa pagos con fecha <= corte. Un tramo con menos de 100 observaciones cae a la tasa global.",
+      "intervalo": "El horizonte acumula el intervalo ABIERTO por la izquierda y CERRADO por la derecha (corte, corte+h]: el dia del corte queda excluido y el dia corte+h incluido. Mismo convenio que xray/cashflow_forecast.py.",
+      "n_facturas": 366666,
+      "n_vivas": 31222,
+      "n_empresas": 494,
+      "importe_vivo_eur": 416456881.7096813,
+      "n_no_vencidas": 7169,
+      "n_vencidas": 24052,
+      "n_sin_fecha_vencimiento": 1,
+      "n_no_valorable": 4518,
+      "importe_no_valorable_eur": 0.0,
+      "motivos_no_valorable": {
+        "sin_importe_eur": {
+          "n": 4518,
+          "eur": 0.0
+        },
+        "sin_fecha_vencimiento": {
+          "n": 1,
+          "eur": 0.0
+        }
+      },
+      "n_empresas_con_calendario": 449,
+      "n_facturas_en_calendario": 26066,
+      "importe_esperado_total_eur": 161537756.12958083,
+      "importe_esperado_fuera_de_ventana_max_eur": 12524629.481931252,
+      "retraso_mediano_global_dias": 0.0,
+      "retraso_empresas_p25_dias": 0.0,
+      "retraso_empresas_p50_dias": 0.0,
+      "retraso_empresas_p75_dias": 3.375,
+      "n_empresas_con_retraso_propio": 370,
+      "n_empresas_muestra_corta": 124,
+      "probabilidad_global": 0.6846314532975232,
+      "tabla_probabilidad": [
+        {
+          "tramo": "no_vencida",
+          "n_facturas": 7169,
+          "importe_vivo_eur": 162873724.0114916,
+          "prob_cobro": 0.6846314532975232,
+          "importe_esperado_eur": 111508474.37396719,
+          "detalle_estimacion": {
+            "borde_inferior_dias": null,
+            "prob": 0.6846314532975232,
+            "n_estim": 16755,
+            "fallback": false
+          }
+        },
+        {
+          "tramo": "0_30",
+          "n_facturas": 4358,
+          "importe_vivo_eur": 79333470.30209443,
+          "prob_cobro": 0.4585510810533866,
+          "importe_esperado_eur": 36378448.570742145,
+          "detalle_estimacion": {
+            "borde_inferior_dias": 0,
+            "prob": 0.4585510810533866,
+            "n_estim": 9759,
+            "fallback": false
+          }
+        },
+        {
+          "tramo": "31_60",
+          "n_facturas": 3136,
+          "importe_vivo_eur": 37213366.59619959,
+          "prob_cobro": 0.1937618147448015,
+          "importe_esperado_eur": 7210529.444443209,
+          "detalle_estimacion": {
+            "borde_inferior_dias": 31,
+            "prob": 0.1937618147448015,
+            "n_estim": 4232,
+            "fallback": false
+          }
+        },
+        {
+          "tramo": "61_90",
+          "n_facturas": 3444,
+          "importe_vivo_eur": 47622122.53471877,
+          "prob_cobro": 0.09576427255985268,
+          "importe_esperado_eur": 4560497.92229351,
+          "detalle_estimacion": {
+            "borde_inferior_dias": 61,
+            "prob": 0.09576427255985268,
+            "n_estim": 2172,
+            "fallback": false
+          }
+        },
+        {
+          "tramo": "91_180",
+          "n_facturas": 8420,
+          "importe_vivo_eur": 64897538.54064073,
+          "prob_cobro": 0.027777777777777776,
+          "importe_esperado_eur": 1802709.4039066867,
+          "detalle_estimacion": {
+            "borde_inferior_dias": 91,
+            "prob": 0.027777777777777776,
+            "n_estim": 576,
+            "fallback": false
+          }
+        },
+        {
+          "tramo": "180_mas",
+          "n_facturas": 4694,
+          "importe_vivo_eur": 24516659.724536188,
+          "prob_cobro": 0.0031446540880503146,
+          "importe_esperado_eur": 77096.41422810123,
+          "detalle_estimacion": {
+            "borde_inferior_dias": 181,
+            "prob": 0.0031446540880503146,
+            "n_estim": 318,
+            "fallback": false
+          }
+        }
+      ],
+      "esperado_por_horizonte": {
+        "30": {
+          "importe_esperado_eur": 87400752.8937908,
+          "n_facturas_en_ventana": 23633
+        },
+        "60": {
+          "importe_esperado_eur": 108323019.44677839,
+          "n_facturas_en_ventana": 24810
+        },
+        "90": {
+          "importe_esperado_eur": 149013126.6476496,
+          "n_facturas_en_ventana": 26066
+        }
+      }
+    },
+    {
+      "version": "collection_schedule_v1",
+      "corte": "2025-06-30",
+      "corte_vivo": false,
+      "universo": "flow_side='inflow'",
+      "excluir_cancel": true,
+      "criterio_universo": "flow_side='inflow', issuance_date_ok <= corte, NOT (status_norm='paid' AND payment_date_ok <= corte) y status_norm<>'cancel'. payment_date_ok solo es fecha REAL si status_norm='paid'; en otro estado (overdue) es fecha PREVISTA (payment_date_ok = due_date_ok) y se ignora (criterio status-aware).",
+      "criterio_probabilidad": "Probabilidad por tramo = P(cobro) estimada point-in-time. Para el tramo 'no_vencida' es la tasa de cura INCONDICIONAL P(pagada dentro de 180 dias desde el vencimiento) sobre cohortes ya vencidas y observables (due_date_ok <= corte - 180). Para los tramos vencidos es la tasa de cura RESIDUAL condicionada en seguir impagada al entrar en el tramo a = borde_inferior: P(pagada en (a, a+180] | impagada en a). Solo usa pagos con fecha <= corte. Un tramo con menos de 100 observaciones cae a la tasa global.",
+      "intervalo": "El horizonte acumula el intervalo ABIERTO por la izquierda y CERRADO por la derecha (corte, corte+h]: el dia del corte queda excluido y el dia corte+h incluido. Mismo convenio que xray/cashflow_forecast.py.",
+      "n_facturas": 366666,
+      "n_vivas": 35755,
+      "n_empresas": 515,
+      "importe_vivo_eur": 497434709.364608,
+      "n_no_vencidas": 8086,
+      "n_vencidas": 27668,
+      "n_sin_fecha_vencimiento": 1,
+      "n_no_valorable": 5108,
+      "importe_no_valorable_eur": 0.0,
+      "motivos_no_valorable": {
+        "sin_importe_eur": {
+          "n": 5108,
+          "eur": 0.0
+        },
+        "sin_fecha_vencimiento": {
+          "n": 1,
+          "eur": 0.0
+        }
+      },
+      "n_empresas_con_calendario": 468,
+      "n_facturas_en_calendario": 30033,
+      "importe_esperado_total_eur": 189943766.84822303,
+      "importe_esperado_fuera_de_ventana_max_eur": 18963783.80313466,
+      "retraso_mediano_global_dias": 0.0,
+      "retraso_empresas_p25_dias": 0.0,
+      "retraso_empresas_p50_dias": 0.0,
+      "retraso_empresas_p75_dias": 3.125,
+      "n_empresas_con_retraso_propio": 392,
+      "n_empresas_muestra_corta": 123,
+      "probabilidad_global": 0.6795167582532824,
+      "tabla_probabilidad": [
+        {
+          "tramo": "no_vencida",
+          "n_facturas": 8086,
+          "importe_vivo_eur": 203742178.99818605,
+          "prob_cobro": 0.6795167582532824,
+          "importe_esperado_eur": 138446224.9923074,
+          "detalle_estimacion": {
+            "borde_inferior_dias": null,
+            "prob": 0.6795167582532824,
+            "n_estim": 23839,
+            "fallback": false
+          }
+        },
+        {
+          "tramo": "0_30",
+          "n_facturas": 6166,
+          "importe_vivo_eur": 58241430.728709154,
+          "prob_cobro": 0.4602613917343695,
+          "importe_esperado_eur": 26806281.96379655,
+          "detalle_estimacion": {
+            "borde_inferior_dias": 0,
+            "prob": 0.4602613917343695,
+            "n_estim": 14155,
+            "fallback": false
+          }
+        },
+        {
+          "tramo": "31_60",
+          "n_facturas": 2534,
+          "importe_vivo_eur": 65743357.64585288,
+          "prob_cobro": 0.21892505677517032,
+          "importe_esperado_eur": 14392868.305208672,
+          "detalle_estimacion": {
+            "borde_inferior_dias": 31,
+            "prob": 0.21892505677517032,
+            "n_estim": 6605,
+            "fallback": false
+          }
+        },
+        {
+          "tramo": "61_90",
+          "n_facturas": 2777,
+          "importe_vivo_eur": 36010170.16355375,
+          "prob_cobro": 0.12306900102986612,
+          "importe_esperado_eur": 4431735.668944051,
+          "detalle_estimacion": {
+            "borde_inferior_dias": 61,
+            "prob": 0.12306900102986612,
+            "n_estim": 3884,
+            "fallback": false
+          }
+        },
+        {
+          "tramo": "91_180",
+          "n_facturas": 9544,
+          "importe_vivo_eur": 78223496.66915628,
+          "prob_cobro": 0.07099200752233192,
+          "importe_esperado_eur": 5553243.06395985,
+          "detalle_estimacion": {
+            "borde_inferior_dias": 91,
+            "prob": 0.07099200752233192,
+            "n_estim": 2127,
+            "fallback": false
+          }
+        },
+        {
+          "tramo": "180_mas",
+          "n_facturas": 6647,
+          "importe_vivo_eur": 55474075.15914983,
+          "prob_cobro": 0.005649717514124294,
+          "importe_esperado_eur": 313412.85400649626,
+          "detalle_estimacion": {
+            "borde_inferior_dias": 181,
+            "prob": 0.005649717514124294,
+            "n_estim": 354,
+            "fallback": false
+          }
+        }
+      ],
+      "esperado_por_horizonte": {
+        "30": {
+          "importe_esperado_eur": 109869080.37184525,
+          "n_facturas_en_ventana": 26579
+        },
+        "60": {
+          "importe_esperado_eur": 158602443.52298063,
+          "n_facturas_en_ventana": 28620
+        },
+        "90": {
+          "importe_esperado_eur": 170979983.04508835,
+          "n_facturas_en_ventana": 30033
+        }
+      }
+    },
+    {
+      "version": "collection_schedule_v1",
+      "corte": "2025-07-31",
+      "corte_vivo": false,
+      "universo": "flow_side='inflow'",
+      "excluir_cancel": true,
+      "criterio_universo": "flow_side='inflow', issuance_date_ok <= corte, NOT (status_norm='paid' AND payment_date_ok <= corte) y status_norm<>'cancel'. payment_date_ok solo es fecha REAL si status_norm='paid'; en otro estado (overdue) es fecha PREVISTA (payment_date_ok = due_date_ok) y se ignora (criterio status-aware).",
+      "criterio_probabilidad": "Probabilidad por tramo = P(cobro) estimada point-in-time. Para el tramo 'no_vencida' es la tasa de cura INCONDICIONAL P(pagada dentro de 180 dias desde el vencimiento) sobre cohortes ya vencidas y observables (due_date_ok <= corte - 180). Para los tramos vencidos es la tasa de cura RESIDUAL condicionada en seguir impagada al entrar en el tramo a = borde_inferior: P(pagada en (a, a+180] | impagada en a). Solo usa pagos con fecha <= corte. Un tramo con menos de 100 observaciones cae a la tasa global.",
+      "intervalo": "El horizonte acumula el intervalo ABIERTO por la izquierda y CERRADO por la derecha (corte, corte+h]: el dia del corte queda excluido y el dia corte+h incluido. Mismo convenio que xray/cashflow_forecast.py.",
+      "n_facturas": 366666,
+      "n_vivas": 40613,
+      "n_empresas": 535,
+      "importe_vivo_eur": 543190522.1951692,
+      "n_no_vencidas": 8462,
+      "n_vencidas": 32151,
+      "n_sin_fecha_vencimiento": 0,
+      "n_no_valorable": 5867,
+      "importe_no_valorable_eur": 0.0,
+      "motivos_no_valorable": {
+        "sin_importe_eur": {
+          "n": 5867,
+          "eur": 0.0
+        }
+      },
+      "n_empresas_con_calendario": 491,
+      "n_facturas_en_calendario": 34205,
+      "importe_esperado_total_eur": 193815833.85330904,
+      "importe_esperado_fuera_de_ventana_max_eur": 16878649.409351073,
+      "retraso_mediano_global_dias": 0.0,
+      "retraso_empresas_p25_dias": 0.0,
+      "retraso_empresas_p50_dias": 0.0,
+      "retraso_empresas_p75_dias": 3.5,
+      "n_empresas_con_retraso_propio": 410,
+      "n_empresas_muestra_corta": 125,
+      "probabilidad_global": 0.6780618131034064,
+      "tabla_probabilidad": [
+        {
+          "tramo": "no_vencida",
+          "n_facturas": 8462,
+          "importe_vivo_eur": 179060000.71215242,
+          "prob_cobro": 0.6780618131034064,
+          "importe_esperado_eur": 121413748.73717934,
+          "detalle_estimacion": {
+            "borde_inferior_dias": null,
+            "prob": 0.6780618131034064,
+            "n_estim": 32938,
+            "fallback": false
+          }
+        },
+        {
+          "tramo": "0_30",
+          "n_facturas": 6126,
+          "importe_vivo_eur": 96007075.21362197,
+          "prob_cobro": 0.46352322169381766,
+          "importe_esperado_eur": 44501508.80841872,
+          "detalle_estimacion": {
+            "borde_inferior_dias": 0,
+            "prob": 0.46352322169381766,
+            "n_estim": 19766,
+            "fallback": false
+          }
+        },
+        {
+          "tramo": "31_60",
+          "n_facturas": 4288,
+          "importe_vivo_eur": 45710783.01535161,
+          "prob_cobro": 0.2313410346559518,
+          "importe_esperado_eur": 10574779.83770515,
+          "detalle_estimacion": {
+            "borde_inferior_dias": 31,
+            "prob": 0.2313410346559518,
+            "n_estim": 9955,
+            "fallback": false
+          }
+        },
+        {
+          "tramo": "61_90",
+          "n_facturas": 2796,
+          "importe_vivo_eur": 49603537.06593312,
+          "prob_cobro": 0.14463076426959046,
+          "importe_esperado_eur": 7174197.4763208665,
+          "detalle_estimacion": {
+            "borde_inferior_dias": 61,
+            "prob": 0.14463076426959046,
+            "n_estim": 6202,
+            "fallback": false
+          }
+        },
+        {
+          "tramo": "91_180",
+          "n_facturas": 9677,
+          "importe_vivo_eur": 101899809.5579992,
+          "prob_cobro": 0.09548123563952005,
+          "importe_esperado_eur": 9729519.728029538,
+          "detalle_estimacion": {
+            "borde_inferior_dias": 91,
+            "prob": 0.09548123563952005,
+            "n_estim": 3917,
+            "fallback": false
+          }
+        },
+        {
+          "tramo": "180_mas",
+          "n_facturas": 9264,
+          "importe_vivo_eur": 70909316.63011083,
+          "prob_cobro": 0.005952380952380952,
+          "importe_esperado_eur": 422079.26565542165,
+          "detalle_estimacion": {
+            "borde_inferior_dias": 181,
+            "prob": 0.005952380952380952,
+            "n_estim": 504,
+            "fallback": false
+          }
+        }
+      ],
+      "esperado_por_horizonte": {
+        "30": {
+          "importe_esperado_eur": 145825850.81657588,
+          "n_facturas_en_ventana": 31346
+        },
+        "60": {
+          "importe_esperado_eur": 166695211.33350608,
+          "n_facturas_en_ventana": 32902
+        },
+        "90": {
+          "importe_esperado_eur": 176937184.44395792,
+          "n_facturas_en_ventana": 34205
+        }
+      }
+    },
+    {
+      "version": "collection_schedule_v1",
+      "corte": "2025-08-31",
+      "corte_vivo": false,
+      "universo": "flow_side='inflow'",
+      "excluir_cancel": true,
+      "criterio_universo": "flow_side='inflow', issuance_date_ok <= corte, NOT (status_norm='paid' AND payment_date_ok <= corte) y status_norm<>'cancel'. payment_date_ok solo es fecha REAL si status_norm='paid'; en otro estado (overdue) es fecha PREVISTA (payment_date_ok = due_date_ok) y se ignora (criterio status-aware).",
+      "criterio_probabilidad": "Probabilidad por tramo = P(cobro) estimada point-in-time. Para el tramo 'no_vencida' es la tasa de cura INCONDICIONAL P(pagada dentro de 180 dias desde el vencimiento) sobre cohortes ya vencidas y observables (due_date_ok <= corte - 180). Para los tramos vencidos es la tasa de cura RESIDUAL condicionada en seguir impagada al entrar en el tramo a = borde_inferior: P(pagada en (a, a+180] | impagada en a). Solo usa pagos con fecha <= corte. Un tramo con menos de 100 observaciones cae a la tasa global.",
+      "intervalo": "El horizonte acumula el intervalo ABIERTO por la izquierda y CERRADO por la derecha (corte, corte+h]: el dia del corte queda excluido y el dia corte+h incluido. Mismo convenio que xray/cashflow_forecast.py.",
+      "n_facturas": 366666,
+      "n_vivas": 43603,
+      "n_empresas": 551,
+      "importe_vivo_eur": 559697352.3054767,
+      "n_no_vencidas": 7020,
+      "n_vencidas": 36583,
+      "n_sin_fecha_vencimiento": 0,
+      "n_no_valorable": 6658,
+      "importe_no_valorable_eur": 0.0,
+      "motivos_no_valorable": {
+        "sin_importe_eur": {
+          "n": 6658,
+          "eur": 0.0
+        }
+      },
+      "n_empresas_con_calendario": 507,
+      "n_facturas_en_calendario": 36457,
+      "importe_esperado_total_eur": 158606671.1205402,
+      "importe_esperado_fuera_de_ventana_max_eur": 16019730.19373255,
+      "retraso_mediano_global_dias": 0.0,
+      "retraso_empresas_p25_dias": 0.0,
+      "retraso_empresas_p50_dias": 0.0,
+      "retraso_empresas_p75_dias": 3.125,
+      "n_empresas_con_retraso_propio": 436,
+      "n_empresas_muestra_corta": 115,
+      "probabilidad_global": 0.6721277478224803,
+      "tabla_probabilidad": [
+        {
+          "tramo": "no_vencida",
+          "n_facturas": 7020,
+          "importe_vivo_eur": 94776353.99033993,
+          "prob_cobro": 0.6721277478224803,
+          "importe_esperado_eur": 63701817.35435332,
+          "detalle_estimacion": {
+            "borde_inferior_dias": null,
+            "prob": 0.6721277478224803,
+            "n_estim": 43398,
+            "fallback": false
+          }
+        },
+        {
+          "tramo": "0_30",
+          "n_facturas": 5739,
+          "importe_vivo_eur": 111406495.22411782,
+          "prob_cobro": 0.4535294569475382,
+          "importe_esperado_eur": 50526127.27942266,
+          "detalle_estimacion": {
+            "borde_inferior_dias": 0,
+            "prob": 0.4535294569475382,
+            "n_estim": 26038,
+            "fallback": false
+          }
+        },
+        {
+          "tramo": "31_60",
+          "n_facturas": 4939,
+          "importe_vivo_eur": 85346316.93288347,
+          "prob_cobro": 0.2403004667444574,
+          "importe_esperado_eur": 20508759.793892287,
+          "detalle_estimacion": {
+            "borde_inferior_dias": 31,
+            "prob": 0.2403004667444574,
+            "n_estim": 13712,
+            "fallback": false
+          }
+        },
+        {
+          "tramo": "61_90",
+          "n_facturas": 4204,
+          "importe_vivo_eur": 46078820.37240347,
+          "prob_cobro": 0.1580513611815276,
+          "importe_esperado_eur": 7282820.281497471,
+          "detalle_estimacion": {
+            "borde_inferior_dias": 61,
+            "prob": 0.1580513611815276,
+            "n_estim": 9073,
+            "fallback": false
+          }
+        },
+        {
+          "tramo": "91_180",
+          "n_facturas": 8775,
+          "importe_vivo_eur": 134882767.3449874,
+          "prob_cobro": 0.11515353805073432,
+          "importe_esperado_eur": 15532227.881849347,
+          "detalle_estimacion": {
+            "borde_inferior_dias": 91,
+            "prob": 0.11515353805073432,
+            "n_estim": 5992,
+            "fallback": false
+          }
+        },
+        {
+          "tramo": "180_mas",
+          "n_facturas": 12926,
+          "importe_vivo_eur": 87206598.44074458,
+          "prob_cobro": 0.012096774193548387,
+          "importe_esperado_eur": 1054918.529525136,
+          "detalle_estimacion": {
+            "borde_inferior_dias": 181,
+            "prob": 0.012096774193548387,
+            "n_estim": 744,
+            "fallback": false
+          }
+        }
+      ],
+      "esperado_por_horizonte": {
+        "30": {
+          "importe_esperado_eur": 130091789.94248849,
+          "n_facturas_en_ventana": 34951
+        },
+        "60": {
+          "importe_esperado_eur": 140362142.88521537,
+          "n_facturas_en_ventana": 36027
+        },
+        "90": {
+          "importe_esperado_eur": 142586940.92680767,
+          "n_facturas_en_ventana": 36457
+        }
+      }
+    },
+    {
+      "version": "collection_schedule_v1",
+      "corte": "2025-09-30",
+      "corte_vivo": false,
+      "universo": "flow_side='inflow'",
+      "excluir_cancel": true,
+      "criterio_universo": "flow_side='inflow', issuance_date_ok <= corte, NOT (status_norm='paid' AND payment_date_ok <= corte) y status_norm<>'cancel'. payment_date_ok solo es fecha REAL si status_norm='paid'; en otro estado (overdue) es fecha PREVISTA (payment_date_ok = due_date_ok) y se ignora (criterio status-aware).",
+      "criterio_probabilidad": "Probabilidad por tramo = P(cobro) estimada point-in-time. Para el tramo 'no_vencida' es la tasa de cura INCONDICIONAL P(pagada dentro de 180 dias desde el vencimiento) sobre cohortes ya vencidas y observables (due_date_ok <= corte - 180). Para los tramos vencidos es la tasa de cura RESIDUAL condicionada en seguir impagada al entrar en el tramo a = borde_inferior: P(pagada en (a, a+180] | impagada en a). Solo usa pagos con fecha <= corte. Un tramo con menos de 100 observaciones cae a la tasa global.",
+      "intervalo": "El horizonte acumula el intervalo ABIERTO por la izquierda y CERRADO por la derecha (corte, corte+h]: el dia del corte queda excluido y el dia corte+h incluido. Mismo convenio que xray/cashflow_forecast.py.",
+      "n_facturas": 366666,
+      "n_vivas": 46673,
+      "n_empresas": 558,
+      "importe_vivo_eur": 615001435.7693664,
+      "n_no_vencidas": 6982,
+      "n_vencidas": 39691,
+      "n_sin_fecha_vencimiento": 0,
+      "n_no_valorable": 6926,
+      "importe_no_valorable_eur": 0.0,
+      "motivos_no_valorable": {
+        "sin_importe_eur": {
+          "n": 6926,
+          "eur": 0.0
+        }
+      },
+      "n_empresas_con_calendario": 511,
+      "n_facturas_en_calendario": 39170,
+      "importe_esperado_total_eur": 165973614.0936022,
+      "importe_esperado_fuera_de_ventana_max_eur": 12643861.654528208,
+      "retraso_mediano_global_dias": 0.0,
+      "retraso_empresas_p25_dias": 0.0,
+      "retraso_empresas_p50_dias": 0.0,
+      "retraso_empresas_p75_dias": 4.0,
+      "n_empresas_con_retraso_propio": 439,
+      "n_empresas_muestra_corta": 119,
+      "probabilidad_global": 0.6674701046337818,
+      "tabla_probabilidad": [
+        {
+          "tramo": "no_vencida",
+          "n_facturas": 6982,
+          "importe_vivo_eur": 126896107.7244205,
+          "prob_cobro": 0.6674701046337818,
+          "importe_esperado_eur": 84699358.30043861,
+          "detalle_estimacion": {
+            "borde_inferior_dias": null,
+            "prob": 0.6674701046337818,
+            "n_estim": 53520,
+            "fallback": false
+          }
+        },
+        {
+          "tramo": "0_30",
+          "n_facturas": 6209,
+          "importe_vivo_eur": 61195959.69781922,
+          "prob_cobro": 0.44569719998754165,
+          "importe_esperado_eur": 27274867.88786847,
+          "detalle_estimacion": {
+            "borde_inferior_dias": 0,
+            "prob": 0.44569719998754165,
+            "n_estim": 32107,
+            "fallback": false
+          }
+        },
+        {
+          "tramo": "31_60",
+          "n_facturas": 3725,
+          "importe_vivo_eur": 92115564.98108321,
+          "prob_cobro": 0.2304681038760545,
+          "importe_esperado_eur": 21229699.598661732,
+          "detalle_estimacion": {
+            "borde_inferior_dias": 31,
+            "prob": 0.2304681038760545,
+            "n_estim": 18137,
+            "fallback": false
+          }
+        },
+        {
+          "tramo": "61_90",
+          "n_facturas": 4404,
+          "importe_vivo_eur": 77388719.24694702,
+          "prob_cobro": 0.1553676953381484,
+          "importe_esperado_eur": 12023706.954569165,
+          "detalle_estimacion": {
+            "borde_inferior_dias": 61,
+            "prob": 0.1553676953381484,
+            "n_estim": 12184,
+            "fallback": false
+          }
+        },
+        {
+          "tramo": "91_180",
+          "n_facturas": 9150,
+          "importe_vivo_eur": 127872841.00646633,
+          "prob_cobro": 0.1262381939645243,
+          "importe_esperado_eur": 16142436.505769072,
+          "detalle_estimacion": {
+            "borde_inferior_dias": 91,
+            "prob": 0.1262381939645243,
+            "n_estim": 8682,
+            "fallback": false
+          }
+        },
+        {
+          "tramo": "180_mas",
+          "n_facturas": 16203,
+          "importe_vivo_eur": 129532243.11263008,
+          "prob_cobro": 0.03553976010661928,
+          "importe_esperado_eur": 4603544.846295161,
+          "detalle_estimacion": {
+            "borde_inferior_dias": 181,
+            "prob": 0.03553976010661928,
+            "n_estim": 2251,
+            "fallback": false
+          }
+        }
+      ],
+      "esperado_por_horizonte": {
+        "30": {
+          "importe_esperado_eur": 127329530.53230381,
+          "n_facturas_en_ventana": 37352
+        },
+        "60": {
+          "importe_esperado_eur": 136466503.33833995,
+          "n_facturas_en_ventana": 38584
+        },
+        "90": {
+          "importe_esperado_eur": 153329752.43907398,
+          "n_facturas_en_ventana": 39170
+        }
+      }
+    },
+    {
+      "version": "collection_schedule_v1",
+      "corte": "2025-10-31",
+      "corte_vivo": false,
+      "universo": "flow_side='inflow'",
+      "excluir_cancel": true,
+      "criterio_universo": "flow_side='inflow', issuance_date_ok <= corte, NOT (status_norm='paid' AND payment_date_ok <= corte) y status_norm<>'cancel'. payment_date_ok solo es fecha REAL si status_norm='paid'; en otro estado (overdue) es fecha PREVISTA (payment_date_ok = due_date_ok) y se ignora (criterio status-aware).",
+      "criterio_probabilidad": "Probabilidad por tramo = P(cobro) estimada point-in-time. Para el tramo 'no_vencida' es la tasa de cura INCONDICIONAL P(pagada dentro de 180 dias desde el vencimiento) sobre cohortes ya vencidas y observables (due_date_ok <= corte - 180). Para los tramos vencidos es la tasa de cura RESIDUAL condicionada en seguir impagada al entrar en el tramo a = borde_inferior: P(pagada en (a, a+180] | impagada en a). Solo usa pagos con fecha <= corte. Un tramo con menos de 100 observaciones cae a la tasa global.",
+      "intervalo": "El horizonte acumula el intervalo ABIERTO por la izquierda y CERRADO por la derecha (corte, corte+h]: el dia del corte queda excluido y el dia corte+h incluido. Mismo convenio que xray/cashflow_forecast.py.",
+      "n_facturas": 366666,
+      "n_vivas": 49912,
+      "n_empresas": 579,
+      "importe_vivo_eur": 623047212.2675323,
+      "n_no_vencidas": 7983,
+      "n_vencidas": 41928,
+      "n_sin_fecha_vencimiento": 1,
+      "n_no_valorable": 7189,
+      "importe_no_valorable_eur": 6459407.56,
+      "motivos_no_valorable": {
+        "sin_importe_eur": {
+          "n": 7188,
+          "eur": 0.0
+        },
+        "sin_fecha_vencimiento": {
+          "n": 1,
+          "eur": 6459407.56
+        }
+      },
+      "n_empresas_con_calendario": 533,
+      "n_facturas_en_calendario": 42117,
+      "importe_esperado_total_eur": 152527581.3370028,
+      "importe_esperado_fuera_de_ventana_max_eur": 22593238.970491365,
+      "retraso_mediano_global_dias": 0.0,
+      "retraso_empresas_p25_dias": 0.0,
+      "retraso_empresas_p50_dias": 0.0,
+      "retraso_empresas_p75_dias": 4.0,
+      "n_empresas_con_retraso_propio": 464,
+      "n_empresas_muestra_corta": 115,
+      "probabilidad_global": 0.6745104968116035,
+      "tabla_probabilidad": [
+        {
+          "tramo": "no_vencida",
+          "n_facturas": 7983,
+          "importe_vivo_eur": 128623994.52971978,
+          "prob_cobro": 0.6745104968116035,
+          "importe_esperado_eur": 86758234.45213425,
+          "detalle_estimacion": {
+            "borde_inferior_dias": null,
+            "prob": 0.6745104968116035,
+            "n_estim": 62257,
+            "fallback": false
+          }
+        },
+        {
+          "tramo": "0_30",
+          "n_facturas": 4809,
+          "importe_vivo_eur": 39265393.24746239,
+          "prob_cobro": 0.4522058823529412,
+          "importe_esperado_eur": 17756041.79940395,
+          "detalle_estimacion": {
+            "borde_inferior_dias": 0,
+            "prob": 0.4522058823529412,
+            "n_estim": 36992,
+            "fallback": false
+          }
+        },
+        {
+          "tramo": "31_60",
+          "n_facturas": 3910,
+          "importe_vivo_eur": 38959909.60344104,
+          "prob_cobro": 0.22591905266878756,
+          "importe_esperado_eur": 8801785.869670998,
+          "detalle_estimacion": {
+            "borde_inferior_dias": 31,
+            "prob": 0.22591905266878756,
+            "n_estim": 22632,
+            "fallback": false
+          }
+        },
+        {
+          "tramo": "61_90",
+          "n_facturas": 3934,
+          "importe_vivo_eur": 68205110.83754912,
+          "prob_cobro": 0.14613534020109803,
+          "importe_esperado_eur": 9967177.07569884,
+          "detalle_estimacion": {
+            "borde_inferior_dias": 61,
+            "prob": 0.14613534020109803,
+            "n_estim": 16211,
+            "fallback": false
+          }
+        },
+        {
+          "tramo": "91_180",
+          "n_facturas": 10919,
+          "importe_vivo_eur": 186001609.56152245,
+          "prob_cobro": 0.12298594446348989,
+          "importe_esperado_eur": 22875583.623653132,
+          "detalle_estimacion": {
+            "borde_inferior_dias": 91,
+            "prob": 0.12298594446348989,
+            "n_estim": 11668,
+            "fallback": false
+          }
+        },
+        {
+          "tramo": "180_mas",
+          "n_facturas": 18356,
+          "importe_vivo_eur": 155531786.92783764,
+          "prob_cobro": 0.040948275862068964,
+          "importe_esperado_eur": 6368758.516441628,
+          "detalle_estimacion": {
+            "borde_inferior_dias": 181,
+            "prob": 0.040948275862068964,
+            "n_estim": 3712,
+            "fallback": false
+          }
+        }
+      ],
+      "esperado_por_horizonte": {
+        "30": {
+          "importe_esperado_eur": 101584202.70254736,
+          "n_facturas_en_ventana": 40232
+        },
+        "60": {
+          "importe_esperado_eur": 126938592.85378638,
+          "n_facturas_en_ventana": 41401
+        },
+        "90": {
+          "importe_esperado_eur": 129934342.36651143,
+          "n_facturas_en_ventana": 42117
+        }
+      }
+    },
+    {
+      "version": "collection_schedule_v1",
+      "corte": "2025-11-30",
+      "corte_vivo": false,
+      "universo": "flow_side='inflow'",
+      "excluir_cancel": true,
+      "criterio_universo": "flow_side='inflow', issuance_date_ok <= corte, NOT (status_norm='paid' AND payment_date_ok <= corte) y status_norm<>'cancel'. payment_date_ok solo es fecha REAL si status_norm='paid'; en otro estado (overdue) es fecha PREVISTA (payment_date_ok = due_date_ok) y se ignora (criterio status-aware).",
+      "criterio_probabilidad": "Probabilidad por tramo = P(cobro) estimada point-in-time. Para el tramo 'no_vencida' es la tasa de cura INCONDICIONAL P(pagada dentro de 180 dias desde el vencimiento) sobre cohortes ya vencidas y observables (due_date_ok <= corte - 180). Para los tramos vencidos es la tasa de cura RESIDUAL condicionada en seguir impagada al entrar en el tramo a = borde_inferior: P(pagada en (a, a+180] | impagada en a). Solo usa pagos con fecha <= corte. Un tramo con menos de 100 observaciones cae a la tasa global.",
+      "intervalo": "El horizonte acumula el intervalo ABIERTO por la izquierda y CERRADO por la derecha (corte, corte+h]: el dia del corte queda excluido y el dia corte+h incluido. Mismo convenio que xray/cashflow_forecast.py.",
+      "n_facturas": 366666,
+      "n_vivas": 52851,
+      "n_empresas": 590,
+      "importe_vivo_eur": 673397343.7384322,
+      "n_no_vencidas": 7645,
+      "n_vencidas": 45205,
+      "n_sin_fecha_vencimiento": 1,
+      "n_no_valorable": 7579,
+      "importe_no_valorable_eur": 6459407.56,
+      "motivos_no_valorable": {
+        "sin_importe_eur": {
+          "n": 7578,
+          "eur": 0.0
+        },
+        "sin_fecha_vencimiento": {
+          "n": 1,
+          "eur": 6459407.56
+        }
+      },
+      "n_empresas_con_calendario": 539,
+      "n_facturas_en_calendario": 44604,
+      "importe_esperado_total_eur": 165295691.7354418,
+      "importe_esperado_fuera_de_ventana_max_eur": 21052893.987320393,
+      "retraso_mediano_global_dias": 0.0,
+      "retraso_empresas_p25_dias": 0.0,
+      "retraso_empresas_p50_dias": 0.0,
+      "retraso_empresas_p75_dias": 4.0,
+      "n_empresas_con_retraso_propio": 470,
+      "n_empresas_muestra_corta": 120,
+      "probabilidad_global": 0.6797981194690266,
+      "tabla_probabilidad": [
+        {
+          "tramo": "no_vencida",
+          "n_facturas": 7645,
+          "importe_vivo_eur": 130755566.31891777,
+          "prob_cobro": 0.6797981194690266,
+          "importe_esperado_eur": 88887388.09370787,
+          "detalle_estimacion": {
+            "borde_inferior_dias": null,
+            "prob": 0.6797981194690266,
+            "n_estim": 72320,
+            "fallback": false
+          }
+        },
+        {
+          "tramo": "0_30",
+          "n_facturas": 6324,
+          "importe_vivo_eur": 70446347.11204338,
+          "prob_cobro": 0.45695659311024084,
+          "importe_esperado_eur": 32190922.773380794,
+          "detalle_estimacion": {
+            "borde_inferior_dias": 0,
+            "prob": 0.45695659311024084,
+            "n_estim": 42643,
+            "fallback": false
+          }
+        },
+        {
+          "tramo": "31_60",
+          "n_facturas": 2870,
+          "importe_vivo_eur": 25126701.95278599,
+          "prob_cobro": 0.23186223406309123,
+          "importe_esperado_eur": 5825933.249410396,
+          "detalle_estimacion": {
+            "borde_inferior_dias": 31,
+            "prob": 0.23186223406309123,
+            "n_estim": 25899,
+            "fallback": false
+          }
+        },
+        {
+          "tramo": "61_90",
+          "n_facturas": 3540,
+          "importe_vivo_eur": 36029777.63741955,
+          "prob_cobro": 0.143323765218252,
+          "importe_esperado_eur": 5163923.390971345,
+          "detalle_estimacion": {
+            "borde_inferior_dias": 61,
+            "prob": 0.143323765218252,
+            "n_estim": 20206,
+            "fallback": false
+          }
+        },
+        {
+          "tramo": "91_180",
+          "n_facturas": 11589,
+          "importe_vivo_eur": 207894120.62637132,
+          "prob_cobro": 0.11409222831344727,
+          "importe_esperado_eur": 23719103.4755273,
+          "detalle_estimacion": {
+            "borde_inferior_dias": 91,
+            "prob": 0.11409222831344727,
+            "n_estim": 15505,
+            "fallback": false
+          }
+        },
+        {
+          "tramo": "180_mas",
+          "n_facturas": 20882,
+          "importe_vivo_eur": 196685422.53089422,
+          "prob_cobro": 0.048343291689299295,
+          "importe_esperado_eur": 9508420.7524441,
+          "detalle_estimacion": {
+            "borde_inferior_dias": 181,
+            "prob": 0.048343291689299295,
+            "n_estim": 5523,
+            "fallback": false
+          }
+        }
+      ],
+      "esperado_por_horizonte": {
+        "30": {
+          "importe_esperado_eur": 120629118.09541565,
+          "n_facturas_en_ventana": 42251
+        },
+        "60": {
+          "importe_esperado_eur": 137291786.88414574,
+          "n_facturas_en_ventana": 43898
+        },
+        "90": {
+          "importe_esperado_eur": 144242797.74812144,
+          "n_facturas_en_ventana": 44604
+        }
+      }
+    },
+    {
+      "version": "collection_schedule_v1",
+      "corte": "2025-12-31",
+      "corte_vivo": false,
+      "universo": "flow_side='inflow'",
+      "excluir_cancel": true,
+      "criterio_universo": "flow_side='inflow', issuance_date_ok <= corte, NOT (status_norm='paid' AND payment_date_ok <= corte) y status_norm<>'cancel'. payment_date_ok solo es fecha REAL si status_norm='paid'; en otro estado (overdue) es fecha PREVISTA (payment_date_ok = due_date_ok) y se ignora (criterio status-aware).",
+      "criterio_probabilidad": "Probabilidad por tramo = P(cobro) estimada point-in-time. Para el tramo 'no_vencida' es la tasa de cura INCONDICIONAL P(pagada dentro de 180 dias desde el vencimiento) sobre cohortes ya vencidas y observables (due_date_ok <= corte - 180). Para los tramos vencidos es la tasa de cura RESIDUAL condicionada en seguir impagada al entrar en el tramo a = borde_inferior: P(pagada en (a, a+180] | impagada en a). Solo usa pagos con fecha <= corte. Un tramo con menos de 100 observaciones cae a la tasa global.",
+      "intervalo": "El horizonte acumula el intervalo ABIERTO por la izquierda y CERRADO por la derecha (corte, corte+h]: el dia del corte queda excluido y el dia corte+h incluido. Mismo convenio que xray/cashflow_forecast.py.",
+      "n_facturas": 366666,
+      "n_vivas": 58790,
+      "n_empresas": 607,
+      "importe_vivo_eur": 873559641.856305,
+      "n_no_vencidas": 10110,
+      "n_vencidas": 48679,
+      "n_sin_fecha_vencimiento": 1,
+      "n_no_valorable": 8200,
+      "importe_no_valorable_eur": 6459407.56,
+      "motivos_no_valorable": {
+        "sin_importe_eur": {
+          "n": 8199,
+          "eur": 0.0
+        },
+        "sin_fecha_vencimiento": {
+          "n": 1,
+          "eur": 6459407.56
+        }
+      },
+      "n_empresas_con_calendario": 554,
+      "n_facturas_en_calendario": 49893,
+      "importe_esperado_total_eur": 268136851.23023817,
+      "importe_esperado_fuera_de_ventana_max_eur": 28486994.532394193,
+      "retraso_mediano_global_dias": 0.0,
+      "retraso_empresas_p25_dias": 0.0,
+      "retraso_empresas_p50_dias": 0.0,
+      "retraso_empresas_p75_dias": 3.0,
+      "n_empresas_con_retraso_propio": 470,
+      "n_empresas_muestra_corta": 137,
+      "probabilidad_global": 0.6809627131435579,
+      "tabla_probabilidad": [
+        {
+          "tramo": "no_vencida",
+          "n_facturas": 10110,
+          "importe_vivo_eur": 256828247.71926278,
+          "prob_cobro": 0.6809627131435579,
+          "importe_esperado_eur": 174890460.37881497,
+          "detalle_estimacion": {
+            "borde_inferior_dias": null,
+            "prob": 0.6809627131435579,
+            "n_estim": 84802,
+            "fallback": false
+          }
+        },
+        {
+          "tramo": "0_30",
+          "n_facturas": 5659,
+          "importe_vivo_eur": 93273171.59936664,
+          "prob_cobro": 0.45531597914275934,
+          "importe_esperado_eur": 42468765.45451623,
+          "detalle_estimacion": {
+            "borde_inferior_dias": 0,
+            "prob": 0.45531597914275934,
+            "n_estim": 49671,
+            "fallback": false
+          }
+        },
+        {
+          "tramo": "31_60",
+          "n_facturas": 4338,
+          "importe_vivo_eur": 50913266.77340671,
+          "prob_cobro": 0.23380641689648216,
+          "importe_esperado_eur": 11903848.476784945,
+          "detalle_estimacion": {
+            "borde_inferior_dias": 31,
+            "prob": 0.23380641689648216,
+            "n_estim": 29734,
+            "fallback": false
+          }
+        },
+        {
+          "tramo": "61_90",
+          "n_facturas": 3149,
+          "importe_vivo_eur": 28475439.760689992,
+          "prob_cobro": 0.1455160744500846,
+          "importe_esperado_eur": 4143634.2122154646,
+          "detalle_estimacion": {
+            "borde_inferior_dias": 61,
+            "prob": 0.1455160744500846,
+            "n_estim": 23049,
+            "fallback": false
+          }
+        },
+        {
+          "tramo": "91_180",
+          "n_facturas": 11198,
+          "importe_vivo_eur": 197615464.26997936,
+          "prob_cobro": 0.1094419493056631,
+          "importe_esperado_eur": 21627421.62265016,
+          "detalle_estimacion": {
+            "borde_inferior_dias": 91,
+            "prob": 0.1094419493056631,
+            "n_estim": 19371,
+            "fallback": false
+          }
+        },
+        {
+          "tramo": "180_mas",
+          "n_facturas": 24335,
+          "importe_vivo_eur": 239994644.17359957,
+          "prob_cobro": 0.05459588954734586,
+          "importe_esperado_eur": 13102721.085256413,
+          "detalle_estimacion": {
+            "borde_inferior_dias": 181,
+            "prob": 0.05459588954734586,
+            "n_estim": 7931,
+            "fallback": false
+          }
+        }
+      ],
+      "esperado_por_horizonte": {
+        "30": {
+          "importe_esperado_eur": 161851033.3690054,
+          "n_facturas_en_ventana": 47078
+        },
+        "60": {
+          "importe_esperado_eur": 236312116.5783032,
+          "n_facturas_en_ventana": 49404
+        },
+        "90": {
+          "importe_esperado_eur": 239649856.69784397,
+          "n_facturas_en_ventana": 49893
+        }
+      }
+    },
+    {
+      "version": "collection_schedule_v1",
+      "corte": "2026-01-31",
+      "corte_vivo": false,
+      "universo": "flow_side='inflow'",
+      "excluir_cancel": true,
+      "criterio_universo": "flow_side='inflow', issuance_date_ok <= corte, NOT (status_norm='paid' AND payment_date_ok <= corte) y status_norm<>'cancel'. payment_date_ok solo es fecha REAL si status_norm='paid'; en otro estado (overdue) es fecha PREVISTA (payment_date_ok = due_date_ok) y se ignora (criterio status-aware).",
+      "criterio_probabilidad": "Probabilidad por tramo = P(cobro) estimada point-in-time. Para el tramo 'no_vencida' es la tasa de cura INCONDICIONAL P(pagada dentro de 180 dias desde el vencimiento) sobre cohortes ya vencidas y observables (due_date_ok <= corte - 180). Para los tramos vencidos es la tasa de cura RESIDUAL condicionada en seguir impagada al entrar en el tramo a = borde_inferior: P(pagada en (a, a+180] | impagada en a). Solo usa pagos con fecha <= corte. Un tramo con menos de 100 observaciones cae a la tasa global.",
+      "intervalo": "El horizonte acumula el intervalo ABIERTO por la izquierda y CERRADO por la derecha (corte, corte+h]: el dia del corte queda excluido y el dia corte+h incluido. Mismo convenio que xray/cashflow_forecast.py.",
+      "n_facturas": 366666,
+      "n_vivas": 62222,
+      "n_empresas": 637,
+      "importe_vivo_eur": 867220323.7344031,
+      "n_no_vencidas": 9357,
+      "n_vencidas": 52864,
+      "n_sin_fecha_vencimiento": 1,
+      "n_no_valorable": 8570,
+      "importe_no_valorable_eur": 6459407.56,
+      "motivos_no_valorable": {
+        "sin_importe_eur": {
+          "n": 8569,
+          "eur": 0.0
+        },
+        "sin_fecha_vencimiento": {
+          "n": 1,
+          "eur": 6459407.56
+        }
+      },
+      "n_empresas_con_calendario": 588,
+      "n_facturas_en_calendario": 53005,
+      "importe_esperado_total_eur": 212703149.4266395,
+      "importe_esperado_fuera_de_ventana_max_eur": 24156684.631553534,
+      "retraso_mediano_global_dias": 0.0,
+      "retraso_empresas_p25_dias": 0.0,
+      "retraso_empresas_p50_dias": 0.0,
+      "retraso_empresas_p75_dias": 4.0,
+      "n_empresas_con_retraso_propio": 516,
+      "n_empresas_muestra_corta": 121,
+      "probabilidad_global": 0.6788829819988095,
+      "tabla_probabilidad": [
+        {
+          "tramo": "no_vencida",
+          "n_facturas": 9357,
+          "importe_vivo_eur": 129443755.54053572,
+          "prob_cobro": 0.6788829819988095,
+          "importe_esperado_eur": 87877162.76248379,
+          "detalle_estimacion": {
+            "borde_inferior_dias": null,
+            "prob": 0.6788829819988095,
+            "n_estim": 97438,
+            "fallback": false
+          }
+        },
+        {
+          "tramo": "0_30",
+          "n_facturas": 6762,
+          "importe_vivo_eur": 148337965.3845619,
+          "prob_cobro": 0.4523767852142257,
+          "importe_esperado_eur": 67104651.9058872,
+          "detalle_estimacion": {
+            "borde_inferior_dias": 0,
+            "prob": 0.4523767852142257,
+            "n_estim": 57136,
+            "fallback": false
+          }
+        },
+        {
+          "tramo": "31_60",
+          "n_facturas": 3985,
+          "importe_vivo_eur": 77841229.49981567,
+          "prob_cobro": 0.22991129474992053,
+          "importe_esperado_eur": 17896577.859228328,
+          "detalle_estimacion": {
+            "borde_inferior_dias": 31,
+            "prob": 0.22991129474992053,
+            "n_estim": 34609,
+            "fallback": false
+          }
+        },
+        {
+          "tramo": "61_90",
+          "n_facturas": 3936,
+          "importe_vivo_eur": 49667022.646093324,
+          "prob_cobro": 0.1457538798474493,
+          "importe_esperado_eur": 7239161.25113923,
+          "detalle_estimacion": {
+            "borde_inferior_dias": 61,
+            "prob": 0.1457538798474493,
+            "n_estim": 26483,
+            "fallback": false
+          }
+        },
+        {
+          "tramo": "91_180",
+          "n_facturas": 9948,
+          "importe_vivo_eur": 124642572.25919397,
+          "prob_cobro": 0.11070878971666516,
+          "importe_esperado_eur": 13799028.32198735,
+          "detalle_estimacion": {
+            "borde_inferior_dias": 91,
+            "prob": 0.11070878971666516,
+            "n_estim": 22094,
+            "fallback": false
+          }
+        },
+        {
+          "tramo": "180_mas",
+          "n_facturas": 28233,
+          "importe_vivo_eur": 330828370.84420264,
+          "prob_cobro": 0.056786445727052694,
+          "importe_esperado_eur": 18786567.325913575,
+          "detalle_estimacion": {
+            "borde_inferior_dias": 181,
+            "prob": 0.056786445727052694,
+            "n_estim": 10742,
+            "fallback": false
+          }
+        }
+      ],
+      "esperado_por_horizonte": {
+        "30": {
+          "importe_esperado_eur": 164191014.2557097,
+          "n_facturas_en_ventana": 50177
+        },
+        "60": {
+          "importe_esperado_eur": 181449580.55259916,
+          "n_facturas_en_ventana": 52241
+        },
+        "90": {
+          "importe_esperado_eur": 188546464.7950859,
+          "n_facturas_en_ventana": 53005
+        }
+      }
+    },
+    {
+      "version": "collection_schedule_v1",
+      "corte": "2026-02-28",
+      "corte_vivo": false,
+      "universo": "flow_side='inflow'",
+      "excluir_cancel": true,
+      "criterio_universo": "flow_side='inflow', issuance_date_ok <= corte, NOT (status_norm='paid' AND payment_date_ok <= corte) y status_norm<>'cancel'. payment_date_ok solo es fecha REAL si status_norm='paid'; en otro estado (overdue) es fecha PREVISTA (payment_date_ok = due_date_ok) y se ignora (criterio status-aware).",
+      "criterio_probabilidad": "Probabilidad por tramo = P(cobro) estimada point-in-time. Para el tramo 'no_vencida' es la tasa de cura INCONDICIONAL P(pagada dentro de 180 dias desde el vencimiento) sobre cohortes ya vencidas y observables (due_date_ok <= corte - 180). Para los tramos vencidos es la tasa de cura RESIDUAL condicionada en seguir impagada al entrar en el tramo a = borde_inferior: P(pagada en (a, a+180] | impagada en a). Solo usa pagos con fecha <= corte. Un tramo con menos de 100 observaciones cae a la tasa global.",
+      "intervalo": "El horizonte acumula el intervalo ABIERTO por la izquierda y CERRADO por la derecha (corte, corte+h]: el dia del corte queda excluido y el dia corte+h incluido. Mismo convenio que xray/cashflow_forecast.py.",
+      "n_facturas": 366666,
+      "n_vivas": 67726,
+      "n_empresas": 646,
+      "importe_vivo_eur": 907276683.818675,
+      "n_no_vencidas": 11881,
+      "n_vencidas": 55844,
+      "n_sin_fecha_vencimiento": 1,
+      "n_no_valorable": 8879,
+      "importe_no_valorable_eur": 6459407.56,
+      "motivos_no_valorable": {
+        "sin_importe_eur": {
+          "n": 8878,
+          "eur": 0.0
+        },
+        "sin_fecha_vencimiento": {
+          "n": 1,
+          "eur": 6459407.56
+        }
+      },
+      "n_empresas_con_calendario": 594,
+      "n_facturas_en_calendario": 58176,
+      "importe_esperado_total_eur": 206026755.67038548,
+      "importe_esperado_fuera_de_ventana_max_eur": 23146997.833938397,
+      "retraso_mediano_global_dias": 0.0,
+      "retraso_empresas_p25_dias": 0.0,
+      "retraso_empresas_p50_dias": 0.0,
+      "retraso_empresas_p75_dias": 3.0,
+      "n_empresas_con_retraso_propio": 533,
+      "n_empresas_muestra_corta": 113,
+      "probabilidad_global": 0.6792051815275246,
+      "tabla_probabilidad": [
+        {
+          "tramo": "no_vencida",
+          "n_facturas": 11881,
+          "importe_vivo_eur": 154508025.31327334,
+          "prob_cobro": 0.6792051815275246,
+          "importe_esperado_eur": 104942651.38036118,
+          "detalle_estimacion": {
+            "borde_inferior_dias": null,
+            "prob": 0.6792051815275246,
+            "n_estim": 109157,
+            "fallback": false
+          }
+        },
+        {
+          "tramo": "0_30",
+          "n_facturas": 8045,
+          "importe_vivo_eur": 63410112.40217169,
+          "prob_cobro": 0.4526626756490614,
+          "importe_esperado_eur": 28703391.14317476,
+          "detalle_estimacion": {
+            "borde_inferior_dias": 0,
+            "prob": 0.4526626756490614,
+            "n_estim": 63977,
+            "fallback": false
+          }
+        },
+        {
+          "tramo": "31_60",
+          "n_facturas": 4610,
+          "importe_vivo_eur": 148731707.41696984,
+          "prob_cobro": 0.22901856364138762,
+          "importe_esperado_eur": 34062322.00056555,
+          "detalle_estimacion": {
+            "borde_inferior_dias": 31,
+            "prob": 0.22901856364138762,
+            "n_estim": 39809,
+            "fallback": false
+          }
+        },
+        {
+          "tramo": "61_90",
+          "n_facturas": 3013,
+          "importe_vivo_eur": 43117773.29860437,
+          "prob_cobro": 0.14466351637607952,
+          "importe_esperado_eur": 6237568.703682737,
+          "detalle_estimacion": {
+            "borde_inferior_dias": 61,
+            "prob": 0.14466351637607952,
+            "n_estim": 30685,
+            "fallback": false
+          }
+        },
+        {
+          "tramo": "91_180",
+          "n_facturas": 8661,
+          "importe_vivo_eur": 98123721.54810894,
+          "prob_cobro": 0.11081468503623478,
+          "importe_esperado_eur": 10873549.297936894,
+          "detalle_estimacion": {
+            "borde_inferior_dias": 91,
+            "prob": 0.11081468503623478,
+            "n_estim": 25114,
+            "fallback": false
+          }
+        },
+        {
+          "tramo": "180_mas",
+          "n_facturas": 31515,
+          "importe_vivo_eur": 392925936.2795469,
+          "prob_cobro": 0.053972698634931746,
+          "importe_esperado_eur": 21207273.14466438,
+          "detalle_estimacion": {
+            "borde_inferior_dias": 181,
+            "prob": 0.053972698634931746,
+            "n_estim": 14285,
+            "fallback": false
+          }
+        }
+      ],
+      "esperado_por_horizonte": {
+        "30": {
+          "importe_esperado_eur": 154760915.4955619,
+          "n_facturas_en_ventana": 53864
+        },
+        "60": {
+          "importe_esperado_eur": 174891577.91938108,
+          "n_facturas_en_ventana": 57163
+        },
+        "90": {
+          "importe_esperado_eur": 182879757.83644712,
+          "n_facturas_en_ventana": 58176
+        }
+      }
+    },
+    {
+      "version": "collection_schedule_v1",
+      "corte": "2026-03-31",
+      "corte_vivo": false,
+      "universo": "flow_side='inflow'",
+      "excluir_cancel": true,
+      "criterio_universo": "flow_side='inflow', issuance_date_ok <= corte, NOT (status_norm='paid' AND payment_date_ok <= corte) y status_norm<>'cancel'. payment_date_ok solo es fecha REAL si status_norm='paid'; en otro estado (overdue) es fecha PREVISTA (payment_date_ok = due_date_ok) y se ignora (criterio status-aware).",
+      "criterio_probabilidad": "Probabilidad por tramo = P(cobro) estimada point-in-time. Para el tramo 'no_vencida' es la tasa de cura INCONDICIONAL P(pagada dentro de 180 dias desde el vencimiento) sobre cohortes ya vencidas y observables (due_date_ok <= corte - 180). Para los tramos vencidos es la tasa de cura RESIDUAL condicionada en seguir impagada al entrar en el tramo a = borde_inferior: P(pagada en (a, a+180] | impagada en a). Solo usa pagos con fecha <= corte. Un tramo con menos de 100 observaciones cae a la tasa global.",
+      "intervalo": "El horizonte acumula el intervalo ABIERTO por la izquierda y CERRADO por la derecha (corte, corte+h]: el dia del corte queda excluido y el dia corte+h incluido. Mismo convenio que xray/cashflow_forecast.py.",
+      "n_facturas": 366666,
+      "n_vivas": 73345,
+      "n_empresas": 666,
+      "importe_vivo_eur": 976384610.9290242,
+      "n_no_vencidas": 13073,
+      "n_vencidas": 60271,
+      "n_sin_fecha_vencimiento": 1,
+      "n_no_valorable": 9371,
+      "importe_no_valorable_eur": 6459407.56,
+      "motivos_no_valorable": {
+        "sin_importe_eur": {
+          "n": 9370,
+          "eur": 0.0
+        },
+        "sin_fecha_vencimiento": {
+          "n": 1,
+          "eur": 6459407.56
+        }
+      },
+      "n_empresas_con_calendario": 618,
+      "n_facturas_en_calendario": 63147,
+      "importe_esperado_total_eur": 225816622.1018764,
+      "importe_esperado_fuera_de_ventana_max_eur": 22556678.966109082,
+      "retraso_mediano_global_dias": 0.0,
+      "retraso_empresas_p25_dias": 0.0,
+      "retraso_empresas_p50_dias": 0.0,
+      "retraso_empresas_p75_dias": 4.0,
+      "n_empresas_con_retraso_propio": 557,
+      "n_empresas_muestra_corta": 109,
+      "probabilidad_global": 0.6865996239064672,
+      "tabla_probabilidad": [
+        {
+          "tramo": "no_vencida",
+          "n_facturas": 13073,
+          "importe_vivo_eur": 178498168.0941675,
+          "prob_cobro": 0.6865996239064672,
+          "importe_esperado_eur": 122556775.08144878,
+          "detalle_estimacion": {
+            "borde_inferior_dias": null,
+            "prob": 0.6865996239064672,
+            "n_estim": 122310,
+            "fallback": false
+          }
+        },
+        {
+          "tramo": "0_30",
+          "n_facturas": 7428,
+          "importe_vivo_eur": 80405612.19754975,
+          "prob_cobro": 0.4607203151378728,
+          "importe_esperado_eur": 37044498.990508705,
+          "detalle_estimacion": {
+            "borde_inferior_dias": 0,
+            "prob": 0.4607203151378728,
+            "n_estim": 71080,
+            "fallback": false
+          }
+        },
+        {
+          "tramo": "31_60",
+          "n_facturas": 6309,
+          "importe_vivo_eur": 47482880.62772447,
+          "prob_cobro": 0.23122432577245935,
+          "importe_esperado_eur": 10979197.058879763,
+          "detalle_estimacion": {
+            "borde_inferior_dias": 31,
+            "prob": 0.23122432577245935,
+            "n_estim": 44792,
+            "fallback": false
+          }
+        },
+        {
+          "tramo": "61_90",
+          "n_facturas": 3560,
+          "importe_vivo_eur": 134193349.65602472,
+          "prob_cobro": 0.14384064104734495,
+          "importe_esperado_eur": 19302457.438813105,
+          "detalle_estimacion": {
+            "borde_inferior_dias": 61,
+            "prob": 0.14384064104734495,
+            "n_estim": 35442,
+            "fallback": false
+          }
+        },
+        {
+          "tramo": "91_180",
+          "n_facturas": 8753,
+          "importe_vivo_eur": 112190992.47391665,
+          "prob_cobro": 0.11142555150192641,
+          "importe_esperado_eur": 12500943.20995464,
+          "detalle_estimacion": {
+            "borde_inferior_dias": 91,
+            "prob": 0.11142555150192641,
+            "n_estim": 29329,
+            "fallback": false
+          }
+        },
+        {
+          "tramo": "180_mas",
+          "n_facturas": 34221,
+          "importe_vivo_eur": 417154200.31964123,
+          "prob_cobro": 0.05617287397397956,
+          "importe_esperado_eur": 23432750.32227143,
+          "detalle_estimacion": {
+            "borde_inferior_dias": 181,
+            "prob": 0.05617287397397956,
+            "n_estim": 17909,
+            "fallback": false
+          }
+        }
+      ],
+      "esperado_por_horizonte": {
+        "30": {
+          "importe_esperado_eur": 165761377.0386771,
+          "n_facturas_en_ventana": 58698
+        },
+        "60": {
+          "importe_esperado_eur": 188805506.94500762,
+          "n_facturas_en_ventana": 61702
+        },
+        "90": {
+          "importe_esperado_eur": 203259943.13576734,
+          "n_facturas_en_ventana": 63147
+        }
+      }
+    },
+    {
+      "version": "collection_schedule_v1",
+      "corte": "2026-04-30",
+      "corte_vivo": false,
+      "universo": "flow_side='inflow'",
+      "excluir_cancel": true,
+      "criterio_universo": "flow_side='inflow', issuance_date_ok <= corte, NOT (status_norm='paid' AND payment_date_ok <= corte) y status_norm<>'cancel'. payment_date_ok solo es fecha REAL si status_norm='paid'; en otro estado (overdue) es fecha PREVISTA (payment_date_ok = due_date_ok) y se ignora (criterio status-aware).",
+      "criterio_probabilidad": "Probabilidad por tramo = P(cobro) estimada point-in-time. Para el tramo 'no_vencida' es la tasa de cura INCONDICIONAL P(pagada dentro de 180 dias desde el vencimiento) sobre cohortes ya vencidas y observables (due_date_ok <= corte - 180). Para los tramos vencidos es la tasa de cura RESIDUAL condicionada en seguir impagada al entrar en el tramo a = borde_inferior: P(pagada en (a, a+180] | impagada en a). Solo usa pagos con fecha <= corte. Un tramo con menos de 100 observaciones cae a la tasa global.",
+      "intervalo": "El horizonte acumula el intervalo ABIERTO por la izquierda y CERRADO por la derecha (corte, corte+h]: el dia del corte queda excluido y el dia corte+h incluido. Mismo convenio que xray/cashflow_forecast.py.",
+      "n_facturas": 366666,
+      "n_vivas": 80960,
+      "n_empresas": 685,
+      "importe_vivo_eur": 1067337592.2347841,
+      "n_no_vencidas": 14905,
+      "n_vencidas": 66054,
+      "n_sin_fecha_vencimiento": 1,
+      "n_no_valorable": 10247,
+      "importe_no_valorable_eur": 6459407.56,
+      "motivos_no_valorable": {
+        "sin_importe_eur": {
+          "n": 10246,
+          "eur": 0.0
+        },
+        "sin_fecha_vencimiento": {
+          "n": 1,
+          "eur": 6459407.56
+        }
+      },
+      "n_empresas_con_calendario": 639,
+      "n_facturas_en_calendario": 69889,
+      "importe_esperado_total_eur": 274302874.0430274,
+      "importe_esperado_fuera_de_ventana_max_eur": 18289710.02817517,
+      "retraso_mediano_global_dias": 0.0,
+      "retraso_empresas_p25_dias": 0.0,
+      "retraso_empresas_p50_dias": 0.0,
+      "retraso_empresas_p75_dias": 4.0,
+      "n_empresas_con_retraso_propio": 587,
+      "n_empresas_muestra_corta": 98,
+      "probabilidad_global": 0.6948453303365469,
+      "tabla_probabilidad": [
+        {
+          "tramo": "no_vencida",
+          "n_facturas": 14905,
+          "importe_vivo_eur": 244470662.32724607,
+          "prob_cobro": 0.6948453303365469,
+          "importe_esperado_eur": 169869298.1223697,
+          "detalle_estimacion": {
+            "borde_inferior_dias": null,
+            "prob": 0.6948453303365469,
+            "n_estim": 135256,
+            "fallback": false
+          }
+        },
+        {
+          "tramo": "0_30",
+          "n_facturas": 9468,
+          "importe_vivo_eur": 77828077.41654159,
+          "prob_cobro": 0.46774817527661,
+          "importe_esperado_eur": 36403941.19687407,
+          "detalle_estimacion": {
+            "borde_inferior_dias": 0,
+            "prob": 0.46774817527661,
+            "n_estim": 77546,
+            "fallback": false
+          }
+        },
+        {
+          "tramo": "31_60",
+          "n_facturas": 4783,
+          "importe_vivo_eur": 57430563.323352404,
+          "prob_cobro": 0.23219416763465184,
+          "importe_esperado_eur": 13335041.847654976,
+          "detalle_estimacion": {
+            "borde_inferior_dias": 31,
+            "prob": 0.23219416763465184,
+            "n_estim": 49071,
+            "fallback": false
+          }
+        },
+        {
+          "tramo": "61_90",
+          "n_facturas": 5871,
+          "importe_vivo_eur": 42128048.329995975,
+          "prob_cobro": 0.14378756255186462,
+          "importe_esperado_eur": 6057489.38443727,
+          "detalle_estimacion": {
+            "borde_inferior_dias": 61,
+            "prob": 0.14378756255186462,
+            "n_estim": 39767,
+            "fallback": false
+          }
+        },
+        {
+          "tramo": "91_180",
+          "n_facturas": 9139,
+          "importe_vivo_eur": 213652068.5486716,
+          "prob_cobro": 0.10895367766760397,
+          "importe_esperado_eur": 23278178.60966879,
+          "detalle_estimacion": {
+            "borde_inferior_dias": 91,
+            "prob": 0.10895367766760397,
+            "n_estim": 33785,
+            "fallback": false
+          }
+        },
+        {
+          "tramo": "180_mas",
+          "n_facturas": 36793,
+          "importe_vivo_eur": 425368764.72897637,
+          "prob_cobro": 0.05961633054599114,
+          "importe_esperado_eur": 25358924.882022597,
+          "detalle_estimacion": {
+            "borde_inferior_dias": 181,
+            "prob": 0.05961633054599114,
+            "n_estim": 20330,
+            "fallback": false
+          }
+        }
+      ],
+      "esperado_por_horizonte": {
+        "30": {
+          "importe_esperado_eur": 207500366.89943182,
+          "n_facturas_en_ventana": 64539
+        },
+        "60": {
+          "importe_esperado_eur": 243603019.6930275,
+          "n_facturas_en_ventana": 68342
+        },
+        "90": {
+          "importe_esperado_eur": 256013164.01485223,
+          "n_facturas_en_ventana": 69889
+        }
+      }
+    },
+    {
+      "version": "collection_schedule_v1",
+      "corte": "2026-05-31",
+      "corte_vivo": false,
+      "universo": "flow_side='inflow'",
+      "excluir_cancel": true,
+      "criterio_universo": "flow_side='inflow', issuance_date_ok <= corte, NOT (status_norm='paid' AND payment_date_ok <= corte) y status_norm<>'cancel'. payment_date_ok solo es fecha REAL si status_norm='paid'; en otro estado (overdue) es fecha PREVISTA (payment_date_ok = due_date_ok) y se ignora (criterio status-aware).",
+      "criterio_probabilidad": "Probabilidad por tramo = P(cobro) estimada point-in-time. Para el tramo 'no_vencida' es la tasa de cura INCONDICIONAL P(pagada dentro de 180 dias desde el vencimiento) sobre cohortes ya vencidas y observables (due_date_ok <= corte - 180). Para los tramos vencidos es la tasa de cura RESIDUAL condicionada en seguir impagada al entrar en el tramo a = borde_inferior: P(pagada en (a, a+180] | impagada en a). Solo usa pagos con fecha <= corte. Un tramo con menos de 100 observaciones cae a la tasa global.",
+      "intervalo": "El horizonte acumula el intervalo ABIERTO por la izquierda y CERRADO por la derecha (corte, corte+h]: el dia del corte queda excluido y el dia corte+h incluido. Mismo convenio que xray/cashflow_forecast.py.",
+      "n_facturas": 366666,
+      "n_vivas": 91277,
+      "n_empresas": 687,
+      "importe_vivo_eur": 1129528768.2738514,
+      "n_no_vencidas": 15749,
+      "n_vencidas": 75523,
+      "n_sin_fecha_vencimiento": 5,
+      "n_no_valorable": 11409,
+      "importe_no_valorable_eur": 6459407.56,
+      "motivos_no_valorable": {
+        "sin_importe_eur": {
+          "n": 11408,
+          "eur": 0.0
+        },
+        "sin_fecha_vencimiento": {
+          "n": 5,
+          "eur": 6459407.56
+        }
+      },
+      "n_empresas_con_calendario": 640,
+      "n_facturas_en_calendario": 79003,
+      "importe_esperado_total_eur": 287244550.4112765,
+      "importe_esperado_fuera_de_ventana_max_eur": 20810303.48878742,
+      "retraso_mediano_global_dias": 0.0,
+      "retraso_empresas_p25_dias": 0.0,
+      "retraso_empresas_p50_dias": 0.0,
+      "retraso_empresas_p75_dias": 4.0,
+      "n_empresas_con_retraso_propio": 603,
+      "n_empresas_muestra_corta": 84,
+      "probabilidad_global": 0.6978298275333129,
+      "tabla_probabilidad": [
+        {
+          "tramo": "no_vencida",
+          "n_facturas": 15749,
+          "importe_vivo_eur": 235743254.89230597,
+          "prob_cobro": 0.6978298275333129,
+          "importe_esperado_eur": 164508674.90363967,
+          "detalle_estimacion": {
+            "borde_inferior_dias": null,
+            "prob": 0.6978298275333129,
+            "n_estim": 149942,
+            "fallback": false
+          }
+        },
+        {
+          "tramo": "0_30",
+          "n_facturas": 12422,
+          "importe_vivo_eur": 117199897.10131723,
+          "prob_cobro": 0.46788495190670254,
+          "importe_esperado_eur": 54836068.218720295,
+          "detalle_estimacion": {
+            "borde_inferior_dias": 0,
+            "prob": 0.46788495190670254,
+            "n_estim": 85147,
+            "fallback": false
+          }
+        },
+        {
+          "tramo": "31_60",
+          "n_facturas": 6585,
+          "importe_vivo_eur": 49951423.20942141,
+          "prob_cobro": 0.23512334001386054,
+          "importe_esperado_eur": 11744745.463445036,
+          "detalle_estimacion": {
+            "borde_inferior_dias": 31,
+            "prob": 0.23512334001386054,
+            "n_estim": 53389,
+            "fallback": false
+          }
+        },
+        {
+          "tramo": "61_90",
+          "n_facturas": 5158,
+          "importe_vivo_eur": 48999738.91969628,
+          "prob_cobro": 0.14366242183577524,
+          "importe_esperado_eur": 7039421.162524261,
+          "detalle_estimacion": {
+            "borde_inferior_dias": 61,
+            "prob": 0.14366242183577524,
+            "n_estim": 43818,
+            "fallback": false
+          }
+        },
+        {
+          "tramo": "91_180",
+          "n_facturas": 10962,
+          "importe_vivo_eur": 199673736.0345037,
+          "prob_cobro": 0.10662718482220068,
+          "importe_esperado_eur": 21290648.35629034,
+          "detalle_estimacion": {
+            "borde_inferior_dias": 91,
+            "prob": 0.10662718482220068,
+            "n_estim": 38161,
+            "fallback": false
+          }
+        },
+        {
+          "tramo": "180_mas",
+          "n_facturas": 40396,
+          "importe_vivo_eur": 471501310.55660677,
+          "prob_cobro": 0.05901360544217687,
+          "importe_esperado_eur": 27824992.306656897,
+          "detalle_estimacion": {
+            "borde_inferior_dias": 181,
+            "prob": 0.05901360544217687,
+            "n_estim": 23520,
+            "fallback": false
+          }
+        }
+      ],
+      "esperado_por_horizonte": {
+        "30": {
+          "importe_esperado_eur": 207231158.3529563,
+          "n_facturas_en_ventana": 73207
+        },
+        "60": {
+          "importe_esperado_eur": 256139828.76858884,
+          "n_facturas_en_ventana": 77338
+        },
+        "90": {
+          "importe_esperado_eur": 266434246.9224891,
+          "n_facturas_en_ventana": 79003
+        }
+      }
+    },
+    {
+      "version": "collection_schedule_v1",
+      "corte": "2026-06-30",
+      "corte_vivo": false,
+      "universo": "flow_side='inflow'",
+      "excluir_cancel": true,
+      "criterio_universo": "flow_side='inflow', issuance_date_ok <= corte, NOT (status_norm='paid' AND payment_date_ok <= corte) y status_norm<>'cancel'. payment_date_ok solo es fecha REAL si status_norm='paid'; en otro estado (overdue) es fecha PREVISTA (payment_date_ok = due_date_ok) y se ignora (criterio status-aware).",
+      "criterio_probabilidad": "Probabilidad por tramo = P(cobro) estimada point-in-time. Para el tramo 'no_vencida' es la tasa de cura INCONDICIONAL P(pagada dentro de 180 dias desde el vencimiento) sobre cohortes ya vencidas y observables (due_date_ok <= corte - 180). Para los tramos vencidos es la tasa de cura RESIDUAL condicionada en seguir impagada al entrar en el tramo a = borde_inferior: P(pagada en (a, a+180] | impagada en a). Solo usa pagos con fecha <= corte. Un tramo con menos de 100 observaciones cae a la tasa global.",
+      "intervalo": "El horizonte acumula el intervalo ABIERTO por la izquierda y CERRADO por la derecha (corte, corte+h]: el dia del corte queda excluido y el dia corte+h incluido. Mismo convenio que xray/cashflow_forecast.py.",
+      "n_facturas": 366666,
+      "n_vivas": 104340,
+      "n_empresas": 696,
+      "importe_vivo_eur": 1262209909.8255215,
+      "n_no_vencidas": 19846,
+      "n_vencidas": 84489,
+      "n_sin_fecha_vencimiento": 5,
+      "n_no_valorable": 13224,
+      "importe_no_valorable_eur": 6459407.56,
+      "motivos_no_valorable": {
+        "sin_importe_eur": {
+          "n": 13223,
+          "eur": 0.0
+        },
+        "sin_fecha_vencimiento": {
+          "n": 5,
+          "eur": 6459407.56
+        }
+      },
+      "n_empresas_con_calendario": 644,
+      "n_facturas_en_calendario": 90219,
+      "importe_esperado_total_eur": 337610691.7351824,
+      "importe_esperado_fuera_de_ventana_max_eur": 24800039.56629718,
+      "retraso_mediano_global_dias": 0.0,
+      "retraso_empresas_p25_dias": 0.0,
+      "retraso_empresas_p50_dias": 0.0,
+      "retraso_empresas_p75_dias": 4.0,
+      "n_empresas_con_retraso_propio": 619,
+      "n_empresas_muestra_corta": 77,
+      "probabilidad_global": 0.7036666585348004,
+      "tabla_probabilidad": [
+        {
+          "tramo": "no_vencida",
+          "n_facturas": 19846,
+          "importe_vivo_eur": 287838133.6148521,
+          "prob_cobro": 0.7036666585348004,
+          "importe_esperado_eur": 202542097.6796564,
+          "detalle_estimacion": {
+            "borde_inferior_dias": null,
+            "prob": 0.7036666585348004,
+            "n_estim": 163964,
+            "fallback": false
+          }
+        },
+        {
+          "tramo": "0_30",
+          "n_facturas": 12783,
+          "importe_vivo_eur": 117274726.66307706,
+          "prob_cobro": 0.4740249196228498,
+          "importe_esperado_eur": 55591142.880256794,
+          "detalle_estimacion": {
+            "borde_inferior_dias": 0,
+            "prob": 0.4740249196228498,
+            "n_estim": 92377,
+            "fallback": false
+          }
+        },
+        {
+          "tramo": "31_60",
+          "n_facturas": 9873,
+          "importe_vivo_eur": 96387174.0046713,
+          "prob_cobro": 0.2353689348756467,
+          "importe_esperado_eur": 22686546.481153104,
+          "detalle_estimacion": {
+            "borde_inferior_dias": 31,
+            "prob": 0.2353689348756467,
+            "n_estim": 58181,
+            "fallback": false
+          }
+        },
+        {
+          "tramo": "61_90",
+          "n_facturas": 5988,
+          "importe_vivo_eur": 45737693.165128276,
+          "prob_cobro": 0.14670557388141758,
+          "importe_esperado_eur": 6709974.523802334,
+          "detalle_estimacion": {
+            "borde_inferior_dias": 61,
+            "prob": 0.14670557388141758,
+            "n_estim": 47292,
+            "fallback": false
+          }
+        },
+        {
+          "tramo": "91_180",
+          "n_facturas": 12597,
+          "importe_vivo_eur": 187277725.90054688,
+          "prob_cobro": 0.10709745508622964,
+          "importe_esperado_eur": 20056967.838285048,
+          "detalle_estimacion": {
+            "borde_inferior_dias": 91,
+            "prob": 0.10709745508622964,
+            "n_estim": 41691,
+            "fallback": false
+          }
+        },
+        {
+          "tramo": "180_mas",
+          "n_facturas": 43248,
+          "importe_vivo_eur": 521235048.91724586,
+          "prob_cobro": 0.05760157992904948,
+          "importe_esperado_eur": 30023962.332028758,
+          "detalle_estimacion": {
+            "borde_inferior_dias": 181,
+            "prob": 0.05760157992904948,
+            "n_estim": 27343,
+            "fallback": false
+          }
+        }
+      ],
+      "esperado_por_horizonte": {
+        "30": {
+          "importe_esperado_eur": 240831766.95768923,
+          "n_facturas_en_ventana": 83402
+        },
+        "60": {
+          "importe_esperado_eur": 291647016.1352054,
+          "n_facturas_en_ventana": 88187
+        },
+        "90": {
+          "importe_esperado_eur": 312810652.16888523,
+          "n_facturas_en_ventana": 90219
+        }
+      }
+    },
+    {
+      "version": "collection_schedule_v1",
+      "corte": "2026-07-31",
+      "corte_vivo": false,
+      "universo": "flow_side='inflow'",
+      "excluir_cancel": true,
+      "criterio_universo": "flow_side='inflow', issuance_date_ok <= corte, NOT (status_norm='paid' AND payment_date_ok <= corte) y status_norm<>'cancel'. payment_date_ok solo es fecha REAL si status_norm='paid'; en otro estado (overdue) es fecha PREVISTA (payment_date_ok = due_date_ok) y se ignora (criterio status-aware).",
+      "criterio_probabilidad": "Probabilidad por tramo = P(cobro) estimada point-in-time. Para el tramo 'no_vencida' es la tasa de cura INCONDICIONAL P(pagada dentro de 180 dias desde el vencimiento) sobre cohortes ya vencidas y observables (due_date_ok <= corte - 180). Para los tramos vencidos es la tasa de cura RESIDUAL condicionada en seguir impagada al entrar en el tramo a = borde_inferior: P(pagada en (a, a+180] | impagada en a). Solo usa pagos con fecha <= corte. Un tramo con menos de 100 observaciones cae a la tasa global.",
+      "intervalo": "El horizonte acumula el intervalo ABIERTO por la izquierda y CERRADO por la derecha (corte, corte+h]: el dia del corte queda excluido y el dia corte+h incluido. Mismo convenio que xray/cashflow_forecast.py.",
+      "n_facturas": 366666,
+      "n_vivas": 113539,
+      "n_empresas": 700,
+      "importe_vivo_eur": 1374137736.200617,
+      "n_no_vencidas": 20886,
+      "n_vencidas": 92648,
+      "n_sin_fecha_vencimiento": 5,
+      "n_no_valorable": 14829,
+      "importe_no_valorable_eur": 6459407.56,
+      "motivos_no_valorable": {
+        "sin_importe_eur": {
+          "n": 14828,
+          "eur": 0.0
+        },
+        "sin_fecha_vencimiento": {
+          "n": 5,
+          "eur": 6459407.56
+        }
+      },
+      "n_empresas_con_calendario": 652,
+      "n_facturas_en_calendario": 97793,
+      "importe_esperado_total_eur": 361746890.62088454,
+      "importe_esperado_fuera_de_ventana_max_eur": 22269983.542103156,
+      "retraso_mediano_global_dias": 0.0,
+      "retraso_empresas_p25_dias": 0.0,
+      "retraso_empresas_p50_dias": 0.0,
+      "retraso_empresas_p75_dias": 4.0,
+      "n_empresas_con_retraso_propio": 623,
+      "n_empresas_muestra_corta": 77,
+      "probabilidad_global": 0.7080771102459742,
+      "tabla_probabilidad": [
+        {
+          "tramo": "no_vencida",
+          "n_facturas": 20886,
+          "importe_vivo_eur": 302999939.80500615,
+          "prob_cobro": 0.7080771102459742,
+          "importe_esperado_eur": 214547321.78183287,
+          "detalle_estimacion": {
+            "borde_inferior_dias": null,
+            "prob": 0.7080771102459742,
+            "n_estim": 180832,
+            "fallback": false
+          }
+        },
+        {
+          "tramo": "0_30",
+          "n_facturas": 12772,
+          "importe_vivo_eur": 136338032.00916153,
+          "prob_cobro": 0.4780962361711173,
+          "importe_esperado_eur": 65182699.95055744,
+          "detalle_estimacion": {
+            "borde_inferior_dias": 0,
+            "prob": 0.4780962361711173,
+            "n_estim": 101147,
+            "fallback": false
+          }
+        },
+        {
+          "tramo": "31_60",
+          "n_facturas": 9203,
+          "importe_vivo_eur": 86808784.86091897,
+          "prob_cobro": 0.24009286941034286,
+          "importe_esperado_eur": 20842170.24728316,
+          "detalle_estimacion": {
+            "borde_inferior_dias": 31,
+            "prob": 0.24009286941034286,
+            "n_estim": 62884,
+            "fallback": false
+          }
+        },
+        {
+          "tramo": "61_90",
+          "n_facturas": 9861,
+          "importe_vivo_eur": 94656531.20969088,
+          "prob_cobro": 0.14676303602224505,
+          "importe_esperado_eur": 13892079.899668626,
+          "detalle_estimacion": {
+            "borde_inferior_dias": 61,
+            "prob": 0.14676303602224505,
+            "n_estim": 51607,
+            "fallback": false
+          }
+        },
+        {
+          "tramo": "91_180",
+          "n_facturas": 13987,
+          "importe_vivo_eur": 113961264.89613912,
+          "prob_cobro": 0.10850211440017805,
+          "importe_esperado_eur": 12365038.200949881,
+          "detalle_estimacion": {
+            "borde_inferior_dias": 91,
+            "prob": 0.10850211440017805,
+            "n_estim": 44930,
+            "fallback": false
+          }
+        },
+        {
+          "tramo": "180_mas",
+          "n_facturas": 46825,
+          "importe_vivo_eur": 632913775.8597004,
+          "prob_cobro": 0.05516956949335364,
+          "importe_esperado_eur": 34917580.540592596,
+          "detalle_estimacion": {
+            "borde_inferior_dias": 181,
+            "prob": 0.05516956949335364,
+            "n_estim": 31521,
+            "fallback": false
+          }
+        }
+      ],
+      "esperado_por_horizonte": {
+        "30": {
+          "importe_esperado_eur": 265820119.11618334,
+          "n_facturas_en_ventana": 90789
+        },
+        "60": {
+          "importe_esperado_eur": 317764879.0239327,
+          "n_facturas_en_ventana": 95770
+        },
+        "90": {
+          "importe_esperado_eur": 339476907.0787815,
+          "n_facturas_en_ventana": 97793
+        }
+      }
+    },
+    {
+      "version": "collection_schedule_v1",
+      "corte": "2026-08-31",
+      "corte_vivo": true,
+      "universo": "flow_side='inflow'",
+      "excluir_cancel": true,
+      "criterio_universo": "flow_side='inflow', issuance_date_ok <= corte, NOT (status_norm='paid' AND payment_date_ok <= corte) y status_norm<>'cancel'. payment_date_ok solo es fecha REAL si status_norm='paid'; en otro estado (overdue) es fecha PREVISTA (payment_date_ok = due_date_ok) y se ignora (criterio status-aware).",
+      "criterio_probabilidad": "Probabilidad por tramo = P(cobro) estimada point-in-time. Para el tramo 'no_vencida' es la tasa de cura INCONDICIONAL P(pagada dentro de 180 dias desde el vencimiento) sobre cohortes ya vencidas y observables (due_date_ok <= corte - 180). Para los tramos vencidos es la tasa de cura RESIDUAL condicionada en seguir impagada al entrar en el tramo a = borde_inferior: P(pagada en (a, a+180] | impagada en a). Solo usa pagos con fecha <= corte. Un tramo con menos de 100 observaciones cae a la tasa global.",
+      "intervalo": "El horizonte acumula el intervalo ABIERTO por la izquierda y CERRADO por la derecha (corte, corte+h]: el dia del corte queda excluido y el dia corte+h incluido. Mismo convenio que xray/cashflow_forecast.py.",
+      "n_facturas": 366666,
+      "n_vivas": 120003,
+      "n_empresas": 701,
+      "importe_vivo_eur": 1436638478.8045583,
+      "n_no_vencidas": 17953,
+      "n_vencidas": 102045,
+      "n_sin_fecha_vencimiento": 5,
+      "n_no_valorable": 15485,
+      "importe_no_valorable_eur": 6459407.56,
+      "motivos_no_valorable": {
+        "sin_importe_eur": {
+          "n": 15484,
+          "eur": 0.0
+        },
+        "sin_fecha_vencimiento": {
+          "n": 5,
+          "eur": 6459407.56
+        }
+      },
+      "n_empresas_con_calendario": 654,
+      "n_facturas_en_calendario": 103026,
+      "importe_esperado_total_eur": 345857358.46837574,
+      "importe_esperado_fuera_de_ventana_max_eur": 24769258.021352883,
+      "retraso_mediano_global_dias": 0.0,
+      "retraso_empresas_p25_dias": 0.0,
+      "retraso_empresas_p50_dias": 0.0,
+      "retraso_empresas_p75_dias": 5.0,
+      "n_empresas_con_retraso_propio": 630,
+      "n_empresas_muestra_corta": 71,
+      "probabilidad_global": 0.7134291295065336,
+      "tabla_probabilidad": [
+        {
+          "tramo": "no_vencida",
+          "n_facturas": 17953,
+          "importe_vivo_eur": 256464675.0654195,
+          "prob_cobro": 0.7134291295065336,
+          "importe_esperado_eur": 182969369.8810982,
+          "detalle_estimacion": {
+            "borde_inferior_dias": null,
+            "prob": 0.7134291295065336,
+            "n_estim": 198129,
+            "fallback": false
+          }
+        },
+        {
+          "tramo": "0_30",
+          "n_facturas": 13488,
+          "importe_vivo_eur": 139815007.2856026,
+          "prob_cobro": 0.48360163710777626,
+          "importe_esperado_eur": 67614766.41555308,
+          "detalle_estimacion": {
+            "borde_inferior_dias": 0,
+            "prob": 0.48360163710777626,
+            "n_estim": 109950,
+            "fallback": false
+          }
+        },
+        {
+          "tramo": "31_60",
+          "n_facturas": 9926,
+          "importe_vivo_eur": 111498765.6655249,
+          "prob_cobro": 0.24423922859556618,
+          "importe_esperado_eur": 27232372.5155056,
+          "detalle_estimacion": {
+            "borde_inferior_dias": 31,
+            "prob": 0.24423922859556618,
+            "n_estim": 68654,
+            "fallback": false
+          }
+        },
+        {
+          "tramo": "61_90",
+          "n_facturas": 8532,
+          "importe_vivo_eur": 87195241.01999782,
+          "prob_cobro": 0.15049337670974353,
+          "importe_esperado_eur": 13122306.254119413,
+          "detalle_estimacion": {
+            "borde_inferior_dias": 61,
+            "prob": 0.15049337670974353,
+            "n_estim": 55637,
+            "fallback": false
+          }
+        },
+        {
+          "tramo": "91_180",
+          "n_facturas": 19826,
+          "importe_vivo_eur": 175936176.631094,
+          "prob_cobro": 0.10759558268182653,
+          "importe_esperado_eur": 18929955.43943531,
+          "detalle_estimacion": {
+            "borde_inferior_dias": 91,
+            "prob": 0.10759558268182653,
+            "n_estim": 48989,
+            "fallback": false
+          }
+        },
+        {
+          "tramo": "180_mas",
+          "n_facturas": 50273,
+          "importe_vivo_eur": 659269205.5769196,
+          "prob_cobro": 0.05458860759493671,
+          "importe_esperado_eur": 35988587.96266411,
+          "detalle_estimacion": {
+            "borde_inferior_dias": 181,
+            "prob": 0.05458860759493671,
+            "n_estim": 35392,
+            "fallback": false
+          }
+        }
+      ],
+      "esperado_por_horizonte": {
+        "30": {
+          "importe_esperado_eur": 263551818.8050378,
+          "n_facturas_en_ventana": 97495
+        },
+        "60": {
+          "importe_esperado_eur": 309743664.765094,
+          "n_facturas_en_ventana": 101442
+        },
+        "90": {
+          "importe_esperado_eur": 321088100.4470229,
+          "n_facturas_en_ventana": 103026
+        }
+      }
+    }
+  ]
+}
