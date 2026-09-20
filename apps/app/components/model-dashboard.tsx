@@ -22,7 +22,7 @@ export function hasMonthlyData(row: ModelRecord) {
 export function modelReason(reason: string) {
   const unknown = reason.match(/^([cpd]_eur|deficit_servicio_eur)_desconocido_en_(\d+)_meses$/);
   if (unknown) return `${({ c_eur: "Collections", p_eur: "Operating payments", d_eur: "Debt service", deficit_servicio_eur: "Debt-service shortfall" } as Record<string, string>)[unknown[1]]} could not be fully determined in ${unknown[2]} month(s) of the window.`;
-  const fxIndex = reason.match(/^castigo_fx_indice_(.+)$/);
+  const fxIndex = reason.match(/^castigo_fx_indice_(\d+(?:\.\d+)?)$/);
   if (fxIndex) return `Foreign-currency receivables carried an FX risk index of ${new Intl.NumberFormat("en-GB", { maximumFractionDigits: 3 }).format(Number(fxIndex[1]))} / 1, so the corresponding FX reduction was applied to the score.`;
   return ({
     excluida_nota_cero_persistente: "Excluded by the published v4 rule for persistently near-zero scores. This reflects uneven data coverage, not necessarily poor financial health; the company’s source records remain available.",
