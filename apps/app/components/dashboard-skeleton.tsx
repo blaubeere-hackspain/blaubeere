@@ -20,12 +20,12 @@ export function DashboardSkeleton({ detail = false }: { detail?: boolean }) {
             <SegmentedGauge segments={[]} className="health-score-gauge"><div className="health-score-value"><span className="skeleton-line skeleton-value"/></div></SegmentedGauge>
             <div className="health-score-context"><span className="skeleton-line"/><span className="skeleton-line"/></div>
           </div>
-          {!detail && <div className="model-chart health-history-chart"><div className="skeleton-plot"/><p className="chart-note"><span className="skeleton-line"/><span className="skeleton-line"/></p></div>}
+          {!detail && <div className="model-chart health-history-chart"><div className="skeleton-plot"/><p className="chart-note"><span className="skeleton-line"/></p></div>}
         </section>
         {!detail && <section className="card monthly-cash">
           <div className="card-heading"><div><h2>Cash flow</h2><p className="small muted mt-1"><span className="skeleton-line"/></p></div><span className="skeleton-control skeleton-currency"/></div>
           <div className="cash-flow-legend">{[1, 2, 3].map(n => <span className="skeleton-line" key={n}/>)}</div>
-          <div className="model-chart cash-flow-chart"><div className="skeleton-plot"/><p className="chart-note"><span className="skeleton-line"/><span className="skeleton-line"/></p></div>
+          <div className="model-chart cash-flow-chart"><div className="skeleton-plot"/><p className="chart-note"><span className="skeleton-line"/></p></div>
           <div className="cash-inspected-period"><span className="skeleton-line"/></div>
           <dl className="checkpoints cash-flow-totals">{["Income", "Expenses", "Month-end cash"].map(label => <div key={label}><dt>{label}</dt><dd><span className="skeleton-line skeleton-value"/></dd></div>)}</dl>
         </section>}

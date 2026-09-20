@@ -255,8 +255,7 @@ body { background: #f1f1ee; }
 .dashboard-skeleton .small .skeleton-line, .dashboard-skeleton .financial-card-heading .skeleton-line { width: 150px; margin-block: 4px; }
 .dashboard-skeleton .cash-flow-legend .skeleton-line { width: 74px; margin-block: 4px; }
 .skeleton-plot { height: 290px; margin-inline: 26px 4px; background: repeating-linear-gradient(to top, transparent 0 54px, var(--line) 54px 55px); border-bottom: 1px solid var(--line); }
-.dashboard-skeleton .chart-note .skeleton-line { margin-block: 8px; width: 95%; }
-.dashboard-skeleton .chart-note .skeleton-line:last-child { width: 64%; }
+.dashboard-skeleton .chart-note .skeleton-line { margin-block: .25em; width: 95%; height: 1em; }
 .dashboard-skeleton .cash-inspected-period .skeleton-line { width: 160px; margin-block: 4px; }
 .dashboard-skeleton .aging-total .skeleton-line { margin-inline: auto; }
 .skeleton-row { display: flex; justify-content: space-between; gap: 24px; padding-block: 12px; }
