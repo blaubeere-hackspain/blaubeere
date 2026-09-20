@@ -342,7 +342,7 @@ fn router(state: AppState) -> Router {
                 let mut meta = json!({"securitySchemes":[{"type":"oauth2","scopes":[oauth::SCOPE]}],"ui":{"visibility":["model","app"]},"openai/widgetAccessible":true});
                 if route.attr.name == "render_company_picker" {
                     meta["ui"]["resourceUri"] = json!(COMPANY_PICKER);
-                    meta["openai/outputTemplate"] = json!(COMPANY_PICKER);
+                    meta["openai/outputTemplate"] = json!("ui://blau/company-picker-v3.html");
                     meta["openai/toolInvocation/invoking"] = json!("Opening your companies…");
                     meta["openai/toolInvocation/invoked"] = json!("Choose a company");
                 }
@@ -631,7 +631,10 @@ mod tests {
                     .iter()
                     .find(|t| t["name"] == "render_company_picker")
                     .unwrap();
-                assert_eq!(picker["_meta"]["openai/outputTemplate"], COMPANY_PICKER);
+                assert_eq!(
+                    picker["_meta"]["openai/outputTemplate"],
+                    "ui://blau/company-picker-v3.html"
+                );
                 assert_eq!(picker["_meta"]["ui"]["resourceUri"], COMPANY_PICKER);
                 assert_eq!(picker["_meta"]["openai/widgetAccessible"], true);
                 assert_eq!(picker["outputSchema"]["required"], json!(["companies"]));
