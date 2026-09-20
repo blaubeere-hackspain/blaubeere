@@ -2,7 +2,7 @@
 import Image from "next/image";
 import { useEffect, useState } from "react";
 import logo from "../../brand/blau.svg";
-import { Activity, ChartNoAxesCombined, LayoutGrid, LoaderCircle, LogOut, Plug, ReceiptText, ShieldCheck, Wallet } from "lucide-react";
+import { ChartNoAxesCombined, LayoutGrid, LoaderCircle, LogOut, Plug, ReceiptText, ShieldCheck, Wallet } from "lucide-react";
 import type { CompanySummary, Identity } from "../lib/types";
 import { CompanyPicker } from "./company-picker";
 
@@ -31,10 +31,6 @@ export function Sidebar({ overviewHref, demo = false, selectorId, companies, rec
         <a {...navProps("#cash")} href={`${overviewHref ?? ""}#cash`} onClick={onNavigate} aria-disabled={!canInspect} tabIndex={canInspect ? undefined : -1}><Wallet aria-hidden/>Cash movements</a>
         <a {...navProps("#payments")} href={`${overviewHref ?? ""}#payments`} onClick={onNavigate} aria-disabled={!canInspect} tabIndex={canInspect ? undefined : -1}><ReceiptText aria-hidden/>Payments &amp; debt</a>
         <button className="nav-link" onClick={onConnections} disabled={!demo && !identity}><Plug aria-hidden/>Integrations</button>
-      </nav>
-      <nav className="sidebar-section" aria-label="Workspace">
-        <span className="nav-label">Workspace</span>
-        <a {...navProps("#history")} href={`${overviewHref ?? ""}#history`} onClick={onNavigate} aria-disabled={!canInspect} tabIndex={canInspect ? undefined : -1}><Activity aria-hidden/>Monthly records</a>
       </nav>
       {recentCompanies.length > 0 && <nav className="sidebar-section sidebar-recents" aria-label="Recent companies"><span className="nav-label">Recents</span>{recentCompanies.map(company => <button key={company.id} className="nav-link" onClick={() => onCompany(company.id)} aria-pressed={company.id === selected}>{company.name}{company.id === selected && <span className="recent-current" aria-hidden/>}</button>)}</nav>}
     </div>

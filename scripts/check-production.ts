@@ -43,6 +43,8 @@ assert.equal((await fetch(`${app}/api/companies/${companies[0].id}/assessment`))
 assert.equal((await fetch(`${app}/api/demo/companies/DEMO_001/assessment`)).status, 404, "Public dataset endpoints cannot read private fixture data");
 const homepage = await (await read(landing)).text();
 assert.ok(homepage.includes(app), "Landing must link to the deployed app");
+for (const title of ["Health score", "Cash flow", "Overdue collections", "Overdue payments", "Defaulting"]) assert.ok(homepage.includes(title), `Landing includes the actual dashboard panel: ${title}`);
+assert.ok(homepage.includes("COMP 6") && homepage.includes("35,572.28") && homepage.includes("15,564.58") && !homepage.includes("Mediterránea Supply"), "Landing uses the published COMP_0006 snapshot instead of the old mock");
 const pricing = await (await read(`${landing}/pricing`)).text();
 assert.ok(pricing.includes("$99") && pricing.includes("Enterprise") && pricing.includes("Contact sales"), "Pricing must display both plans and the sales CTA");
 const images = new Set([...homepage.matchAll(/<img[^>]+src="([^"]+)"/g)].map(match => match[1]));

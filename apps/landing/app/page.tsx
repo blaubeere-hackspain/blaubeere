@@ -1,7 +1,7 @@
 import Image from "next/image";
-import { Activity, ArrowDown, ArrowDownRight, ArrowRight, Building2, CalendarDays, Check, FileSearch, LockKeyhole, ShieldCheck, SlidersHorizontal, TriangleAlert, Wallet } from "lucide-react";
+import { ArrowDown, ArrowRight, Check, FileSearch, LockKeyhole, ShieldCheck, SlidersHorizontal } from "lucide-react";
 import painting from "../public/cash-horizon-oil.png";
-import logo from "../../brand/blau.svg";
+import { ProductDemo } from "../components/product-demo";
 import { AssistantSection } from "../components/assistant-section";
 import { ScrollReveals } from "../components/scroll-reveals";
 import { PricingCards } from "../components/pricing-cards";
@@ -42,38 +42,4 @@ export default function Home() {
     </main>
     <SiteFooter/>
   </>;
-}
-
-function ProductDemo() {
-  return <section className="product-demo site-container" id="outlook" aria-labelledby="demo-title">
-    <h2 id="demo-title" className="sr-only">A preview of your finance workspace</h2>
-    <div className="demo-window" data-scroll-reveal>
-      <div className="demo-topbar"><Image className="brand-logo" src={logo} alt="blau"/><span className="demo-label"><span className="live-dot"/>Product preview · demo data</span></div>
-      <div className="demo-layout">
-        <aside className="demo-sidebar" aria-hidden><span className="demo-workspace"><Building2 size={18}/>Finance workspace</span><span className="eyebrow">Workspace</span><span className="demo-nav active"><Activity size={17}/>Cash outlook</span><span className="demo-nav"><ArrowDownRight size={17}/>Explore a plan</span><div className="demo-sidebar-note"><ShieldCheck size={20}/><p>Your companies.<br/>A clearer perspective.</p></div></aside>
-        <div className="demo-main">
-          <div className="demo-heading"><div><h3>Your cash, in perspective.</h3><p>See what’s ahead. Understand why.</p></div><span className="demo-period">90-day outlook</span></div>
-          <div className="demo-context"><span><Building2 size={15} aria-hidden/>Mediterránea Supply</span><span><CalendarDays size={14} aria-hidden/>31 August 2026</span><span>EUR</span></div>
-          <div className="demo-metrics"><div><span>Cash today<Wallet size={15} aria-hidden/></span><strong className="num">€2,000,000</strong><small>Usable cash at the cutoff</small></div><div className="needs-attention"><span>Funding needed<TriangleAlert size={15} aria-hidden/></span><strong className="num">€2,100,000</strong><small>Above a €100,000 cash floor</small></div><div><span>First cash floor breach<CalendarDays size={15} aria-hidden/></span><strong className="num">28 Sept</strong><small>With time to consider your options</small></div></div>
-          <div className="demo-chart"><div className="demo-chart-heading"><h4>Cash over time</h4><span>History + 90-day forecast</span></div><div className="demo-legend"><span><i/>Reconstructed history</span><span><i className="forecast-line"/>Baseline forecast</span><span><i className="floor-line"/>Cash floor</span></div>
-            <DemoChart/><DemoChart compact/>
-            <div className="demo-chart-footer"><span><TriangleAlert size={16} aria-hidden/>Supplier payments arrive before customer receipts.</span><strong>€2.1m funding gap</strong></div>
-          </div>
-          <div className="demo-bottom"><span><ShieldCheck size={14} aria-hidden/>Every assumption stays visible.</span><a className="text-link" href={`${app}/dashboard`}>Explore the workspace<ArrowRight size={16} aria-hidden/></a></div>
-        </div>
-      </div>
-    </div>
-    <p className="preview-caption">An illustrative preview using demo data. Your outlook depends on your company’s records and assumptions.</p>
-  </section>;
-}
-
-function DemoChart({ compact = false }: { compact?: boolean }) {
-  const left = compact ? 50 : 60, right = compact ? 330 : 775;
-  const x = (position: number) => left + (position - 60) * (right - left) / 715;
-  return <svg className={compact ? "demo-chart-compact" : "demo-chart-wide"} viewBox={`0 0 ${compact ? 340 : 800} 228`} role="img" aria-label="Illustrative cash outlook: history falls to two million euros on 31 August, followed by a projected cash shortfall of negative two million on 28 September, before recovering in October.">
-    <g transform={`translate(${left} 0) scale(${(right - left) / 715} 1) translate(-60 0)`}>
-      <rect x="280" y="24" width="495" height="160" fill="var(--accent-soft)" opacity=".5"/><path d="M60 30H775M60 80H775M60 130H775M60 180H775" stroke="var(--line)"/><line x1="60" x2="775" y1="127.5" y2="127.5" stroke="var(--warn)" strokeDasharray="3 5"/><line x1="280" x2="280" y1="22" y2="184" stroke="var(--subtle)" strokeDasharray="3 5"/><path d="M60 52.5L134 57.5L207 67.5L280 80" fill="none" stroke="var(--ink)" strokeWidth="2.5"/><path d="M280 80H434V180H445V161.25H457V175H516V179H528V174H588V94H660V85H666V97H720V100H764V78.75H775" fill="none" stroke="var(--accent)" strokeWidth="2.5" strokeDasharray="5 4"/>
-    </g>
-    <circle cx={x(434)} cy="180" r="4" fill="var(--bad)"/><text x="0" y="34">€4m</text><text x="0" y="84">€2m</text><text x="0" y="134">€0</text><text x="0" y="184">−€2m</text><text x={x(280) + 8} y="16">Forecast →</text><text x={left} y="218">2 Jun</text><text x={x(280)} y="218" textAnchor="middle">31 Aug</text>{!compact && <text x={x(528)} y="218" textAnchor="middle">15 Oct</text>}<text x={right} y="218" textAnchor="end">29 Nov</text>
-  </svg>;
 }

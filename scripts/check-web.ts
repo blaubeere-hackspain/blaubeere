@@ -17,6 +17,8 @@ import { outsideDialog } from "../apps/app/components/dialog";
 import { ModelDashboard, modelNumber, modelReason, hasMonthlyData } from "../apps/app/components/model-dashboard";
 import { agingAmounts, DefaultingCard, formatArrearsIndex } from "../apps/app/components/financial-cards";
 import type { CashMonth, ModelAssessment, ModelRecord } from "../apps/app/lib/types";
+import { HealthScorePanel } from "../apps/app/components/health-score-panel";
+import preview from "../apps/landing/data/product-preview.json";
 
 const requireApp = createRequire(new URL("../apps/app/package.json", import.meta.url));
 const { createElement } = requireApp("react");
@@ -95,7 +97,13 @@ const latestEmpty = renderToStaticMarkup(createElement(ModelDashboard, { data: {
 assert.ok(latestEmpty.includes('Selected month: July 2026'), "Default to the latest month with company evidence");
 const cashRecords = [{ ...cashRecord, as_of: "2026-06-30" }, { ...record, as_of: "2026-07-31" }, { ...cashRecord, daily_cash: [daily] }];
 const dataOverview = renderToStaticMarkup(createElement(ModelDashboard, { data: { ...model, records: cashRecords } }));
-for (const text of ["Cash flow", "Income", "Expenses", "Reconstructed cash", "Overdue collections", "Overdue payments", "Defaulting", "Debt and overdue obligations", "Monthly source records", "€678.12", "-€321.88", "€123.45", "€876.54", "€60.25", "1 invoice(s) with unknown EUR amounts"]) assert.ok(dataOverview.includes(text), `Display the published amount or explanation: ${text}`);
+for (const text of ["Cash flow", "Income", "Expenses", "Reconstructed cash", "Overdue collections", "Overdue payments", "Defaulting", "€678.12", "-€321.09", "€123.45", "€876.54", "1 invoice(s) with unknown EUR amounts"]) assert.ok(dataOverview.includes(text), `Display the published amount or explanation: ${text}`);
+for (const removed of ["Signed amounts in the published cash categories", "Debt and overdue obligations", "Monthly source records", 'id="history"']) assert.ok(!dataOverview.includes(removed), `Remove the dashboard section: ${removed}`);
+const previewHealth = renderToStaticMarkup(createElement(HealthScorePanel, { records: preview.history, row: preview.record, explanationHref: "/demo/health/2026-08-31?company=COMP_0006" }));
+assert.ok(previewHealth.includes("30.2") && previewHealth.includes("-14.9 points since 31 Jul") && previewHealth.includes('stroke-dasharray="4 4"'), "The landing preview uses the saved score history, including the selected month marker");
+const previewCash = preview.record.daily_cash[0];
+assert.deepEqual([preview.company_id, preview.record.as_of, previewCash.days.length, previewCash.income, previewCash.expense, previewCash.closing_balance], ["COMP_0006", "2026-08-31", 31, 35572.28, 31152.94, 15564.58]);
+assert.equal(previewCash.days.reduce((sum, day) => sum + Math.round(day.income * 100) - Math.round(day.expense * 100), 0), 441934, "The published preview daily cash reconciles to its month totals");
 assert.ok(dataOverview.includes('id="model-date"') && dataOverview.includes("August 2026"));
 assert.ok(!dataOverview.includes("healthscore_v4") && !dataOverview.includes("Shared scale"));
 const metricCaptions = [...dataOverview.match(/<section class="stats-grid model-stats"[\s\S]*?<\/section>/)![0].matchAll(/<p>(.*?)<\/p>/g)];
@@ -106,9 +114,12 @@ assert.equal((cashSvg.match(/<path[^>]* d="([^"]*)"/)![1].match(/M/g) ?? []).len
 for (const series of ["income", "expense"]) assert.equal([...cashSvg.matchAll(new RegExp(`<rect[^>]*data-series="${series}"`, "g"))].length, 2, "Daily bars preserve gaps instead of fabricating movements");
 assert.ok(!cashSvg.includes("NaN") && !cashSvg.includes("Jun") && !cashSvg.includes("Jul") && !cashSvg.includes("Today"), "Cash chart contains only the selected month");
 const sameScale: CashMonth = { ...daily, days: [{ ...daily.days[0], income: 1000, expense: 1000, balance: 1000 }] };
-const sharedScaleChart = renderToStaticMarkup(createElement(DailyCashPlot, { series: sameScale }));
-const balanceY = sharedScaleChart.match(/<circle[^>]* cy="([^"]+)"/)![1];
-for (const series of ["income", "expense"]) assert.equal(sharedScaleChart.match(new RegExp(`<rect[^>]*data-series="${series}"[^>]* y="([^"]+)"`))![1], balanceY, "Equal amounts use exactly the same height for all three series");
+for (const height of [290, 220]) {
+  const sharedScaleChart = renderToStaticMarkup(createElement(DailyCashPlot, { series: sameScale, height }));
+  const balanceY = sharedScaleChart.match(/<circle[^>]* cy="([^"]+)"/)![1];
+  for (const series of ["income", "expense"]) assert.equal(sharedScaleChart.match(new RegExp(`<rect[^>]*data-series="${series}"[^>]* y="([^"]+)"`))![1], balanceY, "Full and compact charts share one scale for all three series");
+  assert.ok(sharedScaleChart.includes(`viewBox="0 0 1000 ${height}"`) && sharedScaleChart.includes(`height:${height}px`), "Compact SVG coordinates must match their rendered height for accurate pointer inspection");
+}
 const zeroChart = renderToStaticMarkup(createElement(DailyCashPlot, { series: { ...sameScale, days: [{ ...sameScale.days[0], balance: 0 }] } }));
 assert.ok(zeroChart.includes("Reconstructed cash · €0"));
 const nativeChart = renderToStaticMarkup(createElement(MonthlyCashChart, { row: { ...cashRecord, daily_cash: [{ ...daily, currency: "GBP" }] } }));
