@@ -16,6 +16,7 @@ import type { Company } from "../apps/app/lib/types";
 import { outsideDialog } from "../apps/app/components/dialog";
 import { ModelDashboard, modelNumber, modelReason, hasMonthlyData } from "../apps/app/components/model-dashboard";
 import { agingAmounts, DefaultingCard, formatIndex } from "../apps/app/components/financial-cards";
+import { GrowingBar } from "../apps/app/components/motion";
 import type { CashMonth, ModelAssessment, ModelRecord } from "../apps/app/lib/types";
 import { HealthScorePanel } from "../apps/app/components/health-score-panel";
 import preview from "../apps/landing/data/product-preview.json";
@@ -242,4 +243,19 @@ try {
     await assert.rejects(api("/companies/DEMO_001/plans"), error => error instanceof ApiError && error.status === status && error.message.includes("input format"));
   }
 } finally { globalThis.fetch = originalFetch; }
+// Invariantes de la cadena de animacion (T1–T3): I1 convierte en test que el
+// HTML servido es el estado final (sin estados iniciales ocultos ni a cero);
+// I2 que las animaciones nunca tocan los atributos que leen los tests; I4 que
+// las graficas tambien se renderizan fuera de ChartMotion (el proveedor solo
+// hace falta en cliente, tras el montaje).
+for (const [name, markup] of [["MonthlyCashChart", dataOverview], ["MonthlyCashChart in native currency", nativeChart], ["HealthScorePanel", previewHealth], ["ScoreChart history", modelHistory], ["DefaultingCard", defaultingMarkup]] as const) {
+  for (const hidden of ["scaleX(0)", "scaleY(0)", "opacity:0", "stroke-dashoffset"]) assert.ok(!markup.includes(hidden), `I1: the static ${name} markup serves the final state, never a hidden or zeroed animation start (${hidden})`);
+  for (const pathTag of markup.match(/<path\b[^>]*>/g) ?? []) assert.ok(!pathTag.includes("stroke-dasharray"), `I1/I2: data paths in the static ${name} markup carry no dash drawing; the served line is complete`);
+}
+assert.equal(renderToStaticMarkup(createElement(GrowingBar, { width: "40%" })), '<i style="width:40%"></i>', "I1/I2: a bare GrowingBar serves the plain final element with its width style intact, never a hidden zero scale");
+assert.equal(renderToStaticMarkup(createElement(GrowingBar, { as: "span", width: "100%" })), '<span style="width:100%"></span>', "I1/I2: GrowingBar as a span serves the same flat element with its width style intact");
+const animatedScorePanel = renderToStaticMarkup(createElement(HealthScorePanel, { records: [scoredV4], row: scoredV4 }));
+assert.equal((animatedScorePanel.match(/class="health-score-gauge"[\s\S]*?<\/svg>/)![0].match(/stroke="var\(--accent\)"/g) ?? []).length, 19, "I2: the gauge animates only opacity, so the markup still carries exactly 19 accent strokes for the score");
+assert.doesNotThrow(() => renderToStaticMarkup(createElement(DailyCashPlot, { series: daily })), "I4: DailyCashPlot renders outside ChartMotion without throwing, because m.* elements only exist in the client after the provider is up");
+assert.doesNotThrow(() => renderToStaticMarkup(createElement(HealthScorePanel, { records: chartRecords, row: chartRecords.at(-1)! })), "I4: ScoreChart (exercised through HealthScorePanel) renders outside ChartMotion without throwing, avoiding the LazyMotion strict trap");
 console.log("Web checks passed: published company demo and team sign-in, redirects, exact money input, dated horizons, chart scales, dated health explanations, dialog boundaries and validation errors.");

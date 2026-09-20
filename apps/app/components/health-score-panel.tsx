@@ -3,14 +3,20 @@ import Image from "next/image";
 import welcomePainting from "../public/welcome-garden-oil.png";
 import welcomeStyles from "./welcome-onboarding.module.css";
 import { useEffect, useRef, useState } from "react";
+import { m } from "framer-motion";
 import { date, monthlyTimeline } from "../lib/format";
 import type { ModelRecord } from "../lib/types";
 import { SegmentedGauge } from "./financial-cards";
+import { ChartMotion, enterTransition, useChartMotion } from "./motion";
 
 type ScorePoint = Pick<ModelRecord, "as_of" | "health_score">;
 export const modelNumber = (value: number | null | undefined, suffix = "", maximumFractionDigits = 1) => value == null ? "Not available" : `${new Intl.NumberFormat("en-GB", { maximumFractionDigits }).format(value)}${suffix}`;
 
 function ScoreChart({ records, row, height }: { records: ScorePoint[]; row: ModelRecord; height: number }) {
+  // Las animaciones de entrada solo corren en cliente tras el montaje: sin JS
+  // el markup estatico ya es el estado final (I1), y fuera de ChartMotion los
+  // elementos son los planos de siempre (LazyMotion strict exigiria proveedor).
+  const animate = useChartMotion();
   const [width, setWidth] = useState(1000);
   const svg = useRef<SVGSVGElement>(null);
   useEffect(() => {
@@ -24,9 +30,30 @@ function ScoreChart({ records, row, height }: { records: ScorePoint[]; row: Mode
   const y = (score: number) => height - 40 - score / 100 * (height - 70);
   const path = records.map((row, index) => row.health_score === null ? "" : `${index && records[index - 1].health_score !== null ? "L" : "M"}${x(index)},${y(row.health_score)}`).join(" ");
   const selected = records.findIndex(record => record.as_of === row.as_of);
-  return <div className="model-chart health-history-chart"><svg ref={svg} style={{ height }} viewBox={`0 0 ${width} ${height}`} role="img" aria-labelledby="model-chart-title model-chart-description"><title id="model-chart-title">Monthly health score history</title><desc id="model-chart-description">Published model ratings from 0 to 100. Gaps mean no score was returned.</desc>{[0,25,50,75,100].map(value => <g key={value}><line x1="42" x2={right} y1={y(value)} y2={y(value)} stroke="var(--line)"/><text x="30" y={y(value)+4} textAnchor="end">{value}</text></g>)}<path d={path} fill="none" stroke="var(--accent)" strokeWidth="2.5"/>{records.map((record,index) => record.health_score === null ? null : <circle key={record.as_of} cx={x(index)} cy={y(record.health_score)} r={record.as_of === row.as_of ? 6 : width < 540 ? 3 : 4} fill={record.as_of === row.as_of ? "var(--accent)" : "var(--surface)"} stroke="var(--accent)" strokeWidth="2"><title>{`${date(record.as_of,true)}: ${modelNumber(record.health_score)} / 100`}</title></circle>)}{selected >= 0 && <line x1={x(selected)} x2={x(selected)} y1="18" y2={height - 34} stroke="var(--accent)" strokeDasharray="4 4"/>}{timeline.map((day,index) => index===0 || index===timeline.length-1 || (width > 540 && index===Math.floor(timeline.length/2)) ? <text key={day} x={x(index)} y={height - 11} textAnchor={index===0?"start":index===timeline.length-1?"end":"middle"}>{timeline.length > records.length && index===timeline.length-1 ? "Today" : date(day,true)}</text> : null)}</svg>
+  // La nota se dibuja de izquierda a derecha con pathLength (framer-motion lo
+  // implementa con strokeDasharray/strokeDashoffset, que solo existen en
+  // cliente despues del montaje; el path estatico no lleva guiones). Los
+  // puntos aparecen escalonados a medida que el trazo los alcanza, creciendo
+  // con scale: el atributo r del mes seleccionado nunca se anima (I2).
+  const line = animate ? <m.path d={path} fill="none" stroke="var(--accent)" strokeWidth="2.5" initial={{ pathLength: 0 }} animate={{ pathLength: 1 }} transition={enterTransition}/> : <path d={path} fill="none" stroke="var(--accent)" strokeWidth="2.5"/>;
+  const content = <div className="model-chart health-history-chart"><svg ref={svg} style={{ height }} viewBox={`0 0 ${width} ${height}`} role="img" aria-labelledby="model-chart-title model-chart-description"><title id="model-chart-title">Monthly health score history</title><desc id="model-chart-description">Published model ratings from 0 to 100. Gaps mean no score was returned.</desc>{[0,25,50,75,100].map(value => <g key={value}><line x1="42" x2={right} y1={y(value)} y2={y(value)} stroke="var(--line)"/><text x="30" y={y(value)+4} textAnchor="end">{value}</text></g>)}{line}{records.map((record,index) => {
+    if (record.health_score === null) return null;
+    const isSelected = record.as_of === row.as_of;
+    const attrs = { cx: x(index), cy: y(record.health_score), r: isSelected ? 6 : width < 540 ? 3 : 4, fill: isSelected ? "var(--accent)" : "var(--surface)", stroke: "var(--accent)", strokeWidth: 2 };
+    const label = <title>{`${date(record.as_of,true)}: ${modelNumber(record.health_score)} / 100`}</title>;
+    if (!animate) return <circle key={record.as_of} {...attrs}>{label}</circle>;
+    const Point = m.circle;
+    return <Point key={record.as_of} {...attrs} style={{ transformBox: "fill-box", transformOrigin: "center" }} initial={{ scale: 0, opacity: 0 }} animate={{ scale: 1, opacity: 1 }} transition={{ ...enterTransition, duration: 0.35, delay: 0.05 + 0.55 * (records.length > 1 ? index / (records.length - 1) : 1) }}>{label}</Point>;
+  })}{selected >= 0 && (animate
+    // El guion del mes seleccionado ya es diseno (4 4): no se convierte en
+    // animacion de guiones. Al cambiar la seleccion reaparece con opacidad.
+    ? <m.line key={selected} x1={x(selected)} x2={x(selected)} y1="18" y2={height - 34} stroke="var(--accent)" strokeDasharray="4 4" initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 0.25 }}/>
+    : <line x1={x(selected)} x2={x(selected)} y1="18" y2={height - 34} stroke="var(--accent)" strokeDasharray="4 4"/>)}{timeline.map((day,index) => index===0 || index===timeline.length-1 || (width > 540 && index===Math.floor(timeline.length/2)) ? <text key={day} x={x(index)} y={height - 11} textAnchor={index===0?"start":index===timeline.length-1?"end":"middle"}>{timeline.length > records.length && index===timeline.length-1 ? "Today" : date(day,true)}</text> : null)}</svg>
     {!records.some(record => record.health_score !== null) && <p className="chart-note">No score was returned for this company. Its available source data is shown below.</p>}
     <p className="chart-note">Monthly observations{records.length ? ` through ${date(records.at(-1)!.as_of, true)}` : " from 2025 are not available"}. Missing ratings stay empty; no daily scores are interpolated.</p></div>;
+  // Proveedor propio por si la grafica se monta fuera de un ChartMotion:
+  // anidar LazyMotion es inofensivo y evita el fallo de strict sin features.
+  return animate ? <ChartMotion>{content}</ChartMotion> : content;
 }
 
 function HealthScoreGauge({ row }: { row: ModelRecord }) {

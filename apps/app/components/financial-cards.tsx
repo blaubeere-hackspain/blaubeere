@@ -3,7 +3,8 @@ import type { ReactNode } from "react";
 import { ArrowDownLeft, ArrowUpRight, ClockAlert, Coins } from "lucide-react";
 import { date, money } from "../lib/format";
 import type { ModelRecord } from "../lib/types";
-import { GrowingBar } from "./motion";
+import { m } from "framer-motion";
+import { ChartMotion, GrowingBar, enterTransition, useChartMotion } from "./motion";
 
 const buckets = [
   { key: "1_30", label: "0–30 days", color: "#315b4b" },
@@ -23,13 +24,24 @@ export function formatIndex(value: number | null | undefined) {
 const formatFxPoints = (value: number | null | undefined) => value == null || !Number.isFinite(value) ? "Not available" : `${new Intl.NumberFormat("en-GB", { maximumFractionDigits: 2 }).format(value)} points`;
 
 export function SegmentedGauge({ segments, className, children }: { segments: { fraction: number; color: string }[]; className: string; children: ReactNode }) {
+  // Un gauge vacio (sin evidencia) no tiene nada que llenar: se queda como
+  // siempre. El llenado enciende los trazos en secuencia, de izquierda a
+  // derecha, con opacidad escalonada; el atributo stroke (que cuentan los
+  // tests de check-web) y la geometria de las lineas no se tocan (I2).
+  const animate = useChartMotion() && segments.length > 0;
   let end = 0;
   const ranges = segments.map(segment => ({ ...segment, end: end += segment.fraction }));
-  return <div className={className}><svg viewBox="0 0 180 105" aria-hidden="true">{Array.from({ length: 36 }, (_, index) => {
+  const strokes = Array.from({ length: 36 }, (_, index) => {
     const angle = Math.PI * (1 - index / 35);
-    const color = ranges.find(range => (index + .5) / 36 <= range.end)?.color ?? "var(--line)";
-    return <line key={index} x1={90 + 61 * Math.cos(angle)} y1={87 - 61 * Math.sin(angle)} x2={90 + 74 * Math.cos(angle)} y2={87 - 74 * Math.sin(angle)} stroke={color} strokeWidth="5" strokeLinecap="round"/>;
-  })}</svg>{children}</div>;
+    const attrs = { x1: 90 + 61 * Math.cos(angle), y1: 87 - 61 * Math.sin(angle), x2: 90 + 74 * Math.cos(angle), y2: 87 - 74 * Math.sin(angle), stroke: ranges.find(range => (index + .5) / 36 <= range.end)?.color ?? "var(--line)", strokeWidth: "5" as const, strokeLinecap: "round" as const };
+    if (!animate) return <line key={index} {...attrs}/>;
+    const Stroke = m.line;
+    return <Stroke key={index} {...attrs} initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ ...enterTransition, delay: index * 0.02 }}/>;
+  });
+  const svg = <svg viewBox="0 0 180 105" aria-hidden="true">{strokes}</svg>;
+  // Proveedor propio por si el gauge se monta fuera de un ChartMotion: anidar
+  // LazyMotion es inofensivo y evita el fallo de strict sin features.
+  return <div className={className}>{animate ? <ChartMotion>{svg}</ChartMotion> : svg}{children}</div>;
 }
 
 export function agingAmounts(payment: ModelRecord["payment"], side: "pago" | "cobro") {
