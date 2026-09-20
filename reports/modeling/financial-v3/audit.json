@@ -1,0 +1,3791 @@
+{
+  "aggregate_input_coverage_development_groups_only": {
+    "account_coverage_summary": [
+      {
+        "cash_products": 4130,
+        "first_activity_after_start": 2694,
+        "last_activity_before_end": 1139,
+        "with_activity_all_24": 472,
+        "with_august_activity": 2377,
+        "with_booked_closed_activity": 3516
+      }
+    ],
+    "account_month_coverage_distribution": [
+      {
+        "active_months": 1,
+        "internal_gap_months": 0,
+        "products": 169
+      },
+      {
+        "active_months": 2,
+        "internal_gap_months": 0,
+        "products": 78
+      },
+      {
+        "active_months": 2,
+        "internal_gap_months": 1,
+        "products": 17
+      },
+      {
+        "active_months": 2,
+        "internal_gap_months": 2,
+        "products": 26
+      },
+      {
+        "active_months": 2,
+        "internal_gap_months": 3,
+        "products": 7
+      },
+      {
+        "active_months": 2,
+        "internal_gap_months": 4,
+        "products": 5
+      },
+      {
+        "active_months": 2,
+        "internal_gap_months": 5,
+        "products": 5
+      },
+      {
+        "active_months": 2,
+        "internal_gap_months": 6,
+        "products": 2
+      },
+      {
+        "active_months": 2,
+        "internal_gap_months": 8,
+        "products": 5
+      },
+      {
+        "active_months": 2,
+        "internal_gap_months": 9,
+        "products": 2
+      },
+      {
+        "active_months": 2,
+        "internal_gap_months": 11,
+        "products": 4
+      },
+      {
+        "active_months": 2,
+        "internal_gap_months": 12,
+        "products": 3
+      },
+      {
+        "active_months": 2,
+        "internal_gap_months": 13,
+        "products": 2
+      },
+      {
+        "active_months": 3,
+        "internal_gap_months": 0,
+        "products": 70
+      },
+      {
+        "active_months": 3,
+        "internal_gap_months": 1,
+        "products": 16
+      },
+      {
+        "active_months": 3,
+        "internal_gap_months": 2,
+        "products": 20
+      },
+      {
+        "active_months": 3,
+        "internal_gap_months": 3,
+        "products": 2
+      },
+      {
+        "active_months": 3,
+        "internal_gap_months": 4,
+        "products": 8
+      },
+      {
+        "active_months": 3,
+        "internal_gap_months": 6,
+        "products": 3
+      },
+      {
+        "active_months": 3,
+        "internal_gap_months": 7,
+        "products": 4
+      },
+      {
+        "active_months": 3,
+        "internal_gap_months": 8,
+        "products": 1
+      },
+      {
+        "active_months": 3,
+        "internal_gap_months": 10,
+        "products": 5
+      },
+      {
+        "active_months": 3,
+        "internal_gap_months": 11,
+        "products": 3
+      },
+      {
+        "active_months": 3,
+        "internal_gap_months": 13,
+        "products": 3
+      },
+      {
+        "active_months": 3,
+        "internal_gap_months": 14,
+        "products": 1
+      },
+      {
+        "active_months": 3,
+        "internal_gap_months": 16,
+        "products": 3
+      },
+      {
+        "active_months": 4,
+        "internal_gap_months": 0,
+        "products": 75
+      },
+      {
+        "active_months": 4,
+        "internal_gap_months": 1,
+        "products": 14
+      },
+      {
+        "active_months": 4,
+        "internal_gap_months": 2,
+        "products": 9
+      },
+      {
+        "active_months": 4,
+        "internal_gap_months": 3,
+        "products": 8
+      },
+      {
+        "active_months": 4,
+        "internal_gap_months": 4,
+        "products": 2
+      },
+      {
+        "active_months": 4,
+        "internal_gap_months": 5,
+        "products": 3
+      },
+      {
+        "active_months": 4,
+        "internal_gap_months": 6,
+        "products": 11
+      },
+      {
+        "active_months": 4,
+        "internal_gap_months": 7,
+        "products": 3
+      },
+      {
+        "active_months": 4,
+        "internal_gap_months": 8,
+        "products": 1
+      },
+      {
+        "active_months": 4,
+        "internal_gap_months": 9,
+        "products": 5
+      },
+      {
+        "active_months": 4,
+        "internal_gap_months": 10,
+        "products": 2
+      },
+      {
+        "active_months": 4,
+        "internal_gap_months": 11,
+        "products": 1
+      },
+      {
+        "active_months": 4,
+        "internal_gap_months": 12,
+        "products": 2
+      },
+      {
+        "active_months": 4,
+        "internal_gap_months": 13,
+        "products": 2
+      },
+      {
+        "active_months": 4,
+        "internal_gap_months": 14,
+        "products": 2
+      },
+      {
+        "active_months": 4,
+        "internal_gap_months": 15,
+        "products": 4
+      },
+      {
+        "active_months": 5,
+        "internal_gap_months": 0,
+        "products": 74
+      },
+      {
+        "active_months": 5,
+        "internal_gap_months": 1,
+        "products": 16
+      },
+      {
+        "active_months": 5,
+        "internal_gap_months": 2,
+        "products": 11
+      },
+      {
+        "active_months": 5,
+        "internal_gap_months": 3,
+        "products": 4
+      },
+      {
+        "active_months": 5,
+        "internal_gap_months": 4,
+        "products": 4
+      },
+      {
+        "active_months": 5,
+        "internal_gap_months": 5,
+        "products": 12
+      },
+      {
+        "active_months": 5,
+        "internal_gap_months": 7,
+        "products": 4
+      },
+      {
+        "active_months": 5,
+        "internal_gap_months": 8,
+        "products": 2
+      },
+      {
+        "active_months": 5,
+        "internal_gap_months": 9,
+        "products": 1
+      },
+      {
+        "active_months": 5,
+        "internal_gap_months": 10,
+        "products": 4
+      },
+      {
+        "active_months": 5,
+        "internal_gap_months": 12,
+        "products": 2
+      },
+      {
+        "active_months": 5,
+        "internal_gap_months": 13,
+        "products": 2
+      },
+      {
+        "active_months": 5,
+        "internal_gap_months": 14,
+        "products": 2
+      },
+      {
+        "active_months": 5,
+        "internal_gap_months": 17,
+        "products": 1
+      },
+      {
+        "active_months": 5,
+        "internal_gap_months": 18,
+        "products": 1
+      },
+      {
+        "active_months": 5,
+        "internal_gap_months": 19,
+        "products": 1
+      },
+      {
+        "active_months": 6,
+        "internal_gap_months": 0,
+        "products": 133
+      },
+      {
+        "active_months": 6,
+        "internal_gap_months": 1,
+        "products": 12
+      },
+      {
+        "active_months": 6,
+        "internal_gap_months": 2,
+        "products": 7
+      },
+      {
+        "active_months": 6,
+        "internal_gap_months": 3,
+        "products": 4
+      },
+      {
+        "active_months": 6,
+        "internal_gap_months": 4,
+        "products": 5
+      },
+      {
+        "active_months": 6,
+        "internal_gap_months": 5,
+        "products": 2
+      },
+      {
+        "active_months": 6,
+        "internal_gap_months": 6,
+        "products": 4
+      },
+      {
+        "active_months": 6,
+        "internal_gap_months": 7,
+        "products": 11
+      },
+      {
+        "active_months": 6,
+        "internal_gap_months": 8,
+        "products": 2
+      },
+      {
+        "active_months": 6,
+        "internal_gap_months": 9,
+        "products": 3
+      },
+      {
+        "active_months": 6,
+        "internal_gap_months": 10,
+        "products": 3
+      },
+      {
+        "active_months": 6,
+        "internal_gap_months": 11,
+        "products": 2
+      },
+      {
+        "active_months": 6,
+        "internal_gap_months": 13,
+        "products": 3
+      },
+      {
+        "active_months": 6,
+        "internal_gap_months": 16,
+        "products": 1
+      },
+      {
+        "active_months": 7,
+        "internal_gap_months": 0,
+        "products": 200
+      },
+      {
+        "active_months": 7,
+        "internal_gap_months": 1,
+        "products": 24
+      },
+      {
+        "active_months": 7,
+        "internal_gap_months": 2,
+        "products": 8
+      },
+      {
+        "active_months": 7,
+        "internal_gap_months": 3,
+        "products": 3
+      },
+      {
+        "active_months": 7,
+        "internal_gap_months": 4,
+        "products": 4
+      },
+      {
+        "active_months": 7,
+        "internal_gap_months": 5,
+        "products": 2
+      },
+      {
+        "active_months": 7,
+        "internal_gap_months": 6,
+        "products": 5
+      },
+      {
+        "active_months": 7,
+        "internal_gap_months": 7,
+        "products": 2
+      },
+      {
+        "active_months": 7,
+        "internal_gap_months": 9,
+        "products": 3
+      },
+      {
+        "active_months": 7,
+        "internal_gap_months": 10,
+        "products": 1
+      },
+      {
+        "active_months": 7,
+        "internal_gap_months": 11,
+        "products": 3
+      },
+      {
+        "active_months": 7,
+        "internal_gap_months": 12,
+        "products": 8
+      },
+      {
+        "active_months": 7,
+        "internal_gap_months": 13,
+        "products": 2
+      },
+      {
+        "active_months": 7,
+        "internal_gap_months": 14,
+        "products": 4
+      },
+      {
+        "active_months": 7,
+        "internal_gap_months": 15,
+        "products": 2
+      },
+      {
+        "active_months": 8,
+        "internal_gap_months": 0,
+        "products": 234
+      },
+      {
+        "active_months": 8,
+        "internal_gap_months": 1,
+        "products": 4
+      },
+      {
+        "active_months": 8,
+        "internal_gap_months": 2,
+        "products": 1
+      },
+      {
+        "active_months": 8,
+        "internal_gap_months": 3,
+        "products": 5
+      },
+      {
+        "active_months": 8,
+        "internal_gap_months": 5,
+        "products": 3
+      },
+      {
+        "active_months": 8,
+        "internal_gap_months": 7,
+        "products": 1
+      },
+      {
+        "active_months": 8,
+        "internal_gap_months": 8,
+        "products": 6
+      },
+      {
+        "active_months": 8,
+        "internal_gap_months": 9,
+        "products": 2
+      },
+      {
+        "active_months": 8,
+        "internal_gap_months": 10,
+        "products": 1
+      },
+      {
+        "active_months": 8,
+        "internal_gap_months": 11,
+        "products": 4
+      },
+      {
+        "active_months": 8,
+        "internal_gap_months": 12,
+        "products": 1
+      },
+      {
+        "active_months": 8,
+        "internal_gap_months": 16,
+        "products": 1
+      },
+      {
+        "active_months": 9,
+        "internal_gap_months": 0,
+        "products": 112
+      },
+      {
+        "active_months": 9,
+        "internal_gap_months": 1,
+        "products": 7
+      },
+      {
+        "active_months": 9,
+        "internal_gap_months": 2,
+        "products": 3
+      },
+      {
+        "active_months": 9,
+        "internal_gap_months": 3,
+        "products": 6
+      },
+      {
+        "active_months": 9,
+        "internal_gap_months": 4,
+        "products": 1
+      },
+      {
+        "active_months": 9,
+        "internal_gap_months": 5,
+        "products": 3
+      },
+      {
+        "active_months": 9,
+        "internal_gap_months": 6,
+        "products": 1
+      },
+      {
+        "active_months": 9,
+        "internal_gap_months": 7,
+        "products": 4
+      },
+      {
+        "active_months": 9,
+        "internal_gap_months": 8,
+        "products": 6
+      },
+      {
+        "active_months": 9,
+        "internal_gap_months": 9,
+        "products": 3
+      },
+      {
+        "active_months": 9,
+        "internal_gap_months": 10,
+        "products": 3
+      },
+      {
+        "active_months": 9,
+        "internal_gap_months": 11,
+        "products": 3
+      },
+      {
+        "active_months": 9,
+        "internal_gap_months": 14,
+        "products": 1
+      },
+      {
+        "active_months": 9,
+        "internal_gap_months": 15,
+        "products": 1
+      },
+      {
+        "active_months": 10,
+        "internal_gap_months": 0,
+        "products": 84
+      },
+      {
+        "active_months": 10,
+        "internal_gap_months": 1,
+        "products": 7
+      },
+      {
+        "active_months": 10,
+        "internal_gap_months": 2,
+        "products": 4
+      },
+      {
+        "active_months": 10,
+        "internal_gap_months": 3,
+        "products": 4
+      },
+      {
+        "active_months": 10,
+        "internal_gap_months": 4,
+        "products": 2
+      },
+      {
+        "active_months": 10,
+        "internal_gap_months": 5,
+        "products": 1
+      },
+      {
+        "active_months": 10,
+        "internal_gap_months": 6,
+        "products": 2
+      },
+      {
+        "active_months": 10,
+        "internal_gap_months": 7,
+        "products": 1
+      },
+      {
+        "active_months": 10,
+        "internal_gap_months": 8,
+        "products": 1
+      },
+      {
+        "active_months": 10,
+        "internal_gap_months": 9,
+        "products": 3
+      },
+      {
+        "active_months": 10,
+        "internal_gap_months": 11,
+        "products": 3
+      },
+      {
+        "active_months": 10,
+        "internal_gap_months": 12,
+        "products": 1
+      },
+      {
+        "active_months": 10,
+        "internal_gap_months": 13,
+        "products": 2
+      },
+      {
+        "active_months": 10,
+        "internal_gap_months": 14,
+        "products": 1
+      },
+      {
+        "active_months": 11,
+        "internal_gap_months": 0,
+        "products": 103
+      },
+      {
+        "active_months": 11,
+        "internal_gap_months": 1,
+        "products": 4
+      },
+      {
+        "active_months": 11,
+        "internal_gap_months": 3,
+        "products": 2
+      },
+      {
+        "active_months": 11,
+        "internal_gap_months": 4,
+        "products": 1
+      },
+      {
+        "active_months": 11,
+        "internal_gap_months": 5,
+        "products": 1
+      },
+      {
+        "active_months": 11,
+        "internal_gap_months": 7,
+        "products": 4
+      },
+      {
+        "active_months": 11,
+        "internal_gap_months": 8,
+        "products": 1
+      },
+      {
+        "active_months": 11,
+        "internal_gap_months": 9,
+        "products": 3
+      },
+      {
+        "active_months": 11,
+        "internal_gap_months": 10,
+        "products": 1
+      },
+      {
+        "active_months": 11,
+        "internal_gap_months": 11,
+        "products": 3
+      },
+      {
+        "active_months": 11,
+        "internal_gap_months": 12,
+        "products": 2
+      },
+      {
+        "active_months": 11,
+        "internal_gap_months": 13,
+        "products": 1
+      },
+      {
+        "active_months": 12,
+        "internal_gap_months": 0,
+        "products": 70
+      },
+      {
+        "active_months": 12,
+        "internal_gap_months": 1,
+        "products": 5
+      },
+      {
+        "active_months": 12,
+        "internal_gap_months": 2,
+        "products": 4
+      },
+      {
+        "active_months": 12,
+        "internal_gap_months": 3,
+        "products": 1
+      },
+      {
+        "active_months": 12,
+        "internal_gap_months": 4,
+        "products": 4
+      },
+      {
+        "active_months": 12,
+        "internal_gap_months": 5,
+        "products": 3
+      },
+      {
+        "active_months": 12,
+        "internal_gap_months": 6,
+        "products": 5
+      },
+      {
+        "active_months": 12,
+        "internal_gap_months": 7,
+        "products": 2
+      },
+      {
+        "active_months": 12,
+        "internal_gap_months": 8,
+        "products": 3
+      },
+      {
+        "active_months": 12,
+        "internal_gap_months": 9,
+        "products": 2
+      },
+      {
+        "active_months": 12,
+        "internal_gap_months": 10,
+        "products": 3
+      },
+      {
+        "active_months": 12,
+        "internal_gap_months": 11,
+        "products": 2
+      },
+      {
+        "active_months": 13,
+        "internal_gap_months": 0,
+        "products": 65
+      },
+      {
+        "active_months": 13,
+        "internal_gap_months": 1,
+        "products": 11
+      },
+      {
+        "active_months": 13,
+        "internal_gap_months": 2,
+        "products": 5
+      },
+      {
+        "active_months": 13,
+        "internal_gap_months": 3,
+        "products": 3
+      },
+      {
+        "active_months": 13,
+        "internal_gap_months": 4,
+        "products": 4
+      },
+      {
+        "active_months": 13,
+        "internal_gap_months": 5,
+        "products": 2
+      },
+      {
+        "active_months": 13,
+        "internal_gap_months": 6,
+        "products": 4
+      },
+      {
+        "active_months": 13,
+        "internal_gap_months": 7,
+        "products": 2
+      },
+      {
+        "active_months": 13,
+        "internal_gap_months": 8,
+        "products": 3
+      },
+      {
+        "active_months": 13,
+        "internal_gap_months": 9,
+        "products": 4
+      },
+      {
+        "active_months": 13,
+        "internal_gap_months": 10,
+        "products": 1
+      },
+      {
+        "active_months": 13,
+        "internal_gap_months": 11,
+        "products": 3
+      },
+      {
+        "active_months": 14,
+        "internal_gap_months": 0,
+        "products": 60
+      },
+      {
+        "active_months": 14,
+        "internal_gap_months": 1,
+        "products": 4
+      },
+      {
+        "active_months": 14,
+        "internal_gap_months": 2,
+        "products": 5
+      },
+      {
+        "active_months": 14,
+        "internal_gap_months": 4,
+        "products": 3
+      },
+      {
+        "active_months": 14,
+        "internal_gap_months": 5,
+        "products": 4
+      },
+      {
+        "active_months": 14,
+        "internal_gap_months": 6,
+        "products": 3
+      },
+      {
+        "active_months": 14,
+        "internal_gap_months": 9,
+        "products": 1
+      },
+      {
+        "active_months": 14,
+        "internal_gap_months": 10,
+        "products": 2
+      },
+      {
+        "active_months": 15,
+        "internal_gap_months": 0,
+        "products": 77
+      },
+      {
+        "active_months": 15,
+        "internal_gap_months": 1,
+        "products": 9
+      },
+      {
+        "active_months": 15,
+        "internal_gap_months": 2,
+        "products": 4
+      },
+      {
+        "active_months": 15,
+        "internal_gap_months": 3,
+        "products": 1
+      },
+      {
+        "active_months": 15,
+        "internal_gap_months": 4,
+        "products": 6
+      },
+      {
+        "active_months": 15,
+        "internal_gap_months": 5,
+        "products": 2
+      },
+      {
+        "active_months": 15,
+        "internal_gap_months": 7,
+        "products": 4
+      },
+      {
+        "active_months": 15,
+        "internal_gap_months": 8,
+        "products": 7
+      },
+      {
+        "active_months": 15,
+        "internal_gap_months": 9,
+        "products": 1
+      },
+      {
+        "active_months": 16,
+        "internal_gap_months": 0,
+        "products": 68
+      },
+      {
+        "active_months": 16,
+        "internal_gap_months": 1,
+        "products": 10
+      },
+      {
+        "active_months": 16,
+        "internal_gap_months": 2,
+        "products": 4
+      },
+      {
+        "active_months": 16,
+        "internal_gap_months": 3,
+        "products": 2
+      },
+      {
+        "active_months": 16,
+        "internal_gap_months": 4,
+        "products": 5
+      },
+      {
+        "active_months": 16,
+        "internal_gap_months": 5,
+        "products": 1
+      },
+      {
+        "active_months": 16,
+        "internal_gap_months": 6,
+        "products": 1
+      },
+      {
+        "active_months": 16,
+        "internal_gap_months": 7,
+        "products": 1
+      },
+      {
+        "active_months": 16,
+        "internal_gap_months": 8,
+        "products": 6
+      },
+      {
+        "active_months": 17,
+        "internal_gap_months": 0,
+        "products": 48
+      },
+      {
+        "active_months": 17,
+        "internal_gap_months": 1,
+        "products": 10
+      },
+      {
+        "active_months": 17,
+        "internal_gap_months": 2,
+        "products": 12
+      },
+      {
+        "active_months": 17,
+        "internal_gap_months": 3,
+        "products": 3
+      },
+      {
+        "active_months": 17,
+        "internal_gap_months": 5,
+        "products": 1
+      },
+      {
+        "active_months": 17,
+        "internal_gap_months": 6,
+        "products": 5
+      },
+      {
+        "active_months": 17,
+        "internal_gap_months": 7,
+        "products": 2
+      },
+      {
+        "active_months": 18,
+        "internal_gap_months": 0,
+        "products": 58
+      },
+      {
+        "active_months": 18,
+        "internal_gap_months": 1,
+        "products": 4
+      },
+      {
+        "active_months": 18,
+        "internal_gap_months": 2,
+        "products": 10
+      },
+      {
+        "active_months": 18,
+        "internal_gap_months": 3,
+        "products": 1
+      },
+      {
+        "active_months": 18,
+        "internal_gap_months": 4,
+        "products": 2
+      },
+      {
+        "active_months": 18,
+        "internal_gap_months": 5,
+        "products": 4
+      },
+      {
+        "active_months": 18,
+        "internal_gap_months": 6,
+        "products": 5
+      },
+      {
+        "active_months": 19,
+        "internal_gap_months": 0,
+        "products": 73
+      },
+      {
+        "active_months": 19,
+        "internal_gap_months": 1,
+        "products": 10
+      },
+      {
+        "active_months": 19,
+        "internal_gap_months": 2,
+        "products": 5
+      },
+      {
+        "active_months": 19,
+        "internal_gap_months": 3,
+        "products": 1
+      },
+      {
+        "active_months": 19,
+        "internal_gap_months": 4,
+        "products": 4
+      },
+      {
+        "active_months": 19,
+        "internal_gap_months": 5,
+        "products": 5
+      },
+      {
+        "active_months": 20,
+        "internal_gap_months": 0,
+        "products": 203
+      },
+      {
+        "active_months": 20,
+        "internal_gap_months": 1,
+        "products": 6
+      },
+      {
+        "active_months": 20,
+        "internal_gap_months": 2,
+        "products": 2
+      },
+      {
+        "active_months": 20,
+        "internal_gap_months": 3,
+        "products": 5
+      },
+      {
+        "active_months": 20,
+        "internal_gap_months": 4,
+        "products": 11
+      },
+      {
+        "active_months": 21,
+        "internal_gap_months": 0,
+        "products": 40
+      },
+      {
+        "active_months": 21,
+        "internal_gap_months": 1,
+        "products": 7
+      },
+      {
+        "active_months": 21,
+        "internal_gap_months": 2,
+        "products": 3
+      },
+      {
+        "active_months": 21,
+        "internal_gap_months": 3,
+        "products": 10
+      },
+      {
+        "active_months": 22,
+        "internal_gap_months": 0,
+        "products": 29
+      },
+      {
+        "active_months": 22,
+        "internal_gap_months": 1,
+        "products": 4
+      },
+      {
+        "active_months": 22,
+        "internal_gap_months": 2,
+        "products": 8
+      },
+      {
+        "active_months": 23,
+        "internal_gap_months": 0,
+        "products": 56
+      },
+      {
+        "active_months": 23,
+        "internal_gap_months": 1,
+        "products": 24
+      },
+      {
+        "active_months": 24,
+        "internal_gap_months": 0,
+        "products": 472
+      }
+    ],
+    "anchor_day_movements": [
+      {
+        "products_on_anchor_day": 1296,
+        "transaction_rows_on_anchor_day": 7102
+      }
+    ],
+    "anchor_multiplicity": [
+      {
+        "products": 6774,
+        "snapshots": 1
+      }
+    ],
+    "anchors": [
+      {
+        "companies": 176,
+        "first_date": "2026-09-01 00:00:00",
+        "intraday_timestamps": 0,
+        "invalid_balance": 0,
+        "last_date": "2026-09-01 00:00:00",
+        "missing_available": 671,
+        "non_eur": 3,
+        "product_source": "banking",
+        "product_type": "card",
+        "rows": 671
+      },
+      {
+        "companies": 1064,
+        "first_date": "2026-08-28 00:00:00",
+        "intraday_timestamps": 0,
+        "invalid_balance": 5,
+        "last_date": "2026-09-01 00:00:00",
+        "missing_available": 3937,
+        "non_eur": 743,
+        "product_source": "banking",
+        "product_type": "checking",
+        "rows": 3937
+      },
+      {
+        "companies": 1,
+        "first_date": "2026-09-01 00:00:00",
+        "intraday_timestamps": 0,
+        "invalid_balance": 0,
+        "last_date": "2026-09-01 00:00:00",
+        "missing_available": 1,
+        "non_eur": 0,
+        "product_source": "banking",
+        "product_type": "expensesPlatform",
+        "rows": 1
+      },
+      {
+        "companies": 74,
+        "first_date": "2026-09-01 00:00:00",
+        "intraday_timestamps": 0,
+        "invalid_balance": 0,
+        "last_date": "2026-09-01 00:00:00",
+        "missing_available": 157,
+        "non_eur": 8,
+        "product_source": "banking",
+        "product_type": "investment",
+        "rows": 157
+      },
+      {
+        "companies": 8,
+        "first_date": "2026-09-01 00:00:00",
+        "intraday_timestamps": 0,
+        "invalid_balance": 0,
+        "last_date": "2026-09-01 00:00:00",
+        "missing_available": 19,
+        "non_eur": 0,
+        "product_source": "banking",
+        "product_type": "lineofcomex",
+        "rows": 19
+      },
+      {
+        "companies": 5,
+        "first_date": "2026-09-01 00:00:00",
+        "intraday_timestamps": 0,
+        "invalid_balance": 0,
+        "last_date": "2026-09-01 00:00:00",
+        "missing_available": 25,
+        "non_eur": 12,
+        "product_source": "banking",
+        "product_type": "risk",
+        "rows": 25
+      },
+      {
+        "companies": 4,
+        "first_date": "2026-09-01 00:00:00",
+        "intraday_timestamps": 0,
+        "invalid_balance": 0,
+        "last_date": "2026-09-01 00:00:00",
+        "missing_available": 5,
+        "non_eur": 5,
+        "product_source": "banking",
+        "product_type": "saving",
+        "rows": 5
+      },
+      {
+        "companies": 8,
+        "first_date": "2026-09-01 00:00:00",
+        "intraday_timestamps": 0,
+        "invalid_balance": 0,
+        "last_date": "2026-09-01 00:00:00",
+        "missing_available": 22,
+        "non_eur": 0,
+        "product_source": "banking",
+        "product_type": "tpv",
+        "rows": 22
+      },
+      {
+        "companies": 18,
+        "first_date": "2026-09-01 00:00:00",
+        "intraday_timestamps": 0,
+        "invalid_balance": 0,
+        "last_date": "2026-09-01 00:00:00",
+        "missing_available": 30,
+        "non_eur": 16,
+        "product_source": "banking",
+        "product_type": "wallet",
+        "rows": 30
+      },
+      {
+        "companies": 57,
+        "first_date": "2026-09-01 00:00:00",
+        "intraday_timestamps": 0,
+        "invalid_balance": 0,
+        "last_date": "2026-09-01 00:00:00",
+        "missing_available": 198,
+        "non_eur": 4,
+        "product_source": "debt",
+        "product_type": "confirming",
+        "rows": 198
+      },
+      {
+        "companies": 18,
+        "first_date": "2026-09-01 00:00:00",
+        "intraday_timestamps": 0,
+        "invalid_balance": 0,
+        "last_date": "2026-09-01 00:00:00",
+        "missing_available": 22,
+        "non_eur": 1,
+        "product_source": "debt",
+        "product_type": "factoring",
+        "rows": 22
+      },
+      {
+        "companies": 44,
+        "first_date": "2026-09-01 00:00:00",
+        "intraday_timestamps": 0,
+        "invalid_balance": 0,
+        "last_date": "2026-09-01 00:00:00",
+        "missing_available": 130,
+        "non_eur": 4,
+        "product_source": "debt",
+        "product_type": "guarantee",
+        "rows": 130
+      },
+      {
+        "companies": 37,
+        "first_date": "2026-09-01 00:00:00",
+        "intraday_timestamps": 0,
+        "invalid_balance": 0,
+        "last_date": "2026-09-01 00:00:00",
+        "missing_available": 149,
+        "non_eur": 0,
+        "product_source": "debt",
+        "product_type": "leasing",
+        "rows": 149
+      },
+      {
+        "companies": 178,
+        "first_date": "2026-08-28 00:00:00",
+        "intraday_timestamps": 0,
+        "invalid_balance": 0,
+        "last_date": "2026-09-01 00:00:00",
+        "missing_available": 452,
+        "non_eur": 4,
+        "product_source": "debt",
+        "product_type": "lineofcredit",
+        "rows": 452
+      },
+      {
+        "companies": 207,
+        "first_date": "2026-09-01 00:00:00",
+        "intraday_timestamps": 0,
+        "invalid_balance": 0,
+        "last_date": "2026-09-01 00:00:00",
+        "missing_available": 845,
+        "non_eur": 5,
+        "product_source": "debt",
+        "product_type": "loan",
+        "rows": 845
+      },
+      {
+        "companies": 11,
+        "first_date": "2026-09-01 00:00:00",
+        "intraday_timestamps": 0,
+        "invalid_balance": 0,
+        "last_date": "2026-09-01 00:00:00",
+        "missing_available": 60,
+        "non_eur": 0,
+        "product_source": "debt",
+        "product_type": "mortgage",
+        "rows": 60
+      },
+      {
+        "companies": 13,
+        "first_date": "2026-09-01 00:00:00",
+        "intraday_timestamps": 0,
+        "invalid_balance": 0,
+        "last_date": "2026-09-01 00:00:00",
+        "missing_available": 33,
+        "non_eur": 0,
+        "product_source": "debt",
+        "product_type": "renting",
+        "rows": 33
+      },
+      {
+        "companies": 13,
+        "first_date": "2026-08-25 00:00:00",
+        "intraday_timestamps": 0,
+        "invalid_balance": 0,
+        "last_date": "2026-09-01 00:00:00",
+        "missing_available": 18,
+        "non_eur": 0,
+        "product_source": "orphan",
+        "product_type": null,
+        "rows": 18
+      }
+    ],
+    "cash_anchor_coverage": [
+      {
+        "cash_products": 4130,
+        "eur_finite_anchor": 3204,
+        "finite_anchor_and_24_active_months": 472,
+        "ownership_mismatch": 0,
+        "with_anchor": 3972,
+        "with_finite_clean_anchor": 3967
+      }
+    ],
+    "cash_monthly_coverage": [
+      {
+        "companies": 376,
+        "month": "2024-09-01",
+        "products": 822,
+        "rows": 31815,
+        "unknown_eur": 1658,
+        "unusable_native_amount": 0
+      },
+      {
+        "companies": 403,
+        "month": "2024-10-01",
+        "products": 901,
+        "rows": 37551,
+        "unknown_eur": 1692,
+        "unusable_native_amount": 0
+      },
+      {
+        "companies": 408,
+        "month": "2024-11-01",
+        "products": 908,
+        "rows": 33857,
+        "unknown_eur": 1742,
+        "unusable_native_amount": 0
+      },
+      {
+        "companies": 432,
+        "month": "2024-12-01",
+        "products": 992,
+        "rows": 35853,
+        "unknown_eur": 1801,
+        "unusable_native_amount": 0
+      },
+      {
+        "companies": 547,
+        "month": "2025-01-01",
+        "products": 1277,
+        "rows": 47302,
+        "unknown_eur": 2382,
+        "unusable_native_amount": 0
+      },
+      {
+        "companies": 581,
+        "month": "2025-02-01",
+        "products": 1314,
+        "rows": 47358,
+        "unknown_eur": 2169,
+        "unusable_native_amount": 0
+      },
+      {
+        "companies": 615,
+        "month": "2025-03-01",
+        "products": 1423,
+        "rows": 54346,
+        "unknown_eur": 2022,
+        "unusable_native_amount": 0
+      },
+      {
+        "companies": 633,
+        "month": "2025-04-01",
+        "products": 1475,
+        "rows": 60194,
+        "unknown_eur": 2385,
+        "unusable_native_amount": 0
+      },
+      {
+        "companies": 651,
+        "month": "2025-05-01",
+        "products": 1504,
+        "rows": 61649,
+        "unknown_eur": 2334,
+        "unusable_native_amount": 0
+      },
+      {
+        "companies": 667,
+        "month": "2025-06-01",
+        "products": 1602,
+        "rows": 65413,
+        "unknown_eur": 3299,
+        "unusable_native_amount": 0
+      },
+      {
+        "companies": 705,
+        "month": "2025-07-01",
+        "products": 1697,
+        "rows": 75452,
+        "unknown_eur": 3300,
+        "unusable_native_amount": 0
+      },
+      {
+        "companies": 720,
+        "month": "2025-08-01",
+        "products": 1642,
+        "rows": 65730,
+        "unknown_eur": 3953,
+        "unusable_native_amount": 0
+      },
+      {
+        "companies": 755,
+        "month": "2025-09-01",
+        "products": 1780,
+        "rows": 78307,
+        "unknown_eur": 4562,
+        "unusable_native_amount": 0
+      },
+      {
+        "companies": 786,
+        "month": "2025-10-01",
+        "products": 1887,
+        "rows": 85357,
+        "unknown_eur": 5136,
+        "unusable_native_amount": 0
+      },
+      {
+        "companies": 803,
+        "month": "2025-11-01",
+        "products": 1896,
+        "rows": 75856,
+        "unknown_eur": 4737,
+        "unusable_native_amount": 0
+      },
+      {
+        "companies": 849,
+        "month": "2025-12-01",
+        "products": 2021,
+        "rows": 88601,
+        "unknown_eur": 5845,
+        "unusable_native_amount": 0
+      },
+      {
+        "companies": 947,
+        "month": "2026-01-01",
+        "products": 2239,
+        "rows": 96989,
+        "unknown_eur": 6877,
+        "unusable_native_amount": 0
+      },
+      {
+        "companies": 998,
+        "month": "2026-02-01",
+        "products": 2380,
+        "rows": 103852,
+        "unknown_eur": 7783,
+        "unusable_native_amount": 0
+      },
+      {
+        "companies": 1017,
+        "month": "2026-03-01",
+        "products": 2545,
+        "rows": 129681,
+        "unknown_eur": 8670,
+        "unusable_native_amount": 0
+      },
+      {
+        "companies": 1024,
+        "month": "2026-04-01",
+        "products": 2590,
+        "rows": 135099,
+        "unknown_eur": 8289,
+        "unusable_native_amount": 0
+      },
+      {
+        "companies": 1011,
+        "month": "2026-05-01",
+        "products": 2506,
+        "rows": 126925,
+        "unknown_eur": 8000,
+        "unusable_native_amount": 0
+      },
+      {
+        "companies": 1001,
+        "month": "2026-06-01",
+        "products": 2576,
+        "rows": 135663,
+        "unknown_eur": 7782,
+        "unusable_native_amount": 0
+      },
+      {
+        "companies": 998,
+        "month": "2026-07-01",
+        "products": 2551,
+        "rows": 142053,
+        "unknown_eur": 10011,
+        "unusable_native_amount": 0
+      },
+      {
+        "companies": 966,
+        "month": "2026-08-01",
+        "products": 2377,
+        "rows": 116470,
+        "unknown_eur": 8227,
+        "unusable_native_amount": 0
+      }
+    ],
+    "company_scope": [
+      {
+        "companies": 1078,
+        "groups": 200
+      }
+    ],
+    "debt_mart_input_coverage": [
+      {
+        "company_months": 25872,
+        "identifiable_paid_service": 4527,
+        "with_identified_service_payments": 6012
+      }
+    ],
+    "debt_schedule_coverage": [
+      {
+        "companies": 33,
+        "missing_settlement_account": 0,
+        "schedules": 76,
+        "settlement_account_found": 66,
+        "settlement_same_company": 66,
+        "settlement_same_currency": 66,
+        "valid_last_payment": 76,
+        "valid_latest_rate": 76,
+        "valid_next_payment": 76
+      }
+    ],
+    "debt_snapshot": [
+      {
+        "companies": 330,
+        "negative_outstanding": 1152,
+        "non_eur": 18,
+        "products": 1914,
+        "reported_zero": 645,
+        "scheduled": 76,
+        "unknown_outstanding": 0,
+        "with_any_ledger_rows": 335
+      }
+    ],
+    "fx_evidence": [
+      {
+        "applicable_rates": 0,
+        "currency_months": 405,
+        "is_eur": false
+      },
+      {
+        "applicable_rates": 24,
+        "currency_months": 24,
+        "is_eur": true
+      }
+    ],
+    "growth_history_coverage": [
+      {
+        "company_months": 25872,
+        "fifteen_contiguous_known_receipt_months": 243,
+        "six_contiguous_known_receipt_months": 1584
+      }
+    ],
+    "invoice_issue_month_coverage": [
+      {
+        "companies": 358,
+        "month": "2024-09-01",
+        "rows": 13305,
+        "unknown_eur": 1448
+      },
+      {
+        "companies": 370,
+        "month": "2024-10-01",
+        "rows": 14939,
+        "unknown_eur": 1863
+      },
+      {
+        "companies": 388,
+        "month": "2024-11-01",
+        "rows": 16125,
+        "unknown_eur": 1591
+      },
+      {
+        "companies": 435,
+        "month": "2024-12-01",
+        "rows": 18206,
+        "unknown_eur": 2009
+      },
+      {
+        "companies": 448,
+        "month": "2025-01-01",
+        "rows": 20718,
+        "unknown_eur": 2009
+      },
+      {
+        "companies": 447,
+        "month": "2025-02-01",
+        "rows": 20087,
+        "unknown_eur": 1818
+      },
+      {
+        "companies": 456,
+        "month": "2025-03-01",
+        "rows": 21285,
+        "unknown_eur": 2289
+      },
+      {
+        "companies": 463,
+        "month": "2025-04-01",
+        "rows": 22845,
+        "unknown_eur": 2037
+      },
+      {
+        "companies": 470,
+        "month": "2025-05-01",
+        "rows": 25517,
+        "unknown_eur": 2090
+      },
+      {
+        "companies": 496,
+        "month": "2025-06-01",
+        "rows": 29209,
+        "unknown_eur": 2601
+      },
+      {
+        "companies": 504,
+        "month": "2025-07-01",
+        "rows": 31116,
+        "unknown_eur": 2643
+      },
+      {
+        "companies": 492,
+        "month": "2025-08-01",
+        "rows": 24280,
+        "unknown_eur": 2973
+      },
+      {
+        "companies": 528,
+        "month": "2025-09-01",
+        "rows": 29618,
+        "unknown_eur": 2795
+      },
+      {
+        "companies": 534,
+        "month": "2025-10-01",
+        "rows": 33024,
+        "unknown_eur": 3031
+      },
+      {
+        "companies": 536,
+        "month": "2025-11-01",
+        "rows": 29960,
+        "unknown_eur": 3035
+      },
+      {
+        "companies": 567,
+        "month": "2025-12-01",
+        "rows": 35863,
+        "unknown_eur": 3788
+      },
+      {
+        "companies": 567,
+        "month": "2026-01-01",
+        "rows": 36183,
+        "unknown_eur": 3577
+      },
+      {
+        "companies": 576,
+        "month": "2026-02-01",
+        "rows": 37288,
+        "unknown_eur": 3438
+      },
+      {
+        "companies": 585,
+        "month": "2026-03-01",
+        "rows": 45966,
+        "unknown_eur": 4850
+      },
+      {
+        "companies": 591,
+        "month": "2026-04-01",
+        "rows": 50352,
+        "unknown_eur": 6098
+      },
+      {
+        "companies": 588,
+        "month": "2026-05-01",
+        "rows": 52701,
+        "unknown_eur": 6824
+      },
+      {
+        "companies": 588,
+        "month": "2026-06-01",
+        "rows": 60890,
+        "unknown_eur": 8516
+      },
+      {
+        "companies": 577,
+        "month": "2026-07-01",
+        "rows": 64819,
+        "unknown_eur": 9614
+      },
+      {
+        "companies": 561,
+        "month": "2026-08-01",
+        "rows": 49329,
+        "unknown_eur": 7432
+      }
+    ],
+    "invoice_source_completeness": [
+      {
+        "companies": 679,
+        "duplicate_or_null_ids": 0,
+        "invalid_issuance": 0,
+        "missing_pending": 0,
+        "missing_valid_due": 20201,
+        "nonpaid_payment_date_not_actual": 208209,
+        "paid_with_pending": 282,
+        "partial_snapshot_candidates": 6158,
+        "rows": 788477,
+        "unknown_eur": 88814,
+        "valid_terminal_settlement_date": 561742
+      }
+    ],
+    "invoice_types_and_signs": [
+      {
+        "amount_sign": "positive",
+        "document_type_norm": "cheque",
+        "rows": 1
+      },
+      {
+        "amount_sign": "negative",
+        "document_type_norm": "deliverynote",
+        "rows": 95
+      },
+      {
+        "amount_sign": "positive",
+        "document_type_norm": "deliverynote",
+        "rows": 4193
+      },
+      {
+        "amount_sign": "zero_or_null",
+        "document_type_norm": "deliverynote",
+        "rows": 55
+      },
+      {
+        "amount_sign": "negative",
+        "document_type_norm": "deposit",
+        "rows": 8116
+      },
+      {
+        "amount_sign": "positive",
+        "document_type_norm": "deposit",
+        "rows": 11640
+      },
+      {
+        "amount_sign": "negative",
+        "document_type_norm": "invoice",
+        "rows": 397588
+      },
+      {
+        "amount_sign": "positive",
+        "document_type_norm": "invoice",
+        "rows": 267168
+      },
+      {
+        "amount_sign": "zero_or_null",
+        "document_type_norm": "invoice",
+        "rows": 780
+      },
+      {
+        "amount_sign": "negative",
+        "document_type_norm": "invoicegroup",
+        "rows": 8430
+      },
+      {
+        "amount_sign": "positive",
+        "document_type_norm": "invoicegroup",
+        "rows": 4202
+      },
+      {
+        "amount_sign": "negative",
+        "document_type_norm": "note",
+        "rows": 17653
+      },
+      {
+        "amount_sign": "positive",
+        "document_type_norm": "note",
+        "rows": 16621
+      },
+      {
+        "amount_sign": "zero_or_null",
+        "document_type_norm": "note",
+        "rows": 59
+      },
+      {
+        "amount_sign": "negative",
+        "document_type_norm": "other",
+        "rows": 369
+      },
+      {
+        "amount_sign": "positive",
+        "document_type_norm": "other",
+        "rows": 359
+      },
+      {
+        "amount_sign": "negative",
+        "document_type_norm": "paymentdocument",
+        "rows": 34493
+      },
+      {
+        "amount_sign": "positive",
+        "document_type_norm": "paymentdocument",
+        "rows": 13577
+      },
+      {
+        "amount_sign": "negative",
+        "document_type_norm": "purchaseorder",
+        "rows": 1110
+      },
+      {
+        "amount_sign": "positive",
+        "document_type_norm": "purchaseorder",
+        "rows": 10
+      },
+      {
+        "amount_sign": "zero_or_null",
+        "document_type_norm": "purchaseorder",
+        "rows": 52
+      },
+      {
+        "amount_sign": "negative",
+        "document_type_norm": "refund",
+        "rows": 1060
+      },
+      {
+        "amount_sign": "positive",
+        "document_type_norm": "refund",
+        "rows": 835
+      },
+      {
+        "amount_sign": "zero_or_null",
+        "document_type_norm": "refund",
+        "rows": 11
+      }
+    ],
+    "panel_flow_input_coverage": [
+      {
+        "active_company_months": 17893,
+        "ambiguous_classification": 14973,
+        "company_months": 25872,
+        "complete_operating_net": 2892,
+        "known_cash_net": 16478,
+        "known_operating_payments": 4470,
+        "known_operating_receipts": 6112,
+        "missing_eur": 1415
+      }
+    ],
+    "schedule_terms": [
+      {
+        "amortising_frequency": "monthly",
+        "amortization_type": "constant quote",
+        "interest_type": "fixed",
+        "schedules": 47
+      },
+      {
+        "amortising_frequency": "monthly",
+        "amortization_type": "constant quote",
+        "interest_type": "variable",
+        "schedules": 24
+      },
+      {
+        "amortising_frequency": "quarterly",
+        "amortization_type": "constant quote",
+        "interest_type": "fixed",
+        "schedules": 2
+      },
+      {
+        "amortising_frequency": "quarterly",
+        "amortization_type": "constant quote",
+        "interest_type": "variable",
+        "schedules": 1
+      },
+      {
+        "amortising_frequency": "semiannually",
+        "amortization_type": "constant quote",
+        "interest_type": "fixed",
+        "schedules": 1
+      },
+      {
+        "amortising_frequency": "semiannually",
+        "amortization_type": "constant quote",
+        "interest_type": "variable",
+        "schedules": 1
+      }
+    ],
+    "settlement_account_activity_not_payment_match": [
+      {
+        "schedules": 76,
+        "with_cash_account_activity": 62
+      }
+    ],
+    "source_completeness": [
+      {
+        "companies": 1075,
+        "rows": 5043,
+        "source": "banking_products",
+        "valid_created_at": 5043
+      },
+      {
+        "companies": 330,
+        "rows": 1914,
+        "source": "debt_products",
+        "valid_created_at": 1914
+      },
+      {
+        "companies": 679,
+        "rows": 788477,
+        "source": "invoices",
+        "valid_created_at": 788477
+      },
+      {
+        "companies": 1078,
+        "rows": 2220333,
+        "source": "transactions",
+        "valid_created_at": 2220333
+      }
+    ],
+    "transaction_dates": [
+      {
+        "booking_value_different": 288145,
+        "duplicate_or_null_ids": 0,
+        "first_booking": "2024-09-01 00:00:00",
+        "invalid_booking": 0,
+        "invalid_value_date": 0,
+        "last_booking": "2026-09-01 22:59:35",
+        "open_month_rows": 7946,
+        "unusable_amount": 0
+      }
+    ],
+    "transaction_status": [
+      {
+        "rows": 2188407,
+        "status_norm": "booked"
+      },
+      {
+        "rows": 5732,
+        "status_norm": "pending"
+      },
+      {
+        "rows": 26194,
+        "status_norm": "unknown"
+      }
+    ]
+  },
+  "assignment": {
+    "assignment_counts": {
+      "final_test": 50,
+      "train": 150,
+      "validation": 50
+    },
+    "development_groups": 200,
+    "excluded_groups": 50,
+    "new_confirmatory_groups_identified": 0
+  },
+  "audit_source_sha256": "b688f0a8bb018efb97ae32db548e80ca3c8368a5baf5ed92d35f427643f43981",
+  "baseline_sha256": "e91307018fe80d59102b864eef080bd242f7974479a7f2056f1c2f718c1e79fa",
+  "bindings": {
+    "frozen_source:requirements.txt": true,
+    "frozen_source:scripts/audit_financial_data.py": true,
+    "frozen_source:scripts/run_checks.sh": true,
+    "frozen_source:scripts/verify_ingest.sh": true,
+    "frozen_source:tests/__init__.py": true,
+    "frozen_source:tests/fixtures/financial_audit/materialized/balances.csv": true,
+    "frozen_source:tests/fixtures/financial_audit/materialized/companies.csv": true,
+    "frozen_source:tests/test_audit_inventory.py": true,
+    "frozen_source:tests/test_contracts.py": true,
+    "frozen_source:tests/test_marts.py": true,
+    "frozen_source:tests/test_model_audit.py": true,
+    "frozen_source:tests/test_pipeline.py": true,
+    "frozen_source:tests/test_regressions.py": true,
+    "frozen_source:xray/__init__.py": true,
+    "frozen_source:xray/clean/__init__.py": true,
+    "frozen_source:xray/clean/dimensions.py": true,
+    "frozen_source:xray/clean/facts.py": true,
+    "frozen_source:xray/cli.py": true,
+    "frozen_source:xray/contracts.py": true,
+    "frozen_source:xray/db.py": true,
+    "frozen_source:xray/flags.py": true,
+    "frozen_source:xray/flows.py": true,
+    "frozen_source:xray/ingest.py": true,
+    "frozen_source:xray/marts/__init__.py": true,
+    "frozen_source:xray/marts/cobro.py": true,
+    "frozen_source:xray/marts/common.py": true,
+    "frozen_source:xray/marts/deuda.py": true,
+    "frozen_source:xray/marts/evidencia.py": true,
+    "frozen_source:xray/marts/flujos.py": true,
+    "frozen_source:xray/marts/fx.py": true,
+    "frozen_source:xray/marts/observabilidad.py": true,
+    "frozen_source:xray/marts/targets.py": true,
+    "frozen_source:xray/model_audit.py": true,
+    "frozen_source:xray/paths.py": true,
+    "frozen_source:xray/period.py": true,
+    "frozen_source:xray/pipeline.py": true,
+    "frozen_source:xray/quality.py": true,
+    "frozen_source:xray/schema.py": true,
+    "raw_byte_hash_only:balances.csv": true,
+    "raw_byte_hash_only:banking_products.csv": true,
+    "raw_byte_hash_only:companies.csv": true,
+    "raw_byte_hash_only:debt_products.csv": true,
+    "raw_byte_hash_only:debt_schedule_config.csv": true,
+    "raw_byte_hash_only:groups.csv": true,
+    "raw_byte_hash_only:invoices.csv": true,
+    "raw_byte_hash_only:transactions.csv": true,
+    "run_output:data/clean/balances.parquet": true,
+    "run_output:data/clean/banking_products.parquet": true,
+    "run_output:data/clean/companies.parquet": true,
+    "run_output:data/clean/debt_products.parquet": true,
+    "run_output:data/clean/debt_schedule_config.parquet": true,
+    "run_output:data/clean/groups.parquet": true,
+    "run_output:data/clean/invoices.parquet": true,
+    "run_output:data/clean/transactions.parquet": true,
+    "run_output:data/interim/balances.parquet": true,
+    "run_output:data/interim/banking_products.parquet": true,
+    "run_output:data/interim/companies.parquet": true,
+    "run_output:data/interim/debt_products.parquet": true,
+    "run_output:data/interim/debt_schedule_config.parquet": true,
+    "run_output:data/interim/groups.parquet": true,
+    "run_output:data/interim/invoices.parquet": true,
+    "run_output:data/interim/transactions.parquet": true,
+    "run_output:data/interim/tx_flow_class.parquet": true,
+    "run_output:data/marts/fx_rates.parquet": true,
+    "run_output:data/marts/observabilidad.parquet": true,
+    "run_output:data/marts/panel_cobro.parquet": true,
+    "run_output:data/marts/panel_deuda.parquet": true,
+    "run_output:data/marts/panel_evidencia.parquet": true,
+    "run_output:data/marts/panel_flujos.parquet": true,
+    "run_output:data/marts/targets_proxy.parquet": true,
+    "run_output:reports/quality/dimensions.json": true,
+    "run_output:reports/quality/facts.json": true,
+    "run_output:reports/quality/flows.json": true,
+    "run_output:reports/quality/fx_rates.json": true,
+    "run_output:reports/quality/observabilidad.json": true,
+    "run_output:reports/quality/panel_cobro.json": true,
+    "run_output:reports/quality/panel_deuda.json": true,
+    "run_output:reports/quality/panel_evidencia.json": true,
+    "run_output:reports/quality/panel_flujos.json": true,
+    "run_output:reports/quality/summary.json": true,
+    "run_output:reports/quality/summary.md": true,
+    "run_output:reports/quality/targets_proxy.json": true,
+    "v1_artifact:config.json": true,
+    "v1_artifact:development.json": true,
+    "v1_artifact:development.json.integrity.json": true,
+    "v1_artifact:development_receipt.json": true,
+    "v1_artifact:development_support.json": true,
+    "v1_artifact:development_support.json.integrity.json": true,
+    "v1_artifact:final_training_receipt.json": true,
+    "v1_artifact:final_training_support.json": true,
+    "v1_artifact:final_training_support.json.integrity.json": true,
+    "v1_artifact:freeze.json": true,
+    "v1_artifact:hgb_leaf15.fold1.json": true,
+    "v1_artifact:hgb_leaf15.fold1.json.integrity.json": true,
+    "v1_artifact:hgb_leaf15.fold2.json": true,
+    "v1_artifact:hgb_leaf15.fold2.json.integrity.json": true,
+    "v1_artifact:hgb_leaf7.fold1.json": true,
+    "v1_artifact:hgb_leaf7.fold1.json.integrity.json": true,
+    "v1_artifact:hgb_leaf7.fold2.json": true,
+    "v1_artifact:hgb_leaf7.fold2.json.integrity.json": true,
+    "v1_artifact:logistic_c0.1.fold1.json": true,
+    "v1_artifact:logistic_c0.1.fold1.json.integrity.json": true,
+    "v1_artifact:logistic_c0.1.fold2.json": true,
+    "v1_artifact:logistic_c0.1.fold2.json.integrity.json": true,
+    "v1_artifact:logistic_c1.fold1.json": true,
+    "v1_artifact:logistic_c1.fold1.json.integrity.json": true,
+    "v1_artifact:logistic_c1.fold2.json": true,
+    "v1_artifact:logistic_c1.fold2.json.integrity.json": true,
+    "v1_artifact:model.joblib": true,
+    "v1_artifact:selection.json": true,
+    "v1_artifact:selection.json.integrity.json": true,
+    "v1_run_binding": true,
+    "v1_source:requirements-model.in": true,
+    "v1_source:requirements-model.txt": true,
+    "v1_source:scripts/model_experiment.py": true,
+    "v1_source:scripts/model_features.py": true,
+    "v1_source:scripts/model_inference.py": true,
+    "v1_source:scripts/model_learning.py": true,
+    "v1_source:scripts/model_protocol.py": true,
+    "v1_source:scripts/model_training_io.py": true,
+    "v1_source:tests/test_model_training.py": true,
+    "v2_source:requirements-model.txt": true,
+    "v2_source:requirements.txt": true,
+    "v2_source:scripts/model_features.py": true,
+    "v2_source:scripts/trajectory_backtest.py": true,
+    "v2_source:scripts/trajectory_contract.py": true,
+    "v2_source:scripts/trajectory_events.py": true,
+    "v2_source:scripts/trajectory_metrics.py": true,
+    "v2_source:scripts/trajectory_signals.py": true,
+    "v2_source:tests/test_trajectory_backtest.py": true,
+    "v2_source:tests/test_trajectory_contract.py": true,
+    "v2_source:tests/test_trajectory_events.py": true,
+    "v2_source:tests/test_trajectory_metrics.py": true,
+    "v2_source:tests/test_trajectory_signals.py": true
+  },
+  "capture_command": ".venv/bin/python -B scripts/financial_v3_audit.py --capture",
+  "created_at": "2026-09-19T19:48:38.717745+00:00",
+  "duckdb_version": "1.5.5",
+  "evaluation": {
+    "new_test_identified": false,
+    "required": "New external/future data with documented untouched access history; no relabelled old reserve.",
+    "v1_evaluation_receipt_exists": true,
+    "v2_reserve_consumed": true
+  },
+  "inventory_all_groups_counts_only": {
+    "balances": 7996,
+    "banking_products": 5987,
+    "companies": 1286,
+    "debt_products": 2239,
+    "debt_schedule_config": 87,
+    "fx_rates": 429,
+    "groups": 250,
+    "invoices": 897894,
+    "observabilidad": 30864,
+    "panel_cobro": 30864,
+    "panel_deuda": 30864,
+    "panel_evidencia": 30864,
+    "panel_flujos": 30864,
+    "transactions": 2556437,
+    "tx_flow_class": 2556437
+  },
+  "limitations": [
+    "Activity in every month does not prove a complete bank statement or a genuine zero in other months.",
+    "Snapshot midnight dates do not identify opening versus closing balance; no historical ingestion timestamps.",
+    "One balance per account cannot independently reconcile a reversed ledger; no FX valuation adjustment table.",
+    "Debt outstanding and schedule rates are extraction snapshots, not historical vintages or installment/payment ledgers.",
+    "Invoice signs are historical AP/AR proxies, not explicit verified role fields; terminal payment dates omit partial-payment histories.",
+    "No obligation-to-transaction allocation keys, dated cancellation/renegotiation events or completeness attestations exist in the input schema.",
+    "No headline company financial-health score is warranted by source presence alone."
+  ],
+  "protected_integrity_after_audit": {
+    "differences": [],
+    "mode": "hash-only read-only check; no DuckDB queries, pipeline, labels or evaluation",
+    "ok": true,
+    "old_document_bytes_preserved_as_suffix": true,
+    "protected_assets": 541
+  },
+  "query_sql": {
+    "account_coverage_summary": "WITH companies AS (SELECT * FROM read_parquet('/home/mikel/.herdr/worktrees/predictive-models/feat-training-devin/data/runs/20260919T124814Z-e5302b58/data/clean/companies.parquet') WHERE group_id NOT IN ('GROUP_0004','GROUP_0005','GROUP_0008','GROUP_0019','GROUP_0026','GROUP_0036','GROUP_0041','GROUP_0043','GROUP_0044','GROUP_0049','GROUP_0052','GROUP_0056','GROUP_0059','GROUP_0069','GROUP_0078','GROUP_0083','GROUP_0085','GROUP_0094','GROUP_0095','GROUP_0099','GROUP_0102','GROUP_0120','GROUP_0122','GROUP_0123','GROUP_0130','GROUP_0135','GROUP_0136','GROUP_0146','GROUP_0150','GROUP_0152','GROUP_0160','GROUP_0164','GROUP_0168','GROUP_0169','GROUP_0176','GROUP_0181','GROUP_0184','GROUP_0187','GROUP_0190','GROUP_0194','GROUP_0195','GROUP_0199','GROUP_0201','GROUP_0204','GROUP_0208','GROUP_0212','GROUP_0214','GROUP_0223','GROUP_0226','GROUP_0235')),\nbanking_products AS (SELECT s.* FROM read_parquet('/home/mikel/.herdr/worktrees/predictive-models/feat-training-devin/data/runs/20260919T124814Z-e5302b58/data/clean/banking_products.parquet') s JOIN companies c USING(company_id)),\ndebt_products AS (SELECT s.* FROM read_parquet('/home/mikel/.herdr/worktrees/predictive-models/feat-training-devin/data/runs/20260919T124814Z-e5302b58/data/clean/debt_products.parquet') s JOIN companies c USING(company_id)),\ndebt_schedule_config AS (SELECT s.* FROM read_parquet('/home/mikel/.herdr/worktrees/predictive-models/feat-training-devin/data/runs/20260919T124814Z-e5302b58/data/clean/debt_schedule_config.parquet') s JOIN companies c USING(company_id)),\nbalances AS (SELECT s.* FROM read_parquet('/home/mikel/.herdr/worktrees/predictive-models/feat-training-devin/data/runs/20260919T124814Z-e5302b58/data/clean/balances.parquet') s JOIN companies c USING(company_id)),\ntransactions AS (SELECT s.* FROM read_parquet('/home/mikel/.herdr/worktrees/predictive-models/feat-training-devin/data/runs/20260919T124814Z-e5302b58/data/clean/transactions.parquet') s JOIN companies c USING(company_id)),\ninvoices AS (SELECT s.* FROM read_parquet('/home/mikel/.herdr/worktrees/predictive-models/feat-training-devin/data/runs/20260919T124814Z-e5302b58/data/clean/invoices.parquet') s JOIN companies c USING(company_id)),\npanel_flujos AS (SELECT s.* FROM read_parquet('/home/mikel/.herdr/worktrees/predictive-models/feat-training-devin/data/runs/20260919T124814Z-e5302b58/data/marts/panel_flujos.parquet') s JOIN companies c USING(company_id)),\npanel_deuda AS (SELECT s.* FROM read_parquet('/home/mikel/.herdr/worktrees/predictive-models/feat-training-devin/data/runs/20260919T124814Z-e5302b58/data/marts/panel_deuda.parquet') s JOIN companies c USING(company_id)),\ncash AS (SELECT * FROM transactions WHERE is_booked AND product_source='banking' AND product_type IN ('checking','saving','wallet') AND month >= DATE '2024-09-01' AND month < DATE '2026-09-01')\nSELECT count(*) AS cash_products,\n            count(*) FILTER(WHERE t.product_id IS NOT NULL) AS with_booked_closed_activity,\n            count(*) FILTER(WHERE t.n=24) AS with_activity_all_24,\n            count(*) FILTER(WHERE t.last_month=DATE '2026-08-01') AS with_august_activity,\n            count(*) FILTER(WHERE t.first_month > DATE '2024-09-01') AS first_activity_after_start,\n            count(*) FILTER(WHERE t.last_month < DATE '2026-08-01') AS last_activity_before_end\n            FROM banking_products b LEFT JOIN (SELECT product_id, count(DISTINCT month) AS n,\n            min(month) AS first_month, max(month) AS last_month FROM cash GROUP BY 1) t USING(product_id)\n            WHERE b.type_norm IN ('checking','saving','wallet')",
+    "account_month_coverage_distribution": "WITH companies AS (SELECT * FROM read_parquet('/home/mikel/.herdr/worktrees/predictive-models/feat-training-devin/data/runs/20260919T124814Z-e5302b58/data/clean/companies.parquet') WHERE group_id NOT IN ('GROUP_0004','GROUP_0005','GROUP_0008','GROUP_0019','GROUP_0026','GROUP_0036','GROUP_0041','GROUP_0043','GROUP_0044','GROUP_0049','GROUP_0052','GROUP_0056','GROUP_0059','GROUP_0069','GROUP_0078','GROUP_0083','GROUP_0085','GROUP_0094','GROUP_0095','GROUP_0099','GROUP_0102','GROUP_0120','GROUP_0122','GROUP_0123','GROUP_0130','GROUP_0135','GROUP_0136','GROUP_0146','GROUP_0150','GROUP_0152','GROUP_0160','GROUP_0164','GROUP_0168','GROUP_0169','GROUP_0176','GROUP_0181','GROUP_0184','GROUP_0187','GROUP_0190','GROUP_0194','GROUP_0195','GROUP_0199','GROUP_0201','GROUP_0204','GROUP_0208','GROUP_0212','GROUP_0214','GROUP_0223','GROUP_0226','GROUP_0235')),\nbanking_products AS (SELECT s.* FROM read_parquet('/home/mikel/.herdr/worktrees/predictive-models/feat-training-devin/data/runs/20260919T124814Z-e5302b58/data/clean/banking_products.parquet') s JOIN companies c USING(company_id)),\ndebt_products AS (SELECT s.* FROM read_parquet('/home/mikel/.herdr/worktrees/predictive-models/feat-training-devin/data/runs/20260919T124814Z-e5302b58/data/clean/debt_products.parquet') s JOIN companies c USING(company_id)),\ndebt_schedule_config AS (SELECT s.* FROM read_parquet('/home/mikel/.herdr/worktrees/predictive-models/feat-training-devin/data/runs/20260919T124814Z-e5302b58/data/clean/debt_schedule_config.parquet') s JOIN companies c USING(company_id)),\nbalances AS (SELECT s.* FROM read_parquet('/home/mikel/.herdr/worktrees/predictive-models/feat-training-devin/data/runs/20260919T124814Z-e5302b58/data/clean/balances.parquet') s JOIN companies c USING(company_id)),\ntransactions AS (SELECT s.* FROM read_parquet('/home/mikel/.herdr/worktrees/predictive-models/feat-training-devin/data/runs/20260919T124814Z-e5302b58/data/clean/transactions.parquet') s JOIN companies c USING(company_id)),\ninvoices AS (SELECT s.* FROM read_parquet('/home/mikel/.herdr/worktrees/predictive-models/feat-training-devin/data/runs/20260919T124814Z-e5302b58/data/clean/invoices.parquet') s JOIN companies c USING(company_id)),\npanel_flujos AS (SELECT s.* FROM read_parquet('/home/mikel/.herdr/worktrees/predictive-models/feat-training-devin/data/runs/20260919T124814Z-e5302b58/data/marts/panel_flujos.parquet') s JOIN companies c USING(company_id)),\npanel_deuda AS (SELECT s.* FROM read_parquet('/home/mikel/.herdr/worktrees/predictive-models/feat-training-devin/data/runs/20260919T124814Z-e5302b58/data/marts/panel_deuda.parquet') s JOIN companies c USING(company_id)),\ncash AS (SELECT * FROM transactions WHERE is_booked AND product_source='banking' AND product_type IN ('checking','saving','wallet') AND month >= DATE '2024-09-01' AND month < DATE '2026-09-01')\nSELECT active_months, span_months-active_months AS internal_gap_months,\n        count(*) AS products FROM (\n        SELECT product_id, count(DISTINCT month) AS active_months,\n        date_diff('month', min(month), max(month))+1 AS span_months\n        FROM cash GROUP BY product_id) x GROUP BY 1,2 ORDER BY 1,2",
+    "anchor_day_movements": "WITH companies AS (SELECT * FROM read_parquet('/home/mikel/.herdr/worktrees/predictive-models/feat-training-devin/data/runs/20260919T124814Z-e5302b58/data/clean/companies.parquet') WHERE group_id NOT IN ('GROUP_0004','GROUP_0005','GROUP_0008','GROUP_0019','GROUP_0026','GROUP_0036','GROUP_0041','GROUP_0043','GROUP_0044','GROUP_0049','GROUP_0052','GROUP_0056','GROUP_0059','GROUP_0069','GROUP_0078','GROUP_0083','GROUP_0085','GROUP_0094','GROUP_0095','GROUP_0099','GROUP_0102','GROUP_0120','GROUP_0122','GROUP_0123','GROUP_0130','GROUP_0135','GROUP_0136','GROUP_0146','GROUP_0150','GROUP_0152','GROUP_0160','GROUP_0164','GROUP_0168','GROUP_0169','GROUP_0176','GROUP_0181','GROUP_0184','GROUP_0187','GROUP_0190','GROUP_0194','GROUP_0195','GROUP_0199','GROUP_0201','GROUP_0204','GROUP_0208','GROUP_0212','GROUP_0214','GROUP_0223','GROUP_0226','GROUP_0235')),\nbanking_products AS (SELECT s.* FROM read_parquet('/home/mikel/.herdr/worktrees/predictive-models/feat-training-devin/data/runs/20260919T124814Z-e5302b58/data/clean/banking_products.parquet') s JOIN companies c USING(company_id)),\ndebt_products AS (SELECT s.* FROM read_parquet('/home/mikel/.herdr/worktrees/predictive-models/feat-training-devin/data/runs/20260919T124814Z-e5302b58/data/clean/debt_products.parquet') s JOIN companies c USING(company_id)),\ndebt_schedule_config AS (SELECT s.* FROM read_parquet('/home/mikel/.herdr/worktrees/predictive-models/feat-training-devin/data/runs/20260919T124814Z-e5302b58/data/clean/debt_schedule_config.parquet') s JOIN companies c USING(company_id)),\nbalances AS (SELECT s.* FROM read_parquet('/home/mikel/.herdr/worktrees/predictive-models/feat-training-devin/data/runs/20260919T124814Z-e5302b58/data/clean/balances.parquet') s JOIN companies c USING(company_id)),\ntransactions AS (SELECT s.* FROM read_parquet('/home/mikel/.herdr/worktrees/predictive-models/feat-training-devin/data/runs/20260919T124814Z-e5302b58/data/clean/transactions.parquet') s JOIN companies c USING(company_id)),\ninvoices AS (SELECT s.* FROM read_parquet('/home/mikel/.herdr/worktrees/predictive-models/feat-training-devin/data/runs/20260919T124814Z-e5302b58/data/clean/invoices.parquet') s JOIN companies c USING(company_id)),\npanel_flujos AS (SELECT s.* FROM read_parquet('/home/mikel/.herdr/worktrees/predictive-models/feat-training-devin/data/runs/20260919T124814Z-e5302b58/data/marts/panel_flujos.parquet') s JOIN companies c USING(company_id)),\npanel_deuda AS (SELECT s.* FROM read_parquet('/home/mikel/.herdr/worktrees/predictive-models/feat-training-devin/data/runs/20260919T124814Z-e5302b58/data/marts/panel_deuda.parquet') s JOIN companies c USING(company_id)),\ncash AS (SELECT * FROM transactions WHERE is_booked AND product_source='banking' AND product_type IN ('checking','saving','wallet') AND month >= DATE '2024-09-01' AND month < DATE '2026-09-01')\nSELECT count(*) AS transaction_rows_on_anchor_day,\n            count(DISTINCT t.product_id) AS products_on_anchor_day FROM transactions t JOIN balances a USING(product_id)\n            WHERE t.is_booked AND t.product_source='banking' AND t.product_type IN ('checking','saving','wallet')\n            AND CAST(t.date_ok AS DATE)=CAST(a.date_ok AS DATE)",
+    "anchor_multiplicity": "WITH companies AS (SELECT * FROM read_parquet('/home/mikel/.herdr/worktrees/predictive-models/feat-training-devin/data/runs/20260919T124814Z-e5302b58/data/clean/companies.parquet') WHERE group_id NOT IN ('GROUP_0004','GROUP_0005','GROUP_0008','GROUP_0019','GROUP_0026','GROUP_0036','GROUP_0041','GROUP_0043','GROUP_0044','GROUP_0049','GROUP_0052','GROUP_0056','GROUP_0059','GROUP_0069','GROUP_0078','GROUP_0083','GROUP_0085','GROUP_0094','GROUP_0095','GROUP_0099','GROUP_0102','GROUP_0120','GROUP_0122','GROUP_0123','GROUP_0130','GROUP_0135','GROUP_0136','GROUP_0146','GROUP_0150','GROUP_0152','GROUP_0160','GROUP_0164','GROUP_0168','GROUP_0169','GROUP_0176','GROUP_0181','GROUP_0184','GROUP_0187','GROUP_0190','GROUP_0194','GROUP_0195','GROUP_0199','GROUP_0201','GROUP_0204','GROUP_0208','GROUP_0212','GROUP_0214','GROUP_0223','GROUP_0226','GROUP_0235')),\nbanking_products AS (SELECT s.* FROM read_parquet('/home/mikel/.herdr/worktrees/predictive-models/feat-training-devin/data/runs/20260919T124814Z-e5302b58/data/clean/banking_products.parquet') s JOIN companies c USING(company_id)),\ndebt_products AS (SELECT s.* FROM read_parquet('/home/mikel/.herdr/worktrees/predictive-models/feat-training-devin/data/runs/20260919T124814Z-e5302b58/data/clean/debt_products.parquet') s JOIN companies c USING(company_id)),\ndebt_schedule_config AS (SELECT s.* FROM read_parquet('/home/mikel/.herdr/worktrees/predictive-models/feat-training-devin/data/runs/20260919T124814Z-e5302b58/data/clean/debt_schedule_config.parquet') s JOIN companies c USING(company_id)),\nbalances AS (SELECT s.* FROM read_parquet('/home/mikel/.herdr/worktrees/predictive-models/feat-training-devin/data/runs/20260919T124814Z-e5302b58/data/clean/balances.parquet') s JOIN companies c USING(company_id)),\ntransactions AS (SELECT s.* FROM read_parquet('/home/mikel/.herdr/worktrees/predictive-models/feat-training-devin/data/runs/20260919T124814Z-e5302b58/data/clean/transactions.parquet') s JOIN companies c USING(company_id)),\ninvoices AS (SELECT s.* FROM read_parquet('/home/mikel/.herdr/worktrees/predictive-models/feat-training-devin/data/runs/20260919T124814Z-e5302b58/data/clean/invoices.parquet') s JOIN companies c USING(company_id)),\npanel_flujos AS (SELECT s.* FROM read_parquet('/home/mikel/.herdr/worktrees/predictive-models/feat-training-devin/data/runs/20260919T124814Z-e5302b58/data/marts/panel_flujos.parquet') s JOIN companies c USING(company_id)),\npanel_deuda AS (SELECT s.* FROM read_parquet('/home/mikel/.herdr/worktrees/predictive-models/feat-training-devin/data/runs/20260919T124814Z-e5302b58/data/marts/panel_deuda.parquet') s JOIN companies c USING(company_id)),\ncash AS (SELECT * FROM transactions WHERE is_booked AND product_source='banking' AND product_type IN ('checking','saving','wallet') AND month >= DATE '2024-09-01' AND month < DATE '2026-09-01')\nSELECT snapshots, count(*) AS products FROM (\n            SELECT product_id, count(*) AS snapshots FROM balances GROUP BY 1) x GROUP BY 1 ORDER BY 1",
+    "anchors": "WITH companies AS (SELECT * FROM read_parquet('/home/mikel/.herdr/worktrees/predictive-models/feat-training-devin/data/runs/20260919T124814Z-e5302b58/data/clean/companies.parquet') WHERE group_id NOT IN ('GROUP_0004','GROUP_0005','GROUP_0008','GROUP_0019','GROUP_0026','GROUP_0036','GROUP_0041','GROUP_0043','GROUP_0044','GROUP_0049','GROUP_0052','GROUP_0056','GROUP_0059','GROUP_0069','GROUP_0078','GROUP_0083','GROUP_0085','GROUP_0094','GROUP_0095','GROUP_0099','GROUP_0102','GROUP_0120','GROUP_0122','GROUP_0123','GROUP_0130','GROUP_0135','GROUP_0136','GROUP_0146','GROUP_0150','GROUP_0152','GROUP_0160','GROUP_0164','GROUP_0168','GROUP_0169','GROUP_0176','GROUP_0181','GROUP_0184','GROUP_0187','GROUP_0190','GROUP_0194','GROUP_0195','GROUP_0199','GROUP_0201','GROUP_0204','GROUP_0208','GROUP_0212','GROUP_0214','GROUP_0223','GROUP_0226','GROUP_0235')),\nbanking_products AS (SELECT s.* FROM read_parquet('/home/mikel/.herdr/worktrees/predictive-models/feat-training-devin/data/runs/20260919T124814Z-e5302b58/data/clean/banking_products.parquet') s JOIN companies c USING(company_id)),\ndebt_products AS (SELECT s.* FROM read_parquet('/home/mikel/.herdr/worktrees/predictive-models/feat-training-devin/data/runs/20260919T124814Z-e5302b58/data/clean/debt_products.parquet') s JOIN companies c USING(company_id)),\ndebt_schedule_config AS (SELECT s.* FROM read_parquet('/home/mikel/.herdr/worktrees/predictive-models/feat-training-devin/data/runs/20260919T124814Z-e5302b58/data/clean/debt_schedule_config.parquet') s JOIN companies c USING(company_id)),\nbalances AS (SELECT s.* FROM read_parquet('/home/mikel/.herdr/worktrees/predictive-models/feat-training-devin/data/runs/20260919T124814Z-e5302b58/data/clean/balances.parquet') s JOIN companies c USING(company_id)),\ntransactions AS (SELECT s.* FROM read_parquet('/home/mikel/.herdr/worktrees/predictive-models/feat-training-devin/data/runs/20260919T124814Z-e5302b58/data/clean/transactions.parquet') s JOIN companies c USING(company_id)),\ninvoices AS (SELECT s.* FROM read_parquet('/home/mikel/.herdr/worktrees/predictive-models/feat-training-devin/data/runs/20260919T124814Z-e5302b58/data/clean/invoices.parquet') s JOIN companies c USING(company_id)),\npanel_flujos AS (SELECT s.* FROM read_parquet('/home/mikel/.herdr/worktrees/predictive-models/feat-training-devin/data/runs/20260919T124814Z-e5302b58/data/marts/panel_flujos.parquet') s JOIN companies c USING(company_id)),\npanel_deuda AS (SELECT s.* FROM read_parquet('/home/mikel/.herdr/worktrees/predictive-models/feat-training-devin/data/runs/20260919T124814Z-e5302b58/data/marts/panel_deuda.parquet') s JOIN companies c USING(company_id)),\ncash AS (SELECT * FROM transactions WHERE is_booked AND product_source='banking' AND product_type IN ('checking','saving','wallet') AND month >= DATE '2024-09-01' AND month < DATE '2026-09-01')\nSELECT product_source, product_type, count(*) AS rows, count(DISTINCT company_id) AS companies,\n            min(date_ok) AS first_date, max(date_ok) AS last_date,\n            count(*) FILTER(WHERE balance_ok IS NULL OR NOT isfinite(balance_ok)) AS invalid_balance,\n            count(*) FILTER(WHERE available IS NULL OR NOT isfinite(available)) AS missing_available,\n            count(*) FILTER(WHERE product_currency <> 'EUR') AS non_eur,\n            count(*) FILTER(WHERE CAST(date_ok AS TIME) <> TIME '00:00:00') AS intraday_timestamps\n            FROM balances GROUP BY 1,2 ORDER BY 1,2",
+    "cash_anchor_coverage": "WITH companies AS (SELECT * FROM read_parquet('/home/mikel/.herdr/worktrees/predictive-models/feat-training-devin/data/runs/20260919T124814Z-e5302b58/data/clean/companies.parquet') WHERE group_id NOT IN ('GROUP_0004','GROUP_0005','GROUP_0008','GROUP_0019','GROUP_0026','GROUP_0036','GROUP_0041','GROUP_0043','GROUP_0044','GROUP_0049','GROUP_0052','GROUP_0056','GROUP_0059','GROUP_0069','GROUP_0078','GROUP_0083','GROUP_0085','GROUP_0094','GROUP_0095','GROUP_0099','GROUP_0102','GROUP_0120','GROUP_0122','GROUP_0123','GROUP_0130','GROUP_0135','GROUP_0136','GROUP_0146','GROUP_0150','GROUP_0152','GROUP_0160','GROUP_0164','GROUP_0168','GROUP_0169','GROUP_0176','GROUP_0181','GROUP_0184','GROUP_0187','GROUP_0190','GROUP_0194','GROUP_0195','GROUP_0199','GROUP_0201','GROUP_0204','GROUP_0208','GROUP_0212','GROUP_0214','GROUP_0223','GROUP_0226','GROUP_0235')),\nbanking_products AS (SELECT s.* FROM read_parquet('/home/mikel/.herdr/worktrees/predictive-models/feat-training-devin/data/runs/20260919T124814Z-e5302b58/data/clean/banking_products.parquet') s JOIN companies c USING(company_id)),\ndebt_products AS (SELECT s.* FROM read_parquet('/home/mikel/.herdr/worktrees/predictive-models/feat-training-devin/data/runs/20260919T124814Z-e5302b58/data/clean/debt_products.parquet') s JOIN companies c USING(company_id)),\ndebt_schedule_config AS (SELECT s.* FROM read_parquet('/home/mikel/.herdr/worktrees/predictive-models/feat-training-devin/data/runs/20260919T124814Z-e5302b58/data/clean/debt_schedule_config.parquet') s JOIN companies c USING(company_id)),\nbalances AS (SELECT s.* FROM read_parquet('/home/mikel/.herdr/worktrees/predictive-models/feat-training-devin/data/runs/20260919T124814Z-e5302b58/data/clean/balances.parquet') s JOIN companies c USING(company_id)),\ntransactions AS (SELECT s.* FROM read_parquet('/home/mikel/.herdr/worktrees/predictive-models/feat-training-devin/data/runs/20260919T124814Z-e5302b58/data/clean/transactions.parquet') s JOIN companies c USING(company_id)),\ninvoices AS (SELECT s.* FROM read_parquet('/home/mikel/.herdr/worktrees/predictive-models/feat-training-devin/data/runs/20260919T124814Z-e5302b58/data/clean/invoices.parquet') s JOIN companies c USING(company_id)),\npanel_flujos AS (SELECT s.* FROM read_parquet('/home/mikel/.herdr/worktrees/predictive-models/feat-training-devin/data/runs/20260919T124814Z-e5302b58/data/marts/panel_flujos.parquet') s JOIN companies c USING(company_id)),\npanel_deuda AS (SELECT s.* FROM read_parquet('/home/mikel/.herdr/worktrees/predictive-models/feat-training-devin/data/runs/20260919T124814Z-e5302b58/data/marts/panel_deuda.parquet') s JOIN companies c USING(company_id)),\ncash AS (SELECT * FROM transactions WHERE is_booked AND product_source='banking' AND product_type IN ('checking','saving','wallet') AND month >= DATE '2024-09-01' AND month < DATE '2026-09-01')\nSELECT count(*) AS cash_products,\n            count(*) FILTER(WHERE a.product_id IS NOT NULL) AS with_anchor,\n            count(*) FILTER(WHERE isfinite(a.balance_ok)) AS with_finite_clean_anchor,\n            count(*) FILTER(WHERE isfinite(a.balance_ok) AND b.currency_norm='EUR') AS eur_finite_anchor,\n            count(*) FILTER(WHERE isfinite(a.balance_ok) AND t.n=24) AS finite_anchor_and_24_active_months,\n            count(*) FILTER(WHERE a.product_id IS NOT NULL AND a.company_id<>b.company_id) AS ownership_mismatch\n            FROM banking_products b LEFT JOIN balances a USING(product_id)\n            LEFT JOIN (SELECT product_id, count(DISTINCT month) AS n FROM cash GROUP BY 1) t USING(product_id)\n            WHERE b.type_norm IN ('checking','saving','wallet')",
+    "cash_monthly_coverage": "WITH companies AS (SELECT * FROM read_parquet('/home/mikel/.herdr/worktrees/predictive-models/feat-training-devin/data/runs/20260919T124814Z-e5302b58/data/clean/companies.parquet') WHERE group_id NOT IN ('GROUP_0004','GROUP_0005','GROUP_0008','GROUP_0019','GROUP_0026','GROUP_0036','GROUP_0041','GROUP_0043','GROUP_0044','GROUP_0049','GROUP_0052','GROUP_0056','GROUP_0059','GROUP_0069','GROUP_0078','GROUP_0083','GROUP_0085','GROUP_0094','GROUP_0095','GROUP_0099','GROUP_0102','GROUP_0120','GROUP_0122','GROUP_0123','GROUP_0130','GROUP_0135','GROUP_0136','GROUP_0146','GROUP_0150','GROUP_0152','GROUP_0160','GROUP_0164','GROUP_0168','GROUP_0169','GROUP_0176','GROUP_0181','GROUP_0184','GROUP_0187','GROUP_0190','GROUP_0194','GROUP_0195','GROUP_0199','GROUP_0201','GROUP_0204','GROUP_0208','GROUP_0212','GROUP_0214','GROUP_0223','GROUP_0226','GROUP_0235')),\nbanking_products AS (SELECT s.* FROM read_parquet('/home/mikel/.herdr/worktrees/predictive-models/feat-training-devin/data/runs/20260919T124814Z-e5302b58/data/clean/banking_products.parquet') s JOIN companies c USING(company_id)),\ndebt_products AS (SELECT s.* FROM read_parquet('/home/mikel/.herdr/worktrees/predictive-models/feat-training-devin/data/runs/20260919T124814Z-e5302b58/data/clean/debt_products.parquet') s JOIN companies c USING(company_id)),\ndebt_schedule_config AS (SELECT s.* FROM read_parquet('/home/mikel/.herdr/worktrees/predictive-models/feat-training-devin/data/runs/20260919T124814Z-e5302b58/data/clean/debt_schedule_config.parquet') s JOIN companies c USING(company_id)),\nbalances AS (SELECT s.* FROM read_parquet('/home/mikel/.herdr/worktrees/predictive-models/feat-training-devin/data/runs/20260919T124814Z-e5302b58/data/clean/balances.parquet') s JOIN companies c USING(company_id)),\ntransactions AS (SELECT s.* FROM read_parquet('/home/mikel/.herdr/worktrees/predictive-models/feat-training-devin/data/runs/20260919T124814Z-e5302b58/data/clean/transactions.parquet') s JOIN companies c USING(company_id)),\ninvoices AS (SELECT s.* FROM read_parquet('/home/mikel/.herdr/worktrees/predictive-models/feat-training-devin/data/runs/20260919T124814Z-e5302b58/data/clean/invoices.parquet') s JOIN companies c USING(company_id)),\npanel_flujos AS (SELECT s.* FROM read_parquet('/home/mikel/.herdr/worktrees/predictive-models/feat-training-devin/data/runs/20260919T124814Z-e5302b58/data/marts/panel_flujos.parquet') s JOIN companies c USING(company_id)),\npanel_deuda AS (SELECT s.* FROM read_parquet('/home/mikel/.herdr/worktrees/predictive-models/feat-training-devin/data/runs/20260919T124814Z-e5302b58/data/marts/panel_deuda.parquet') s JOIN companies c USING(company_id)),\ncash AS (SELECT * FROM transactions WHERE is_booked AND product_source='banking' AND product_type IN ('checking','saving','wallet') AND month >= DATE '2024-09-01' AND month < DATE '2026-09-01')\nSELECT month, count(*) AS rows, count(DISTINCT company_id) AS companies,\n            count(DISTINCT product_id) AS products, count(*) FILTER(WHERE amount_eur IS NULL) AS unknown_eur,\n            count(*) FILTER(WHERE amount IS NULL OR NOT isfinite(amount)) AS unusable_native_amount\n            FROM cash GROUP BY 1 ORDER BY 1",
+    "company_scope": "WITH companies AS (SELECT * FROM read_parquet('/home/mikel/.herdr/worktrees/predictive-models/feat-training-devin/data/runs/20260919T124814Z-e5302b58/data/clean/companies.parquet') WHERE group_id NOT IN ('GROUP_0004','GROUP_0005','GROUP_0008','GROUP_0019','GROUP_0026','GROUP_0036','GROUP_0041','GROUP_0043','GROUP_0044','GROUP_0049','GROUP_0052','GROUP_0056','GROUP_0059','GROUP_0069','GROUP_0078','GROUP_0083','GROUP_0085','GROUP_0094','GROUP_0095','GROUP_0099','GROUP_0102','GROUP_0120','GROUP_0122','GROUP_0123','GROUP_0130','GROUP_0135','GROUP_0136','GROUP_0146','GROUP_0150','GROUP_0152','GROUP_0160','GROUP_0164','GROUP_0168','GROUP_0169','GROUP_0176','GROUP_0181','GROUP_0184','GROUP_0187','GROUP_0190','GROUP_0194','GROUP_0195','GROUP_0199','GROUP_0201','GROUP_0204','GROUP_0208','GROUP_0212','GROUP_0214','GROUP_0223','GROUP_0226','GROUP_0235')),\nbanking_products AS (SELECT s.* FROM read_parquet('/home/mikel/.herdr/worktrees/predictive-models/feat-training-devin/data/runs/20260919T124814Z-e5302b58/data/clean/banking_products.parquet') s JOIN companies c USING(company_id)),\ndebt_products AS (SELECT s.* FROM read_parquet('/home/mikel/.herdr/worktrees/predictive-models/feat-training-devin/data/runs/20260919T124814Z-e5302b58/data/clean/debt_products.parquet') s JOIN companies c USING(company_id)),\ndebt_schedule_config AS (SELECT s.* FROM read_parquet('/home/mikel/.herdr/worktrees/predictive-models/feat-training-devin/data/runs/20260919T124814Z-e5302b58/data/clean/debt_schedule_config.parquet') s JOIN companies c USING(company_id)),\nbalances AS (SELECT s.* FROM read_parquet('/home/mikel/.herdr/worktrees/predictive-models/feat-training-devin/data/runs/20260919T124814Z-e5302b58/data/clean/balances.parquet') s JOIN companies c USING(company_id)),\ntransactions AS (SELECT s.* FROM read_parquet('/home/mikel/.herdr/worktrees/predictive-models/feat-training-devin/data/runs/20260919T124814Z-e5302b58/data/clean/transactions.parquet') s JOIN companies c USING(company_id)),\ninvoices AS (SELECT s.* FROM read_parquet('/home/mikel/.herdr/worktrees/predictive-models/feat-training-devin/data/runs/20260919T124814Z-e5302b58/data/clean/invoices.parquet') s JOIN companies c USING(company_id)),\npanel_flujos AS (SELECT s.* FROM read_parquet('/home/mikel/.herdr/worktrees/predictive-models/feat-training-devin/data/runs/20260919T124814Z-e5302b58/data/marts/panel_flujos.parquet') s JOIN companies c USING(company_id)),\npanel_deuda AS (SELECT s.* FROM read_parquet('/home/mikel/.herdr/worktrees/predictive-models/feat-training-devin/data/runs/20260919T124814Z-e5302b58/data/marts/panel_deuda.parquet') s JOIN companies c USING(company_id)),\ncash AS (SELECT * FROM transactions WHERE is_booked AND product_source='banking' AND product_type IN ('checking','saving','wallet') AND month >= DATE '2024-09-01' AND month < DATE '2026-09-01')\nSELECT count(*) AS companies, count(DISTINCT group_id) AS groups FROM companies",
+    "debt_mart_input_coverage": "WITH companies AS (SELECT * FROM read_parquet('/home/mikel/.herdr/worktrees/predictive-models/feat-training-devin/data/runs/20260919T124814Z-e5302b58/data/clean/companies.parquet') WHERE group_id NOT IN ('GROUP_0004','GROUP_0005','GROUP_0008','GROUP_0019','GROUP_0026','GROUP_0036','GROUP_0041','GROUP_0043','GROUP_0044','GROUP_0049','GROUP_0052','GROUP_0056','GROUP_0059','GROUP_0069','GROUP_0078','GROUP_0083','GROUP_0085','GROUP_0094','GROUP_0095','GROUP_0099','GROUP_0102','GROUP_0120','GROUP_0122','GROUP_0123','GROUP_0130','GROUP_0135','GROUP_0136','GROUP_0146','GROUP_0150','GROUP_0152','GROUP_0160','GROUP_0164','GROUP_0168','GROUP_0169','GROUP_0176','GROUP_0181','GROUP_0184','GROUP_0187','GROUP_0190','GROUP_0194','GROUP_0195','GROUP_0199','GROUP_0201','GROUP_0204','GROUP_0208','GROUP_0212','GROUP_0214','GROUP_0223','GROUP_0226','GROUP_0235')),\nbanking_products AS (SELECT s.* FROM read_parquet('/home/mikel/.herdr/worktrees/predictive-models/feat-training-devin/data/runs/20260919T124814Z-e5302b58/data/clean/banking_products.parquet') s JOIN companies c USING(company_id)),\ndebt_products AS (SELECT s.* FROM read_parquet('/home/mikel/.herdr/worktrees/predictive-models/feat-training-devin/data/runs/20260919T124814Z-e5302b58/data/clean/debt_products.parquet') s JOIN companies c USING(company_id)),\ndebt_schedule_config AS (SELECT s.* FROM read_parquet('/home/mikel/.herdr/worktrees/predictive-models/feat-training-devin/data/runs/20260919T124814Z-e5302b58/data/clean/debt_schedule_config.parquet') s JOIN companies c USING(company_id)),\nbalances AS (SELECT s.* FROM read_parquet('/home/mikel/.herdr/worktrees/predictive-models/feat-training-devin/data/runs/20260919T124814Z-e5302b58/data/clean/balances.parquet') s JOIN companies c USING(company_id)),\ntransactions AS (SELECT s.* FROM read_parquet('/home/mikel/.herdr/worktrees/predictive-models/feat-training-devin/data/runs/20260919T124814Z-e5302b58/data/clean/transactions.parquet') s JOIN companies c USING(company_id)),\ninvoices AS (SELECT s.* FROM read_parquet('/home/mikel/.herdr/worktrees/predictive-models/feat-training-devin/data/runs/20260919T124814Z-e5302b58/data/clean/invoices.parquet') s JOIN companies c USING(company_id)),\npanel_flujos AS (SELECT s.* FROM read_parquet('/home/mikel/.herdr/worktrees/predictive-models/feat-training-devin/data/runs/20260919T124814Z-e5302b58/data/marts/panel_flujos.parquet') s JOIN companies c USING(company_id)),\npanel_deuda AS (SELECT s.* FROM read_parquet('/home/mikel/.herdr/worktrees/predictive-models/feat-training-devin/data/runs/20260919T124814Z-e5302b58/data/marts/panel_deuda.parquet') s JOIN companies c USING(company_id)),\ncash AS (SELECT * FROM transactions WHERE is_booked AND product_source='banking' AND product_type IN ('checking','saving','wallet') AND month >= DATE '2024-09-01' AND month < DATE '2026-09-01')\nSELECT count(*) AS company_months,\n            count(*) FILTER(WHERE servicio_deuda_eur IS NOT NULL) AS identifiable_paid_service,\n            count(*) FILTER(WHERE n_pagos_servicio>0) AS with_identified_service_payments\n            FROM panel_deuda",
+    "debt_schedule_coverage": "WITH companies AS (SELECT * FROM read_parquet('/home/mikel/.herdr/worktrees/predictive-models/feat-training-devin/data/runs/20260919T124814Z-e5302b58/data/clean/companies.parquet') WHERE group_id NOT IN ('GROUP_0004','GROUP_0005','GROUP_0008','GROUP_0019','GROUP_0026','GROUP_0036','GROUP_0041','GROUP_0043','GROUP_0044','GROUP_0049','GROUP_0052','GROUP_0056','GROUP_0059','GROUP_0069','GROUP_0078','GROUP_0083','GROUP_0085','GROUP_0094','GROUP_0095','GROUP_0099','GROUP_0102','GROUP_0120','GROUP_0122','GROUP_0123','GROUP_0130','GROUP_0135','GROUP_0136','GROUP_0146','GROUP_0150','GROUP_0152','GROUP_0160','GROUP_0164','GROUP_0168','GROUP_0169','GROUP_0176','GROUP_0181','GROUP_0184','GROUP_0187','GROUP_0190','GROUP_0194','GROUP_0195','GROUP_0199','GROUP_0201','GROUP_0204','GROUP_0208','GROUP_0212','GROUP_0214','GROUP_0223','GROUP_0226','GROUP_0235')),\nbanking_products AS (SELECT s.* FROM read_parquet('/home/mikel/.herdr/worktrees/predictive-models/feat-training-devin/data/runs/20260919T124814Z-e5302b58/data/clean/banking_products.parquet') s JOIN companies c USING(company_id)),\ndebt_products AS (SELECT s.* FROM read_parquet('/home/mikel/.herdr/worktrees/predictive-models/feat-training-devin/data/runs/20260919T124814Z-e5302b58/data/clean/debt_products.parquet') s JOIN companies c USING(company_id)),\ndebt_schedule_config AS (SELECT s.* FROM read_parquet('/home/mikel/.herdr/worktrees/predictive-models/feat-training-devin/data/runs/20260919T124814Z-e5302b58/data/clean/debt_schedule_config.parquet') s JOIN companies c USING(company_id)),\nbalances AS (SELECT s.* FROM read_parquet('/home/mikel/.herdr/worktrees/predictive-models/feat-training-devin/data/runs/20260919T124814Z-e5302b58/data/clean/balances.parquet') s JOIN companies c USING(company_id)),\ntransactions AS (SELECT s.* FROM read_parquet('/home/mikel/.herdr/worktrees/predictive-models/feat-training-devin/data/runs/20260919T124814Z-e5302b58/data/clean/transactions.parquet') s JOIN companies c USING(company_id)),\ninvoices AS (SELECT s.* FROM read_parquet('/home/mikel/.herdr/worktrees/predictive-models/feat-training-devin/data/runs/20260919T124814Z-e5302b58/data/clean/invoices.parquet') s JOIN companies c USING(company_id)),\npanel_flujos AS (SELECT s.* FROM read_parquet('/home/mikel/.herdr/worktrees/predictive-models/feat-training-devin/data/runs/20260919T124814Z-e5302b58/data/marts/panel_flujos.parquet') s JOIN companies c USING(company_id)),\npanel_deuda AS (SELECT s.* FROM read_parquet('/home/mikel/.herdr/worktrees/predictive-models/feat-training-devin/data/runs/20260919T124814Z-e5302b58/data/marts/panel_deuda.parquet') s JOIN companies c USING(company_id)),\ncash AS (SELECT * FROM transactions WHERE is_booked AND product_source='banking' AND product_type IN ('checking','saving','wallet') AND month >= DATE '2024-09-01' AND month < DATE '2026-09-01')\nSELECT count(*) AS schedules, count(DISTINCT s.company_id) AS companies,\n            count(*) FILTER(WHERE s.settlement_product_id IS NULL) AS missing_settlement_account,\n            count(*) FILTER(WHERE b.product_id IS NOT NULL) AS settlement_account_found,\n            count(*) FILTER(WHERE b.product_id IS NOT NULL AND b.company_id=s.company_id) AS settlement_same_company,\n            count(*) FILTER(WHERE b.product_id IS NOT NULL AND b.currency_norm=upper(trim(s.currency))) AS settlement_same_currency,\n            count(*) FILTER(WHERE s.next_payment_date_ok IS NOT NULL) AS valid_next_payment,\n            count(*) FILTER(WHERE s.last_payment_date_ok IS NOT NULL) AS valid_last_payment,\n            count(*) FILTER(WHERE s.interest_rate_ok IS NOT NULL) AS valid_latest_rate\n            FROM debt_schedule_config s LEFT JOIN banking_products b ON b.product_id=s.settlement_product_id",
+    "debt_snapshot": "WITH companies AS (SELECT * FROM read_parquet('/home/mikel/.herdr/worktrees/predictive-models/feat-training-devin/data/runs/20260919T124814Z-e5302b58/data/clean/companies.parquet') WHERE group_id NOT IN ('GROUP_0004','GROUP_0005','GROUP_0008','GROUP_0019','GROUP_0026','GROUP_0036','GROUP_0041','GROUP_0043','GROUP_0044','GROUP_0049','GROUP_0052','GROUP_0056','GROUP_0059','GROUP_0069','GROUP_0078','GROUP_0083','GROUP_0085','GROUP_0094','GROUP_0095','GROUP_0099','GROUP_0102','GROUP_0120','GROUP_0122','GROUP_0123','GROUP_0130','GROUP_0135','GROUP_0136','GROUP_0146','GROUP_0150','GROUP_0152','GROUP_0160','GROUP_0164','GROUP_0168','GROUP_0169','GROUP_0176','GROUP_0181','GROUP_0184','GROUP_0187','GROUP_0190','GROUP_0194','GROUP_0195','GROUP_0199','GROUP_0201','GROUP_0204','GROUP_0208','GROUP_0212','GROUP_0214','GROUP_0223','GROUP_0226','GROUP_0235')),\nbanking_products AS (SELECT s.* FROM read_parquet('/home/mikel/.herdr/worktrees/predictive-models/feat-training-devin/data/runs/20260919T124814Z-e5302b58/data/clean/banking_products.parquet') s JOIN companies c USING(company_id)),\ndebt_products AS (SELECT s.* FROM read_parquet('/home/mikel/.herdr/worktrees/predictive-models/feat-training-devin/data/runs/20260919T124814Z-e5302b58/data/clean/debt_products.parquet') s JOIN companies c USING(company_id)),\ndebt_schedule_config AS (SELECT s.* FROM read_parquet('/home/mikel/.herdr/worktrees/predictive-models/feat-training-devin/data/runs/20260919T124814Z-e5302b58/data/clean/debt_schedule_config.parquet') s JOIN companies c USING(company_id)),\nbalances AS (SELECT s.* FROM read_parquet('/home/mikel/.herdr/worktrees/predictive-models/feat-training-devin/data/runs/20260919T124814Z-e5302b58/data/clean/balances.parquet') s JOIN companies c USING(company_id)),\ntransactions AS (SELECT s.* FROM read_parquet('/home/mikel/.herdr/worktrees/predictive-models/feat-training-devin/data/runs/20260919T124814Z-e5302b58/data/clean/transactions.parquet') s JOIN companies c USING(company_id)),\ninvoices AS (SELECT s.* FROM read_parquet('/home/mikel/.herdr/worktrees/predictive-models/feat-training-devin/data/runs/20260919T124814Z-e5302b58/data/clean/invoices.parquet') s JOIN companies c USING(company_id)),\npanel_flujos AS (SELECT s.* FROM read_parquet('/home/mikel/.herdr/worktrees/predictive-models/feat-training-devin/data/runs/20260919T124814Z-e5302b58/data/marts/panel_flujos.parquet') s JOIN companies c USING(company_id)),\npanel_deuda AS (SELECT s.* FROM read_parquet('/home/mikel/.herdr/worktrees/predictive-models/feat-training-devin/data/runs/20260919T124814Z-e5302b58/data/marts/panel_deuda.parquet') s JOIN companies c USING(company_id)),\ncash AS (SELECT * FROM transactions WHERE is_booked AND product_source='banking' AND product_type IN ('checking','saving','wallet') AND month >= DATE '2024-09-01' AND month < DATE '2026-09-01')\nSELECT count(*) AS products, count(DISTINCT company_id) AS companies,\n            count(*) FILTER(WHERE outstanding IS NULL OR NOT isfinite(outstanding)) AS unknown_outstanding,\n            count(*) FILTER(WHERE outstanding<0) AS negative_outstanding,\n            count(*) FILTER(WHERE outstanding=0) AS reported_zero,\n            count(*) FILTER(WHERE currency_norm<>'EUR') AS non_eur,\n            count(*) FILTER(WHERE product_id IN (SELECT product_id FROM transactions)) AS with_any_ledger_rows,\n            count(*) FILTER(WHERE product_id IN (SELECT product_id FROM debt_schedule_config)) AS scheduled\n            FROM debt_products",
+    "fx_evidence": "SELECT moneda='EUR' AS is_eur, count(*) AS currency_months,\n            count(*) FILTER(WHERE rate_por_eur IS NOT NULL) AS applicable_rates FROM read_parquet('/home/mikel/.herdr/worktrees/predictive-models/feat-training-devin/data/runs/20260919T124814Z-e5302b58/data/marts/fx_rates.parquet') GROUP BY 1 ORDER BY 1",
+    "growth_history_coverage": "WITH companies AS (SELECT * FROM read_parquet('/home/mikel/.herdr/worktrees/predictive-models/feat-training-devin/data/runs/20260919T124814Z-e5302b58/data/clean/companies.parquet') WHERE group_id NOT IN ('GROUP_0004','GROUP_0005','GROUP_0008','GROUP_0019','GROUP_0026','GROUP_0036','GROUP_0041','GROUP_0043','GROUP_0044','GROUP_0049','GROUP_0052','GROUP_0056','GROUP_0059','GROUP_0069','GROUP_0078','GROUP_0083','GROUP_0085','GROUP_0094','GROUP_0095','GROUP_0099','GROUP_0102','GROUP_0120','GROUP_0122','GROUP_0123','GROUP_0130','GROUP_0135','GROUP_0136','GROUP_0146','GROUP_0150','GROUP_0152','GROUP_0160','GROUP_0164','GROUP_0168','GROUP_0169','GROUP_0176','GROUP_0181','GROUP_0184','GROUP_0187','GROUP_0190','GROUP_0194','GROUP_0195','GROUP_0199','GROUP_0201','GROUP_0204','GROUP_0208','GROUP_0212','GROUP_0214','GROUP_0223','GROUP_0226','GROUP_0235')),\nbanking_products AS (SELECT s.* FROM read_parquet('/home/mikel/.herdr/worktrees/predictive-models/feat-training-devin/data/runs/20260919T124814Z-e5302b58/data/clean/banking_products.parquet') s JOIN companies c USING(company_id)),\ndebt_products AS (SELECT s.* FROM read_parquet('/home/mikel/.herdr/worktrees/predictive-models/feat-training-devin/data/runs/20260919T124814Z-e5302b58/data/clean/debt_products.parquet') s JOIN companies c USING(company_id)),\ndebt_schedule_config AS (SELECT s.* FROM read_parquet('/home/mikel/.herdr/worktrees/predictive-models/feat-training-devin/data/runs/20260919T124814Z-e5302b58/data/clean/debt_schedule_config.parquet') s JOIN companies c USING(company_id)),\nbalances AS (SELECT s.* FROM read_parquet('/home/mikel/.herdr/worktrees/predictive-models/feat-training-devin/data/runs/20260919T124814Z-e5302b58/data/clean/balances.parquet') s JOIN companies c USING(company_id)),\ntransactions AS (SELECT s.* FROM read_parquet('/home/mikel/.herdr/worktrees/predictive-models/feat-training-devin/data/runs/20260919T124814Z-e5302b58/data/clean/transactions.parquet') s JOIN companies c USING(company_id)),\ninvoices AS (SELECT s.* FROM read_parquet('/home/mikel/.herdr/worktrees/predictive-models/feat-training-devin/data/runs/20260919T124814Z-e5302b58/data/clean/invoices.parquet') s JOIN companies c USING(company_id)),\npanel_flujos AS (SELECT s.* FROM read_parquet('/home/mikel/.herdr/worktrees/predictive-models/feat-training-devin/data/runs/20260919T124814Z-e5302b58/data/marts/panel_flujos.parquet') s JOIN companies c USING(company_id)),\npanel_deuda AS (SELECT s.* FROM read_parquet('/home/mikel/.herdr/worktrees/predictive-models/feat-training-devin/data/runs/20260919T124814Z-e5302b58/data/marts/panel_deuda.parquet') s JOIN companies c USING(company_id)),\ncash AS (SELECT * FROM transactions WHERE is_booked AND product_source='banking' AND product_type IN ('checking','saving','wallet') AND month >= DATE '2024-09-01' AND month < DATE '2026-09-01')\nSELECT count(*) AS company_months,\n            count(*) FILTER(WHERE n6=6 AND contiguous6=5) AS six_contiguous_known_receipt_months,\n            count(*) FILTER(WHERE n15=15 AND contiguous15=14) AS fifteen_contiguous_known_receipt_months\n            FROM (SELECT company_id, month,\n            count(cobros_operativos_eur) OVER w6 AS n6,\n            date_diff('month', min(month) OVER w6, month) AS contiguous6,\n            count(cobros_operativos_eur) OVER w15 AS n15,\n            date_diff('month', min(month) OVER w15, month) AS contiguous15\n            FROM panel_flujos WINDOW w6 AS (PARTITION BY company_id ORDER BY month ROWS BETWEEN 5 PRECEDING AND CURRENT ROW),\n            w15 AS (PARTITION BY company_id ORDER BY month ROWS BETWEEN 14 PRECEDING AND CURRENT ROW)) x",
+    "invoice_issue_month_coverage": "WITH companies AS (SELECT * FROM read_parquet('/home/mikel/.herdr/worktrees/predictive-models/feat-training-devin/data/runs/20260919T124814Z-e5302b58/data/clean/companies.parquet') WHERE group_id NOT IN ('GROUP_0004','GROUP_0005','GROUP_0008','GROUP_0019','GROUP_0026','GROUP_0036','GROUP_0041','GROUP_0043','GROUP_0044','GROUP_0049','GROUP_0052','GROUP_0056','GROUP_0059','GROUP_0069','GROUP_0078','GROUP_0083','GROUP_0085','GROUP_0094','GROUP_0095','GROUP_0099','GROUP_0102','GROUP_0120','GROUP_0122','GROUP_0123','GROUP_0130','GROUP_0135','GROUP_0136','GROUP_0146','GROUP_0150','GROUP_0152','GROUP_0160','GROUP_0164','GROUP_0168','GROUP_0169','GROUP_0176','GROUP_0181','GROUP_0184','GROUP_0187','GROUP_0190','GROUP_0194','GROUP_0195','GROUP_0199','GROUP_0201','GROUP_0204','GROUP_0208','GROUP_0212','GROUP_0214','GROUP_0223','GROUP_0226','GROUP_0235')),\nbanking_products AS (SELECT s.* FROM read_parquet('/home/mikel/.herdr/worktrees/predictive-models/feat-training-devin/data/runs/20260919T124814Z-e5302b58/data/clean/banking_products.parquet') s JOIN companies c USING(company_id)),\ndebt_products AS (SELECT s.* FROM read_parquet('/home/mikel/.herdr/worktrees/predictive-models/feat-training-devin/data/runs/20260919T124814Z-e5302b58/data/clean/debt_products.parquet') s JOIN companies c USING(company_id)),\ndebt_schedule_config AS (SELECT s.* FROM read_parquet('/home/mikel/.herdr/worktrees/predictive-models/feat-training-devin/data/runs/20260919T124814Z-e5302b58/data/clean/debt_schedule_config.parquet') s JOIN companies c USING(company_id)),\nbalances AS (SELECT s.* FROM read_parquet('/home/mikel/.herdr/worktrees/predictive-models/feat-training-devin/data/runs/20260919T124814Z-e5302b58/data/clean/balances.parquet') s JOIN companies c USING(company_id)),\ntransactions AS (SELECT s.* FROM read_parquet('/home/mikel/.herdr/worktrees/predictive-models/feat-training-devin/data/runs/20260919T124814Z-e5302b58/data/clean/transactions.parquet') s JOIN companies c USING(company_id)),\ninvoices AS (SELECT s.* FROM read_parquet('/home/mikel/.herdr/worktrees/predictive-models/feat-training-devin/data/runs/20260919T124814Z-e5302b58/data/clean/invoices.parquet') s JOIN companies c USING(company_id)),\npanel_flujos AS (SELECT s.* FROM read_parquet('/home/mikel/.herdr/worktrees/predictive-models/feat-training-devin/data/runs/20260919T124814Z-e5302b58/data/marts/panel_flujos.parquet') s JOIN companies c USING(company_id)),\npanel_deuda AS (SELECT s.* FROM read_parquet('/home/mikel/.herdr/worktrees/predictive-models/feat-training-devin/data/runs/20260919T124814Z-e5302b58/data/marts/panel_deuda.parquet') s JOIN companies c USING(company_id)),\ncash AS (SELECT * FROM transactions WHERE is_booked AND product_source='banking' AND product_type IN ('checking','saving','wallet') AND month >= DATE '2024-09-01' AND month < DATE '2026-09-01')\nSELECT month, count(*) AS rows,\n            count(DISTINCT company_id) AS companies, count(*) FILTER(WHERE amount_eur IS NULL) AS unknown_eur\n            FROM invoices WHERE month>=DATE '2024-09-01' AND month<DATE '2026-09-01' GROUP BY 1 ORDER BY 1",
+    "invoice_source_completeness": "WITH companies AS (SELECT * FROM read_parquet('/home/mikel/.herdr/worktrees/predictive-models/feat-training-devin/data/runs/20260919T124814Z-e5302b58/data/clean/companies.parquet') WHERE group_id NOT IN ('GROUP_0004','GROUP_0005','GROUP_0008','GROUP_0019','GROUP_0026','GROUP_0036','GROUP_0041','GROUP_0043','GROUP_0044','GROUP_0049','GROUP_0052','GROUP_0056','GROUP_0059','GROUP_0069','GROUP_0078','GROUP_0083','GROUP_0085','GROUP_0094','GROUP_0095','GROUP_0099','GROUP_0102','GROUP_0120','GROUP_0122','GROUP_0123','GROUP_0130','GROUP_0135','GROUP_0136','GROUP_0146','GROUP_0150','GROUP_0152','GROUP_0160','GROUP_0164','GROUP_0168','GROUP_0169','GROUP_0176','GROUP_0181','GROUP_0184','GROUP_0187','GROUP_0190','GROUP_0194','GROUP_0195','GROUP_0199','GROUP_0201','GROUP_0204','GROUP_0208','GROUP_0212','GROUP_0214','GROUP_0223','GROUP_0226','GROUP_0235')),\nbanking_products AS (SELECT s.* FROM read_parquet('/home/mikel/.herdr/worktrees/predictive-models/feat-training-devin/data/runs/20260919T124814Z-e5302b58/data/clean/banking_products.parquet') s JOIN companies c USING(company_id)),\ndebt_products AS (SELECT s.* FROM read_parquet('/home/mikel/.herdr/worktrees/predictive-models/feat-training-devin/data/runs/20260919T124814Z-e5302b58/data/clean/debt_products.parquet') s JOIN companies c USING(company_id)),\ndebt_schedule_config AS (SELECT s.* FROM read_parquet('/home/mikel/.herdr/worktrees/predictive-models/feat-training-devin/data/runs/20260919T124814Z-e5302b58/data/clean/debt_schedule_config.parquet') s JOIN companies c USING(company_id)),\nbalances AS (SELECT s.* FROM read_parquet('/home/mikel/.herdr/worktrees/predictive-models/feat-training-devin/data/runs/20260919T124814Z-e5302b58/data/clean/balances.parquet') s JOIN companies c USING(company_id)),\ntransactions AS (SELECT s.* FROM read_parquet('/home/mikel/.herdr/worktrees/predictive-models/feat-training-devin/data/runs/20260919T124814Z-e5302b58/data/clean/transactions.parquet') s JOIN companies c USING(company_id)),\ninvoices AS (SELECT s.* FROM read_parquet('/home/mikel/.herdr/worktrees/predictive-models/feat-training-devin/data/runs/20260919T124814Z-e5302b58/data/clean/invoices.parquet') s JOIN companies c USING(company_id)),\npanel_flujos AS (SELECT s.* FROM read_parquet('/home/mikel/.herdr/worktrees/predictive-models/feat-training-devin/data/runs/20260919T124814Z-e5302b58/data/marts/panel_flujos.parquet') s JOIN companies c USING(company_id)),\npanel_deuda AS (SELECT s.* FROM read_parquet('/home/mikel/.herdr/worktrees/predictive-models/feat-training-devin/data/runs/20260919T124814Z-e5302b58/data/marts/panel_deuda.parquet') s JOIN companies c USING(company_id)),\ncash AS (SELECT * FROM transactions WHERE is_booked AND product_source='banking' AND product_type IN ('checking','saving','wallet') AND month >= DATE '2024-09-01' AND month < DATE '2026-09-01')\nSELECT count(*) AS rows, count(DISTINCT company_id) AS companies,\n            count(*) FILTER(WHERE issuance_date_ok IS NULL) AS invalid_issuance,\n            count(*) FILTER(WHERE maturity_date_ok IS NULL) AS missing_valid_due,\n            count(*) FILTER(WHERE settlement_date_ok IS NOT NULL) AS valid_terminal_settlement_date,\n            count(*) FILTER(WHERE payment_date_ok IS NOT NULL AND status_norm<>'paid') AS nonpaid_payment_date_not_actual,\n            count(*) FILTER(WHERE pending_amount IS NULL) AS missing_pending,\n            count(*) FILTER(WHERE pending_amount<>0 AND abs(pending_amount)<abs(amount)) AS partial_snapshot_candidates,\n            count(*) FILTER(WHERE status_norm='paid' AND pending_amount<>0) AS paid_with_pending,\n            count(*) FILTER(WHERE amount_eur IS NULL) AS unknown_eur,\n            count(*)-count(DISTINCT operation_id) AS duplicate_or_null_ids FROM invoices",
+    "invoice_types_and_signs": "WITH companies AS (SELECT * FROM read_parquet('/home/mikel/.herdr/worktrees/predictive-models/feat-training-devin/data/runs/20260919T124814Z-e5302b58/data/clean/companies.parquet') WHERE group_id NOT IN ('GROUP_0004','GROUP_0005','GROUP_0008','GROUP_0019','GROUP_0026','GROUP_0036','GROUP_0041','GROUP_0043','GROUP_0044','GROUP_0049','GROUP_0052','GROUP_0056','GROUP_0059','GROUP_0069','GROUP_0078','GROUP_0083','GROUP_0085','GROUP_0094','GROUP_0095','GROUP_0099','GROUP_0102','GROUP_0120','GROUP_0122','GROUP_0123','GROUP_0130','GROUP_0135','GROUP_0136','GROUP_0146','GROUP_0150','GROUP_0152','GROUP_0160','GROUP_0164','GROUP_0168','GROUP_0169','GROUP_0176','GROUP_0181','GROUP_0184','GROUP_0187','GROUP_0190','GROUP_0194','GROUP_0195','GROUP_0199','GROUP_0201','GROUP_0204','GROUP_0208','GROUP_0212','GROUP_0214','GROUP_0223','GROUP_0226','GROUP_0235')),\nbanking_products AS (SELECT s.* FROM read_parquet('/home/mikel/.herdr/worktrees/predictive-models/feat-training-devin/data/runs/20260919T124814Z-e5302b58/data/clean/banking_products.parquet') s JOIN companies c USING(company_id)),\ndebt_products AS (SELECT s.* FROM read_parquet('/home/mikel/.herdr/worktrees/predictive-models/feat-training-devin/data/runs/20260919T124814Z-e5302b58/data/clean/debt_products.parquet') s JOIN companies c USING(company_id)),\ndebt_schedule_config AS (SELECT s.* FROM read_parquet('/home/mikel/.herdr/worktrees/predictive-models/feat-training-devin/data/runs/20260919T124814Z-e5302b58/data/clean/debt_schedule_config.parquet') s JOIN companies c USING(company_id)),\nbalances AS (SELECT s.* FROM read_parquet('/home/mikel/.herdr/worktrees/predictive-models/feat-training-devin/data/runs/20260919T124814Z-e5302b58/data/clean/balances.parquet') s JOIN companies c USING(company_id)),\ntransactions AS (SELECT s.* FROM read_parquet('/home/mikel/.herdr/worktrees/predictive-models/feat-training-devin/data/runs/20260919T124814Z-e5302b58/data/clean/transactions.parquet') s JOIN companies c USING(company_id)),\ninvoices AS (SELECT s.* FROM read_parquet('/home/mikel/.herdr/worktrees/predictive-models/feat-training-devin/data/runs/20260919T124814Z-e5302b58/data/clean/invoices.parquet') s JOIN companies c USING(company_id)),\npanel_flujos AS (SELECT s.* FROM read_parquet('/home/mikel/.herdr/worktrees/predictive-models/feat-training-devin/data/runs/20260919T124814Z-e5302b58/data/marts/panel_flujos.parquet') s JOIN companies c USING(company_id)),\npanel_deuda AS (SELECT s.* FROM read_parquet('/home/mikel/.herdr/worktrees/predictive-models/feat-training-devin/data/runs/20260919T124814Z-e5302b58/data/marts/panel_deuda.parquet') s JOIN companies c USING(company_id)),\ncash AS (SELECT * FROM transactions WHERE is_booked AND product_source='banking' AND product_type IN ('checking','saving','wallet') AND month >= DATE '2024-09-01' AND month < DATE '2026-09-01')\nSELECT document_type_norm,\n            CASE WHEN amount>0 THEN 'positive' WHEN amount<0 THEN 'negative' ELSE 'zero_or_null' END AS amount_sign,\n            count(*) AS rows FROM invoices GROUP BY 1,2 ORDER BY 1,2",
+    "panel_flow_input_coverage": "WITH companies AS (SELECT * FROM read_parquet('/home/mikel/.herdr/worktrees/predictive-models/feat-training-devin/data/runs/20260919T124814Z-e5302b58/data/clean/companies.parquet') WHERE group_id NOT IN ('GROUP_0004','GROUP_0005','GROUP_0008','GROUP_0019','GROUP_0026','GROUP_0036','GROUP_0041','GROUP_0043','GROUP_0044','GROUP_0049','GROUP_0052','GROUP_0056','GROUP_0059','GROUP_0069','GROUP_0078','GROUP_0083','GROUP_0085','GROUP_0094','GROUP_0095','GROUP_0099','GROUP_0102','GROUP_0120','GROUP_0122','GROUP_0123','GROUP_0130','GROUP_0135','GROUP_0136','GROUP_0146','GROUP_0150','GROUP_0152','GROUP_0160','GROUP_0164','GROUP_0168','GROUP_0169','GROUP_0176','GROUP_0181','GROUP_0184','GROUP_0187','GROUP_0190','GROUP_0194','GROUP_0195','GROUP_0199','GROUP_0201','GROUP_0204','GROUP_0208','GROUP_0212','GROUP_0214','GROUP_0223','GROUP_0226','GROUP_0235')),\nbanking_products AS (SELECT s.* FROM read_parquet('/home/mikel/.herdr/worktrees/predictive-models/feat-training-devin/data/runs/20260919T124814Z-e5302b58/data/clean/banking_products.parquet') s JOIN companies c USING(company_id)),\ndebt_products AS (SELECT s.* FROM read_parquet('/home/mikel/.herdr/worktrees/predictive-models/feat-training-devin/data/runs/20260919T124814Z-e5302b58/data/clean/debt_products.parquet') s JOIN companies c USING(company_id)),\ndebt_schedule_config AS (SELECT s.* FROM read_parquet('/home/mikel/.herdr/worktrees/predictive-models/feat-training-devin/data/runs/20260919T124814Z-e5302b58/data/clean/debt_schedule_config.parquet') s JOIN companies c USING(company_id)),\nbalances AS (SELECT s.* FROM read_parquet('/home/mikel/.herdr/worktrees/predictive-models/feat-training-devin/data/runs/20260919T124814Z-e5302b58/data/clean/balances.parquet') s JOIN companies c USING(company_id)),\ntransactions AS (SELECT s.* FROM read_parquet('/home/mikel/.herdr/worktrees/predictive-models/feat-training-devin/data/runs/20260919T124814Z-e5302b58/data/clean/transactions.parquet') s JOIN companies c USING(company_id)),\ninvoices AS (SELECT s.* FROM read_parquet('/home/mikel/.herdr/worktrees/predictive-models/feat-training-devin/data/runs/20260919T124814Z-e5302b58/data/clean/invoices.parquet') s JOIN companies c USING(company_id)),\npanel_flujos AS (SELECT s.* FROM read_parquet('/home/mikel/.herdr/worktrees/predictive-models/feat-training-devin/data/runs/20260919T124814Z-e5302b58/data/marts/panel_flujos.parquet') s JOIN companies c USING(company_id)),\npanel_deuda AS (SELECT s.* FROM read_parquet('/home/mikel/.herdr/worktrees/predictive-models/feat-training-devin/data/runs/20260919T124814Z-e5302b58/data/marts/panel_deuda.parquet') s JOIN companies c USING(company_id)),\ncash AS (SELECT * FROM transactions WHERE is_booked AND product_source='banking' AND product_type IN ('checking','saving','wallet') AND month >= DATE '2024-09-01' AND month < DATE '2026-09-01')\nSELECT count(*) AS company_months,\n            count(*) FILTER(WHERE tiene_actividad_caja) AS active_company_months,\n            count(*) FILTER(WHERE neto_caja_eur IS NOT NULL) AS known_cash_net,\n            count(*) FILTER(WHERE cobros_operativos_eur IS NOT NULL) AS known_operating_receipts,\n            count(*) FILTER(WHERE pagos_operativos_eur IS NOT NULL) AS known_operating_payments,\n            count(*) FILTER(WHERE flujo_operativo_eur IS NOT NULL) AS complete_operating_net,\n            count(*) FILTER(WHERE n_ambiguos>0) AS ambiguous_classification,\n            count(*) FILTER(WHERE n_sin_eur>0) AS missing_eur FROM panel_flujos",
+    "schedule_terms": "WITH companies AS (SELECT * FROM read_parquet('/home/mikel/.herdr/worktrees/predictive-models/feat-training-devin/data/runs/20260919T124814Z-e5302b58/data/clean/companies.parquet') WHERE group_id NOT IN ('GROUP_0004','GROUP_0005','GROUP_0008','GROUP_0019','GROUP_0026','GROUP_0036','GROUP_0041','GROUP_0043','GROUP_0044','GROUP_0049','GROUP_0052','GROUP_0056','GROUP_0059','GROUP_0069','GROUP_0078','GROUP_0083','GROUP_0085','GROUP_0094','GROUP_0095','GROUP_0099','GROUP_0102','GROUP_0120','GROUP_0122','GROUP_0123','GROUP_0130','GROUP_0135','GROUP_0136','GROUP_0146','GROUP_0150','GROUP_0152','GROUP_0160','GROUP_0164','GROUP_0168','GROUP_0169','GROUP_0176','GROUP_0181','GROUP_0184','GROUP_0187','GROUP_0190','GROUP_0194','GROUP_0195','GROUP_0199','GROUP_0201','GROUP_0204','GROUP_0208','GROUP_0212','GROUP_0214','GROUP_0223','GROUP_0226','GROUP_0235')),\nbanking_products AS (SELECT s.* FROM read_parquet('/home/mikel/.herdr/worktrees/predictive-models/feat-training-devin/data/runs/20260919T124814Z-e5302b58/data/clean/banking_products.parquet') s JOIN companies c USING(company_id)),\ndebt_products AS (SELECT s.* FROM read_parquet('/home/mikel/.herdr/worktrees/predictive-models/feat-training-devin/data/runs/20260919T124814Z-e5302b58/data/clean/debt_products.parquet') s JOIN companies c USING(company_id)),\ndebt_schedule_config AS (SELECT s.* FROM read_parquet('/home/mikel/.herdr/worktrees/predictive-models/feat-training-devin/data/runs/20260919T124814Z-e5302b58/data/clean/debt_schedule_config.parquet') s JOIN companies c USING(company_id)),\nbalances AS (SELECT s.* FROM read_parquet('/home/mikel/.herdr/worktrees/predictive-models/feat-training-devin/data/runs/20260919T124814Z-e5302b58/data/clean/balances.parquet') s JOIN companies c USING(company_id)),\ntransactions AS (SELECT s.* FROM read_parquet('/home/mikel/.herdr/worktrees/predictive-models/feat-training-devin/data/runs/20260919T124814Z-e5302b58/data/clean/transactions.parquet') s JOIN companies c USING(company_id)),\ninvoices AS (SELECT s.* FROM read_parquet('/home/mikel/.herdr/worktrees/predictive-models/feat-training-devin/data/runs/20260919T124814Z-e5302b58/data/clean/invoices.parquet') s JOIN companies c USING(company_id)),\npanel_flujos AS (SELECT s.* FROM read_parquet('/home/mikel/.herdr/worktrees/predictive-models/feat-training-devin/data/runs/20260919T124814Z-e5302b58/data/marts/panel_flujos.parquet') s JOIN companies c USING(company_id)),\npanel_deuda AS (SELECT s.* FROM read_parquet('/home/mikel/.herdr/worktrees/predictive-models/feat-training-devin/data/runs/20260919T124814Z-e5302b58/data/marts/panel_deuda.parquet') s JOIN companies c USING(company_id)),\ncash AS (SELECT * FROM transactions WHERE is_booked AND product_source='banking' AND product_type IN ('checking','saving','wallet') AND month >= DATE '2024-09-01' AND month < DATE '2026-09-01')\nSELECT amortising_frequency, amortization_type, interest_type,\n            count(*) AS schedules FROM debt_schedule_config GROUP BY 1,2,3 ORDER BY 1,2,3",
+    "settlement_account_activity_not_payment_match": "WITH companies AS (SELECT * FROM read_parquet('/home/mikel/.herdr/worktrees/predictive-models/feat-training-devin/data/runs/20260919T124814Z-e5302b58/data/clean/companies.parquet') WHERE group_id NOT IN ('GROUP_0004','GROUP_0005','GROUP_0008','GROUP_0019','GROUP_0026','GROUP_0036','GROUP_0041','GROUP_0043','GROUP_0044','GROUP_0049','GROUP_0052','GROUP_0056','GROUP_0059','GROUP_0069','GROUP_0078','GROUP_0083','GROUP_0085','GROUP_0094','GROUP_0095','GROUP_0099','GROUP_0102','GROUP_0120','GROUP_0122','GROUP_0123','GROUP_0130','GROUP_0135','GROUP_0136','GROUP_0146','GROUP_0150','GROUP_0152','GROUP_0160','GROUP_0164','GROUP_0168','GROUP_0169','GROUP_0176','GROUP_0181','GROUP_0184','GROUP_0187','GROUP_0190','GROUP_0194','GROUP_0195','GROUP_0199','GROUP_0201','GROUP_0204','GROUP_0208','GROUP_0212','GROUP_0214','GROUP_0223','GROUP_0226','GROUP_0235')),\nbanking_products AS (SELECT s.* FROM read_parquet('/home/mikel/.herdr/worktrees/predictive-models/feat-training-devin/data/runs/20260919T124814Z-e5302b58/data/clean/banking_products.parquet') s JOIN companies c USING(company_id)),\ndebt_products AS (SELECT s.* FROM read_parquet('/home/mikel/.herdr/worktrees/predictive-models/feat-training-devin/data/runs/20260919T124814Z-e5302b58/data/clean/debt_products.parquet') s JOIN companies c USING(company_id)),\ndebt_schedule_config AS (SELECT s.* FROM read_parquet('/home/mikel/.herdr/worktrees/predictive-models/feat-training-devin/data/runs/20260919T124814Z-e5302b58/data/clean/debt_schedule_config.parquet') s JOIN companies c USING(company_id)),\nbalances AS (SELECT s.* FROM read_parquet('/home/mikel/.herdr/worktrees/predictive-models/feat-training-devin/data/runs/20260919T124814Z-e5302b58/data/clean/balances.parquet') s JOIN companies c USING(company_id)),\ntransactions AS (SELECT s.* FROM read_parquet('/home/mikel/.herdr/worktrees/predictive-models/feat-training-devin/data/runs/20260919T124814Z-e5302b58/data/clean/transactions.parquet') s JOIN companies c USING(company_id)),\ninvoices AS (SELECT s.* FROM read_parquet('/home/mikel/.herdr/worktrees/predictive-models/feat-training-devin/data/runs/20260919T124814Z-e5302b58/data/clean/invoices.parquet') s JOIN companies c USING(company_id)),\npanel_flujos AS (SELECT s.* FROM read_parquet('/home/mikel/.herdr/worktrees/predictive-models/feat-training-devin/data/runs/20260919T124814Z-e5302b58/data/marts/panel_flujos.parquet') s JOIN companies c USING(company_id)),\npanel_deuda AS (SELECT s.* FROM read_parquet('/home/mikel/.herdr/worktrees/predictive-models/feat-training-devin/data/runs/20260919T124814Z-e5302b58/data/marts/panel_deuda.parquet') s JOIN companies c USING(company_id)),\ncash AS (SELECT * FROM transactions WHERE is_booked AND product_source='banking' AND product_type IN ('checking','saving','wallet') AND month >= DATE '2024-09-01' AND month < DATE '2026-09-01')\nSELECT count(*) AS schedules,\n            count(*) FILTER(WHERE settlement_product_id IN (SELECT product_id FROM cash)) AS with_cash_account_activity\n            FROM debt_schedule_config",
+    "source_completeness": "WITH companies AS (SELECT * FROM read_parquet('/home/mikel/.herdr/worktrees/predictive-models/feat-training-devin/data/runs/20260919T124814Z-e5302b58/data/clean/companies.parquet') WHERE group_id NOT IN ('GROUP_0004','GROUP_0005','GROUP_0008','GROUP_0019','GROUP_0026','GROUP_0036','GROUP_0041','GROUP_0043','GROUP_0044','GROUP_0049','GROUP_0052','GROUP_0056','GROUP_0059','GROUP_0069','GROUP_0078','GROUP_0083','GROUP_0085','GROUP_0094','GROUP_0095','GROUP_0099','GROUP_0102','GROUP_0120','GROUP_0122','GROUP_0123','GROUP_0130','GROUP_0135','GROUP_0136','GROUP_0146','GROUP_0150','GROUP_0152','GROUP_0160','GROUP_0164','GROUP_0168','GROUP_0169','GROUP_0176','GROUP_0181','GROUP_0184','GROUP_0187','GROUP_0190','GROUP_0194','GROUP_0195','GROUP_0199','GROUP_0201','GROUP_0204','GROUP_0208','GROUP_0212','GROUP_0214','GROUP_0223','GROUP_0226','GROUP_0235')),\nbanking_products AS (SELECT s.* FROM read_parquet('/home/mikel/.herdr/worktrees/predictive-models/feat-training-devin/data/runs/20260919T124814Z-e5302b58/data/clean/banking_products.parquet') s JOIN companies c USING(company_id)),\ndebt_products AS (SELECT s.* FROM read_parquet('/home/mikel/.herdr/worktrees/predictive-models/feat-training-devin/data/runs/20260919T124814Z-e5302b58/data/clean/debt_products.parquet') s JOIN companies c USING(company_id)),\ndebt_schedule_config AS (SELECT s.* FROM read_parquet('/home/mikel/.herdr/worktrees/predictive-models/feat-training-devin/data/runs/20260919T124814Z-e5302b58/data/clean/debt_schedule_config.parquet') s JOIN companies c USING(company_id)),\nbalances AS (SELECT s.* FROM read_parquet('/home/mikel/.herdr/worktrees/predictive-models/feat-training-devin/data/runs/20260919T124814Z-e5302b58/data/clean/balances.parquet') s JOIN companies c USING(company_id)),\ntransactions AS (SELECT s.* FROM read_parquet('/home/mikel/.herdr/worktrees/predictive-models/feat-training-devin/data/runs/20260919T124814Z-e5302b58/data/clean/transactions.parquet') s JOIN companies c USING(company_id)),\ninvoices AS (SELECT s.* FROM read_parquet('/home/mikel/.herdr/worktrees/predictive-models/feat-training-devin/data/runs/20260919T124814Z-e5302b58/data/clean/invoices.parquet') s JOIN companies c USING(company_id)),\npanel_flujos AS (SELECT s.* FROM read_parquet('/home/mikel/.herdr/worktrees/predictive-models/feat-training-devin/data/runs/20260919T124814Z-e5302b58/data/marts/panel_flujos.parquet') s JOIN companies c USING(company_id)),\npanel_deuda AS (SELECT s.* FROM read_parquet('/home/mikel/.herdr/worktrees/predictive-models/feat-training-devin/data/runs/20260919T124814Z-e5302b58/data/marts/panel_deuda.parquet') s JOIN companies c USING(company_id)),\ncash AS (SELECT * FROM transactions WHERE is_booked AND product_source='banking' AND product_type IN ('checking','saving','wallet') AND month >= DATE '2024-09-01' AND month < DATE '2026-09-01')\nSELECT 'banking_products' AS source, count(*) AS rows, count(DISTINCT company_id) AS companies,\n            count(*) FILTER(WHERE created_at_ok IS NOT NULL) AS valid_created_at FROM banking_products UNION ALL\n            SELECT 'debt_products', count(*), count(DISTINCT company_id), count(*) FILTER(WHERE created_at_ok IS NOT NULL) FROM debt_products UNION ALL\n            SELECT 'invoices', count(*), count(DISTINCT company_id), count(*) FILTER(WHERE issuance_date_ok IS NOT NULL) FROM invoices UNION ALL\n            SELECT 'transactions', count(*), count(DISTINCT company_id), count(*) FILTER(WHERE date_ok IS NOT NULL) FROM transactions",
+    "transaction_dates": "WITH companies AS (SELECT * FROM read_parquet('/home/mikel/.herdr/worktrees/predictive-models/feat-training-devin/data/runs/20260919T124814Z-e5302b58/data/clean/companies.parquet') WHERE group_id NOT IN ('GROUP_0004','GROUP_0005','GROUP_0008','GROUP_0019','GROUP_0026','GROUP_0036','GROUP_0041','GROUP_0043','GROUP_0044','GROUP_0049','GROUP_0052','GROUP_0056','GROUP_0059','GROUP_0069','GROUP_0078','GROUP_0083','GROUP_0085','GROUP_0094','GROUP_0095','GROUP_0099','GROUP_0102','GROUP_0120','GROUP_0122','GROUP_0123','GROUP_0130','GROUP_0135','GROUP_0136','GROUP_0146','GROUP_0150','GROUP_0152','GROUP_0160','GROUP_0164','GROUP_0168','GROUP_0169','GROUP_0176','GROUP_0181','GROUP_0184','GROUP_0187','GROUP_0190','GROUP_0194','GROUP_0195','GROUP_0199','GROUP_0201','GROUP_0204','GROUP_0208','GROUP_0212','GROUP_0214','GROUP_0223','GROUP_0226','GROUP_0235')),\nbanking_products AS (SELECT s.* FROM read_parquet('/home/mikel/.herdr/worktrees/predictive-models/feat-training-devin/data/runs/20260919T124814Z-e5302b58/data/clean/banking_products.parquet') s JOIN companies c USING(company_id)),\ndebt_products AS (SELECT s.* FROM read_parquet('/home/mikel/.herdr/worktrees/predictive-models/feat-training-devin/data/runs/20260919T124814Z-e5302b58/data/clean/debt_products.parquet') s JOIN companies c USING(company_id)),\ndebt_schedule_config AS (SELECT s.* FROM read_parquet('/home/mikel/.herdr/worktrees/predictive-models/feat-training-devin/data/runs/20260919T124814Z-e5302b58/data/clean/debt_schedule_config.parquet') s JOIN companies c USING(company_id)),\nbalances AS (SELECT s.* FROM read_parquet('/home/mikel/.herdr/worktrees/predictive-models/feat-training-devin/data/runs/20260919T124814Z-e5302b58/data/clean/balances.parquet') s JOIN companies c USING(company_id)),\ntransactions AS (SELECT s.* FROM read_parquet('/home/mikel/.herdr/worktrees/predictive-models/feat-training-devin/data/runs/20260919T124814Z-e5302b58/data/clean/transactions.parquet') s JOIN companies c USING(company_id)),\ninvoices AS (SELECT s.* FROM read_parquet('/home/mikel/.herdr/worktrees/predictive-models/feat-training-devin/data/runs/20260919T124814Z-e5302b58/data/clean/invoices.parquet') s JOIN companies c USING(company_id)),\npanel_flujos AS (SELECT s.* FROM read_parquet('/home/mikel/.herdr/worktrees/predictive-models/feat-training-devin/data/runs/20260919T124814Z-e5302b58/data/marts/panel_flujos.parquet') s JOIN companies c USING(company_id)),\npanel_deuda AS (SELECT s.* FROM read_parquet('/home/mikel/.herdr/worktrees/predictive-models/feat-training-devin/data/runs/20260919T124814Z-e5302b58/data/marts/panel_deuda.parquet') s JOIN companies c USING(company_id)),\ncash AS (SELECT * FROM transactions WHERE is_booked AND product_source='banking' AND product_type IN ('checking','saving','wallet') AND month >= DATE '2024-09-01' AND month < DATE '2026-09-01')\nSELECT min(date_ok) AS first_booking, max(date_ok) AS last_booking,\n            count(*) FILTER(WHERE date_ok IS NULL) AS invalid_booking,\n            count(*) FILTER(WHERE value_date_ok IS NULL) AS invalid_value_date,\n            count(*) FILTER(WHERE date_ok <> value_date_ok) AS booking_value_different,\n            count(*) FILTER(WHERE date_ok >= DATE '2026-09-01') AS open_month_rows,\n            count(*) FILTER(WHERE amount IS NULL OR NOT isfinite(amount)) AS unusable_amount,\n            count(*)-count(DISTINCT transaction_id) AS duplicate_or_null_ids FROM transactions",
+    "transaction_status": "WITH companies AS (SELECT * FROM read_parquet('/home/mikel/.herdr/worktrees/predictive-models/feat-training-devin/data/runs/20260919T124814Z-e5302b58/data/clean/companies.parquet') WHERE group_id NOT IN ('GROUP_0004','GROUP_0005','GROUP_0008','GROUP_0019','GROUP_0026','GROUP_0036','GROUP_0041','GROUP_0043','GROUP_0044','GROUP_0049','GROUP_0052','GROUP_0056','GROUP_0059','GROUP_0069','GROUP_0078','GROUP_0083','GROUP_0085','GROUP_0094','GROUP_0095','GROUP_0099','GROUP_0102','GROUP_0120','GROUP_0122','GROUP_0123','GROUP_0130','GROUP_0135','GROUP_0136','GROUP_0146','GROUP_0150','GROUP_0152','GROUP_0160','GROUP_0164','GROUP_0168','GROUP_0169','GROUP_0176','GROUP_0181','GROUP_0184','GROUP_0187','GROUP_0190','GROUP_0194','GROUP_0195','GROUP_0199','GROUP_0201','GROUP_0204','GROUP_0208','GROUP_0212','GROUP_0214','GROUP_0223','GROUP_0226','GROUP_0235')),\nbanking_products AS (SELECT s.* FROM read_parquet('/home/mikel/.herdr/worktrees/predictive-models/feat-training-devin/data/runs/20260919T124814Z-e5302b58/data/clean/banking_products.parquet') s JOIN companies c USING(company_id)),\ndebt_products AS (SELECT s.* FROM read_parquet('/home/mikel/.herdr/worktrees/predictive-models/feat-training-devin/data/runs/20260919T124814Z-e5302b58/data/clean/debt_products.parquet') s JOIN companies c USING(company_id)),\ndebt_schedule_config AS (SELECT s.* FROM read_parquet('/home/mikel/.herdr/worktrees/predictive-models/feat-training-devin/data/runs/20260919T124814Z-e5302b58/data/clean/debt_schedule_config.parquet') s JOIN companies c USING(company_id)),\nbalances AS (SELECT s.* FROM read_parquet('/home/mikel/.herdr/worktrees/predictive-models/feat-training-devin/data/runs/20260919T124814Z-e5302b58/data/clean/balances.parquet') s JOIN companies c USING(company_id)),\ntransactions AS (SELECT s.* FROM read_parquet('/home/mikel/.herdr/worktrees/predictive-models/feat-training-devin/data/runs/20260919T124814Z-e5302b58/data/clean/transactions.parquet') s JOIN companies c USING(company_id)),\ninvoices AS (SELECT s.* FROM read_parquet('/home/mikel/.herdr/worktrees/predictive-models/feat-training-devin/data/runs/20260919T124814Z-e5302b58/data/clean/invoices.parquet') s JOIN companies c USING(company_id)),\npanel_flujos AS (SELECT s.* FROM read_parquet('/home/mikel/.herdr/worktrees/predictive-models/feat-training-devin/data/runs/20260919T124814Z-e5302b58/data/marts/panel_flujos.parquet') s JOIN companies c USING(company_id)),\npanel_deuda AS (SELECT s.* FROM read_parquet('/home/mikel/.herdr/worktrees/predictive-models/feat-training-devin/data/runs/20260919T124814Z-e5302b58/data/marts/panel_deuda.parquet') s JOIN companies c USING(company_id)),\ncash AS (SELECT * FROM transactions WHERE is_booked AND product_source='banking' AND product_type IN ('checking','saving','wallet') AND month >= DATE '2024-09-01' AND month < DATE '2026-09-01')\nSELECT status_norm, count(*) AS rows FROM transactions GROUP BY 1 ORDER BY 1"
+  },
+  "schemas": {
+    "balances": [
+      {
+        "name": "product_id",
+        "type": "VARCHAR"
+      },
+      {
+        "name": "company_id",
+        "type": "VARCHAR"
+      },
+      {
+        "name": "date",
+        "type": "TIMESTAMP"
+      },
+      {
+        "name": "balance",
+        "type": "DOUBLE"
+      },
+      {
+        "name": "available",
+        "type": "DOUBLE"
+      },
+      {
+        "name": "granted",
+        "type": "DOUBLE"
+      },
+      {
+        "name": "liquidity",
+        "type": "DOUBLE"
+      },
+      {
+        "name": "countable",
+        "type": "DOUBLE"
+      },
+      {
+        "name": "_src_row",
+        "type": "BIGINT"
+      },
+      {
+        "name": "_cast_failures",
+        "type": "VARCHAR[]"
+      },
+      {
+        "name": "date_ok",
+        "type": "TIMESTAMP"
+      },
+      {
+        "name": "balance_ok",
+        "type": "DOUBLE"
+      },
+      {
+        "name": "is_snapshot_date",
+        "type": "BOOLEAN"
+      },
+      {
+        "name": "product_source",
+        "type": "VARCHAR"
+      },
+      {
+        "name": "product_type",
+        "type": "VARCHAR"
+      },
+      {
+        "name": "product_currency",
+        "type": "VARCHAR"
+      },
+      {
+        "name": "quality_flags",
+        "type": "VARCHAR[]"
+      }
+    ],
+    "banking_products": [
+      {
+        "name": "product_id",
+        "type": "VARCHAR"
+      },
+      {
+        "name": "company_id",
+        "type": "VARCHAR"
+      },
+      {
+        "name": "label",
+        "type": "VARCHAR"
+      },
+      {
+        "name": "type",
+        "type": "VARCHAR"
+      },
+      {
+        "name": "bank_name",
+        "type": "VARCHAR"
+      },
+      {
+        "name": "service",
+        "type": "VARCHAR"
+      },
+      {
+        "name": "currency",
+        "type": "VARCHAR"
+      },
+      {
+        "name": "created_at",
+        "type": "TIMESTAMP"
+      },
+      {
+        "name": "_src_row",
+        "type": "BIGINT"
+      },
+      {
+        "name": "_cast_failures",
+        "type": "VARCHAR[]"
+      },
+      {
+        "name": "currency_norm",
+        "type": "VARCHAR"
+      },
+      {
+        "name": "type_norm",
+        "type": "VARCHAR"
+      },
+      {
+        "name": "is_customer_defined",
+        "type": "BOOLEAN"
+      },
+      {
+        "name": "liquidity_class",
+        "type": "VARCHAR"
+      },
+      {
+        "name": "created_at_ok",
+        "type": "TIMESTAMP"
+      },
+      {
+        "name": "quality_flags",
+        "type": "VARCHAR[]"
+      }
+    ],
+    "companies": [
+      {
+        "name": "company_id",
+        "type": "VARCHAR"
+      },
+      {
+        "name": "group_id",
+        "type": "VARCHAR"
+      },
+      {
+        "name": "country",
+        "type": "VARCHAR"
+      },
+      {
+        "name": "currency",
+        "type": "VARCHAR"
+      },
+      {
+        "name": "erp",
+        "type": "VARCHAR"
+      },
+      {
+        "name": "created_at",
+        "type": "TIMESTAMP"
+      },
+      {
+        "name": "_src_row",
+        "type": "BIGINT"
+      },
+      {
+        "name": "_cast_failures",
+        "type": "VARCHAR[]"
+      },
+      {
+        "name": "country_norm",
+        "type": "VARCHAR"
+      },
+      {
+        "name": "currency_norm",
+        "type": "VARCHAR"
+      },
+      {
+        "name": "erp_norm",
+        "type": "VARCHAR"
+      },
+      {
+        "name": "created_at_ok",
+        "type": "TIMESTAMP"
+      },
+      {
+        "name": "quality_flags",
+        "type": "VARCHAR[]"
+      }
+    ],
+    "debt_products": [
+      {
+        "name": "product_id",
+        "type": "VARCHAR"
+      },
+      {
+        "name": "company_id",
+        "type": "VARCHAR"
+      },
+      {
+        "name": "label",
+        "type": "VARCHAR"
+      },
+      {
+        "name": "type",
+        "type": "VARCHAR"
+      },
+      {
+        "name": "bank_name",
+        "type": "VARCHAR"
+      },
+      {
+        "name": "service",
+        "type": "VARCHAR"
+      },
+      {
+        "name": "currency",
+        "type": "VARCHAR"
+      },
+      {
+        "name": "created_at",
+        "type": "TIMESTAMP"
+      },
+      {
+        "name": "granted",
+        "type": "DOUBLE"
+      },
+      {
+        "name": "outstanding",
+        "type": "DOUBLE"
+      },
+      {
+        "name": "liquidity",
+        "type": "DOUBLE"
+      },
+      {
+        "name": "_src_row",
+        "type": "BIGINT"
+      },
+      {
+        "name": "_cast_failures",
+        "type": "VARCHAR[]"
+      },
+      {
+        "name": "granted_abs",
+        "type": "DOUBLE"
+      },
+      {
+        "name": "outstanding_abs",
+        "type": "DOUBLE"
+      },
+      {
+        "name": "outstanding_sign",
+        "type": "VARCHAR"
+      },
+      {
+        "name": "is_drawn",
+        "type": "BOOLEAN"
+      },
+      {
+        "name": "debt_class",
+        "type": "VARCHAR"
+      },
+      {
+        "name": "currency_norm",
+        "type": "VARCHAR"
+      },
+      {
+        "name": "created_at_ok",
+        "type": "TIMESTAMP"
+      },
+      {
+        "name": "quality_flags",
+        "type": "VARCHAR[]"
+      }
+    ],
+    "debt_schedule_config": [
+      {
+        "name": "product_id",
+        "type": "VARCHAR"
+      },
+      {
+        "name": "company_id",
+        "type": "VARCHAR"
+      },
+      {
+        "name": "settlement_product_id",
+        "type": "VARCHAR"
+      },
+      {
+        "name": "currency",
+        "type": "VARCHAR"
+      },
+      {
+        "name": "amortization_type",
+        "type": "VARCHAR"
+      },
+      {
+        "name": "interest_calc_method",
+        "type": "VARCHAR"
+      },
+      {
+        "name": "amortising_frequency",
+        "type": "VARCHAR"
+      },
+      {
+        "name": "granted_balance",
+        "type": "DOUBLE"
+      },
+      {
+        "name": "outstanding_balance",
+        "type": "DOUBLE"
+      },
+      {
+        "name": "total_periods",
+        "type": "BIGINT"
+      },
+      {
+        "name": "next_payment_date",
+        "type": "TIMESTAMP"
+      },
+      {
+        "name": "last_payment_date",
+        "type": "TIMESTAMP"
+      },
+      {
+        "name": "annual_interest_rate_or_spread",
+        "type": "DOUBLE"
+      },
+      {
+        "name": "interest_type",
+        "type": "VARCHAR"
+      },
+      {
+        "name": "_src_row",
+        "type": "BIGINT"
+      },
+      {
+        "name": "_cast_failures",
+        "type": "VARCHAR[]"
+      },
+      {
+        "name": "next_payment_date_ok",
+        "type": "TIMESTAMP"
+      },
+      {
+        "name": "last_payment_date_ok",
+        "type": "TIMESTAMP"
+      },
+      {
+        "name": "interest_rate_ok",
+        "type": "DOUBLE"
+      },
+      {
+        "name": "settlement_product_found",
+        "type": "BOOLEAN"
+      },
+      {
+        "name": "quality_flags",
+        "type": "VARCHAR[]"
+      }
+    ],
+    "fx_rates": [
+      {
+        "name": "moneda",
+        "type": "VARCHAR"
+      },
+      {
+        "name": "month",
+        "type": "DATE"
+      },
+      {
+        "name": "rate_por_eur",
+        "type": "DOUBLE"
+      },
+      {
+        "name": "n_obs",
+        "type": "BIGINT"
+      },
+      {
+        "name": "fuente",
+        "type": "VARCHAR"
+      },
+      {
+        "name": "available_at",
+        "type": "DATE"
+      }
+    ],
+    "groups": [
+      {
+        "name": "group_id",
+        "type": "VARCHAR"
+      },
+      {
+        "name": "erp",
+        "type": "VARCHAR"
+      },
+      {
+        "name": "n_companies_in_sample",
+        "type": "BIGINT"
+      },
+      {
+        "name": "_src_row",
+        "type": "BIGINT"
+      },
+      {
+        "name": "_cast_failures",
+        "type": "VARCHAR[]"
+      },
+      {
+        "name": "erp_norm",
+        "type": "VARCHAR"
+      },
+      {
+        "name": "quality_flags",
+        "type": "VARCHAR[]"
+      }
+    ],
+    "invoices": [
+      {
+        "name": "operation_id",
+        "type": "VARCHAR"
+      },
+      {
+        "name": "company_id",
+        "type": "VARCHAR"
+      },
+      {
+        "name": "document_type",
+        "type": "VARCHAR"
+      },
+      {
+        "name": "issuance_date",
+        "type": "TIMESTAMP"
+      },
+      {
+        "name": "due_date",
+        "type": "TIMESTAMP"
+      },
+      {
+        "name": "payment_date",
+        "type": "TIMESTAMP"
+      },
+      {
+        "name": "amount",
+        "type": "DOUBLE"
+      },
+      {
+        "name": "pending_amount",
+        "type": "DOUBLE"
+      },
+      {
+        "name": "currency",
+        "type": "VARCHAR"
+      },
+      {
+        "name": "accounting_currency",
+        "type": "VARCHAR"
+      },
+      {
+        "name": "exchange_rate",
+        "type": "DOUBLE"
+      },
+      {
+        "name": "status",
+        "type": "VARCHAR"
+      },
+      {
+        "name": "concept",
+        "type": "VARCHAR"
+      },
+      {
+        "name": "counterparty_id",
+        "type": "VARCHAR"
+      },
+      {
+        "name": "_src_row",
+        "type": "BIGINT"
+      },
+      {
+        "name": "_cast_failures",
+        "type": "VARCHAR[]"
+      },
+      {
+        "name": "issuance_date_ok",
+        "type": "TIMESTAMP"
+      },
+      {
+        "name": "due_date_ok",
+        "type": "TIMESTAMP"
+      },
+      {
+        "name": "payment_date_ok",
+        "type": "TIMESTAMP"
+      },
+      {
+        "name": "month",
+        "type": "DATE"
+      },
+      {
+        "name": "is_open_month",
+        "type": "BOOLEAN"
+      },
+      {
+        "name": "status_norm",
+        "type": "VARCHAR"
+      },
+      {
+        "name": "document_type_norm",
+        "type": "VARCHAR"
+      },
+      {
+        "name": "days_to_due",
+        "type": "BIGINT"
+      },
+      {
+        "name": "days_to_payment",
+        "type": "BIGINT"
+      },
+      {
+        "name": "flow_side",
+        "type": "VARCHAR"
+      },
+      {
+        "name": "amount_acct",
+        "type": "DOUBLE"
+      },
+      {
+        "name": "amount_eur",
+        "type": "DOUBLE"
+      },
+      {
+        "name": "currency_norm",
+        "type": "VARCHAR"
+      },
+      {
+        "name": "accounting_currency_norm",
+        "type": "VARCHAR"
+      },
+      {
+        "name": "amount_eur_source",
+        "type": "VARCHAR"
+      },
+      {
+        "name": "fx_ambiguous",
+        "type": "BOOLEAN"
+      },
+      {
+        "name": "settlement_date_ok",
+        "type": "TIMESTAMP"
+      },
+      {
+        "name": "maturity_date_ok",
+        "type": "TIMESTAMP"
+      },
+      {
+        "name": "quality_flags",
+        "type": "VARCHAR[]"
+      }
+    ],
+    "observabilidad": [
+      {
+        "name": "company_id",
+        "type": "VARCHAR"
+      },
+      {
+        "name": "group_id",
+        "type": "VARCHAR"
+      },
+      {
+        "name": "month",
+        "type": "DATE"
+      },
+      {
+        "name": "n_tx",
+        "type": "BIGINT"
+      },
+      {
+        "name": "tiene_actividad",
+        "type": "BOOLEAN"
+      },
+      {
+        "name": "n_cuentas_activas",
+        "type": "BIGINT"
+      },
+      {
+        "name": "pct_filas_sin_clasificar",
+        "type": "DOUBLE"
+      },
+      {
+        "name": "pct_filas_sin_convertir",
+        "type": "DOUBLE"
+      },
+      {
+        "name": "primer_mes_con_tx",
+        "type": "DATE"
+      },
+      {
+        "name": "ultimo_mes_con_tx",
+        "type": "DATE"
+      },
+      {
+        "name": "meses_observados",
+        "type": "BIGINT"
+      },
+      {
+        "name": "meses_con_actividad_hasta_m",
+        "type": "BIGINT"
+      },
+      {
+        "name": "es_calentamiento",
+        "type": "BOOLEAN"
+      },
+      {
+        "name": "horizonte_completo",
+        "type": "BOOLEAN"
+      },
+      {
+        "name": "horizonte_con_actividad",
+        "type": "BOOLEAN"
+      },
+      {
+        "name": "objetivo_observable",
+        "type": "BOOLEAN"
+      },
+      {
+        "name": "motivo_no_observable",
+        "type": "VARCHAR"
+      }
+    ],
+    "panel_cobro": [
+      {
+        "name": "company_id",
+        "type": "VARCHAR"
+      },
+      {
+        "name": "group_id",
+        "type": "VARCHAR"
+      },
+      {
+        "name": "month",
+        "type": "DATE"
+      },
+      {
+        "name": "tiene_erp",
+        "type": "BOOLEAN"
+      },
+      {
+        "name": "ar_abierto_eur",
+        "type": "DOUBLE"
+      },
+      {
+        "name": "ar_vencido_eur",
+        "type": "DOUBLE"
+      },
+      {
+        "name": "ar_pct_vencido",
+        "type": "DOUBLE"
+      },
+      {
+        "name": "ar_n_abiertas",
+        "type": "BIGINT"
+      },
+      {
+        "name": "ar_aging_0_30_eur",
+        "type": "DOUBLE"
+      },
+      {
+        "name": "ar_aging_31_60_eur",
+        "type": "DOUBLE"
+      },
+      {
+        "name": "ar_aging_61_90_eur",
+        "type": "DOUBLE"
+      },
+      {
+        "name": "ar_aging_91_180_eur",
+        "type": "DOUBLE"
+      },
+      {
+        "name": "ar_aging_181_360_eur",
+        "type": "DOUBLE"
+      },
+      {
+        "name": "ar_aging_360_mas_eur",
+        "type": "DOUBLE"
+      },
+      {
+        "name": "ar_emitido_eur",
+        "type": "DOUBLE"
+      },
+      {
+        "name": "ar_cobertura_eur_pct",
+        "type": "DOUBLE"
+      },
+      {
+        "name": "ar_eur_rescatado_pct",
+        "type": "DOUBLE"
+      },
+      {
+        "name": "ar_liquidado_eur",
+        "type": "DOUBLE"
+      },
+      {
+        "name": "ap_abierto_eur",
+        "type": "DOUBLE"
+      },
+      {
+        "name": "ap_vencido_eur",
+        "type": "DOUBLE"
+      },
+      {
+        "name": "ap_pct_vencido",
+        "type": "DOUBLE"
+      },
+      {
+        "name": "ap_n_abiertas",
+        "type": "BIGINT"
+      },
+      {
+        "name": "ap_aging_0_30_eur",
+        "type": "DOUBLE"
+      },
+      {
+        "name": "ap_aging_31_60_eur",
+        "type": "DOUBLE"
+      },
+      {
+        "name": "ap_aging_61_90_eur",
+        "type": "DOUBLE"
+      },
+      {
+        "name": "ap_aging_91_180_eur",
+        "type": "DOUBLE"
+      },
+      {
+        "name": "ap_aging_181_360_eur",
+        "type": "DOUBLE"
+      },
+      {
+        "name": "ap_aging_360_mas_eur",
+        "type": "DOUBLE"
+      },
+      {
+        "name": "ap_emitido_eur",
+        "type": "DOUBLE"
+      },
+      {
+        "name": "ap_cobertura_eur_pct",
+        "type": "DOUBLE"
+      },
+      {
+        "name": "ap_liquidado_eur",
+        "type": "DOUBLE"
+      },
+      {
+        "name": "ar_dso_dias",
+        "type": "DOUBLE"
+      },
+      {
+        "name": "ar_retraso_medio_dias",
+        "type": "DOUBLE"
+      },
+      {
+        "name": "ar_n_contrapartes",
+        "type": "BIGINT"
+      },
+      {
+        "name": "ar_top1_pct",
+        "type": "DOUBLE"
+      },
+      {
+        "name": "ar_mora_mas_180d_eur",
+        "type": "DOUBLE"
+      },
+      {
+        "name": "ap_mora_mas_180d_eur",
+        "type": "DOUBLE"
+      },
+      {
+        "name": "coh_n_emitidas",
+        "type": "BIGINT"
+      },
+      {
+        "name": "coh_emitido_eur",
+        "type": "DOUBLE"
+      },
+      {
+        "name": "coh_pct_cobrado_30d",
+        "type": "DOUBLE"
+      },
+      {
+        "name": "coh_pct_cobrado_60d",
+        "type": "DOUBLE"
+      },
+      {
+        "name": "coh_pct_cobrado_90d",
+        "type": "DOUBLE"
+      },
+      {
+        "name": "coh_30d_available_at",
+        "type": "DATE"
+      },
+      {
+        "name": "coh_60d_available_at",
+        "type": "DATE"
+      },
+      {
+        "name": "coh_90d_available_at",
+        "type": "DATE"
+      },
+      {
+        "name": "ar_abierto_norm",
+        "type": "DOUBLE"
+      },
+      {
+        "name": "meses_observados",
+        "type": "BIGINT"
+      },
+      {
+        "name": "es_calentamiento",
+        "type": "BOOLEAN"
+      },
+      {
+        "name": "cobertura_eur_pct",
+        "type": "DOUBLE"
+      },
+      {
+        "name": "n_facturas_mes",
+        "type": "DOUBLE"
+      },
+      {
+        "name": "observacion_erp_inferida",
+        "type": "BOOLEAN"
+      },
+      {
+        "name": "es_reconstruccion_retrospectiva",
+        "type": "BOOLEAN"
+      },
+      {
+        "name": "ar_abierto_conocido_eur",
+        "type": "DOUBLE"
+      },
+      {
+        "name": "ar_emitido_conocido_eur",
+        "type": "DOUBLE"
+      },
+      {
+        "name": "ar_abierto_cobertura_eur_pct",
+        "type": "DOUBLE"
+      },
+      {
+        "name": "ar_n_estado_incierto",
+        "type": "BIGINT"
+      },
+      {
+        "name": "ar_n_vencimiento_desconocido",
+        "type": "BIGINT"
+      },
+      {
+        "name": "ap_abierto_conocido_eur",
+        "type": "DOUBLE"
+      },
+      {
+        "name": "ap_emitido_conocido_eur",
+        "type": "DOUBLE"
+      },
+      {
+        "name": "ap_abierto_cobertura_eur_pct",
+        "type": "DOUBLE"
+      },
+      {
+        "name": "ap_n_estado_incierto",
+        "type": "BIGINT"
+      },
+      {
+        "name": "ap_n_vencimiento_desconocido",
+        "type": "BIGINT"
+      },
+      {
+        "name": "coh_cobertura_eur_pct",
+        "type": "DOUBLE"
+      },
+      {
+        "name": "coh_n_estado_incierto",
+        "type": "BIGINT"
+      }
+    ],
+    "panel_deuda": [
+      {
+        "name": "company_id",
+        "type": "VARCHAR"
+      },
+      {
+        "name": "group_id",
+        "type": "VARCHAR"
+      },
+      {
+        "name": "month",
+        "type": "DATE"
+      },
+      {
+        "name": "available_at",
+        "type": "DATE"
+      },
+      {
+        "name": "tiene_actividad_caja",
+        "type": "BOOLEAN"
+      },
+      {
+        "name": "n_tx_producto_deuda",
+        "type": "BIGINT"
+      },
+      {
+        "name": "n_caja",
+        "type": "BIGINT"
+      },
+      {
+        "name": "principal_conocido_eur",
+        "type": "DOUBLE"
+      },
+      {
+        "name": "intereses_conocido_eur",
+        "type": "DOUBLE"
+      },
+      {
+        "name": "financiacion_no_desglosada_conocido_eur",
+        "type": "DOUBLE"
+      },
+      {
+        "name": "reintegros_deuda_conocido_eur",
+        "type": "DOUBLE"
+      },
+      {
+        "name": "servicio_deuda_conocido_eur",
+        "type": "DOUBLE"
+      },
+      {
+        "name": "n_pagos_servicio",
+        "type": "BIGINT"
+      },
+      {
+        "name": "n_servicio_sin_eur",
+        "type": "BIGINT"
+      },
+      {
+        "name": "n_financiacion_no_desglosada",
+        "type": "BIGINT"
+      },
+      {
+        "name": "n_posibles_pagos_no_identificados",
+        "type": "BIGINT"
+      },
+      {
+        "name": "servicio_deuda_eur",
+        "type": "DOUBLE"
+      },
+      {
+        "name": "reintegros_deuda_eur",
+        "type": "DOUBLE"
+      },
+      {
+        "name": "servicio_deuda_neto_eur",
+        "type": "DOUBLE"
+      },
+      {
+        "name": "cobertura_servicio_eur_pct",
+        "type": "DOUBLE"
+      },
+      {
+        "name": "ledger_deuda_neto_conocido_eur",
+        "type": "DOUBLE"
+      },
+      {
+        "name": "n_ledger_sin_eur",
+        "type": "BIGINT"
+      },
+      {
+        "name": "financiacion_salidas_caja_conocido_eur",
+        "type": "DOUBLE"
+      }
+    ],
+    "panel_evidencia": [
+      {
+        "name": "company_id",
+        "type": "VARCHAR"
+      },
+      {
+        "name": "group_id",
+        "type": "VARCHAR"
+      },
+      {
+        "name": "month",
+        "type": "DATE"
+      },
+      {
+        "name": "available_at",
+        "type": "DATE"
+      },
+      {
+        "name": "tiene_actividad_caja",
+        "type": "BOOLEAN"
+      },
+      {
+        "name": "n_tx_caja",
+        "type": "BIGINT"
+      },
+      {
+        "name": "n_tx_fuera_perimetro",
+        "type": "BIGINT"
+      },
+      {
+        "name": "n_sin_eur",
+        "type": "BIGINT"
+      },
+      {
+        "name": "n_operativo_sin_eur",
+        "type": "BIGINT"
+      },
+      {
+        "name": "n_ambiguos_sin_eur",
+        "type": "BIGINT"
+      },
+      {
+        "name": "n_ambiguos",
+        "type": "BIGINT"
+      },
+      {
+        "name": "n_atipicos",
+        "type": "BIGINT"
+      },
+      {
+        "name": "n_atipicos_operativos",
+        "type": "BIGINT"
+      },
+      {
+        "name": "n_atipicos_desconocidos",
+        "type": "BIGINT"
+      },
+      {
+        "name": "n_conflictos_direccion",
+        "type": "BIGINT"
+      },
+      {
+        "name": "meses_observados",
+        "type": "BIGINT"
+      },
+      {
+        "name": "meses_con_actividad_hasta_m",
+        "type": "BIGINT"
+      },
+      {
+        "name": "cobertura_eur_pct",
+        "type": "DOUBLE"
+      },
+      {
+        "name": "cobertura_clasificacion_pct",
+        "type": "DOUBLE"
+      },
+      {
+        "name": "volumen_ambiguo_pct",
+        "type": "DOUBLE"
+      },
+      {
+        "name": "flujo_operativo_eur",
+        "type": "DOUBLE"
+      },
+      {
+        "name": "servicio_deuda_eur",
+        "type": "DOUBLE"
+      },
+      {
+        "name": "n_pagos_servicio",
+        "type": "BIGINT"
+      },
+      {
+        "name": "n_servicio_sin_eur",
+        "type": "BIGINT"
+      },
+      {
+        "name": "n_posibles_pagos_no_identificados",
+        "type": "BIGINT"
+      },
+      {
+        "name": "n_financiacion_no_desglosada",
+        "type": "BIGINT"
+      },
+      {
+        "name": "cobertura_servicio_eur_pct",
+        "type": "DOUBLE"
+      },
+      {
+        "name": "tiene_erp",
+        "type": "BOOLEAN"
+      },
+      {
+        "name": "cohorte_cobro_month",
+        "type": "DATE"
+      },
+      {
+        "name": "cobro_available_at",
+        "type": "DATE"
+      },
+      {
+        "name": "cobro_pct_60d",
+        "type": "DOUBLE"
+      },
+      {
+        "name": "cobro_n_facturas",
+        "type": "BIGINT"
+      },
+      {
+        "name": "cobro_antiguedad_dias",
+        "type": "BIGINT"
+      },
+      {
+        "name": "deficit_operativo_definido",
+        "type": "BOOLEAN"
+      },
+      {
+        "name": "deficit_sin_atipicos_definido",
+        "type": "BOOLEAN"
+      },
+      {
+        "name": "sensible_atipicos",
+        "type": "BOOLEAN"
+      },
+      {
+        "name": "motivos_operativo",
+        "type": "VARCHAR[]"
+      },
+      {
+        "name": "motivos_servicio_deuda",
+        "type": "VARCHAR[]"
+      },
+      {
+        "name": "motivos_cobro",
+        "type": "VARCHAR[]"
+      },
+      {
+        "name": "estado_operativo",
+        "type": "VARCHAR"
+      },
+      {
+        "name": "estado_servicio_deuda",
+        "type": "VARCHAR"
+      },
+      {
+        "name": "estado_cobro",
+        "type": "VARCHAR"
+      },
+      {
+        "name": "dimensiones_publicables",
+        "type": "VARCHAR[]"
+      }
+    ],
+    "panel_flujos": [
+      {
+        "name": "company_id",
+        "type": "VARCHAR"
+      },
+      {
+        "name": "group_id",
+        "type": "VARCHAR"
+      },
+      {
+        "name": "month",
+        "type": "DATE"
+      },
+      {
+        "name": "available_at",
+        "type": "DATE"
+      },
+      {
+        "name": "n_tx_total",
+        "type": "BIGINT"
+      },
+      {
+        "name": "n_tx_fuera_perimetro",
+        "type": "BIGINT"
+      },
+      {
+        "name": "n_tx_producto_deuda",
+        "type": "BIGINT"
+      },
+      {
+        "name": "n_tx_huerfanos",
+        "type": "BIGINT"
+      },
+      {
+        "name": "fuera_perimetro_conocido_eur",
+        "type": "DOUBLE"
+      },
+      {
+        "name": "n_cuentas_activas",
+        "type": "BIGINT"
+      },
+      {
+        "name": "n_tx_caja",
+        "type": "BIGINT"
+      },
+      {
+        "name": "n_sin_eur",
+        "type": "BIGINT"
+      },
+      {
+        "name": "n_ambiguos",
+        "type": "BIGINT"
+      },
+      {
+        "name": "n_ambiguos_entrada",
+        "type": "BIGINT"
+      },
+      {
+        "name": "n_ambiguos_salida",
+        "type": "BIGINT"
+      },
+      {
+        "name": "n_operativo_sin_eur",
+        "type": "BIGINT"
+      },
+      {
+        "name": "n_cobros_sin_eur",
+        "type": "BIGINT"
+      },
+      {
+        "name": "n_pagos_sin_eur",
+        "type": "BIGINT"
+      },
+      {
+        "name": "n_ambiguos_sin_eur",
+        "type": "BIGINT"
+      },
+      {
+        "name": "n_atipicos",
+        "type": "BIGINT"
+      },
+      {
+        "name": "n_atipicos_operativos",
+        "type": "BIGINT"
+      },
+      {
+        "name": "n_atipicos_desconocidos",
+        "type": "BIGINT"
+      },
+      {
+        "name": "n_conflictos_direccion",
+        "type": "BIGINT"
+      },
+      {
+        "name": "cobros_operativos_conocido_eur",
+        "type": "DOUBLE"
+      },
+      {
+        "name": "pagos_operativos_conocido_eur",
+        "type": "DOUBLE"
+      },
+      {
+        "name": "financiacion_entradas_conocido_eur",
+        "type": "DOUBLE"
+      },
+      {
+        "name": "financiacion_salidas_conocido_eur",
+        "type": "DOUBLE"
+      },
+      {
+        "name": "inversion_entradas_conocido_eur",
+        "type": "DOUBLE"
+      },
+      {
+        "name": "inversion_salidas_conocido_eur",
+        "type": "DOUBLE"
+      },
+      {
+        "name": "transferencias_entradas_conocido_eur",
+        "type": "DOUBLE"
+      },
+      {
+        "name": "transferencias_salidas_conocido_eur",
+        "type": "DOUBLE"
+      },
+      {
+        "name": "ajustes_entradas_conocido_eur",
+        "type": "DOUBLE"
+      },
+      {
+        "name": "ajustes_salidas_conocido_eur",
+        "type": "DOUBLE"
+      },
+      {
+        "name": "sin_clasificar_entradas_conocido_eur",
+        "type": "DOUBLE"
+      },
+      {
+        "name": "sin_clasificar_salidas_conocido_eur",
+        "type": "DOUBLE"
+      },
+      {
+        "name": "neto_caja_conocido_eur",
+        "type": "DOUBLE"
+      },
+      {
+        "name": "volumen_caja_conocido_eur",
+        "type": "DOUBLE"
+      },
+      {
+        "name": "ambiguo_entradas_conocido_eur",
+        "type": "DOUBLE"
+      },
+      {
+        "name": "ambiguo_salidas_conocido_eur",
+        "type": "DOUBLE"
+      },
+      {
+        "name": "operativo_sin_atipicos_conocido_eur",
+        "type": "DOUBLE"
+      },
+      {
+        "name": "ambiguo_entradas_sin_atipicos_conocido_eur",
+        "type": "DOUBLE"
+      },
+      {
+        "name": "ambiguo_salidas_sin_atipicos_conocido_eur",
+        "type": "DOUBLE"
+      },
+      {
+        "name": "tiene_actividad_caja",
+        "type": "BOOLEAN"
+      },
+      {
+        "name": "primer_mes_caja",
+        "type": "DATE"
+      },
+      {
+        "name": "meses_observados",
+        "type": "BIGINT"
+      },
+      {
+        "name": "operativo_identificado_conocido_eur",
+        "type": "DOUBLE"
+      },
+      {
+        "name": "meses_con_actividad_hasta_m",
+        "type": "BIGINT"
+      },
+      {
+        "name": "es_calentamiento",
+        "type": "BOOLEAN"
+      },
+      {
+        "name": "cobertura_eur_pct",
+        "type": "DOUBLE"
+      },
+      {
+        "name": "cobertura_clasificacion_pct",
+        "type": "DOUBLE"
+      },
+      {
+        "name": "volumen_ambiguo_pct",
+        "type": "DOUBLE"
+      },
+      {
+        "name": "neto_caja_eur",
+        "type": "DOUBLE"
+      },
+      {
+        "name": "cobros_operativos_eur",
+        "type": "DOUBLE"
+      },
+      {
+        "name": "pagos_operativos_eur",
+        "type": "DOUBLE"
+      },
+      {
+        "name": "flujo_operativo_eur",
+        "type": "DOUBLE"
+      },
+      {
+        "name": "operativo_min_eur",
+        "type": "DOUBLE"
+      },
+      {
+        "name": "operativo_max_eur",
+        "type": "DOUBLE"
+      },
+      {
+        "name": "operativo_min_sin_atipicos_eur",
+        "type": "DOUBLE"
+      },
+      {
+        "name": "operativo_max_sin_atipicos_eur",
+        "type": "DOUBLE"
+      }
+    ],
+    "transactions": [
+      {
+        "name": "transaction_id",
+        "type": "VARCHAR"
+      },
+      {
+        "name": "company_id",
+        "type": "VARCHAR"
+      },
+      {
+        "name": "product_id",
+        "type": "VARCHAR"
+      },
+      {
+        "name": "date",
+        "type": "TIMESTAMP"
+      },
+      {
+        "name": "value_date",
+        "type": "TIMESTAMP"
+      },
+      {
+        "name": "amount",
+        "type": "DOUBLE"
+      },
+      {
+        "name": "exchange_rate",
+        "type": "DOUBLE"
+      },
+      {
+        "name": "status",
+        "type": "VARCHAR"
+      },
+      {
+        "name": "accounting_status",
+        "type": "VARCHAR"
+      },
+      {
+        "name": "category",
+        "type": "VARCHAR"
+      },
+      {
+        "name": "description",
+        "type": "VARCHAR"
+      },
+      {
+        "name": "counterparty_id",
+        "type": "VARCHAR"
+      },
+      {
+        "name": "_src_row",
+        "type": "BIGINT"
+      },
+      {
+        "name": "_cast_failures",
+        "type": "VARCHAR[]"
+      },
+      {
+        "name": "date_ok",
+        "type": "TIMESTAMP"
+      },
+      {
+        "name": "value_date_ok",
+        "type": "TIMESTAMP"
+      },
+      {
+        "name": "month",
+        "type": "DATE"
+      },
+      {
+        "name": "is_open_month",
+        "type": "BOOLEAN"
+      },
+      {
+        "name": "status_norm",
+        "type": "VARCHAR"
+      },
+      {
+        "name": "is_booked",
+        "type": "BOOLEAN"
+      },
+      {
+        "name": "category_norm",
+        "type": "VARCHAR"
+      },
+      {
+        "name": "direction",
+        "type": "VARCHAR"
+      },
+      {
+        "name": "product_source",
+        "type": "VARCHAR"
+      },
+      {
+        "name": "product_type",
+        "type": "VARCHAR"
+      },
+      {
+        "name": "product_currency",
+        "type": "VARCHAR"
+      },
+      {
+        "name": "amount_eur",
+        "type": "DOUBLE"
+      },
+      {
+        "name": "amount_eur_source",
+        "type": "VARCHAR"
+      },
+      {
+        "name": "fx_ambiguous",
+        "type": "BOOLEAN"
+      },
+      {
+        "name": "quality_flags",
+        "type": "VARCHAR[]"
+      }
+    ],
+    "tx_flow_class": [
+      {
+        "name": "_src_row",
+        "type": "BIGINT"
+      },
+      {
+        "name": "transaction_id",
+        "type": "VARCHAR"
+      },
+      {
+        "name": "flow_class",
+        "type": "VARCHAR"
+      },
+      {
+        "name": "flow_source",
+        "type": "VARCHAR"
+      },
+      {
+        "name": "rule_id",
+        "type": "VARCHAR"
+      },
+      {
+        "name": "es_atipico",
+        "type": "BOOLEAN"
+      },
+      {
+        "name": "direction_conflict",
+        "type": "BOOLEAN"
+      },
+      {
+        "name": "evidence_month",
+        "type": "DATE"
+      }
+    ]
+  },
+  "scope": {
+    "aggregate_inventory": "all groups row counts and schemas only; financial completeness is 200 development groups",
+    "balance_reconstruction_executed": false,
+    "certified_as_of_evidence": false,
+    "duckdb": "in-memory connection, SELECT-only audit queries, 512 aggregate rows maximum per query, no spill directory",
+    "financial_values_exclude_all_v1_final_test_groups": true,
+    "outcomes_events_predictions_access": "byte hashes only; no evaluation or new labels",
+    "raw_csv_access": "byte hashes only",
+    "run_id": "20260919T124814Z-e5302b58",
+    "target_proxy_access": "byte hashes only; no schema or values"
+  }
+}

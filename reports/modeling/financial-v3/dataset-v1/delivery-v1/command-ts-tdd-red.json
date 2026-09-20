@@ -1,0 +1,11 @@
+{
+  "command": [
+    "bun",
+    "test",
+    "apps/app/lib/financial-v3.test.ts"
+  ],
+  "exit_code": 1,
+  "started_at": "2026-09-19T22:49:08.409199+00:00",
+  "stderr": "\napps/app/lib/financial-v3.test.ts:\n\n# Unhandled error between tests\n-------------------------------\nerror: Cannot find module './financial-v3' from '/home/mikel/.herdr/worktrees/predictive-models/feat-training-devin/apps/app/lib/financial-v3.test.ts'\n-------------------------------\n\n\n 0 pass\n 1 fail\n 1 error\nRan 1 test across 1 file. [72.00ms]\n",
+  "stdout": "bun test v1.3.12 (700fc117)\n"
+}

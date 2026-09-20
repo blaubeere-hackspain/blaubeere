@@ -1,0 +1,328 @@
+{
+  "artifact_hashes": "manifest.json#/artifacts_sha256",
+  "automatic_alerts": false,
+  "commands_before_freeze": [
+    {
+      "command": "pwd && ls",
+      "exit_code": 0,
+      "purpose": "root verification"
+    },
+    {
+      "command": "ls -ld scripts tests reports/modeling/financial-v3/dataset-v1 .venv/bin/python",
+      "exit_code": 0
+    },
+    {
+      "command": ".venv/bin/python -B -m unittest tests.test_financial_v3_dataset_model",
+      "exit_code": 1,
+      "reason": "Expected tests-first RED: new model module absent; no data queries or real fits",
+      "tests": 1
+    },
+    {
+      "command": ".venv/bin/python -B -m unittest tests.test_financial_v3_dataset_model",
+      "exit_code": 0,
+      "reason": "Initial fixture suite GREEN; further scope tests added before freeze",
+      "tests": 21
+    },
+    {
+      "command": ".venv/bin/python -B -m unittest tests.test_financial_v3_dataset_model",
+      "exit_code": 0,
+      "stderr": "........................\n----------------------------------------------------------------------\nRan 24 tests in 0.136s\n\nOK\n",
+      "stdout": ""
+    },
+    {
+      "command": ".venv/bin/python -B -m unittest discover -s tests -p test_financial_v3*.py",
+      "exit_code": 0,
+      "stderr": ".............................................................................................................................................................................................\n----------------------------------------------------------------------\nRan 189 tests in 20.140s\n\nOK\n",
+      "stdout": "{\n  \"ok\": true\n}\n{\n  \"ok\": true\n}\n{\"artifact_count_without_verification\": 1295, \"artifact_sha256\": {\"coverage.json\": \"4393dbb4bd5d9668270559b5e43a9f55acc43e6c5724265881473ae90cc2b7da\", \"features.jsonl\": \"a822dbe7300af5495ca9ef5f90a4de3acfdbf2d95fffd845c6eb21c1c917afaf\", \"index.json\": \"f588434ab5656bf0eb51266a33b869bad1fa85ec8f5842a5c54791f99e716f65\", \"manifest.json\": \"e360ef33ba7cae39aa9c94d0f8e778f49c38a3985f77053a2f53bd4ae5ef8a44\", \"policy.json\": \"1499b9bbf54621da44eff1262bdd1579466df5ebcbc564a8c43669f528197f5f\", \"queries.json\": \"5eab62efc7bf84d963fe392d20f6529c4b9879a75a7a25308f2ebb7539824932\", \"receipt.json\": \"aabc196abd84e70aa78bb56270866e1e3ba25f023ebe468b4425ebe9fd48e871\", \"sample.json\": \"b3c99279ab1b0714d464e7697233755ca4569a0a041e8ddd4e546bbdab7c053f\", \"schema.json\": \"91652d4faa6579250d31158b75c4b44ce785156288f1ee218f72c543ea3373dd\"}, \"component_example\": [{\"company_id\": \"COMP_0037\", \"due_face_proxy\": 112969.38, \"month\": \"2025-07-01\", \"score\": {\"components\": {\"generation\": 0.0, \"growth\": 24.14013333333333, \"stability\": 0}, \"full_company_interval\": [0, 100], \"headline\": null, \"missing_components\": [], \"mora_penalty_range\": [0.10072188600738688, 0.10072188600738688], \"operating_scope_interval\": [7.141318113992613, 7.141318113992613], \"operating_scope_score\": null, \"receipt_reference\": 43535.03333333333}}], \"example_selection\": \"First lexicographic non-holdout company with all observed components in development dates; source coverage only, no labels or outcomes\", \"feature_bytes\": 4000266, \"index_bytes\": 325075, \"input_hash_count\": 11, \"input_queries_export\": 11, \"max_profile_bytes\": 359473, \"new_code_sha256\": {\"scripts/financial_v3_dataset.py\": \"e9b6a89ff3dd54aeb998ef092e59109560eedfae79aafc7ae73c03eb69dbe979\", \"scripts/financial_v3_dataset_contract.py\": \"2b0d9bbcf68d9678168f278632e1798f34420824b56b71ac09972eae159ac00e\", \"scripts/financial_v3_dataset_model.py\": \"ef8e84e8d616b95e98614cc59f4f3d58151e3770243615e4c8d8fcdd09f8fcab\", \"scripts/financial_v3_dataset_model_metrics.py\": \"040ee3e200b9775bf4091b65f90a2b1c5463b51338522d3533fb27027aec4ce5\", \"tests/test_financial_v3_dataset.py\": \"8940b2b681a08530f6c1b300dfade4365a0bdf976980ecbd52acd054cbfcc7f2\", \"tests/test_financial_v3_dataset_contract.py\": \"46efa0b2caf58f17518b14362e1101cbb1aef45e43c156c6e0c71bcc43a40621\", \"tests/test_financial_v3_dataset_model.py\": \"ce7f7042233ff1fe6df246dcf791481082389453c7f868d64c3f5aebde4cf814\", \"tests/test_financial_v3_dataset_validation.py\": \"2d8c84bac0fd19b73b9d5580ab46ecbb7f96b4e50445ddab58b8cad36ca0d961\"}, \"numeric_example\": {\"company_id\": \"COMP_0001\", \"documents\": {\"ap_due_face\": 34506.18000000001, \"ap_due_known\": 34506.18000000001, \"ap_issued_known\": 42934.6, \"ar_issued_known\": 105845.57999999999, \"due_missing_eur_rows\": 0, \"issued_rows\": 25, \"unknown_due_rows\": 0}, \"flow\": {\"bounds_without_outliers\": [28094.13000000002, 28094.13000000002], \"composition\": {\"adjustment\": [0.0, 0.0], \"financing\": [0.0, 0.0], \"investment\": [0.0, 0.0], \"operating\": [102924.99, 74830.85999999999], \"transfer\": [0.0, 0.0], \"unknown\": [0.0, 0.0]}, \"coverage\": {\"active_accounts\": 2, \"ambiguous_rows\": 0, \"classification\": 1.0, \"eur\": 1.0, \"missing_eur_rows\": 0}, \"known_in_out\": [102924.99000000002, 74830.86000000002], \"net_known\": 28094.129999999997, \"net_observed\": 28094.129999999997, \"observed\": true, \"operating_bounds\": [28094.13000000002, 28094.13000000002], \"operating_payments\": 74830.85999999999, \"operating_receipts\": 102924.99, \"reason\": null, \"rows\": 32}, \"month\": \"2026-08-01\", \"score\": {\"components\": {\"generation\": null, \"growth\": null, \"stability\": null}, \"full_company_interval\": [0, 100], \"headline\": null, \"missing_components\": [\"generation\", \"growth\", \"stability\"], \"mora_penalty_range\": [0.0, 40.0], \"operating_scope_interval\": [0.0, 100.0], \"operating_scope_score\": null, \"receipt_reference\": null}}, \"profile_bytes\": 149696834, \"protected_after_match\": true, \"protected_before_count\": 574}\n"
+    }
+  ],
+  "coverage": {
+    "companies": 1078,
+    "current_receipt_dip_3m_probability_points": 0,
+    "eligible_input_points": 6289,
+    "final_test_product_only_abstentions": 208,
+    "index_bytes": 209519,
+    "maximum_profile_bytes": 47181,
+    "points": 25872,
+    "postselection_points": 8624,
+    "receipt_contraction_3m_probability_points": 6289,
+    "receipt_expansion_3m_probability_points": 6289
+  },
+  "execution_attempts": 1,
+  "limitations": [
+    "Synthetic measured-input experiment, internal retrospective availability assumptions",
+    "No independent test; v1/v2 prior exposure remains disclosed",
+    "Unknown company perimeter outside observed accounts",
+    "No unrestricted reconciled cash or total financial debt history",
+    "Receipt-only labels cannot validate all six goal questions",
+    "No automatic alerts or production acceptance; no app integration in this scope"
+  ],
+  "manifest_sha256": "71eae8fef2ab3466fa2545d1c38f57977508cb79b7c051280b59e02253925428",
+  "metrics": "metrics.json",
+  "model_commands": [
+    {
+      "command": ".venv/bin/python -B -m scripts.financial_v3_dataset_model --preflight",
+      "exit_code": 0,
+      "real_fits": 0,
+      "real_label_queries": 0
+    },
+    {
+      "command": ".venv/bin/python -B -m scripts.financial_v3_dataset_model --freeze",
+      "exit_code": 0,
+      "fits": 0,
+      "label_queries": 0
+    },
+    {
+      "command": ".venv/bin/python -B -m scripts.financial_v3_dataset_model --execute",
+      "fits": [
+        {
+          "candidate": "constant",
+          "fitted": true,
+          "labels_mature_by": "2025-06-30",
+          "sklearn_fit": false,
+          "stage": "candidate",
+          "status": "completed",
+          "target": "receipt_contraction_3m",
+          "train_rows": 212
+        },
+        {
+          "candidate": "persistence",
+          "fitted": true,
+          "labels_mature_by": "2025-06-30",
+          "sklearn_fit": false,
+          "stage": "candidate",
+          "status": "completed",
+          "target": "receipt_contraction_3m",
+          "train_rows": 212
+        },
+        {
+          "candidate": "trend",
+          "fitted": true,
+          "labels_mature_by": "2025-06-30",
+          "sklearn_fit": false,
+          "stage": "candidate",
+          "status": "completed",
+          "target": "receipt_contraction_3m",
+          "train_rows": 212
+        },
+        {
+          "candidate": "logistic_C0.1",
+          "fitted": true,
+          "labels_mature_by": "2025-06-30",
+          "sklearn_fit": true,
+          "stage": "candidate",
+          "status": "completed",
+          "target": "receipt_contraction_3m",
+          "train_rows": 212
+        },
+        {
+          "candidate": "logistic_C1",
+          "fitted": true,
+          "labels_mature_by": "2025-06-30",
+          "sklearn_fit": true,
+          "stage": "candidate",
+          "status": "completed",
+          "target": "receipt_contraction_3m",
+          "train_rows": 212
+        },
+        {
+          "candidate": "persistence",
+          "fitted": true,
+          "labels_mature_by": "2025-12-31",
+          "sklearn_fit": false,
+          "stage": "refit",
+          "status": "completed",
+          "target": "receipt_contraction_3m",
+          "train_rows": 240
+        },
+        {
+          "candidate": "constant",
+          "fitted": true,
+          "labels_mature_by": "2025-06-30",
+          "sklearn_fit": false,
+          "stage": "candidate",
+          "status": "completed",
+          "target": "receipt_expansion_3m",
+          "train_rows": 212
+        },
+        {
+          "candidate": "persistence",
+          "fitted": true,
+          "labels_mature_by": "2025-06-30",
+          "sklearn_fit": false,
+          "stage": "candidate",
+          "status": "completed",
+          "target": "receipt_expansion_3m",
+          "train_rows": 212
+        },
+        {
+          "candidate": "trend",
+          "fitted": true,
+          "labels_mature_by": "2025-06-30",
+          "sklearn_fit": false,
+          "stage": "candidate",
+          "status": "completed",
+          "target": "receipt_expansion_3m",
+          "train_rows": 212
+        },
+        {
+          "candidate": "logistic_C0.1",
+          "fitted": true,
+          "labels_mature_by": "2025-06-30",
+          "sklearn_fit": true,
+          "stage": "candidate",
+          "status": "completed",
+          "target": "receipt_expansion_3m",
+          "train_rows": 212
+        },
+        {
+          "candidate": "logistic_C1",
+          "fitted": true,
+          "labels_mature_by": "2025-06-30",
+          "sklearn_fit": true,
+          "stage": "candidate",
+          "status": "completed",
+          "target": "receipt_expansion_3m",
+          "train_rows": 212
+        },
+        {
+          "candidate": "persistence",
+          "fitted": true,
+          "labels_mature_by": "2025-12-31",
+          "sklearn_fit": false,
+          "stage": "refit",
+          "status": "completed",
+          "target": "receipt_expansion_3m",
+          "train_rows": 240
+        },
+        {
+          "candidate": "constant",
+          "fitted": false,
+          "labels_mature_by": "2025-06-30",
+          "sklearn_fit": false,
+          "stage": "candidate",
+          "status": "completed",
+          "target": "current_receipt_dip_3m",
+          "train_rows": 61
+        },
+        {
+          "candidate": "logistic_C1",
+          "fitted": false,
+          "labels_mature_by": "2025-06-30",
+          "sklearn_fit": false,
+          "stage": "candidate",
+          "status": "completed",
+          "target": "current_receipt_dip_3m",
+          "train_rows": 61
+        }
+      ],
+      "result": "completed",
+      "exit_code": 0
+    }
+  ],
+  "new_files_only": true,
+  "no_network_install_config_commit_push_subagents": true,
+  "bound_files_rehashed_equal": 1878,
+  "new_code_and_tests_bound_before_outcomes": 3,
+  "old_bound_files_rehashed_equal": 1875,
+  "old_checks_after": {
+    "audit": {
+      "differences": [],
+      "mode": "hash-only read-only check; no DuckDB queries, pipeline, labels or evaluation",
+      "ok": true,
+      "old_document_bytes_preserved_as_suffix": true,
+      "protected_assets": 541
+    },
+    "dataset": {
+      "artifacts_checked": 1294,
+      "companies": 1286,
+      "feature_rows": 4930,
+      "input_queries": 0,
+      "months": 30864,
+      "ok": true,
+      "outcome_queries": 0,
+      "training": false,
+      "writes": 0
+    }
+  },
+  "seal_sha256": "f1414fc4e5fa4e2a7cce7682e386cc0af850987a934097b25de22465f9d81a59",
+  "source_query_ledger": "queries.json",
+  "status": "executed_internal_receipt_proxy_not_full_health_acceptance",
+  "strict_headline": null,
+  "version": "financial-v3-dataset-v1-model-v1-receipt-extension-1",
+  "final_readonly_recheck_after_verification_enrichment": {
+    "command": ".venv/bin/python -B -m scripts.financial_v3_dataset_model --check",
+    "exit_code": 0,
+    "result": {"ok": true, "artifacts_checked": 1146, "bound_files": 1878, "profiles": 1078, "final_test_abstentions": 208, "label_queries": 0, "source_queries": 0, "fits": 0, "writes": 0},
+    "recording_note": "This observed result was appended after the read-only command returned. All immutable artifact hashes and old checks matched again; the only subsequent write was this result record."
+  },
+  "post_execution_commands": [
+    {
+      "command": ".venv/bin/python -B -m scripts.financial_v3_dataset_model --check",
+      "exit_code": 0,
+      "result": {"ok": true, "artifacts_checked": 1146, "bound_files": 1878, "profiles": 1078, "final_test_abstentions": 208, "label_queries": 0, "source_queries": 0, "fits": 0, "writes": 0}
+    },
+    {
+      "command": ".venv/bin/python -B -m scripts.financial_v3_dataset --check",
+      "exit_code": 0,
+      "result": {"ok": true, "artifacts_checked": 1294, "companies": 1286, "months": 30864, "feature_rows": 4930, "input_queries": 0, "outcome_queries": 0, "training": false, "writes": 0}
+    },
+    {
+      "command": ".venv/bin/python -B -m scripts.financial_v3_audit --check",
+      "exit_code": 0,
+      "result": {"ok": true, "protected_assets": 541, "differences": [], "old_document_bytes_preserved_as_suffix": true, "mode": "hash-only read-only check; no DuckDB queries, pipeline, labels or evaluation"}
+    },
+    {
+      "command": ".venv/bin/python -B -m scripts.financial_v3_contract --check",
+      "exit_code": 0,
+      "result": {"ok": true, "bound_metadata_and_sources": 8, "financial_data_queries": 0, "outcome_values_read": 0, "business_approved": false, "confirmatory_approved": false, "automatic_alerts_enabled": false, "protocol_sha256": "aefaec5905af75e0d0ea61561967a6ad7dbf0731845bf5cf853eaab57be590f0", "receipt_sha256": "7fb94394bff8224ab4016bb57653d5222e9b3d3b182e78cad82efe34b3f860f5"}
+    }
+  ],
+  "fit_counts": {
+    "candidate_calls": 12,
+    "supported_candidate_instances": 10,
+    "fixed_trend_rule_instances_in_supported_count": 2,
+    "q4_candidate_support_abstentions": 2,
+    "selected_persistence_refits": 2,
+    "real_sklearn_logistic_fits": 4,
+    "maximum_preregistered_sklearn_fits": 8,
+    "refit_rows_per_direction": 240,
+    "refit_groups_per_direction": 33,
+    "refit_companies_per_direction": 74,
+    "failed_real_executions": 0,
+    "retuning_or_repeat_executions": 0
+  },
+  "query_counts": {
+    "approved_company_group_month_keys_before_outcomes": 4777,
+    "outcome_phase_selects": 3,
+    "outcome_phase_breakdown": ["company/group identity only", "approved receipt/coverage months only", "booked closed banking cash account identities only"],
+    "inference_input_selects": 6,
+    "2026_outcome_selects": 0,
+    "final_test_model_features_labels_fits_inference": 0
+  },
+  "observed_summary": {
+    "receipt_contraction_3m": {"selected": "persistence", "train_rows": 212, "train_groups": 25, "train_class_0_rows_groups": [122,21], "train_class_1_rows_groups": [90,19], "validation_rows": 28, "validation_groups": 8, "validation_class_0_rows_groups": [19,7], "validation_class_1_rows_groups": [9,6], "average_precision": 0.443001443001443, "brier": 0.2111266938971472, "mean_group_brier": 0.2089771442837549, "precision_at_0_6": null, "recall_at_0_6": 0.0, "alerts_at_0_6": 0, "ece5": 0.16234841498935085, "utility_pass": false},
+    "receipt_expansion_3m": {"selected": "persistence", "train_rows": 212, "train_groups": 25, "train_class_0_rows_groups": [161,22], "train_class_1_rows_groups": [51,18], "validation_rows": 28, "validation_groups": 8, "validation_class_0_rows_groups": [18,8], "validation_class_1_rows_groups": [10,6], "average_precision": 0.41000000000000003, "brier": 0.22460917697535818, "mean_group_brier": 0.22911206916526858, "precision_at_0_6": null, "recall_at_0_6": 0.0, "alerts_at_0_6": 0, "ece5": 0.08015976183952331, "utility_pass": false},
+    "current_receipt_dip_3m": {"selected": null, "train_rows": 61, "train_groups": 17, "train_recovered_rows_groups": [11,9], "train_persistent_rows_groups": [38,13], "train_mixed_rows_groups": [12,7], "validation_rows": 12, "validation_groups": 5, "validation_recovered_rows_groups": [5,4], "validation_persistent_rows_groups": [5,3], "validation_mixed_rows_groups": [2,2], "probabilities": null, "reason": "Training recovered/mixed below frozen 20 rows per class", "utility_pass": false}
+  },
+  "artifact_inventory": {
+    "new_source_paths": ["scripts/financial_v3_dataset_model.py", "scripts/financial_v3_dataset_model_metrics.py", "tests/test_financial_v3_dataset_model.py"],
+    "new_artifact_root": "reports/modeling/financial-v3/dataset-v1/model-v1/",
+    "exhaustive_artifact_paths_and_hashes": "manifest.json#/artifacts_sha256",
+    "additional_paths_not_in_manifest_map": ["manifest.json", "verification.json"],
+    "total_artifact_files": 1148,
+    "profile_files": 1078,
+    "preselection_validation_prediction_rows": 8280,
+    "verification_binding_note": "This post-execution verification binds the immutable manifest; it is excluded from that manifest to avoid self-reference. Only this new verification record was enriched with observed command results after export. No frozen code, model, policy, input, prediction, or existing receipt was changed."
+  },
+  "remaining_requirements": [
+    "All utility gates failed; baseline selection is not predictive acceptance. Validation labels cover only 28 of 345 input-eligible origins per direction (8.115942028985507%).",
+    "Q4 probabilities remain null because two training classes fail the preregistered support minimum; no support threshold was relaxed.",
+    "All 690 validation origins have preselection candidate prediction records per candidate, including censored labels; 345 eligible inputs yield probabilities per binary candidate, 317 without observable outcomes. No future-selected forecasting cohort.",
+    "No confidence intervals or individual uncertainty claims. Correlated origins, small group support, and selection on the same internal validation limit interpretation.",
+    "Strict headline remains null. Missing unrestricted cash and financial debt are not fabricated. Receipt metrics do not satisfy six-question financial health validation or true economic episode anticipation.",
+    "API/UI/MCP integration and authorization checks on loading are not changed here; consume schema.json and authorize company before profile lookup if later integrated.",
+    "No independent review of this model extension was performed; the earlier dataset approval 89ed47ac covered scoped features only.",
+    "Do not execute model-v1 again or retune after these outcomes. Read-only --check is supported; any future development requires separately versioned authorization/protocol without changing frozen artifacts."
+  ]
+}

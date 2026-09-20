@@ -1,0 +1,40 @@
+{
+  "command": [
+    "cargo",
+    "build",
+    "--offline",
+    "--workspace"
+  ],
+  "environment_allowlist": {},
+  "exit_code": 0,
+  "source_sha256_at_start": {
+    "apps/app/app/dashboard/page.tsx": "5e92ba27d6f6322ad0b57fc485124ac96ea035d973947341cb5ea1695b8112c1",
+    "apps/app/app/globals.css": "1d49d0454e87242898544f0e9f3bfffb44eb6bfd563d1abbc64ebcd138791647",
+    "apps/app/components/financial-v3-assessment.tsx": "755c93e056294a4eda02c0c8ccfdbcc0d415593672e5e9b594ce36a1aac3cad2",
+    "apps/app/components/trajectory-assessment.tsx": "f6871aa14d1d78dcbc884477be73fd539c0817d7139226a0c5afda675bc730be",
+    "apps/app/lib/financial-v3.test.ts": "01da265111a2b4b940ac9c8458591ef575f8bac18abcdb6f4fdf1cfd8da54b4b",
+    "apps/app/lib/financial-v3.ts": "8a9130bc9459c6ab5628cf358879aab1d9a2e40fbb2fc6d1fb4979ea2fad7a4e",
+    "apps/app/lib/trajectory-types.ts": "18c184503486c10df53542b967ee0adc8c0a11782d382eb6f302f387f17ed888",
+    "apps/app/lib/trajectory.test.ts": "76679c840f8efcadc389d0290ec182d8d94006a0b7330c5ca60218cecf8838d0",
+    "apps/app/lib/trajectory.ts": "9d4181be8e521e72a620b273105480055c6192e4203df3feac6c9c82e1ae8def",
+    "apps/app/lib/types.ts": "fdc55f241fb90f16d4ad084b675c2273ffa7e59c325c979f3effcc858fe06321",
+    "docs/DASHBOARD.md": "35a716f0555011d71eaebebc736f2a0ac9ed9f81ebc3a63e6307695465c61be6",
+    "docs/PRODUCT.md": "e203d1bfa307352344f1c4820e729b5b5d8370026ac182dd8dfc2f63128d9467",
+    "docs/REQUIREMENTS.md": "22c9673adade325857621b0200a6eace1136e4df424188f105fbe6627d4aa06d",
+    "package.json": "5977a3eec3ab358f66b7bf617650ba3dd07fcd835a176cc4f02d9921a860268b",
+    "readme.md": "a6a53b779832f2d5565ba5918874bb8f6ad8a9c6db0418f0c6b16fefb6602d31",
+    "scripts/check-financial-v3-e2e.ts": "7e01c9558c2a23ffd06970e66c559e804e328fb563225ac9bdd1d0892e44def8",
+    "scripts/financial_v3_dataset_delivery.py": "fc256868758336b7eb20219c63fa3aa6552efb7abf26185e5fa36556c9bb2097",
+    "services/api/src/finance.rs": "d4e835c88898b21c862b3e7713853d8fff797df0846ffbf17f17207eecaab2e5",
+    "services/api/src/financial_v3.rs": "99d4a8eca55f55e03b8002302b62f203401fcd6423a6d822423c2cfd5b1c8238",
+    "services/api/src/financial_v3_tests.rs": "d349202f5ceca8e66945e391436f03612aaad57c71e97059a515f203e37a6458",
+    "services/api/src/lib.rs": "3669acdef0c809a68500dfd7c28f02293d107de7a1e972d7b53552b89999f2ad",
+    "services/api/src/main.rs": "ac4333fc157be9fb22949eb36464ffd36c2cbda4f3480d1d1842f98f48f86d18",
+    "services/mcp/src/financial_v3_tests.rs": "c02ed5c28aa4e3decf7f93901e30522c13e1b3a447e785c533a0079651c32eb4",
+    "services/mcp/src/main.rs": "2378d12cf1e4305a421f9f7cac6642c6bdd000718ab553ad18007f1346102e69"
+  },
+  "source_unchanged_during_command": true,
+  "started_at": "2026-09-19T22:59:41.422368+00:00",
+  "stderr": "   Compiling blaubeere-api v0.1.0 (/home/mikel/.herdr/worktrees/predictive-models/feat-training-devin/services/api)\n   Compiling blaubeere-mcp v0.1.0 (/home/mikel/.herdr/worktrees/predictive-models/feat-training-devin/services/mcp)\n    Finished `dev` profile [unoptimized + debuginfo] target(s) in 8.26s\n",
+  "stdout": ""
+}

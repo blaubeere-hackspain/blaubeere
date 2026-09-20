@@ -1,0 +1,14 @@
+{
+  "command": [
+    "cargo",
+    "test",
+    "--offline",
+    "-p",
+    "blaubeere-api",
+    "financial_v3_schema_dates_paths_and_hashes_fail_closed"
+  ],
+  "exit_code": 101,
+  "started_at": "2026-09-19T22:45:32.503550+00:00",
+  "stderr": "   Compiling blaubeere-api v0.1.0 (/home/mikel/.herdr/worktrees/predictive-models/feat-training-devin/services/api)\nerror[E0432]: unresolved import `crate::finance::financial_v3`\n --> services/api/src/financial_v3_tests.rs:1:28\n  |\n1 | use crate::finance::{self, financial_v3 as v3};\n  |                            ------------^^^^^^\n  |                            |\n  |                            no `financial_v3` in `finance`\n\nerror[E0425]: cannot find function `assess_view` in module `finance`\n  --> services/api/src/financial_v3_tests.rs:87:22\n   |\n87 |     assert!(finance::assess_view(company, 90, None, None, Some(\"strict_known_on\")).is_err());\n   |                      ^^^^^^^^^^^ not found in `finance`\n\nerror[E0609]: no field `financial_v3_store` on type `finance::Company`\n  --> services/api/src/financial_v3_tests.rs:38:30\n   |\n38 |     let store = companies[0].financial_v3_store.as_ref().unwrap();\n   |                              ^^^^^^^^^^^^^^^^^^ unknown field\n   |\n   = note: available fields are: `kind`, `predictive`, `trajectory`, `trajectory_dictionary`, `id` ... and 14 others\n\nerror[E0609]: no field `financial_v3_store` on type `finance::Company`\n   --> services/api/src/financial_v3_tests.rs:103:36\n    |\n103 |     let store = state.companies[0].financial_v3_store.as_ref().unwrap();\n    |                                    ^^^^^^^^^^^^^^^^^^ unknown field\n    |\n    = note: available fields are: `kind`, `predictive`, `trajectory`, `trajectory_dictionary`, `id` ... and 14 others\n\nSome errors have detailed explanations: E0425, E0432, E0609.\nFor more information about an error, try `rustc --explain E0425`.\nerror: could not compile `blaubeere-api` (lib test) due to 4 previous errors\nwarning: build failed, waiting for other jobs to finish...\n",
+  "stdout": ""
+}

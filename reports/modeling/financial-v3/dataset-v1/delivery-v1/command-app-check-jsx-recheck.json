@@ -1,0 +1,11 @@
+{
+  "command": [
+    "bun",
+    "run",
+    "check"
+  ],
+  "exit_code": 2,
+  "started_at": "2026-09-19T22:55:10.381217+00:00",
+  "stderr": "$ bun run test:deploy && bun run test:web && bun run typecheck && bun run build && bun run check:rust\n$ bun scripts/check-deploy.ts\n$ bun scripts/check-web.ts && bun test ./apps/app/lib/trajectory.test.ts ./apps/app/lib/financial-v3.test.ts\n\napps/app/lib/trajectory.test.ts:\n(pass) trajectory segments preserve precision and never bridge nulls or missing months [3.00ms]\n(pass) closed month selection permits only server-advertised dates\n(pass) observed ratios are dimensionless and unknown is not zero [1.00ms]\n\napps/app/lib/financial-v3.test.ts:\n(pass) financial v3 retrospective delivery > native units are not cents and missing data never become zero [14.00ms]\n(pass) financial v3 retrospective delivery > calendar selection and real gaps are not interpolated [1.00ms]\n(pass) financial v3 retrospective delivery > retrospective cutoff is required and later rows are removed [1.00ms]\n(pass) financial v3 retrospective delivery > no full health visualization or fabricated midpoint\n(pass) financial v3 retrospective delivery > probabilities are receipt-only, preselection and holdout stay null\n\n 8 pass\n 0 fail\n 17 expect() calls\nRan 8 tests across 2 files. [90.00ms]\n$ bun --cwd apps/app typecheck && bun --cwd apps/landing typecheck\n$ next typegen && tsc --noEmit\n",
+  "stdout": "Shell syntax checks passed: deploy/jio.sh and deploy/runtime.sh; invalid LF/CRLF shell rejected for both.\nDeployment checks passed: Blaubeere account, exact revision, HTTPS origins, stopped-VM recovery and authentication failures.\nWeb checks passed: redirects, exact money input, dated horizons, chart scales, dialog boundaries, validation errors and proxy display guards.\nbun test v1.3.12 (700fc117)\nGenerating route types...\n\u2713 Types generated successfully\nlib/financial-v3.test.ts(1,40): error TS2307: Cannot find module 'bun:test' or its corresponding type declarations.\n"
+}

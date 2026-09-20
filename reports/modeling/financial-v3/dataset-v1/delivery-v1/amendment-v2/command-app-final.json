@@ -1,0 +1,90 @@
+{
+  "cache_after": {
+    "bytes": 138287,
+    "sha256": "13fe2c0a94935bf288719f902d01a97fb854056e75f187d66b9e5f8a76d79051",
+    "version": "5.9.3"
+  },
+  "cache_before": {
+    "bytes": 138287,
+    "sha256": "8ecfc04867158213c1034082f48adf108d0a002a1aa92058617cb4334c4307fc",
+    "version": "5.9.3"
+  },
+  "command": [
+    "bun",
+    "run",
+    "check"
+  ],
+  "cwd": "/home/mikel/.herdr/worktrees/predictive-models/feat-training-devin",
+  "environment_allowlist": {
+    "CARGO_NET_OFFLINE": "true",
+    "NEXT_TELEMETRY_DISABLED": "1",
+    "PYTHONDONTWRITEBYTECODE": "1"
+  },
+  "exit_code": 0,
+  "next_env_observation": {
+    "after_sha256": "1862ac4bbbc5192d4bf562161df66ea547ed3e67173100656ab606ae9797db2b",
+    "before_sha256": "0f70629890b72a0a82e91972cc032c04b658b26c265373cb711cf576bfbf8fcc",
+    "exception": false,
+    "note": "Typegen/build and dev generate different references. Final amended verification still requires exact original next-env bytes; no second exception."
+  },
+  "source_after_sha256": {
+    "apps/app/app/dashboard/page.tsx": "4ab513a4f2e7603cfe6bfcbb89f709130494bbc2a0f71bcd7aed425dfb276adf",
+    "apps/app/app/globals.css": "1d49d0454e87242898544f0e9f3bfffb44eb6bfd563d1abbc64ebcd138791647",
+    "apps/app/components/financial-v3-assessment.tsx": "755c93e056294a4eda02c0c8ccfdbcc0d415593672e5e9b594ce36a1aac3cad2",
+    "apps/app/components/trajectory-assessment.tsx": "f6871aa14d1d78dcbc884477be73fd539c0817d7139226a0c5afda675bc730be",
+    "apps/app/lib/financial-v3.test.ts": "01da265111a2b4b940ac9c8458591ef575f8bac18abcdb6f4fdf1cfd8da54b4b",
+    "apps/app/lib/financial-v3.ts": "8a9130bc9459c6ab5628cf358879aab1d9a2e40fbb2fc6d1fb4979ea2fad7a4e",
+    "apps/app/lib/trajectory-types.ts": "18c184503486c10df53542b967ee0adc8c0a11782d382eb6f302f387f17ed888",
+    "apps/app/lib/trajectory.test.ts": "76679c840f8efcadc389d0290ec182d8d94006a0b7330c5ca60218cecf8838d0",
+    "apps/app/lib/trajectory.ts": "9d4181be8e521e72a620b273105480055c6192e4203df3feac6c9c82e1ae8def",
+    "apps/app/lib/types.ts": "fdc55f241fb90f16d4ad084b675c2273ffa7e59c325c979f3effcc858fe06321",
+    "docs/DASHBOARD.md": "6581fc30b9fe766fcfddcbb26dbb723c2bfb08cc35004ff216e7653fffd45724",
+    "docs/PRODUCT.md": "1306d7910ee0227c0d55abcbd29797ad41961a49c677a46424e9414e2e1aa27c",
+    "docs/REQUIREMENTS.md": "22986c7f11156cb2224da0ee8a35be2bb03cf7a6639a47a86452399627502691",
+    "package.json": "5977a3eec3ab358f66b7bf617650ba3dd07fcd835a176cc4f02d9921a860268b",
+    "readme.md": "1fa8e584291f91f395b44f41238113f0198ea1bc779f6c4e0f350a4208844d60",
+    "scripts/check-financial-v3-e2e.ts": "7e01c9558c2a23ffd06970e66c559e804e328fb563225ac9bdd1d0892e44def8",
+    "scripts/financial_v3_dataset_delivery.py": "c22c57c260516ec571ac68b9ef20d0cbe8c79e05d72deca98fd9a47a38f45ba1",
+    "scripts/financial_v3_dataset_delivery_amendment.py": "44fa72a89a4c74715b2c9dc2878de21d9f5caabae4ce7c3aa3bd3e5619eb3bd4",
+    "services/api/src/finance.rs": "d4e835c88898b21c862b3e7713853d8fff797df0846ffbf17f17207eecaab2e5",
+    "services/api/src/financial_v3.rs": "99d4a8eca55f55e03b8002302b62f203401fcd6423a6d822423c2cfd5b1c8238",
+    "services/api/src/financial_v3_tests.rs": "d349202f5ceca8e66945e391436f03612aaad57c71e97059a515f203e37a6458",
+    "services/api/src/lib.rs": "3669acdef0c809a68500dfd7c28f02293d107de7a1e972d7b53552b89999f2ad",
+    "services/api/src/main.rs": "ac4333fc157be9fb22949eb36464ffd36c2cbda4f3480d1d1842f98f48f86d18",
+    "services/mcp/src/financial_v3_tests.rs": "c02ed5c28aa4e3decf7f93901e30522c13e1b3a447e785c533a0079651c32eb4",
+    "services/mcp/src/main.rs": "2378d12cf1e4305a421f9f7cac6642c6bdd000718ab553ad18007f1346102e69",
+    "tests/test_financial_v3_dataset_delivery_amendment.py": "71b018444f3187eb4928db7505bd137454e872527f6766731a088fed523a2f16"
+  },
+  "source_before_sha256": {
+    "apps/app/app/dashboard/page.tsx": "4ab513a4f2e7603cfe6bfcbb89f709130494bbc2a0f71bcd7aed425dfb276adf",
+    "apps/app/app/globals.css": "1d49d0454e87242898544f0e9f3bfffb44eb6bfd563d1abbc64ebcd138791647",
+    "apps/app/components/financial-v3-assessment.tsx": "755c93e056294a4eda02c0c8ccfdbcc0d415593672e5e9b594ce36a1aac3cad2",
+    "apps/app/components/trajectory-assessment.tsx": "f6871aa14d1d78dcbc884477be73fd539c0817d7139226a0c5afda675bc730be",
+    "apps/app/lib/financial-v3.test.ts": "01da265111a2b4b940ac9c8458591ef575f8bac18abcdb6f4fdf1cfd8da54b4b",
+    "apps/app/lib/financial-v3.ts": "8a9130bc9459c6ab5628cf358879aab1d9a2e40fbb2fc6d1fb4979ea2fad7a4e",
+    "apps/app/lib/trajectory-types.ts": "18c184503486c10df53542b967ee0adc8c0a11782d382eb6f302f387f17ed888",
+    "apps/app/lib/trajectory.test.ts": "76679c840f8efcadc389d0290ec182d8d94006a0b7330c5ca60218cecf8838d0",
+    "apps/app/lib/trajectory.ts": "9d4181be8e521e72a620b273105480055c6192e4203df3feac6c9c82e1ae8def",
+    "apps/app/lib/types.ts": "fdc55f241fb90f16d4ad084b675c2273ffa7e59c325c979f3effcc858fe06321",
+    "docs/DASHBOARD.md": "6581fc30b9fe766fcfddcbb26dbb723c2bfb08cc35004ff216e7653fffd45724",
+    "docs/PRODUCT.md": "1306d7910ee0227c0d55abcbd29797ad41961a49c677a46424e9414e2e1aa27c",
+    "docs/REQUIREMENTS.md": "22986c7f11156cb2224da0ee8a35be2bb03cf7a6639a47a86452399627502691",
+    "package.json": "5977a3eec3ab358f66b7bf617650ba3dd07fcd835a176cc4f02d9921a860268b",
+    "readme.md": "1fa8e584291f91f395b44f41238113f0198ea1bc779f6c4e0f350a4208844d60",
+    "scripts/check-financial-v3-e2e.ts": "7e01c9558c2a23ffd06970e66c559e804e328fb563225ac9bdd1d0892e44def8",
+    "scripts/financial_v3_dataset_delivery.py": "c22c57c260516ec571ac68b9ef20d0cbe8c79e05d72deca98fd9a47a38f45ba1",
+    "scripts/financial_v3_dataset_delivery_amendment.py": "44fa72a89a4c74715b2c9dc2878de21d9f5caabae4ce7c3aa3bd3e5619eb3bd4",
+    "services/api/src/finance.rs": "d4e835c88898b21c862b3e7713853d8fff797df0846ffbf17f17207eecaab2e5",
+    "services/api/src/financial_v3.rs": "99d4a8eca55f55e03b8002302b62f203401fcd6423a6d822423c2cfd5b1c8238",
+    "services/api/src/financial_v3_tests.rs": "d349202f5ceca8e66945e391436f03612aaad57c71e97059a515f203e37a6458",
+    "services/api/src/lib.rs": "3669acdef0c809a68500dfd7c28f02293d107de7a1e972d7b53552b89999f2ad",
+    "services/api/src/main.rs": "ac4333fc157be9fb22949eb36464ffd36c2cbda4f3480d1d1842f98f48f86d18",
+    "services/mcp/src/financial_v3_tests.rs": "c02ed5c28aa4e3decf7f93901e30522c13e1b3a447e785c533a0079651c32eb4",
+    "services/mcp/src/main.rs": "2378d12cf1e4305a421f9f7cac6642c6bdd000718ab553ad18007f1346102e69",
+    "tests/test_financial_v3_dataset_delivery_amendment.py": "71b018444f3187eb4928db7505bd137454e872527f6766731a088fed523a2f16"
+  },
+  "source_unchanged": true,
+  "started_at": "2026-09-19T23:34:03.318166+00:00",
+  "stderr": "$ bun run test:deploy && bun run test:web && bun run typecheck && bun run build && bun run check:rust\n$ bun scripts/check-deploy.ts\n$ bun scripts/check-web.ts && bun test ./apps/app/lib/trajectory.test.ts ./apps/app/lib/financial-v3.test.ts\n\napps/app/lib/trajectory.test.ts:\n(pass) trajectory segments preserve precision and never bridge nulls or missing months [3.00ms]\n(pass) closed month selection permits only server-advertised dates\n(pass) observed ratios are dimensionless and unknown is not zero\n\napps/app/lib/financial-v3.test.ts:\n(pass) v3 native units are not cents and missing data never become zero [19.00ms]\n(pass) v3 calendar selection and real gaps are not interpolated [1.00ms]\n(pass) v3 retrospective cutoff is required and later rows are removed\n(pass) v3 no full health visualization or fabricated midpoint\n(pass) v3 probabilities are receipt-only, preselection and holdout stay null [1.00ms]\n\n 8 pass\n 0 fail\nRan 8 tests across 2 files. [94.00ms]\n$ bun --cwd apps/app typecheck && bun --cwd apps/landing typecheck\n$ next typegen && tsc --noEmit\n$ next typegen && tsc --noEmit\n$ bun --cwd apps/app build && bun --cwd apps/landing build\n$ next build\n$ next build\n$ cargo fmt --check && cargo clippy --workspace --all-targets -- -D warnings && cargo test --workspace\n    Finished `dev` profile [unoptimized + debuginfo] target(s) in 0.38s\n    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.31s\n     Running unittests src/lib.rs (target/debug/deps/blaubeere_api-a7162cfa0bfbf07d)\n     Running unittests src/main.rs (target/debug/deps/blaubeere_api-2031d536f51612e4)\n     Running unittests src/main.rs (target/debug/deps/blaubeere_mcp-b812fb3845110f8e)\n   Doc-tests blaubeere_api\n",
+  "stdout": "Shell syntax checks passed: deploy/jio.sh and deploy/runtime.sh; invalid LF/CRLF shell rejected for both.\nDeployment checks passed: Blaubeere account, exact revision, HTTPS origins, stopped-VM recovery and authentication failures.\nWeb checks passed: redirects, exact money input, dated horizons, chart scales, dialog boundaries, validation errors and proxy display guards.\nbun test v1.3.12 (700fc117)\nGenerating route types...\n\u2713 Types generated successfully\nGenerating route types...\n\u2713 Types generated successfully\n\u25b2 Next.js 16.3.5 (Turbopack)\n\u2713 Running next.config.ts took 26ms\n\n  Creating an optimized production build ...\n\u2713 Compiled successfully in 667ms\n  Running TypeScript ...\n  Finished TypeScript in 2.5s ...\n  Collecting page data using 7 workers ...\n  Generating static pages using 7 workers (0/6) ...\n  Generating static pages using 7 workers (1/6) \n  Generating static pages using 7 workers (2/6) \n  Generating static pages using 7 workers (4/6) \n\u2713 Generating static pages using 7 workers (6/6) in 551ms\n  Finalizing page optimization ...\n\nRoute (app)\n\u250c \u25cb /\n\u251c \u25cb /_not-found\n\u251c \u25cb /connect\n\u251c \u25cb /dashboard\n\u2514 \u25cb /login\n\n\n\u25cb  (Static)  prerendered as static content\n\n\u25b2 Next.js 16.3.5 (Turbopack)\n\u2713 Running next.config.ts took 31ms\n\n  Creating an optimized production build ...\n\u2713 Compiled successfully in 290ms\n  Running TypeScript ...\n  Finished TypeScript in 1720ms ...\n  Collecting page data using 4 workers ...\n  Generating static pages using 4 workers (0/3) ...\n\u2713 Generating static pages using 4 workers (3/3) in 573ms\n  Finalizing page optimization ...\n\nRoute (app)\n\u250c \u25cb /\n\u2514 \u25cb /_not-found\n\n\n\u25cb  (Static)  prerendered as static content\n\n\nrunning 16 tests\ntest financial_v3_tests::financial_v3_corrupt_manifests_index_and_shards_rejected ... ignored, requires FINANCIAL_V3_ASSESSMENT_FILE; isolated corruption tests, no scientific writes\ntest financial_v3_tests::financial_v3_real_export_and_negative_schema_temporal_holdout ... ignored, requires FINANCIAL_V3_ASSESSMENT_FILE; immutable exports only, no outcomes or inference\ntest financial_v3_tests::financial_v3_unauthorized_api_does_not_read_shards ... ignored, requires FINANCIAL_V3_ASSESSMENT_FILE; authorized lazy store regression\ntest proxy_tests::actual_export_loads_all_1286_companies ... ignored, requires explicit EXPORTED_ASSESSMENT_FILE generated from sealed predictions\ntest trajectory_tests::actual_trajectory_export_validation_and_historical_gating ... ignored, requires explicit TRAJECTORY_ASSESSMENT_FILE; reads sealed export only\ntest financial_v3_tests::financial_v3_schema_dates_paths_and_hashes_fail_closed ... ok\ntest tests::origins_match_the_served_oauth_endpoints ... ok\ntest finance::tests::early_shortfalls_survive_later_receipts_and_future_knowledge_is_excluded ... ok\ntest proxy_tests::proxy_numbers_preserve_ieee754_roundtrip ... ok\ntest trajectory_tests::old_modes_reject_backdated_cutoffs_and_schema_is_closed ... ok\ntest proxy_tests::valid_proxy_and_abstention_never_produce_cash ... ok\ntest proxy_tests::old_demo_retains_cash_forecast_and_planning ... ok\ntest finance::tests::plans_enforce_the_whole_path_and_preserve_baseline_and_health ... ok\ntest proxy_tests::inconsistent_proxy_payloads_fail_closed ... ok\ntest oauth::tests::pkce_codes_rotate_refresh_tokens_and_revoke_replayed_grants ... ok\ntest tests::sessions_require_sign_in_origin_and_company_membership ... ok\n\ntest result: ok. 11 passed; 0 failed; 5 ignored; 0 measured; 0 filtered out; finished in 4.68s\n\n\nrunning 0 tests\n\ntest result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n\nrunning 4 tests\ntest financial_v3_tests::financial_v3_mcp_lazy_auth_temporal_and_plan_rejection ... ignored, requires FINANCIAL_V3_ASSESSMENT_FILE; sealed product exports only\ntest proxy_tests::actual_export_mcp_rejects_proxy_plans ... ignored, requires explicit EXPORTED_ASSESSMENT_FILE generated from sealed predictions\ntest trajectory_tests::actual_trajectory_mcp_dates_and_company_isolation ... ignored, requires explicit TRAJECTORY_ASSESSMENT_FILE; reads sealed export only\ntest tests::transport_challenges_and_enforces_company_access ... ok\n\ntest result: ok. 1 passed; 0 failed; 3 ignored; 0 measured; 0 filtered out; finished in 1.02s\n\n\nrunning 0 tests\n\ntest result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n"
+}

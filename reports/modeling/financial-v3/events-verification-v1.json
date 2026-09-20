@@ -1,0 +1,208 @@
+{
+  "verification_version": "financial-v3-events-verification-v1",
+  "task": "bounded V3T6",
+  "status": "incomplete_stopped_after_one_focused_correction_and_recheck",
+  "root": "/home/mikel/.herdr/worktrees/predictive-models/feat-training-devin",
+  "scope": "New pure development modules and invented fixtures only. Not a predictive model, not accepted V3T6, not completion of v3.",
+  "financial_data_queries": 0,
+  "real_outcome_values_read": 0,
+  "real_models_fitted": 0,
+  "fixture_only_model_fitting_executed": true,
+  "fixture_fit_count_instrumented": false,
+  "company_models_exported": 0,
+  "automatic_alerts_enabled": false,
+  "independent_review_completed": false,
+  "subagents_spawned": 0,
+  "goal_file_written": false,
+  "core_contract_protocol_or_sealed_tests_modified": false,
+  "previous_artifacts_modified": false,
+  "network_install_configuration_commit_push_or_delete_operations": 0,
+  "stop_reason": {
+    "test": "tests.test_financial_v3_evaluate.ExtendedEvaluationTests.test_one_to_one_two_valid_episodes_same_event",
+    "location": "tests/test_financial_v3_evaluate.py:145-152",
+    "initial_failure": "Expected one match but got zero. The June-origin confirmation was issued exactly at July onset, which is not strictly before onset.",
+    "one_correction": "Moved invented onset from July to August, preserving strict actual-issuance-before-onset matching and the one-match/one-false expectations.",
+    "recheck": "The match assertion passed, but the same test still failed at false=1: actual false=0. Implementation work stopped rather than continuing to edit this failing test.",
+    "diagnosis_not_applied": "The earlier February-origin alert needs baseline history from December 2024 for complete follow-up ascertainment. The fixture begins January 2025, so that alert is censored, not resolvably false. A future authorized continuation should supply the missing invented baseline and explicitly test the missing-history censored case; do not weaken censoring policy.",
+    "after_stop": "No further implementation or test edits. Only requested final focused/full V3 verification, read-only integrity checks and this new report were performed. These are final-state inventory runs, not another correction attempt."
+  },
+  "new_paths_only": [
+    "scripts/financial_v3_events.py",
+    "scripts/financial_v3_learning.py",
+    "scripts/financial_v3_evaluate.py",
+    "tests/test_financial_v3_events.py",
+    "tests/test_financial_v3_learning.py",
+    "tests/test_financial_v3_evaluate.py",
+    "reports/modeling/financial-v3/events-verification-v1.json"
+  ],
+  "setup_commands": [
+    {"command": "pwd && ls", "exit_code": 0, "result": "Verified requested worktree and existing parent directories."},
+    {"command": "git status --short", "exit_code": 0, "result": "Recorded and preserved preexisting tracked edits and untracked v2/v3 files."},
+    {"command": ".venv/bin/python -B -c \"import sys, sklearn, numpy, scipy, threadpoolctl; print(sys.version); print('sklearn', sklearn.__version__, 'numpy', numpy.__version__, 'scipy', scipy.__version__, 'threadpoolctl', threadpoolctl.__version__); from sklearn.linear_model import LogisticRegression; from sklearn.preprocessing import StandardScaler; from sklearn.metrics import average_precision_score, brier_score_loss\"", "exit_code": 0, "result": "Python 3.13.15; sklearn 1.7.2; numpy 2.5.3; scipy 1.18.1; threadpoolctl 3.6.0; imports succeeded before implementation/fitting."},
+    {"command": "ls scripts tests reports/modeling/financial-v3 .venv/bin/python", "exit_code": 0, "result": "All write parents and installed Python verified. New module/test/report names did not exist."}
+  ],
+  "attempts": [
+    {
+      "command": ".venv/bin/python -B -m unittest tests.test_financial_v3_events tests.test_financial_v3_learning tests.test_financial_v3_evaluate -v",
+      "phase": "tests_first_expected_red",
+      "exit_code": 1,
+      "result": "Three import errors: the three new modules did not exist. All three new test files existed before implementation.",
+      "correction": "Implemented the three missing modules, using frozen default_policy constants. During this first implementation, changed mock training-origin default from March 2025 to December 2024 so May 2025 negative-label availability genuinely follows origin+4; no maturity rule relaxed."
+    },
+    {
+      "command": ".venv/bin/python -B -m unittest tests.test_financial_v3_events tests.test_financial_v3_learning tests.test_financial_v3_evaluate -v",
+      "phase": "missing_modules_recheck",
+      "exit_code": 1,
+      "tests": 29,
+      "passed": 28,
+      "seconds": 6.639,
+      "result": "New distinct failure: gap/reset fixture expected a September event although its fixed trailing reference still contained missing June.",
+      "correction": "Added one observed calm September month and moved second onset to October; retained two-event expectation and explicitly asserted July/August/September reference months. No production policy change."
+    },
+    {
+      "command": ".venv/bin/python -B -m unittest tests.test_financial_v3_events.EventTests.test_gap_unknown_no_restart_and_two_nonqualifying_reset -v",
+      "phase": "gap_fixture_focused_recheck",
+      "exit_code": 0,
+      "tests": 1,
+      "seconds": 0.002,
+      "result": "Gap fixture corrected on first focused recheck."
+    },
+    {
+      "command": ".venv/bin/python -B -m unittest tests.test_financial_v3_events.ExtendedEventTests tests.test_financial_v3_learning.ExtendedLearningTests tests.test_financial_v3_evaluate.ExtendedEvaluationTests -v",
+      "phase": "additional_boundaries_tests_first",
+      "exit_code": 1,
+      "tests": 13,
+      "passed": 5,
+      "failures": 4,
+      "errors": 4,
+      "seconds": 2.711,
+      "result": "Failures: payment plus cancellation credited as recovery; unknown irrelevant older availability yielded null event timestamp; forged repeated alert accepted; same-event fixture expected a lead when issue equaled onset. Errors: conditional fixture forecasting, explicit state provenance, dated Q4 report and temporal-thirds report interfaces absent.",
+      "corrections": [
+        "Require payment-backed reference-debt reduction in the improvement arrears branch.",
+        "Exclude unknown-on older optional prefix rows from event availability aggregation; required baseline/confirmation remain fully observed.",
+        "Add explicit primitive-state source references, with missing provenance causing ineligibility.",
+        "Add conditional fixture forecast at confirmation origin with actual issuance and end-of-horizon guards.",
+        "Replay prospective signal/episode history before accepting any alert in matching.",
+        "Add dated conditional forecast classification, directional AP/Brier/calibration and ascertainment, and explicitly supplied three chronological temporal thirds.",
+        "Move invented same-event onset one month later rather than relax strict actual issuance-before-onset."
+      ]
+    },
+    {
+      "command": ".venv/bin/python -B -m unittest tests.test_financial_v3_events.ExtendedEventTests tests.test_financial_v3_learning.ExtendedLearningTests tests.test_financial_v3_evaluate.ExtendedEvaluationTests -v",
+      "phase": "additional_boundaries_one_focused_recheck",
+      "exit_code": 1,
+      "tests": 13,
+      "passed": 12,
+      "failures": 1,
+      "seconds": 2.821,
+      "result": "Same matching test remained red at its next assertion: false=0 versus expected 1. STOP invoked, no further code/test corrections. All other extended failures/errors resolved."
+    },
+    {
+      "command": ".venv/bin/python -B -m unittest tests.test_financial_v3_events tests.test_financial_v3_learning tests.test_financial_v3_evaluate -v",
+      "phase": "requested_final_focused_state_inventory_no_corrections",
+      "exit_code": 1,
+      "tests": 42,
+      "passed": 39,
+      "failures": 1,
+      "errors": 2,
+      "seconds": 3.255,
+      "result": "Same false/censored fixture failure plus two older tests whose isolated alert histories do not replay from the full high-probability origin history supplied to matching. No fixes attempted after STOP."
+    },
+    {
+      "command": ".venv/bin/python -B -m unittest discover -s tests -p 'test_financial_v3_*.py' -v",
+      "phase": "requested_final_all_v3_state_inventory_no_corrections",
+      "exit_code": 1,
+      "tests": 123,
+      "passed": 120,
+      "failures": 1,
+      "errors": 2,
+      "seconds": 6.815,
+      "result": "All preexisting 81 V3 tests pass; new tests 39/42 pass, with exactly the same three unresolved test cases."
+    },
+    {
+      "command": ".venv/bin/python -B scripts/financial_v3_contract.py --check",
+      "phase": "final_contract_integrity",
+      "exit_code": 0,
+      "result": "ok=true, 8 bound assets, unchanged protocol and receipt, metadata/hash-only, no financial queries or outcome reads."
+    },
+    {
+      "command": ".venv/bin/python -B scripts/financial_v3_audit.py --check",
+      "phase": "final_protected_integrity",
+      "exit_code": 0,
+      "result": "ok=true, 541 protected assets, differences=[], old document bytes preserved as suffix, no data queries."
+    },
+    {
+      "command": "git diff --check",
+      "phase": "final_tracked_whitespace",
+      "exit_code": 0,
+      "result": "No whitespace errors; existing CRLF-to-LF warnings on preexisting app/doc files, none edited by this worker. Specialized grep separately found no trailing whitespace or code comments in the six new Python files."
+    }
+  ],
+  "sealed_integrity": {
+    "protocol_sha256": "aefaec5905af75e0d0ea61561967a6ad7dbf0731845bf5cf853eaab57be590f0",
+    "receipt_sha256": "7fb94394bff8224ab4016bb57653d5222e9b3d3b182e78cad82efe34b3f860f5",
+    "policy_canonical_sha256": "8ad1ce33e76cda8360003976b619c6c7b8cad9124243be7a79a1d5a71e21b3e1",
+    "protected_assets": 541,
+    "differences": []
+  },
+  "implemented_and_exercised": {
+    "events": "scripts/financial_v3_events.py:21 FixtureScope; :119 adapt_core_outcome; :244 scan_events; :299 directional_label; :341 conditional_label. Typed economic primitives, EUR materiality, past-three reference, same-branch confirmation, active-episode gap/reset, cumulative reference-obligation payments, direction labels/actual maturity and conditional recovered/persistent/mixed/unknown. Invented financial-core-composed history creates an event independently of null score.",
+    "source_adapter": "R is classified receipts, F subtracts operating obligations DUE, Q sums unweighted legal remaining with late_days>30. DebtState preserves paid, writeoff, nonpayment balance adjustments and replacement IDs. Cash and obligation provenance/actual known-on are combined. Score/delta are not accessed for economic labels.",
+    "newly_late_conservative_boundary": "Monthly financial-core outputs cannot establish exposure at an intramonth >30d crossing if that same month changes settlements/amendments. Adapter returns Z=null with newly_late_timing_unavailable rather than assuming end-month exposure. Stable linked prior/current items can supply Z. A full intramonth certified adapter remains future work.",
+    "learning": "scripts/financial_v3_learning.py:78 feature_from_core; :161 split_fold; :226 fit_fixture_candidates; :272 predict_fixture; :298 conditional_fixture_forecast; :316 select_candidate; :333 develop_fixture_folds. Exact five directional/three conditional candidates, C=.1/1, fixed seed1729/two-thread context, train-only StandardScaler/logistic probability mapping, training-only prevalence/state estimates, max3 rolling isolated-group folds, maturity purge, allowlisted X and unavailable-headline abstention.",
+    "mock_only_support": "Fixture fits require two rows in two groups per class, a deliberately separate mock-only minimum, never a change to frozen real utility/support gates. Missing class/support returns all candidates null without fitting. There is no authorized real fitting path. FixtureModels.company_export always raises PermissionError.",
+    "signals_and_metrics": "scripts/financial_v3_evaluate.py:53 issue_signals; :120 match_alerts; :216 probability_metrics; :261 classification_metrics; :307 grouped_uncertainty; :350 evaluate_development. Threshold .60, two adjacent eligible origins, separate watch/confirmation timestamps, gaps break streaks, two low origins reset, no same-episode reissue. One-to-one same-sign matching uses original eligible opportunities and strict actual issue-before-onset; misses/false/censored, burden, lead, group macro, AP/Brier/10-bin calibration, real multiclass matrix, unknown labels, dated Q4, still-strong unvalidated cohort and supplied temporal thirds.",
+    "uncertainty": "Paired macro-group means with shared seed1729 draws, 2000 default replicates, linear percentile interval, no redraw of undefined replicates, explicit test-only smaller count that can never pass support. This is not yet a complete event-weighted bootstrap comparison of all candidate reports.",
+    "gates": "scripts/financial_v3_events.py:48 confirmatory_entry refuses unconditionally before invoking an outcome supplier, even with self-supplied approved/untouched booleans. No real input loader, outcome query or file-writing path is present. FixtureScope is caller evidence for invented tests, not authentication or proof of untouchedness. No path promotes it into real-data approval. Q1 remains named unavailable; all evaluation reports keep predictive_success=false and alerts disabled."
+  },
+  "unresolved_tests": [
+    {
+      "path": "tests/test_financial_v3_evaluate.py:145-152",
+      "failure": "false=0 versus expected1 after one correction/recheck",
+      "next_action": "Do not retry in this attempt. On an explicitly permitted continuation, reconcile invented initial history with the complete-followup rule and preserve a separate censored example."
+    },
+    {
+      "path": "tests/test_financial_v3_evaluate.py:43-62",
+      "failure": "Late October alert built from September/October only, but matching receives uninterrupted high origins since January. It correctly fails prospective episode replay at scripts/financial_v3_evaluate.py:128.",
+      "next_action": "Use a consistent complete prospective probability history for issuance and matching; do not permit reissue by skipping previous highs. Not corrected after STOP."
+    },
+    {
+      "path": "tests/test_financial_v3_evaluate.py:64-77",
+      "failure": "April alert built from March/April only, but matching receives uninterrupted high origins since January. Same replay guard rejects it.",
+      "next_action": "Use consistent probabilities/abstentions for all intended input opportunities, preserving event denominator independence from probability availability. Not corrected after STOP."
+    }
+  ],
+  "unresolved_implementation_review_requirements": [
+    {
+      "path": "scripts/financial_v3_events.py:256-290",
+      "issue": "Gap latch is currently established only for an already confirmed active episode. A gap during a qualifying but not-yet-confirmed candidate may eventually lose unknown episode state after the rolling reference moves. The existing passing candidate-gap test still has the gap inside required label history and does not prove behavior after it rolls out.",
+      "required_followup": "Add a farther-ahead negative-label case, then establish fixed-reference unknown candidate state until two fully observed nonqualifying months; no implicit restart. Not changed after stop."
+    },
+    {
+      "path": "scripts/financial_v3_events.py:323-338",
+      "issue": "Conditional recovery compares peak overdue remaining with current remaining, but pays are accumulated relative to s-1 rather than the payment stock at the peak. For newly overdue obligations, payments made before their late peak could potentially mask a later cancellation in this check.",
+      "required_followup": "Add an affected-obligation partial-payment-before-peak plus later cancellation fixture and reconcile per-obligation economic reduction with separate amendment/writeoff history. Existing simple payment-versus-writeoff tests do not close this review concern."
+    },
+    {
+      "path": "scripts/financial_v3_events.py:119-172",
+      "issue": "Adapter abstains on ambiguous intramonth newly-late exposure; complete independent outcomes need additional certified crossing-time evidence, not patched financial-core/protocol policy. Foreign event materiality also abstains without an approved EUR conversion contract."
+    },
+    {
+      "path": "scripts/financial_v3_learning.py:226-369; scripts/financial_v3_evaluate.py:307-397",
+      "issue": "Only explicit mock fixture training and generic report functions exist. Full candidate-wise alert comparison with paired event-weighted uncertainty, complete company-vs-group aggregation, all business utility acceptance gates and a verified new-data receipt execution path are not implemented/accepted. No success is claimed by their omission."
+    },
+    {
+      "path": "scripts/financial_v3_learning.py:137-158",
+      "issue": "Fixture TrainingRow permits explicit labels plus actual availability after structural timing checks; a future real ingestion path must construct them from independently certified event/label provenance instead of accepting caller labels. Such a real authorization path is intentionally absent."
+    }
+  ],
+  "safe_parent_handoff": [
+    "Leave V3T6 incomplete/blocked and the whole goal active. Parent alone may update .devin/goal.md; worker did not write it.",
+    "Honor the stopped correction budget; do not silently continue looping on the red matcher fixture in this attempt.",
+    "Review and resolve the listed fixture inconsistencies and economic state/payment concerns before accepting this new code.",
+    "An independent next export/application task can define the v3 strict union and show existing incomplete real evidence with null headline/forecast fields and named blockers; it must not call these event/training/evaluation functions during export/API requests.",
+    "Never serialize FixtureModels as company predictors or feed invented forecasts to real company views. Preserve as-of visibility and separate score/observed delta from prospective predictions and retrospective events.",
+    "Future real-data handoff needs certified complete receipts/obligations/settlements/crossing-time evidence, historical availability, explicit final_test exclusions, no consumed v2 reserve, genuinely untouched data/access ledger, approved independent Q1 rubric and a separately sealed confirmatory execution implementation. No arbitrary boolean can supply this authorization.",
+    "No UI/API/MCP/build/real export or real predictive experiment was run; no claim of independent review or predictive utility is made."
+  ]
+}

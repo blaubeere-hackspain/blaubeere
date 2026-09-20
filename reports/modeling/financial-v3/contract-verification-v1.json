@@ -1,0 +1,143 @@
+{
+  "task": "Bounded V3T2 reusable contract implementation and development-only policy freeze",
+  "policy_version": "financial-v3-development-v1",
+  "input_version": "financial-v3-input-v1",
+  "scope": {
+    "development_policy_frozen": true,
+    "business_approved": false,
+    "confirmatory_approved": false,
+    "independent_review_completed": false,
+    "review_disclosure": "Parent reported separate read-only review unavailable due quota and an existing trace; parent inline fallback supplied clarifications. This worker does not claim independent review or business validation.",
+    "automatic_alerts_enabled": false,
+    "financial_data_queries": 0,
+    "real_scores_calculated": 0,
+    "new_outcomes_or_labels": 0,
+    "goal_file_edited": false,
+    "original_proposal_edited": false,
+    "goal_complete": false
+  },
+  "paths_created_this_phase": [
+    "scripts/financial_v3_contract.py",
+    "tests/test_financial_v3_contract.py",
+    "reports/modeling/financial-v3/protocol-development-v1.json",
+    "reports/modeling/financial-v3/protocol-development-v1-receipt.json",
+    "reports/modeling/financial-v3/contract-verification-v1.json"
+  ],
+  "existing_paths_edited_this_phase": [],
+  "hashes": {
+    "protocol_bytes_sha256": "aefaec5905af75e0d0ea61561967a6ad7dbf0731845bf5cf853eaab57be590f0",
+    "policy_canonical_sha256": "8ad1ce33e76cda8360003976b619c6c7b8cad9124243be7a79a1d5a71e21b3e1",
+    "receipt_sha256": "7fb94394bff8224ab4016bb57653d5222e9b3d3b182e78cad82efe34b3f860f5",
+    "input_schemas_sha256": "607dfa19ee798100b81033a19e5ad4e58c0b316757c5f26b193752225aaa7b8e",
+    "contract_module_sha256": "ef64bdf003dc4704b9681797769343f024b66f6d586c7ab63bf53b0a156dcd14",
+    "contract_tests_sha256": "aa26e2f7ffa8dd54e6a41ab318affa63b313090e8929acfeeaf8029ec886782f",
+    "unchanged_original_proposal_sha256": "0e230766240c2e13c0357697ca2b6f3d8607552c8d3ad66f8e3dc025da2573db",
+    "protected_baseline_sha256": "e91307018fe80d59102b864eef080bd242f7974479a7f2056f1c2f718c1e79fa"
+  },
+  "interfaces": {
+    "default_policy()": "Fresh detached policy dictionary; immutable canonical default bytes are not exposed as a mutable global tree.",
+    "validate_policy(policy)": "Exact canonical development-v1 content/types check and detached validated copy. Changes require a new explicit policy version, not mutating the existing seal.",
+    "canonical_bytes(value), canonical_hash(value), parse_json(text_or_bytes)": "Deterministic sorted compact UTF-8 JSON; duplicate JSON keys, nonfinite numbers and non-JSON Python types rejected.",
+    "decimal_amount(value), parse_money(wire_dict), Money": "Exact Decimal from fixed-point strings or existing Decimal; wire amount must be string, currency uppercase three letters. Native float/int/bool are not accepted money. At most 38 digits/12 fraction places. No implicit rounding or currency-minor-unit assumption.",
+    "finite_number(value)": "Finite binary64-compatible int/float only, never bool or implicit string/Decimal conversion.",
+    "iso_date(value), month_date(value), month_end(value), utc_timestamp(value), monthly_cutoff(as_of)": "Strict ISO DATE versus explicit UTC timestamp separation. month is first-of-month; as_of is month-end DATE. Knowledge cutoff is next UTC midnight, exclusive, without arbitrary 23:59:59 truncation.",
+    "validate_source(source_ref), source_availability(source_ref, as_of), latest_known_on(source_refs), Availability": "Required complete provenance/date keys; known_on nullable and never filled from retrieval/effective dates. Only verified known_on before monthly cutoff is historical source-available. Future-effective contracts may be known now: effective applicability and financial eligibility are separate caller responsibilities. Max-known-on propagation retains unknown.",
+    "input_schemas(), validate_record(kind, record), deduplicate_records(kind, records)": "Nine strict dictionary schemas, all keys required including nullable ones, no extras. Validated detached copies; identical canonical duplicates idempotent, conflicting identities rejected. Records cover account, coverage interval, cash movement, balance anchor, FX observation, obligation version, settlement allocation, amendment and universe attestation.",
+    "validate_quantity(value, value_type='number'|'money')": "Explicit eligible/partial/unavailable evidence contract; unavailable value null with reasons, eligible values require dated referenced complete evidence. Missing value never silently becomes zero; boolean cannot become score.",
+    "validate_context(context)": "Exact version/company/month/as_of/cutoff/view fields; simulation requires a named assumption and is distinct from strict as-of and retrospective display.",
+    "reason_codes(*codes)": "Closed reason vocabulary, sorted deduplicated tuple; no unknown arbitrary health reasons.",
+    "make_receipt(payload, bindings, created_at), validate_receipt(receipt, payload, bindings)": "Pure protocol/schema/source hash and scope validation, exact binding-path set; no financial data access.",
+    "seal_development(root), check(root), CLI": "Explicit --seal-development exclusively creates protocol and receipt with xb and file fsync, refuses existing/partial seals. --check only reads existing receipt/protocol and hashes eight metadata/source files; missing receipt fails without creation. No model import, DuckDB connection, pipeline or score evaluation."
+  },
+  "confirmed_development_numeric_mapping": {
+    "score_weights": {"generation": 0.25, "liquidity": 0.25, "debt": 0.20, "growth": 0.15, "stability": 0.15},
+    "score_parameters": {"range": [0, 100], "base": 50, "reference_months": 6, "recent_months": 3, "prior_months": 3, "liquidity_scale_months": 3, "debt_principal_scale_months": 12, "service_coverage_ceiling": 2, "debt_subweights": [0.5, 0.5], "stability_std_ceiling": 0.5, "observed_direction_delta": 5, "display_decimals": 1, "explanation_residual_tolerance": 1e-8},
+    "mora": {"escalation_grace_days": 7, "late_days_upper_bounds": [7, 30, 60, 90, 180, null], "multipliers": [1, 1.25, 1.5, 2, 3, 4], "penalty": "40*E/(S+E)", "due_today_in_U_due": true, "due_today_exposure": 0},
+    "bands": [0, 40, 60, 80, 90, 100],
+    "cash": {"independent_balance_observations_required": 2, "relative_tolerance": 1e-6, "tolerance_scale_floor": 1, "formula": "max(verified_currency_minor_unit,1e-6*max(abs(start),abs(end),1))"},
+    "targets": {"materiality": "max(EUR1000,0.05*reference_receipts)", "reference_months": 3, "late_days_strictly_greater_than": 30, "directional_confirmation_months": 2, "directional_onset_horizon": [1, 2, 3], "complete_negative_followup_offset": 4, "conditional_forecast_onset_offset": 1, "conditional_outcome_onset_offset": 3, "conditional_recovery_consecutive_months": 2, "recovery_materiality_fraction": 0.5},
+    "candidates": {"directional_families": 4, "directional_candidates_per_sign": 5, "logistic_scorecard_C": [0.1, 1.0], "trend_logistic_C": 1.0, "conditional_candidates": 3, "conditional_multinomial_C": 1.0, "maximum_grouped_rolling_folds": 3, "selection_tie_tolerance": 1e-6, "additional_search_allowed": false},
+    "alerts": {"probability_threshold": 0.60, "consecutive_confirmation_origins": 2, "below_threshold_reset_origins": 2, "conditional_threshold": 0.60},
+    "directional_support": {"groups": 50, "mature_events": 100, "event_groups": 20, "mature_negatives": 100, "prediction_coverage_min": 0.70, "mature_ascertainment_min": 0.80},
+    "directional_utility": {"improvement_recall_min": 0.50, "deterioration_recall_min": 0.60, "precision_min": 0.60, "false_alert_share_max": 0.40, "burden_max_per_eligible_company_month": 0.15, "recall_vs_best_baseline_margin": 0.10, "credited_lead_months": [1, 2, 3]},
+    "probability_utility": {"ap_vs_evaluation_constant_baseline_margin": 0.10, "ap_vs_best_fixed_baseline_margin": 0.05, "brier_vs_best_baseline_max_factor": 0.95, "ece_max": 0.10, "ece_bins": 10, "positive_support": 100, "negative_support": 100, "groups": 20},
+    "bootstrap": {"replicates": 2000, "seed": 1729, "confidence": 0.95, "finite_replicates_min": 1900, "positive_paired_recall_and_brier_CI_lower_required": true},
+    "complete_mapping_location": "protocol-development-v1.json also freezes all Q1 level, still-strong cohort, conditional recovered/persistent/mixed support and utility gates, chronological matching, temporal-thirds stability, formulas and nonnumeric safeguards. These remain decision proposals for future confirmation, not business-approved acceptance criteria."
+  },
+  "clarifications_frozen_without_editing_original_proposal": [
+    "Improvement payment-reduction evidence is cumulative from fixed reference close through each confirmation month, allocated to affected obligations; the same repayment is not required again each month.",
+    "Conditional recovered labels likewise require cumulative evidence for overdue reductions credited to recovery; writeoffs and renegotiation do not count as repayment recovery.",
+    "AP uplift uses evaluation prevalence/the constant predictor AP on the same eligible evaluation rows, not training prevalence; the additional best fixed probabilistic baseline margin is retained.",
+    "Monthly origins are strict month-end dates with exclusive next UTC midnight; anchors remain precise UTC timestamps with explicit cut semantics.",
+    "Known-on lives only in required source_ref metadata and remains null when unknown. Retrospective/assumed provenance cannot be silently made historically verified.",
+    "Explicit input identity fields, date-grain due_date, allocation policy and unknown semantics support downstream modules; complete output/API and financial reconciliation are not implemented here.",
+    "Trend C=1 and deterministic candidate tie order are development clarifications; same branch confirms both months of either sign; no-majority and nonunanimous exceptional financial-reference labels remain unknown."
+  ],
+  "commands_in_observed_order": [
+    {
+      "command": "git status --short && ls -ld scripts tests reports/modeling/financial-v3",
+      "exit_code": 0,
+      "result": "Confirmed existing v2 and audit worktree changes; output and code parent directories present."
+    },
+    {
+      "command": ".venv/bin/python -B -m unittest tests.test_financial_v3_contract -v",
+      "attempt": 1,
+      "exit_code": 1,
+      "result": "Expected red-first import error: financial_v3_contract did not exist. One loader failure, no financial reads.",
+      "focused_correction": "Implemented the new strict contract module and declarative development policy; no existing source edited."
+    },
+    {
+      "command": ".venv/bin/python -B -m unittest tests.test_financial_v3_contract -v",
+      "attempt": 2,
+      "exit_code": 0,
+      "result": "23 tests passed in 0.024s. Initial missing-module failure resolved with one correction and recheck."
+    },
+    {
+      "command": ".venv/bin/python -B -m unittest tests.test_financial_v3_contract -v",
+      "attempt": 3,
+      "exit_code": 1,
+      "result": "Added red-first assertion specifically covering inline review's conditional cumulative-payment evidence, plus fixtures for all remaining input records. 24 tests ran in 0.026s; one KeyError for missing targets.conditional.payment_reduction_evidence; other fixtures passed.",
+      "focused_correction": "Added conditional cumulative-payment evidence and affected-obligation scope, and made the recovery predicate explicitly require that evidence. No numeric thresholds changed."
+    },
+    {
+      "command": ".venv/bin/python -B -m unittest tests.test_financial_v3_contract -v",
+      "attempt": 4,
+      "exit_code": 0,
+      "result": "24 tests passed in 0.023s. Conditional evidence failure resolved on its one focused correction/recheck. No persistent repeated failure."
+    },
+    {
+      "command": ".venv/bin/python -B scripts/financial_v3_contract.py --seal-development",
+      "attempt": 1,
+      "exit_code": 0,
+      "result": "Exclusively created development protocol and receipt, then checked eight metadata/source bindings. financial_data_queries=0; outcome_values_read=0; business/confirmatory/activation flags false. Reported mode is the final embedded read-only check, not a claim that seal itself performs no writes."
+    },
+    {
+      "command": ".venv/bin/python -B -m unittest tests.test_financial_v3_contract tests.test_financial_v3_audit -v",
+      "exit_code": 0,
+      "result": "Final combined focused verification: 30 tests passed in 0.055s. Audit tests use invented in-memory DuckDB fixtures only; no financial dataset query."
+    },
+    {
+      "command": ".venv/bin/python -B scripts/financial_v3_contract.py --check",
+      "exit_code": 0,
+      "result": "Read-only existing receipt/protocol/source check passed; eight bindings and both protocol/receipt hashes identical to seal output; no output writes, financial queries or outcome access."
+    },
+    {
+      "command": ".venv/bin/python -B scripts/financial_v3_audit.py --check",
+      "exit_code": 0,
+      "result": "541 protected assets unchanged, differences=[], original document contents preserved as suffix. Byte-hash integrity check only; no DuckDB/data pipeline."
+    },
+    {
+      "command": "git diff --check && git diff --cached --stat && git status --short",
+      "exit_code": 0,
+      "result": "No tracked whitespace errors; index remains empty. Existing package/Rust CRLF warnings remain; those paths untouched. New contract module/test appear alongside pre-existing preserved changes."
+    }
+  ],
+  "verification_limits": [
+    "Tests prove contract handling, policy identity and invented-input behavior, not economic correctness or predictive usefulness.",
+    "No cash reversal, obligation balance calculation, scorecard execution, event detection, model fit, labels, export, UI/API/MCP or E2E implementation was performed.",
+    "Input validators do not replace downstream cross-record ownership checks, account completeness, allocation reconciliation, source truth, eligibility or full output/API validation.",
+    "Hash receipts detect changes against their recorded baseline; they are not cryptographic signatures or evidence of independent scientific review.",
+    "No untouched confirmatory data identified; all 50 v1 final-test groups remain excluded, v2 reserve remains consumed; no tuning or re-evaluation is authorized."
+  ],
+  "next_action": "Parent may assign financial_v3_cash/obligations pure functions and new invented fixture tests using these strict interfaces and the frozen development policy. Keep current contract/protocol/receipt bytes unchanged; any required policy/schema correction must be explicitly versioned with its own receipt rather than overwriting the old seal. Preserve all 541 scientific/application baseline assets. Parent alone updates goal state. Business approval, independent validation, financial-source sufficiency and untouched confirmation data remain pending."
+}

@@ -1,0 +1,28 @@
+{
+  "name": "blaubeere",
+  "private": true,
+  "packageManager": "bun@1.3.12",
+  "workspaces": [
+    "apps/*"
+  ],
+  "scripts": {
+    "setup": "bun scripts/setup.ts",
+    "dev": "bun run --parallel dev:api dev:mcp dev:app dev:landing",
+    "dev:api": "cargo run -p blaubeere-api",
+    "dev:mcp": "cargo run -p blaubeere-mcp",
+    "dev:app": "bun --env-file=../../.env --cwd apps/app dev",
+    "dev:landing": "bun --env-file=../../.env --cwd apps/landing dev",
+    "build": "bun --cwd apps/app build && bun --cwd apps/landing build",
+    "typecheck": "bun --cwd apps/app typecheck && bun --cwd apps/landing typecheck",
+    "check:rust": "cargo fmt --check && cargo clippy --workspace --all-targets -- -D warnings && cargo test --workspace",
+    "check": "bun run test:deploy && bun run test:web && bun run typecheck && bun run build && bun run check:rust",
+    "test:deploy": "bun scripts/check-deploy.ts",
+    "test:web": "bun scripts/check-web.ts && bun test apps/app/lib/trajectory.test.ts",
+    "test:trajectory:e2e": "bun scripts/check-trajectory-e2e.ts",
+    "test:assessments:e2e": "bun scripts/check-assessments-e2e.ts",
+    "test:integration": "bun --env-file=.env scripts/check-api.ts"
+  },
+  "devDependencies": {
+    "@playwright/test": "1.55.1"
+  }
+}

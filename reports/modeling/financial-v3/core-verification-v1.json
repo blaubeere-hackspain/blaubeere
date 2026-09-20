@@ -1,0 +1,230 @@
+{
+  "verification_version": "financial-v3-core-verification-v1",
+  "scope": "V3T3-V3T5 generic development core and invented fixtures only; not completion or independent validation of v3",
+  "status": "passed_development_only",
+  "root": "/home/mikel/.herdr/worktrees/predictive-models/feat-training-devin",
+  "financial_data_queries": 0,
+  "outcome_values_read": 0,
+  "models_fitted": 0,
+  "subagents_spawned": 0,
+  "automatic_alerts_enabled": false,
+  "independent_review_completed": false,
+  "attempt_policy": "Tests first. One focused correction plus recheck per distinct failure; no persisting failure, no relaxed assertions, no exhausted retry budget. Additional boundary tests were written before their corrections. All attempts retained below.",
+  "attempts": [
+    {
+      "command": ".venv/bin/python -B -m unittest tests.test_financial_v3_cash tests.test_financial_v3_obligations tests.test_financial_v3_features tests.test_financial_v3_score tests.test_financial_v3_engine -v",
+      "phase": "tests_first",
+      "exit_code": 1,
+      "result": "5 import errors; ModuleNotFoundError scripts.financial_v3_cash. All five new test files existed before implementation.",
+      "correction": "Implement the five missing connected core modules once."
+    },
+    {
+      "command": ".venv/bin/python -B -m unittest tests.test_financial_v3_cash tests.test_financial_v3_obligations tests.test_financial_v3_features tests.test_financial_v3_score tests.test_financial_v3_engine -v",
+      "phase": "missing_modules_recheck",
+      "exit_code": 1,
+      "result": "34 executable tests in 0.884s: 2 passed and 32 errors, all a single new failure: ValueError Not a JSON type: tuple in perimeter hashing. Missing modules resolved.",
+      "correction": "Replace cash perimeter and obligation comparability tuples with JSON lists; tests unchanged."
+    },
+    {
+      "command": ".venv/bin/python -B -m unittest tests.test_financial_v3_cash tests.test_financial_v3_obligations tests.test_financial_v3_features tests.test_financial_v3_score tests.test_financial_v3_engine -v",
+      "phase": "tuple_boundary_recheck",
+      "exit_code": 0,
+      "result": "34 tests passed in 2.575s; tuple failure resolved on first correction."
+    },
+    {
+      "command": ".venv/bin/python -B -m unittest tests.test_financial_v3_engine.EvidenceBoundaryTests -v",
+      "phase": "additional_boundary_tests_first",
+      "exit_code": 1,
+      "result": "5 tests in 0.139s: 4 failures and 1 error. Unattested debt/AR exposed subtotal zero; unknown due exposed due/not-due subtotals as totals; attested accountless cash returned null; timestamps were compared lexically; identical supplemental terms rejected.",
+      "corrections": [
+        "Separate known obligation subtotals from null incomplete totals and adjusted liquidity",
+        "Honor exhaustive explicit-zero cash attestation",
+        "Compare metadata timestamps as UTC instants",
+        "Make identical cash terms idempotent and reject conflicting terms"
+      ]
+    },
+    {
+      "command": ".venv/bin/python -B -m unittest tests.test_financial_v3_engine.EvidenceBoundaryTests -v",
+      "phase": "evidence_boundary_recheck",
+      "exit_code": 0,
+      "result": "5 tests passed in 0.163s; all new boundary failures resolved on their first corrections."
+    },
+    {
+      "command": ".venv/bin/python -B -m unittest tests.test_financial_v3_engine.ExtendedInvariantTests -v",
+      "phase": "extended_invariants_first_run",
+      "exit_code": 1,
+      "result": "6 tests in 0.398s: 5 passed; future-effective movement with null known_on incorrectly contributed missingness reasons to a prior origin.",
+      "correction": "Scope excluded-fact missingness reasons to effective facts before the exclusive origin cutoff; test unchanged."
+    },
+    {
+      "command": ".venv/bin/python -B -m unittest tests.test_financial_v3_engine.ExtendedInvariantTests -v",
+      "phase": "future_effective_missingness_recheck",
+      "exit_code": 0,
+      "result": "6 tests passed in 0.339s; future-effective missingness resolved on first correction."
+    },
+    {
+      "command": ".venv/bin/python -B -m unittest tests.test_financial_v3_features -v",
+      "phase": "growth_boundary_tests_first",
+      "exit_code": 1,
+      "result": "7 tests in 0.385s: 4 passed including 15-month YoY; 2 new failures (gap arrays compressed, MoM unnecessarily required six months), 1 new error (no dedicated YoY provenance).",
+      "corrections": [
+        "Preserve six calendar positions as null gaps",
+        "Use two complete comparable receipt months for optional MoM",
+        "Publish separate dated source references for each growth window"
+      ],
+      "fixture_extension": "Generalized invented fixture dates across years and explicit schedule attestation through 2027 to exercise 15 known months. No assertions relaxed."
+    },
+    {
+      "command": ".venv/bin/python -B -m unittest tests.test_financial_v3_features -v",
+      "phase": "growth_boundary_recheck",
+      "exit_code": 0,
+      "result": "7 tests passed in 0.387s; all new growth boundary failures resolved on first corrections."
+    },
+    {
+      "command": ".venv/bin/python -B -m unittest tests.test_financial_v3_cash tests.test_financial_v3_obligations tests.test_financial_v3_features tests.test_financial_v3_score tests.test_financial_v3_engine -v",
+      "phase": "focused_suite_before_final_provenance_review",
+      "exit_code": 0,
+      "result": "49 tests passed in 3.305s."
+    },
+    {
+      "command": ".venv/bin/python -B -m unittest discover -s tests -p 'test_financial_v3_*.py' -v",
+      "phase": "all_v3_before_final_provenance_review",
+      "exit_code": 0,
+      "result": "79 tests passed in 3.370s, including unchanged 24 contract and 6 audit tests."
+    },
+    {
+      "command": ".venv/bin/python -B scripts/financial_v3_contract.py --check",
+      "phase": "contract_integrity_before_final_provenance_review",
+      "exit_code": 0,
+      "result": "ok=true; 8 bindings; metadata/hash only; unchanged sealed protocol and receipt."
+    },
+    {
+      "command": ".venv/bin/python -B scripts/financial_v3_audit.py --check",
+      "phase": "protected_integrity_before_final_provenance_review",
+      "exit_code": 0,
+      "result": "ok=true; 541 protected assets, differences=[], old document suffixes preserved; no queries."
+    },
+    {
+      "command": ".venv/bin/python -B -c \"import json; from tests.test_financial_v3_engine import fixture, evaluate; from scripts.financial_v3_score import explain_delta; cases = {'paid': fixture(), 'partial': fixture(paid='300'), 'unpaid': fixture(paid='0'), 'high': fixture(due='300', paid='300', opening='4000'), 'intermediate': fixture(due='950', paid='950', opening='0'), 'weak': fixture(due='1400', paid='0', opening='0', receipts=['1000','1000','1000','700','600','500','400'])}; results = {k: evaluate(v) for k,v in cases.items()}; summary = {k: {'score': v['score']['value'], 'band_validation': v['score']['band_validation'], 'cash': v['cash']['unrestricted'], 'unpaid_due': v['obligations']['unpaid_due'], 'adjusted_cash': v['features']['adjusted_cash'], 'weighted_exposure': v['obligations']['weighted_exposure'], 'growth_3v3': v['features']['growth_3v3'], 'generation_recent': v['features']['generation_recent']} for k,v in results.items()}; rising = fixture(due='950', paid='950', opening='0', receipts=['1000']*6+['1800']); falling = fixture(due='300', paid='300', opening='4000', receipts=['1000']*6+['100']); summary['observed_changes'] = {k: {'old': evaluate(v)['score']['value'], 'new': evaluate(v, month='2025-07-01')['score']['value'], 'delta': explain_delta(evaluate(v), evaluate(v, month='2025-07-01'))['value']} for k,v in [('rising',rising),('falling',falling)]}; print(json.dumps(summary, indent=2, allow_nan=False))\"",
+      "phase": "invented_numeric_examples_only",
+      "exit_code": 0,
+      "result": "Printed invented cases recorded in numeric_examples below. No financial data files or outcomes accessed by this calculation."
+    },
+    {
+      "command": "git diff --check",
+      "phase": "tracked_whitespace_check",
+      "exit_code": 0,
+      "result": "No diff whitespace errors. Existing CRLF conversion warnings for package.json and four preexisting service files; these files were not edited. New Python files separately checked with grep tool for trailing spaces, no matches."
+    },
+    {
+      "command": ".venv/bin/python -B -m unittest tests.test_financial_v3_obligations.ObligationEvidenceTests -v",
+      "phase": "final_provenance_tests_first",
+      "exit_code": 1,
+      "result": "2 new tests failed in 0.040s: conflicting supplemental obligation coverage silently selected by order; linked payment proof absent from obligation provenance/known_on.",
+      "corrections": [
+        "Reject conflicting same-interval visible coverage certificates; identical copies remain idempotent",
+        "Propagate linked payment source into obligation-month and item provenance, including maximum known_on"
+      ]
+    },
+    {
+      "command": ".venv/bin/python -B -m unittest tests.test_financial_v3_obligations.ObligationEvidenceTests -v",
+      "phase": "final_provenance_recheck",
+      "exit_code": 0,
+      "result": "2 tests passed in 0.022s; both new failures resolved on first corrections, assertions unchanged."
+    },
+    {
+      "command": ".venv/bin/python -B -m unittest tests.test_financial_v3_cash tests.test_financial_v3_obligations tests.test_financial_v3_features tests.test_financial_v3_score tests.test_financial_v3_engine -v",
+      "phase": "final_focused_suite",
+      "exit_code": 0,
+      "result": "51 new core tests passed in 3.418s."
+    },
+    {
+      "command": ".venv/bin/python -B -m unittest discover -s tests -p 'test_financial_v3_*.py' -v",
+      "phase": "final_all_v3_suite",
+      "exit_code": 0,
+      "result": "81 tests passed in 3.628s: 51 core + unchanged 24 contract + unchanged 6 audit."
+    },
+    {
+      "command": ".venv/bin/python -B scripts/financial_v3_contract.py --check",
+      "phase": "final_contract_integrity",
+      "exit_code": 0,
+      "result": "ok=true; 8 bound assets; read-only metadata/hashes; financial_data_queries=0; outcome_values_read=0."
+    },
+    {
+      "command": ".venv/bin/python -B scripts/financial_v3_audit.py --check",
+      "phase": "final_protected_integrity",
+      "exit_code": 0,
+      "result": "ok=true; protected_assets=541; differences=[]; old_document_bytes_preserved_as_suffix=true; hash-only, no data queries."
+    }
+  ],
+  "sealed_integrity": {
+    "protocol_sha256": "aefaec5905af75e0d0ea61561967a6ad7dbf0731845bf5cf853eaab57be590f0",
+    "receipt_sha256": "7fb94394bff8224ab4016bb57653d5222e9b3d3b182e78cad82efe34b3f860f5",
+    "policy_canonical_sha256": "8ad1ce33e76cda8360003976b619c6c7b8cad9124243be7a79a1d5a71e21b3e1",
+    "protected_assets": 541,
+    "differences": []
+  },
+  "new_paths_only": [
+    "scripts/financial_v3_cash.py",
+    "scripts/financial_v3_obligations.py",
+    "scripts/financial_v3_features.py",
+    "scripts/financial_v3_score.py",
+    "scripts/financial_v3_engine.py",
+    "tests/test_financial_v3_cash.py",
+    "tests/test_financial_v3_obligations.py",
+    "tests/test_financial_v3_features.py",
+    "tests/test_financial_v3_score.py",
+    "tests/test_financial_v3_engine.py",
+    "reports/modeling/financial-v3/core-verification-v1.json"
+  ],
+  "public_interfaces": {
+    "orchestrator": "FinancialInputs(records, cash_terms, obligation_coverage, principal_observations); evaluate_company_month(inputs, context, *, observed_at, reporting_currency='EUR', policy=None) -> JSON-compatible financial_health_v3_core company/month",
+    "cash": "EvidenceView(records, context); cash_month(view, month, terms, reporting_currency='EUR')",
+    "obligations": "obligation_month(view, month, coverage, principal_observations, reporting_currency='EUR'); mora_multiplier(nonnegative_integer_days) -> Decimal",
+    "features": "build_features(cash_history, obligation_history, month)",
+    "score": "score_features(features, policy=None); explain_delta(old_engine_result, new_engine_result); ratio_change(old_numerator, old_denominator, new_numerator, new_denominator)",
+    "future_consumers": "Events/evaluation may consume dated primitive receipts, due amounts, item remaining/paid/writeoff/lineage and aging from this engine, not use score/delta as independent outcome labels. Export must adapt this core result to its future strict authorized API schema; it is not an implemented endpoint."
+  },
+  "fixture_schema": {
+    "factory": "tests/test_financial_v3_engine.py: fixture(), context(), loan()",
+    "identity": "Only invented-company, bank, invented-core-fixture; synthetic a*64 source hashes, never audited real data",
+    "records": "Mapping from the ten sealed financial-v3-input-v1 record kinds to lists; absent collections are empty, never evidence of zero. Records use the unchanged contract.input_schemas().",
+    "context": "Unchanged contract.validate_context shape: month first-of-month, matching month-end as_of, exclusive next UTC midnight, policy version, company and view.",
+    "CashTerms": ["company_id", "account_id", "currency", "minor_unit decimal string", "balance_convention=booked_before_cutoff", "invalid_stock_values tuple of decimal strings", "source_ref"],
+    "ObligationCoverage": ["company_id", "source_kind=operating_ap|financial_debt|ar", "from_inclusive date", "to_exclusive date", "history_from date", "settlements_to_exclusive date", "schedule_to_exclusive date", "comparable_id", "source_ref"],
+    "PrincipalObservation": ["company_id", "financial_product_id", "currency", "as_of month-end date", "amount_native decimal string", "source_ref"],
+    "obligation_coverage_semantics": "A source-backed certificate of exhaustive legal-face/origination and amendment history, settlement coverage, forward contractual schedule vintage and comparable economic perimeter. Not just an available feed or a current outstanding snapshot. operating_ap scope covers other_payable too.",
+    "principal_semantics": "Atomic funded legal principal tranches or a single bullet, never a second aggregate loan balance on top of installments. Independent current-month principal observation is required to reconcile a nonempty loan perimeter.",
+    "cash_cutoffs": "opening/instant at measured_at mean booked-before that exact timestamp under supplied terms; closing includes that microsecond, mapped to measured_at+1 microsecond. Unknown never inferred from midnight. All coverage is half-open."
+  },
+  "numeric_examples": {
+    "interpretation": "Invented arithmetic demonstrations only. Every band is unvalidated_internal; not externally adjudicated healthy/weak labels.",
+    "paired_common": {"receipts_per_month": "1000", "operating_due_per_month": "800", "reference_S": "1000", "generation_recent": "200", "growth_3v3": 0, "late_days": 10, "adjusted_cash_each": "3200"},
+    "paid": {"cash": "3200", "unpaid_due": "0", "weighted_exposure": "0", "score": 85.0},
+    "partial": {"cash": "3700", "unpaid_due": "500", "weighted_exposure": "625", "score": 69.61538461538461},
+    "unpaid": {"cash": "4000", "unpaid_due": "800", "weighted_exposure": "1000", "score": 65.0},
+    "high_arithmetic_case": {"cash": "8200", "generation_recent": "700", "score": 92.5},
+    "middle_arithmetic_case": {"cash": "300", "generation_recent": "50", "score": 58.75},
+    "weak_arithmetic_case": {"cash": "-2200", "unpaid_due": "1400", "adjusted_cash": "-3600", "generation_recent": "-800", "growth_3v3": -0.4, "score": 1.2427721098451374},
+    "observed_rising": {"old": 58.75, "new": 66.54917184411839, "delta": 7.799171844118391},
+    "observed_falling_from_high": {"old": 92.5, "new": 75.42669894264817, "delta": -17.073301057351827}
+  },
+  "limitations_and_parent_actions": [
+    "Parent alone updates .devin/goal.md. Worker did not edit it or any preexisting code/artifact, UI/API, configuration or dependencies.",
+    "Generic core is implemented and synthetic checks pass; real audit still lacks complete cash, obligations, historical availability and untouched confirmation data. No real headline is claimed.",
+    "Independent economic level review, predictive events/models/evaluation and confirmatory acceptance remain undone or blocked. No outcome labels were created, no fitting and no reserve evaluation occurred.",
+    "Foreign cash stocks are reconstructed natively then converted with dated stock FX; transaction FX is separate. Mixed-currency liability totals explicitly abstain until a comparable liability conversion contract is supplied; native items remain visible.",
+    "Only explicit bank-linked allocations are accepted. Missing/assumed allocations block headline; no ambiguous oldest-due fallback. Writeoff is tracked, not legal extinguishment or payment recovery.",
+    "Schedule changes use documented amendments/replacement lineage. Conflicting changed terms under an old obligation ID are rejected, not silently selected as a new vintage. Account version changes similarly require an explicit new perimeter.",
+    "Only as_of and reconstructed_retrospective are implemented; as_of_simulation is rejected without a separate implemented availability contract. Single cash anchors may yield displayed provisional balances but never an eligible headline.",
+    "Money uses Decimal and decimal strings, with local precision 80 for derived means/FX division/square roots. Legal sums are not float-rounded; repeating derived divisions are finite-precision Decimal, not exact rational identities. Ratios/score points are finite binary64, with explicit reconciliation and display residuals.",
+    "Supplemental coverage/minor-unit/observation evidence must be verified by ingestion review. Source shape and cross-record consistency checks do not independently establish truth of a supplied certificate.",
+    "Core output is an internal versioned JSON-compatible result, not the future API Quantity schema. Export should preserve native unknowns, known subtotals, source/known-on metadata, view and internal band qualifiers; do not silently coerce derived-precision money to input money limits.",
+    "Parent should perform the separate code/economic review and wire future events/evaluate/export through these interfaces. No full project/UI build was needed or run."
+  ],
+  "setup_commands": [
+    {"command": "pwd && ls", "exit_code": 0, "result": "Confirmed requested worktree root and existing top-level directories."},
+    {"command": "git status --short", "exit_code": 0, "result": "Recorded preexisting tracked modifications and untracked v2/v3 artifacts; preserved them."},
+    {"command": "ls scripts tests reports/modeling/financial-v3 .venv/bin/python", "exit_code": 0, "result": "Verified all write parents and installed Python exist; new core paths did not exist."}
+  ]
+}

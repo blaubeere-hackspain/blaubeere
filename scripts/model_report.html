@@ -1,0 +1,140 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; connect-src 'none'; script-src 'sha256-__SCRIPT_HASH__'; style-src 'sha256-__STYLE_HASH__'; base-uri 'none'; form-action 'none'">
+<title>Blaubeere | Informe local del modelo</title>
+<style>
+:root{--ink:#131a24;--muted:#4a5566;--paper:#fff;--canvas:#f5f6f8;--line:#dfe3ea;--observed:#0f6b6e;--observed-soft:#e3f0ef;--uncertain:#895208;--uncertain-soft:#fbf0dd;--failed:#9c2f2f;--failed-soft:#f9e5e5;color-scheme:light}
+*{box-sizing:border-box}body{margin:0;background:var(--canvas);color:var(--ink);font:15px/1.55 "IBM Plex Sans","Segoe UI",sans-serif;-webkit-font-smoothing:antialiased}h1,h2,h3,p{margin:0}h1,h2,h3{line-height:1.2;text-wrap:balance}h1{font-size:32px;font-weight:600;letter-spacing:-.035em}h2{font-size:23px;font-weight:600;letter-spacing:-.02em}h3{font-size:18px;font-weight:600}p{max-width:80ch;text-wrap:pretty}a{color:var(--observed)}button,select{font:inherit;min-height:44px}select{max-width:100%;width:100%;padding:8px 12px;background:var(--canvas);color:var(--ink);border:1px solid var(--line);border-radius:6px;cursor:pointer}select:hover{border-color:var(--observed)}:focus-visible{outline:3px solid var(--observed);outline-offset:4px}[hidden]{display:none!important}.skip{position:absolute;left:16px;top:-60px;background:var(--paper);padding:8px;z-index:3}.skip:focus{top:8px}.masthead{display:flex;align-items:center;justify-content:space-between;gap:24px;padding:20px 32px;background:var(--paper);border-bottom:1px solid var(--line)}.brand{font-size:23px;font-weight:650;letter-spacing:-.05em}.masthead nav{display:flex;gap:24px}.masthead a{padding:8px 0;text-decoration:none}.masthead a:hover{text-decoration:underline}.local{color:var(--muted);font-size:13px}.page{max-width:1440px;margin:auto;padding:32px}.intro{display:flex;align-items:flex-start;justify-content:space-between;gap:24px;margin-bottom:24px}.intro p{color:var(--muted);margin-top:12px}.badge{display:inline-block;background:var(--observed-soft);color:var(--observed);font-size:13px;font-weight:600;padding:6px 12px;border-radius:6px;white-space:nowrap}.notice{padding:20px 24px;background:var(--uncertain-soft);border-left:4px solid var(--uncertain);margin-bottom:32px}.notice h2{font-size:18px;color:var(--uncertain);margin-bottom:8px}.notice p{font-size:14px}.workspace{display:grid;grid-template-columns:224px minmax(0,1fr);gap:32px}.controls{align-self:start;position:sticky;top:24px;display:grid;gap:24px}.field{display:grid;gap:8px}.field label{font-weight:600}.hint,.muted{color:var(--muted)}.hint{font-size:13px}.context{display:grid;gap:8px;margin:0}.context dt{font-size:13px;color:var(--muted)}.context dd{margin:0;overflow-wrap:anywhere}.content{min-width:0;display:grid;gap:24px}.panel{background:var(--paper);border:1px solid var(--line);border-radius:10px;padding:24px;min-width:0}.panel>p{margin-top:12px;color:var(--muted);font-size:14px}.section-head{display:flex;justify-content:space-between;align-items:start;gap:16px;margin-bottom:16px}.section-head p{font-size:14px;color:var(--muted);margin-top:8px}.figures{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px;margin:24px 0}.figures dt{font-size:13px;color:var(--muted)}.figures dd{margin:4px 0 0;font-size:23px;font-weight:600;letter-spacing:-.025em;font-variant-numeric:tabular-nums}.chart{width:100%;height:auto;display:block;overflow:visible}.chart text{font-family:inherit;fill:var(--muted);font-size:12px}.chart .grid{stroke:var(--line);stroke-width:1}.chart .series{stroke:var(--observed);fill:none;stroke-width:2.5}.chart .dot{fill:var(--observed)}.chart .alternate{stroke:var(--uncertain);stroke-dasharray:5 4}.chart .alternate-dot{fill:var(--uncertain)}.legend{display:flex;flex-wrap:wrap;gap:16px;font-size:13px;margin:8px 0 16px}.legend span:before{content:"";display:inline-block;width:20px;border-top:3px solid var(--observed);margin:0 8px 3px 0}.legend .alternate:before{border-color:var(--uncertain);border-top-style:dashed}.table-wrap{overflow:auto;max-height:420px;margin-top:16px;border:1px solid var(--line);border-radius:6px}table{border-collapse:collapse;width:100%;font-size:13px;font-variant-numeric:tabular-nums;white-space:nowrap}caption{text-align:left;white-space:normal;padding:12px;color:var(--muted)}th,td{padding:12px;text-align:right;border-bottom:1px solid var(--line)}th:first-child,td:first-child{text-align:left}thead th{background:var(--canvas);position:sticky;top:0;font-weight:600}tbody tr:last-child td{border-bottom:0}tbody tr:hover{background:var(--canvas)}.selected-row{background:var(--observed-soft)}.pair{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:24px}.pair>.panel{height:100%}.empty{padding:24px;background:var(--canvas);border-radius:6px;color:var(--muted);margin:16px 0}.details{margin-top:16px}summary{cursor:pointer;min-height:44px;padding:12px 0;font-weight:600}summary:hover{color:var(--observed)}.data{margin:12px 0 0;padding:16px;background:var(--canvas);white-space:pre-wrap;overflow-wrap:anywhere;font:12px/1.65 "IBM Plex Mono",monospace;max-height:360px;overflow:auto}.summary{display:flex;flex-wrap:wrap;gap:12px 24px;padding:16px 0;border-block:1px solid var(--line);margin:16px 0;color:var(--muted);font-size:14px}.summary strong{color:var(--ink)}.target+.target{border-top:1px solid var(--line);margin-top:24px;padding-top:24px}.target p{font-size:14px;color:var(--muted);margin-top:8px}.failed{color:var(--failed);background:var(--failed-soft)}.source-list{font:12px/1.7 "IBM Plex Mono",monospace;overflow-wrap:anywhere}.source-list dt{margin-top:12px}.source-list dd{margin:0;color:var(--muted)}.footer{font-size:13px;color:var(--muted);padding:24px 0}.questions{display:grid;gap:16px;padding-left:20px;margin-bottom:0}.questions strong{display:block}.questions li{font-size:14px;color:var(--muted)}.questions strong{color:var(--ink)}
+@media(max-width:1000px){.pair{grid-template-columns:1fr}.figures dd{font-size:20px}.workspace{grid-template-columns:196px minmax(0,1fr);gap:24px}}
+@media(max-width:720px){.masthead{padding:16px;flex-wrap:wrap;gap:8px 16px}.masthead nav{gap:16px;font-size:13px}.local{width:100%}.page{padding:24px 16px}.intro{display:block}h1{font-size:28px}.intro .badge{margin-top:16px}.workspace{grid-template-columns:1fr;gap:24px}.controls{position:static;grid-template-columns:1fr 1fr;gap:16px}.controls .hint,.controls .context{grid-column:1/-1}.context{grid-template-columns:1fr 1fr}.context div{min-width:0}.panel{padding:16px}.notice{padding:16px}.figures{grid-template-columns:1fr;gap:12px}.figures div{display:flex;justify-content:space-between;align-items:baseline;gap:12px}.figures dd{font-size:20px;margin:0}.section-head{display:block}.section-head .badge{margin-top:12px}.chart text{font-size:15px}.table-wrap{max-height:320px}}
+@media print{.masthead nav,.controls,.skip{display:none}.workspace,.pair{display:block}.page{padding:0}.panel{break-inside:avoid;margin-bottom:16px}.table-wrap{max-height:none;overflow:visible}body{background:white}.chart{max-height:260px}.notice{margin-bottom:16px}}
+</style>
+</head>
+<body>
+<a class="skip" href="#main">Ir al informe</a>
+<header class="masthead"><div class="brand">blaubeere</div><nav aria-label="Secciones del informe"><a href="#evolution">Evolución</a><a href="#experiment">Evaluación</a><a href="#sources">Fuentes</a></nav><span class="local">Archivo local. Sin API ni conexión.</span></header>
+<main class="page" id="main">
+<div class="intro"><div><h1>El modelo, bajo la lupa.</h1><p>Evidencia mensual y resultados ya calculados. Un espacio de análisis separado de la aplicación y del despliegue.</p></div><span class="badge">Datos sintéticos</span></div>
+<section class="notice" aria-labelledby="model-status"><h2 id="model-status">Utilidad predictiva no validada</h2><p>Los dos proxies de cobros no superaron los criterios de utilidad. Ganó el baseline de persistencia. No hay pronóstico de bache frente a caída por soporte insuficiente. Las alertas automáticas permanecen desactivadas.</p></section>
+<noscript><p class="notice">Activa JavaScript para explorar los datos incluidos en este archivo. No se necesita conexión ni servidor.</p></noscript>
+<div class="workspace">
+<aside class="controls" aria-label="Selección del informe">
+<div class="field"><label for="company">Empresa</label><select id="company"></select></div>
+<div class="field"><label for="month">Cierre mensual</label><select id="month"></select></div>
+<p class="hint" id="selection-note"></p>
+<dl class="context" id="context"></dl>
+<p class="hint">Vista retrospectiva: cambiar el mes no demuestra qué se sabía entonces. El archivo contiene todos los meses de las empresas incluidas; no es un mecanismo de control de acceso.</p>
+</aside>
+<div class="content">
+<section class="panel" id="evolution" aria-labelledby="evolution-title">
+<div class="section-head"><div><h2 id="evolution-title">Cobros y pagos observados</h2><p id="period" role="status" aria-live="polite"></p></div><span class="badge">Importes en EUR</span></div>
+<dl class="figures" id="flow-summary"></dl>
+<div class="legend"><span>Cobros operativos</span><span class="alternate">Pagos operativos</span></div>
+<div id="flow-chart"></div>
+<p>Un hueco significa dato no disponible, no cero. No se unen periodos sin observación. Los subtotales conocidos no representan toda la actividad de la empresa.</p>
+<div id="flow-table"></div>
+</section>
+<div class="pair">
+<section class="panel"><h2>Crecimiento de cobros</h2><p>No es crecimiento de ventas. Solo ventanas comparables de cobros operativos; la cobertura y los cambios de cuentas limitan su interpretación.</p><div id="growth-table"></div></section>
+<section class="panel"><h2>Componentes, no salud global</h2><p>No hay score de salud financiera completo. El intervalo global [0, 100] es no informativo; no se presenta como una banda de confianza.</p><p id="component-interval"></p><div id="component-table"></div><p id="component-reason"></p></section>
+</div>
+<section class="panel"><h2>Deuda y obligaciones observables</h2><p>El total histórico de deuda financiera no está disponible. El servicio pagado y las estimaciones de facturas son evidencias distintas: no se suman ni se compensan entre sí.</p><div id="debt-table"></div><p>AP: pagos a proveedores; AR: cobros de clientes. Saldos de facturas estimados a partir del estado final, no prueba de deuda legal histórica. La exposición ponderada por mora no es deuda adicional.</p><p id="mora"></p></section>
+<section class="panel"><h2>Caja reconstruida, por cuenta</h2><p>Reconstrucción desde un ancla futura, no caja disponible ni conocimiento histórico. Cada cuenta usa su moneda nativa; no se agregan monedas. A/B corresponden al ancla al inicio/final del día.</p><p id="cash-date"></p><div id="cash-table"></div></section>
+<section class="panel"><h2>Probabilidades experimentales de cobros</h2><p>Escala 0–1, separada de los componentes. Un proxy de cobros no es salud financiera ni solvencia. Simulación retrospectiva sin calibrar; no equivale a una alerta emitida en aquella fecha.</p><div class="legend"><span>Contracción</span><span class="alternate">Expansión</span></div><div id="probability-chart"></div><div id="probability-table"></div><p id="model-reason"></p></section>
+<section class="panel" id="experiment"><h2>¿Mejora frente a los baselines?</h2><p>Resultados agregados de la validación interna ya sellada. Es un informe metodológico posterior, no evidencia conocida al mes seleccionado. Seleccionar y medir utilidad sobre la misma validación introduce sesgo; no es un test independiente.</p><div id="metrics"></div></section>
+<section class="panel"><h2>Qué puede responder hoy</h2><ol class="questions"><li><strong>¿Quién está sano?</strong>No disponible: faltan caja conciliada sin restricciones, deuda histórica y obligaciones completas.</li><li><strong>¿Quién mejora?</strong>Cambios parciales observados en cobros y componentes. La mejora financiera general no está validada.</li><li><strong>¿Quién empieza a torcerse?</strong>No hay advertencia predictiva validada; contracción de cobros es solo un proxy.</li><li><strong>¿Bache o caída persistente?</strong>Sin pronóstico: clases de entrenamiento insuficientes.</li><li><strong>¿Por qué cambia?</strong>Deltas aritméticos, referencias y cobertura; no atribución causal.</li><li><strong>¿Cuándo se vio venir?</strong>Anticipación no demostrada. No se activan alertas automáticas.</li></ol></section>
+<section class="panel" id="sources"><h2>Trazabilidad y alcance</h2><p id="source-note"></p><p>El generador verifica los SHA256 de los manifiestos, índices y perfiles que lee. No consulta etiquetas individuales ni datos brutos, no carga modelos ejecutables y no reentrena ni evalúa. V1/v2 permanecen como evidencia histórica en el repositorio; este informe muestra el export financiero v3 actual.</p><details class="details"><summary>Cobertura del dataset completo</summary><pre class="data" id="coverage"></pre></details><details class="details"><summary>Hashes de los artefactos utilizados</summary><dl class="source-list" id="hashes"></dl></details></section>
+</div>
+</div>
+<footer class="footer">Informe exploratorio local. El frontend, el backend y el despliegue se conservan por separado; integrar el modelo queda pendiente de su preparación y validación.</footer>
+</main>
+<script type="application/json" id="report-data">__REPORT_DATA__</script>
+<script id="report-code">
+'use strict';
+const report = JSON.parse(document.getElementById('report-data').textContent);
+const byId = id => document.getElementById(id);
+const finite = value => typeof value === 'number' && Number.isFinite(value);
+const number = (value, digits = 2) => finite(value) ? new Intl.NumberFormat('es-ES', {minimumFractionDigits: digits, maximumFractionDigits: digits}).format(value) : 'No disponible';
+const percent = value => finite(value) ? number(value * 100, 1) + ' %' : 'No disponible';
+const amount = value => number(value);
+const titles = {receipt_contraction_3m:'Contracción de cobros', receipt_expansion_3m:'Expansión de cobros', current_receipt_dip_3m:'Bache: recuperación o persistencia'};
+const components = {generation:'Generación', growth:'Crecimiento', stability:'Estabilidad'};
+function node(tag, text, className) { const element = document.createElement(tag); if (text !== undefined) element.textContent = text; if (className) element.className = className; return element; }
+function put(id, ...elements) { byId(id).replaceChildren(...elements); }
+function fact(label, value) { const item = node('div'); item.append(node('dt', label), node('dd', value)); return item; }
+function table(id, headers, rows, caption) {
+  const wrap = node('div', undefined, 'table-wrap'); wrap.tabIndex = 0; wrap.setAttribute('role', 'region'); wrap.setAttribute('aria-label', caption);
+  const table = node('table'); table.append(node('caption', caption)); const head = node('thead'), tr = node('tr');
+  headers.forEach(label => { const cell = node('th', label); cell.scope = 'col'; tr.append(cell); }); head.append(tr); table.append(head);
+  const body = node('tbody'); rows.forEach(values => { const row = node('tr'); values.forEach(value => row.append(node('td', value ?? 'No disponible'))); body.append(row); }); table.append(body); wrap.append(table); put(id, wrap);
+}
+function svgNode(tag, attrs, text) { const element = document.createElementNS('http://www.w3.org/2000/svg', tag); Object.entries(attrs).forEach(([key,value]) => element.setAttribute(key, value)); if (text !== undefined) element.textContent = text; return element; }
+function lineSegments(values) { const segments = []; let current = []; values.forEach((value,index) => { if (!finite(value)) { current = []; return; } if (!current.length) segments.push(current); current.push({index,value}); }); return segments; }
+function chart(id, dates, series, label, probability = false) {
+  const values = series.flatMap(s => s.values.filter(finite));
+  if (!values.length) { put(id, node('p', 'No hay observaciones disponibles en este periodo.', 'empty')); return; }
+  const low = probability ? 0 : Math.min(0, ...values), high = probability ? 1 : Math.max(1, ...values);
+  const x = i => 100 + 650 * i / Math.max(1, dates.length - 1), y = value => 220 - 184 * (value-low)/(high-low);
+  const svg = svgNode('svg', {viewBox:'0 0 780 264', class:'chart', role:'img', 'aria-label':label});
+  svg.append(svgNode('title', {}, label));
+  [low, (low+high)/2, high].forEach(value => { svg.append(svgNode('line', {x1:96,x2:750,y1:y(value),y2:y(value),class:'grid'})); svg.append(svgNode('text',{x:88,y:y(value)+4,'text-anchor':'end'},number(value, probability ? 1 : 0))); });
+  series.forEach((s, index) => lineSegments(s.values).forEach(segment => { const g = svgNode('g', {'data-segment':'true'}); g.append(svgNode('polyline',{points:segment.map(p=>`${x(p.index)},${y(p.value)}`).join(' '),class:index ? 'series alternate' : 'series'})); segment.forEach(p => { const dot = svgNode('circle',{cx:x(p.index),cy:y(p.value),r:3,class:index ? 'alternate-dot' : 'dot'}); dot.append(svgNode('title',{},`${s.label}, ${dates[p.index]}: ${number(p.value)}`)); g.append(dot); }); svg.append(g); }));
+  svg.append(svgNode('text',{x:100,y:252},dates[0])); svg.append(svgNode('text',{x:750,y:252,'text-anchor':'end'},dates.at(-1))); put(id,svg);
+}
+function probability(point, target) {
+  const forecast = point?.forecast[target], value = forecast?.probabilities?.['1'];
+  return point && point.month >= '2026-01-01' && point.month <= '2026-08-01' && forecast.target_scope === 'classified_operating_receipts_not_solvency' && forecast.reasons.length === 0 && finite(value) && value >= 0 && value <= 1 ? value : null;
+}
+function renderCompany(reset = false) {
+  const company = report.companies.find(c => c.id === byId('company').value);
+  if (reset) { const previous = byId('month').value; byId('month').replaceChildren(...company.points.map(p => new Option(p.as_of,p.as_of))); byId('month').value = company.points.some(p=>p.as_of===previous) ? previous : company.points.at(-1).as_of; }
+  const cut = byId('month').value, points = company.points.filter(p => p.as_of <= cut), p = points.at(-1);
+  byId('period').textContent = `${company.id}: ${points[0].as_of} a ${cut}. ${points.length} cierres incluidos.`;
+  put('context', fact('Grupo', company.group), fact('Moneda de la empresa', company.currency), fact('Fuentes recuperadas', company.retrieved_at.slice(0,10)), fact('Salud financiera global', 'No disponible'));
+  put('flow-summary', fact('Cobros operativos', amount(p.flow.operating_receipts)), fact('Pagos operativos', amount(p.flow.operating_payments)), fact('Neto observado', amount(p.flow.net_observed)));
+  chart('flow-chart',points.map(p=>p.as_of),[{label:'Cobros',values:points.map(p=>p.flow.operating_receipts)},{label:'Pagos',values:points.map(p=>p.flow.operating_payments)}],'Cobros y pagos operativos mensuales en EUR, con huecos no interpolados');
+  table('flow-table',['Cierre','Entradas conocidas','Salidas conocidas','Neto observado','Neto conocido','Cobertura EUR','Clasificación'],points.map(p=>[p.as_of,...p.flow.known_in_out.map(amount),amount(p.flow.net_observed),amount(p.flow.net_known),percent(p.flow.coverage.eur),percent(p.flow.coverage.classification)]),'Flujos del perímetro observado, en EUR, no céntimos');
+  table('growth-table',['Ventana','Cambio','Referencia EUR','Cambio de cuentas'],Object.entries(p.growth.observed).map(([key,g])=>[({mom:'Mes anterior',three_vs_three:'3 frente a 3 meses',yoy:'Interanual'})[key]??key,percent(g.value),amount(g.denominator),g.active_perimeter_changed===null?'No disponible':g.active_perimeter_changed?'Sí':'No']),'Crecimiento observado de cobros operativos');
+  const range = p.score.operating_scope_interval;
+  byId('component-interval').textContent = range[0]===0 && range[1]===100 ? 'Intervalo operativo [0, 100]: no informativo por dimensiones ausentes.' : `Intervalo del componente operativo: ${number(range[0])} a ${number(range[1])}. No es salud global ni un intervalo de confianza.`;
+  table('component-table',['Componente','Puntos','Delta mensual'],Object.entries(p.score.components).map(([key,value])=>[components[key]??key,number(value),number(p.change.component_deltas[key])]),'Scorecard fija no validada, escala parcial 0–100');
+  byId('component-reason').textContent = `${p.change.reason} Referencia de cobros cambiada: ${p.change.receipt_reference_changed?'sí':'no'}. Cobertura cambiada: ${p.change.coverage_changed?'sí':'no'}.`;
+  table('debt-table',['Evidencia','Importe EUR'],[['Principal pagado conocido',amount(p.service.principal_paid_known)],['Intereses pagados conocidos',amount(p.service.interest_paid_known)],['Servicio pagado observado',amount(p.service.service_paid_observed)],['AP pendiente estimado',amount(p.invoices.ap.pending)],['AP vencido estimado',amount(p.invoices.ap.overdue)],['AR pendiente estimado',amount(p.invoices.ar.pending)],['AR vencido estimado',amount(p.invoices.ar.overdue)],['AP nominal a vencimiento, todos los estados',amount(p.documents.ap_due_face)]],'Subtotales con distinto alcance; no sumarlos');
+  byId('mora').textContent = `Exposición ponderada por mora: ${p.invoices.mora_exposure_range?.map(amount).join(' a ')??'No disponible'}. Penalización parcial en puntos: ${p.score.mora_penalty_range.map(value=>number(value)).join(' a ')}.`;
+  byId('cash-date').textContent = `Reconstrucción disponible desde la recuperación de fuentes: ${company.retrieved_at}. Sin conciliación independiente ni estimación de saldo disponible.`;
+  const accounts = p.cash.accounts;
+  if (accounts.length) table('cash-table',['Cuenta / ancla','Moneda','Apertura A / B','Cierre A / B','Meses sin movimientos observados'],accounts.map(a=>[`${a.product_id} / ${company.anchors.find(b=>b.product_id===a.product_id)?.anchor_date??'sin fecha'}`,a.currency,a.opening_scenarios?.map(amount).join(' / ')??'No disponible',a.closing_scenarios?.map(amount).join(' / ')??'No disponible',number(a.gap_months,0)]),'Escenarios de reconstrucción retrospectiva, moneda nativa');
+  else put('cash-table',node('p','Sin cuentas con evidencia de reconstrucción para este cierre.','empty'));
+  const modelPoints = company.model_points.filter(p=>p.as_of<=cut), current = modelPoints.find(p=>p.as_of===cut);
+  chart('probability-chart',points.map(p=>p.as_of),Object.keys(titles).slice(0,2).map(target=>({label:titles[target],values:points.map(p=>probability(modelPoints.find(m=>m.as_of===p.as_of),target))})),'Probabilidades experimentales independientes de contracción y expansión de cobros, de cero a uno',true);
+  table('probability-table',['Proxy','Probabilidad','Motivo / meses del horizonte'],Object.entries(titles).map(([target,title])=>{ const f=current?.forecast[target]; return [title,percent(probability(current,target)),f?.reasons.length?f.reasons.join('; '):f?.horizon.map(month=>month.slice(0,7)).join(' a ')??company.model_reason??'No disponible']; }),'Simulaciones exportadas; no se ejecuta inferencia');
+  byId('model-reason').textContent = current ? `Exportado realmente el ${current.issued_at}. Antes de enero de 2026 las probabilidades no están disponibles. No se emitieron históricamente.` : `Sin predicción: ${company.model_reason??'no existe punto exportado para este cierre'}.`;
+  byId('source-note').textContent = `Export financiero: ${report.dataset_version}. Modelo: ${report.model_version}. Fuentes: ${company.source_keys.join(', ')}. Selección retrospectiva de ${cut}; la evaluación es un informe posterior y no depende de este corte.`;
+}
+function renderMetrics() {
+  const blocks = [];
+  Object.entries(report.metrics).forEach(([target,result],index)=>{
+    const block=node('div',undefined,'target'); block.append(node('h3',titles[target]??target));
+    const summary=node('div',undefined,'summary'); summary.append(node('span',`Seleccionado: ${result.selected??'ninguno'}`),node('span',`Etiquetados / elegibles: ${result.validation.labeled} / ${result.validation.eligible_inputs}`),node('span',`Grupos: ${result.validation.support.groups}`)); block.append(summary);
+    block.append(node('span',result.utility.pass?'Criterios internos superados; no validación independiente':'Criterios de utilidad no superados','badge failed'));
+    const holder=node('div'); holder.id=`metrics-table-${index}`; block.append(holder); blocks.push(block);
+  });
+  put('metrics',...blocks);
+  Object.entries(report.metrics).forEach(([target,result],index)=>{
+    table(`metrics-table-${index}`,['Candidato','AP ↑','Brier ↓','Brier por grupo ↓','Recall a 0,6'],Object.entries(result.candidates).map(([name,m])=>[name+(result.selected===name?' (seleccionado)':''),number(m.average_precision,3),number(m.brier,3),number(m.mean_group_brier,3),percent(m.recall)]),'Comparación con todos los candidatos, sin recalcular métricas');
+    const failed=Object.entries(result.utility.checks??{}).filter(([,passed])=>!passed).map(([key])=>key);
+    blocks[index].append(node('p',`Criterios fallidos: ${failed.join(', ')||result.utility.reason||'ninguno'}. AP: mayor es mejor. Brier: menor es mejor.`));
+  });
+}
+byId('company').replaceChildren(...report.companies.map(c=>new Option(c.name===c.id?c.id:`${c.id} — ${c.name}`,c.id)));
+byId('selection-note').textContent = `${report.companies.length} de ${report.total_companies} empresas incluidas. ${report.selection==='first_three_non_holdout_ids'?'Las tres primeras por identificador fuera del holdout, sin selección por resultados.':report.selection==='all'?'Dataset completo.':'Selección explícita al generar el archivo.'}`;
+byId('company').addEventListener('change',()=>renderCompany(true)); byId('month').addEventListener('change',()=>renderCompany());
+byId('coverage').textContent=JSON.stringify(report.coverage,null,2);
+Object.entries(report.sources_sha256).forEach(([path,hash])=>byId('hashes').append(node('dt',path),node('dd',hash)));
+renderCompany(true); renderMetrics();
+</script>
+</body>
+</html>
