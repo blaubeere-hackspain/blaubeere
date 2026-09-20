@@ -23,8 +23,8 @@ export function ReceiptOutlook({ outlook }: { outlook?: Outlook }) {
     { key: "receipt_contraction_3m", title: "Lower receipts", detail: "20% or more below the recent average", Icon: TrendingDown },
     { key: "receipt_expansion_3m", title: "Higher receipts", detail: "20% or more above the recent average", Icon: TrendingUp },
   ] as const;
-  return <section className="card receipt-outlook" aria-labelledby="receipt-outlook-title">
-    <header className="card-heading"><div><h2 id="receipt-outlook-title">Receipt outlook</h2><p className="small muted">{outlook ? `${date(outlook.horizon_start, true)} – ${date(outlook.horizon_end, true)}` : "The next three months"}</p></div><span className="badge">Experimental</span></header>
+  return <div className="receipt-outlook">
+    <header className="receipt-heading"><div><h3>Receipt outlook</h3><p className="small muted">{outlook ? `${date(outlook.horizon_start, true)} – ${date(outlook.horizon_end, true)}` : "The next three months"}</p></div><span className="badge">Experimental</span></header>
     <div className="receipt-checkpoints" aria-label="30, 60 and 90-day checkpoints">
       {[30, 60, 90].map(days => <div key={days}><strong>{days}<span> days</span></strong><time>{outlook ? checkpoint(outlook.as_of, days) : "Date unavailable"}</time><p>No separate forecast</p></div>)}
     </div>
@@ -52,5 +52,5 @@ export function ReceiptOutlook({ outlook }: { outlook?: Outlook }) {
         {outlook && <p className="receipt-version">Model {outlook.model_version} · Data through {date(outlook.as_of, true)}</p>}
       </div></details>
     </footer>
-  </section>;
+  </div>;
 }

@@ -1,10 +1,10 @@
 "use client";
 import "@fontsource-variable/inter";
 import { useEffect, useRef, useState } from "react";
-import { TriangleAlert } from "lucide-react";
 import { date, monthlyTimeline } from "../lib/format";
 import type { ModelRecord } from "../lib/types";
 import { SegmentedGauge } from "./financial-cards";
+import { ReceiptOutlook } from "./receipt-outlook";
 
 type ScorePoint = Pick<ModelRecord, "as_of" | "health_score">;
 export const modelNumber = (value: number | null | undefined, suffix = "", maximumFractionDigits = 1) => value == null ? "Not available" : `${new Intl.NumberFormat("en-GB", { maximumFractionDigits }).format(value)}${suffix}`;
@@ -34,13 +34,23 @@ function HealthScoreGauge({ row }: { row: ModelRecord }) {
 }
 
 export function HealthScorePanel({ records, row, detail = false, chartHeight = 290 }: { records: ScorePoint[]; row: ModelRecord; detail?: boolean; chartHeight?: number }) {
+  const [forecast, setForecast] = useState(false);
+  const showForecast = forecast && !detail && row.predictive !== undefined;
   const previous = records[records.findIndex(record => record.as_of === row.as_of) - 1];
   const delta = row.health_score != null && previous?.health_score != null ? row.health_score - previous.health_score : null;
   return <section className="card health-overview-panel" id="health" aria-labelledby="health-title">
-    <div className="health-overview-main"><div className="card-heading"><div><h2 id="health-title">Health score</h2><p className="small muted mt-1">{detail ? "Published rating at this cutoff" : "How the company’s cash-flow health has changed"}</p></div></div>
-      <div className="health-selected-score"><HealthScoreGauge row={row}/><div className="health-score-context"><span>{date(row.as_of,true)}</span><span>{delta === null ? "No comparable previous score" : `${delta > 0 ? "+" : ""}${modelNumber(delta)} points since ${date(previous.as_of)}`}</span></div></div>
-      {row.health_status && row.health_status.issues.length > 0 && <div className="health-risk-alert" role="status"><TriangleAlert size={17} aria-hidden/><div><strong>{row.health_status.issues[0].title}</strong><p>{date(row.as_of, true)} · {row.health_status.issues[0].unit === "EUR" ? new Intl.NumberFormat("en-GB", { style: "currency", currency: "EUR" }).format(row.health_status.issues[0].value) : `${modelNumber(row.health_status.issues[0].value)} points`}</p><details><summary>Review {row.health_status.issues.length === 1 ? "issue" : `${row.health_status.issues.length} issues`}</summary><ul>{row.health_status.issues.map(issue => <li key={issue.code}><strong>{issue.title}</strong><p>{issue.detail}{issue.unit === "EUR" && ` Amount: ${new Intl.NumberFormat("en-GB", { style: "currency", currency: "EUR" }).format(issue.value)}.`}</p></li>)}</ul><p>{row.health_status.policy_note}</p></details></div></div>}
-      {!detail && <ScoreChart records={records.filter(record => record.as_of >= "2025-01-01")} row={row} height={chartHeight}/>}
+    <div className="health-overview-main">
+      <div className="card-heading">
+        <div><h2 id="health-title">Health score</h2><p className="small muted mt-1">{detail ? "Published rating at this cutoff" : "How the company’s cash-flow health has changed"}</p></div>
+        {!detail && row.predictive !== undefined && <button type="button" className="button secondary health-outlook-toggle" aria-pressed={showForecast} aria-controls="health-content" onClick={() => setForecast(value => !value)}>Forecast</button>}
+      </div>
+      <div className="health-card-content" id="health-content">
+        <div className="health-score-view" aria-hidden={showForecast} inert={showForecast}>
+          <div className="health-selected-score"><HealthScoreGauge row={row}/><div className="health-score-context"><span>{date(row.as_of,true)}</span><span>{delta === null ? "No comparable previous score" : `${delta > 0 ? "+" : ""}${modelNumber(delta)} points since ${date(previous.as_of)}`}</span></div></div>
+          {!detail && <ScoreChart records={records.filter(record => record.as_of >= "2025-01-01")} row={row} height={chartHeight}/>}
+        </div>
+        {showForecast && <div className="health-outlook-view" role="region" aria-label="Receipt outlook" tabIndex={0}><ReceiptOutlook outlook={row.predictive}/></div>}
+      </div>
     </div>
   </section>;
 }
