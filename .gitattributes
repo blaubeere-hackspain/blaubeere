@@ -1,3 +1,4 @@
 data/*.csv filter=lfs diff=lfs merge=lfs -text
 data/clean/*.parquet filter=lfs diff=lfs merge=lfs -text
 data/marts/*.parquet filter=lfs diff=lfs merge=lfs -text
+reports/modeling/** -text

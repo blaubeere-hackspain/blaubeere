@@ -1,0 +1,88 @@
+{
+  "command": "bun reports/modeling/financial-v3/dataset-v1/delivery-v1/amendment-v2/check-financial-v3-e2e.ts",
+  "source_queries": 0,
+  "outcome_queries": 0,
+  "inference": 0,
+  "ids": [
+    "COMP_0001",
+    "COMP_0003",
+    "COMP_0014",
+    "COMP_0252"
+  ],
+  "mixed_currency_company": "COMP_0014",
+  "largest_profile_company": "COMP_0252",
+  "steps": [
+    {
+      "name": "COMP_0001 unauthenticated API and browser login",
+      "status": "passed"
+    },
+    {
+      "name": "negative scientific result, no headline/planner, sources and units",
+      "status": "passed"
+    },
+    {
+      "name": "all 24 API cuts, four real profiles including holdout/mixed-currency/largest",
+      "status": "passed"
+    },
+    {
+      "name": "COMP_0001 browser closed months, gaps, probabilities and currency",
+      "status": "passed"
+    },
+    {
+      "name": "COMP_0003 browser closed months, gaps, probabilities and currency",
+      "status": "passed"
+    },
+    {
+      "name": "COMP_0014 browser closed months, gaps, probabilities and currency",
+      "status": "passed"
+    },
+    {
+      "name": "COMP_0252 browser closed months, gaps, probabilities and currency",
+      "status": "passed"
+    },
+    {
+      "name": "keyboard selection and mobile layout",
+      "status": "passed"
+    },
+    {
+      "name": "403 authorization, strict-known-on and invalid dates, unconditional plan rejection",
+      "status": "passed"
+    },
+    {
+      "name": "COMP_0009 unauthenticated API and browser login",
+      "status": "passed"
+    },
+    {
+      "name": "trajectory unchanged: all development case API cuts and UI confirmations",
+      "status": "passed"
+    },
+    {
+      "name": "COMP_0001 unauthenticated API and browser login",
+      "status": "passed"
+    },
+    {
+      "name": "v1 eligible and abstained probability, old date behavior",
+      "status": "passed"
+    },
+    {
+      "name": "DEMO_001 unauthenticated API and browser login",
+      "status": "passed"
+    },
+    {
+      "name": "cash demo forecast and planner preserved",
+      "status": "passed"
+    }
+  ],
+  "browser": {
+    "version": "152.0.7977.82",
+    "executablePath": "/usr/bin/chromium",
+    "sandbox": true
+  },
+  "status": "passed",
+  "v3_api_cuts": 112,
+  "v3_ui_cuts": 17,
+  "trajectory_api_cuts": 72,
+  "max_response_bytes": 393106,
+  "page_errors": [],
+  "cleanup": "Only owned process groups and freshly created ephemeral identity directories removed"
+}

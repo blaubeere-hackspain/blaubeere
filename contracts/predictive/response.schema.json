@@ -1,0 +1,611 @@
+{
+  "$id": "urn:predictive-model:assessment-output:1",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "as_of": {
+      "format": "date",
+      "pattern": "^\\d{4}-\\d{2}-\\d{2}$",
+      "type": "string"
+    },
+    "bundle_sha256": {
+      "pattern": "^[a-f0-9]{64}$",
+      "type": "string"
+    },
+    "change": {
+      "properties": {
+        "causal_claim": {
+          "const": false
+        },
+        "reasons": {
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        },
+        "value": {
+          "type": [
+            "number",
+            "null"
+          ]
+        }
+      },
+      "required": [
+        "value",
+        "reasons",
+        "direction",
+        "causal_claim"
+      ],
+      "type": "object"
+    },
+    "company_id": {
+      "maxLength": 512,
+      "minLength": 1,
+      "pattern": "^\\S(?:[^\\x00-\\x1f]*\\S)?$",
+      "type": "string"
+    },
+    "evaluated_at": {
+      "format": "date-time",
+      "pattern": "^\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}(\\.\\d{1,6})?Z$",
+      "type": "string"
+    },
+    "explanations": {
+      "additionalProperties": false,
+      "properties": {
+        "prediction": {
+          "type": "string"
+        },
+        "score": {
+          "type": "object"
+        }
+      },
+      "required": [
+        "score",
+        "prediction"
+      ],
+      "type": "object"
+    },
+    "feature_version": {
+      "maxLength": 512,
+      "minLength": 1,
+      "pattern": "^\\S(?:[^\\x00-\\x1f]*\\S)?$",
+      "type": "string"
+    },
+    "financial": {
+      "description": "Versioned financial core result; money values are decimal strings. Serving nulls paid aggregates that would mix native currencies.",
+      "required": [
+        "core_version",
+        "company_id",
+        "as_of",
+        "view",
+        "score",
+        "features",
+        "cash",
+        "obligations",
+        "limitations"
+      ],
+      "type": "object"
+    },
+    "group_id": {
+      "maxLength": 512,
+      "minLength": 1,
+      "pattern": "^\\S(?:[^\\x00-\\x1f]*\\S)?$",
+      "type": "string"
+    },
+    "input_sha256": {
+      "pattern": "^[a-f0-9]{64}$",
+      "type": "string"
+    },
+    "model_inputs": {
+      "additionalProperties": false,
+      "properties": {
+        "currency_basis": {
+          "const": "EUR"
+        },
+        "eligible": {
+          "type": "boolean"
+        },
+        "feature_order": {
+          "const": [
+            "receipts_known",
+            "receipts_known_mean3",
+            "payments_known",
+            "payments_known_mean3",
+            "operating_low",
+            "operating_low_mean3",
+            "operating_high",
+            "operating_high_mean3",
+            "classification_coverage",
+            "classification_coverage_mean3",
+            "eur_coverage",
+            "eur_coverage_mean3",
+            "ap_due_face",
+            "ap_issued_known",
+            "ar_issued_known",
+            "unknown_due_rows",
+            "due_missing_eur_rows",
+            "service_paid_known"
+          ]
+        },
+        "missing_features": {
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        },
+        "reasons": {
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        },
+        "scope": {
+          "const": "observed_cash_perimeter"
+        },
+        "values": {
+          "additionalProperties": false,
+          "properties": {
+            "ap_due_face": {
+              "type": [
+                "number",
+                "null"
+              ]
+            },
+            "ap_issued_known": {
+              "type": [
+                "number",
+                "null"
+              ]
+            },
+            "ar_issued_known": {
+              "type": [
+                "number",
+                "null"
+              ]
+            },
+            "classification_coverage": {
+              "type": [
+                "number",
+                "null"
+              ]
+            },
+            "classification_coverage_mean3": {
+              "type": [
+                "number",
+                "null"
+              ]
+            },
+            "due_missing_eur_rows": {
+              "type": [
+                "number",
+                "null"
+              ]
+            },
+            "eur_coverage": {
+              "type": [
+                "number",
+                "null"
+              ]
+            },
+            "eur_coverage_mean3": {
+              "type": [
+                "number",
+                "null"
+              ]
+            },
+            "operating_high": {
+              "type": [
+                "number",
+                "null"
+              ]
+            },
+            "operating_high_mean3": {
+              "type": [
+                "number",
+                "null"
+              ]
+            },
+            "operating_low": {
+              "type": [
+                "number",
+                "null"
+              ]
+            },
+            "operating_low_mean3": {
+              "type": [
+                "number",
+                "null"
+              ]
+            },
+            "payments_known": {
+              "type": [
+                "number",
+                "null"
+              ]
+            },
+            "payments_known_mean3": {
+              "type": [
+                "number",
+                "null"
+              ]
+            },
+            "receipts_known": {
+              "type": [
+                "number",
+                "null"
+              ]
+            },
+            "receipts_known_mean3": {
+              "type": [
+                "number",
+                "null"
+              ]
+            },
+            "service_paid_known": {
+              "type": [
+                "number",
+                "null"
+              ]
+            },
+            "unknown_due_rows": {
+              "type": [
+                "number",
+                "null"
+              ]
+            }
+          },
+          "required": [
+            "receipts_known",
+            "receipts_known_mean3",
+            "payments_known",
+            "payments_known_mean3",
+            "operating_low",
+            "operating_low_mean3",
+            "operating_high",
+            "operating_high_mean3",
+            "classification_coverage",
+            "classification_coverage_mean3",
+            "eur_coverage",
+            "eur_coverage_mean3",
+            "ap_due_face",
+            "ap_issued_known",
+            "ar_issued_known",
+            "unknown_due_rows",
+            "due_missing_eur_rows",
+            "service_paid_known"
+          ],
+          "type": "object"
+        }
+      },
+      "required": [
+        "values",
+        "eligible",
+        "reasons",
+        "missing_features",
+        "currency_basis",
+        "scope",
+        "feature_order"
+      ],
+      "type": "object"
+    },
+    "model_version": {
+      "maxLength": 512,
+      "minLength": 1,
+      "pattern": "^\\S(?:[^\\x00-\\x1f]*\\S)?$",
+      "type": "string"
+    },
+    "policy_version": {
+      "maxLength": 512,
+      "minLength": 1,
+      "pattern": "^\\S(?:[^\\x00-\\x1f]*\\S)?$",
+      "type": "string"
+    },
+    "predictions": {
+      "additionalProperties": false,
+      "properties": {
+        "current_receipt_dip_3m": {
+          "additionalProperties": false,
+          "properties": {
+            "calibration": {
+              "const": "uncalibrated_internal_retrospective"
+            },
+            "fit_label_cutoff": {
+              "anyOf": [
+                {
+                  "format": "date",
+                  "pattern": "^\\d{4}-\\d{2}-\\d{2}$",
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ]
+            },
+            "horizon_end": {
+              "format": "date",
+              "pattern": "^\\d{4}-\\d{2}-\\d{2}$",
+              "type": "string"
+            },
+            "horizon_start": {
+              "format": "date",
+              "pattern": "^\\d{4}-\\d{2}-\\d{2}$",
+              "type": "string"
+            },
+            "probabilities": {
+              "anyOf": [
+                {
+                  "type": "null"
+                },
+                {
+                  "additionalProperties": false,
+                  "properties": {
+                    "mixed": {
+                      "maximum": 1,
+                      "minimum": 0,
+                      "type": "number"
+                    },
+                    "persistent": {
+                      "maximum": 1,
+                      "minimum": 0,
+                      "type": "number"
+                    },
+                    "recovered": {
+                      "maximum": 1,
+                      "minimum": 0,
+                      "type": "number"
+                    }
+                  },
+                  "required": [
+                    "recovered",
+                    "persistent",
+                    "mixed"
+                  ],
+                  "type": "object"
+                }
+              ]
+            },
+            "reasons": {
+              "items": {
+                "type": "string"
+              },
+              "type": "array"
+            },
+            "scope": {
+              "const": "classified_operating_receipts_not_solvency"
+            },
+            "target": {
+              "const": "current_receipt_dip_3m"
+            }
+          },
+          "required": [
+            "target",
+            "probabilities",
+            "reasons",
+            "horizon_start",
+            "horizon_end",
+            "calibration",
+            "scope",
+            "fit_label_cutoff"
+          ],
+          "type": "object"
+        },
+        "receipt_contraction_3m": {
+          "additionalProperties": false,
+          "properties": {
+            "calibration": {
+              "const": "uncalibrated_internal_retrospective"
+            },
+            "fit_label_cutoff": {
+              "anyOf": [
+                {
+                  "format": "date",
+                  "pattern": "^\\d{4}-\\d{2}-\\d{2}$",
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ]
+            },
+            "horizon_end": {
+              "format": "date",
+              "pattern": "^\\d{4}-\\d{2}-\\d{2}$",
+              "type": "string"
+            },
+            "horizon_start": {
+              "format": "date",
+              "pattern": "^\\d{4}-\\d{2}-\\d{2}$",
+              "type": "string"
+            },
+            "probabilities": {
+              "anyOf": [
+                {
+                  "type": "null"
+                },
+                {
+                  "additionalProperties": false,
+                  "properties": {
+                    "0": {
+                      "maximum": 1,
+                      "minimum": 0,
+                      "type": "number"
+                    },
+                    "1": {
+                      "maximum": 1,
+                      "minimum": 0,
+                      "type": "number"
+                    }
+                  },
+                  "required": [
+                    "0",
+                    "1"
+                  ],
+                  "type": "object"
+                }
+              ]
+            },
+            "reasons": {
+              "items": {
+                "type": "string"
+              },
+              "type": "array"
+            },
+            "scope": {
+              "const": "classified_operating_receipts_not_solvency"
+            },
+            "target": {
+              "const": "receipt_contraction_3m"
+            }
+          },
+          "required": [
+            "target",
+            "probabilities",
+            "reasons",
+            "horizon_start",
+            "horizon_end",
+            "calibration",
+            "scope",
+            "fit_label_cutoff"
+          ],
+          "type": "object"
+        },
+        "receipt_expansion_3m": {
+          "additionalProperties": false,
+          "properties": {
+            "calibration": {
+              "const": "uncalibrated_internal_retrospective"
+            },
+            "fit_label_cutoff": {
+              "anyOf": [
+                {
+                  "format": "date",
+                  "pattern": "^\\d{4}-\\d{2}-\\d{2}$",
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ]
+            },
+            "horizon_end": {
+              "format": "date",
+              "pattern": "^\\d{4}-\\d{2}-\\d{2}$",
+              "type": "string"
+            },
+            "horizon_start": {
+              "format": "date",
+              "pattern": "^\\d{4}-\\d{2}-\\d{2}$",
+              "type": "string"
+            },
+            "probabilities": {
+              "anyOf": [
+                {
+                  "type": "null"
+                },
+                {
+                  "additionalProperties": false,
+                  "properties": {
+                    "0": {
+                      "maximum": 1,
+                      "minimum": 0,
+                      "type": "number"
+                    },
+                    "1": {
+                      "maximum": 1,
+                      "minimum": 0,
+                      "type": "number"
+                    }
+                  },
+                  "required": [
+                    "0",
+                    "1"
+                  ],
+                  "type": "object"
+                }
+              ]
+            },
+            "reasons": {
+              "items": {
+                "type": "string"
+              },
+              "type": "array"
+            },
+            "scope": {
+              "const": "classified_operating_receipts_not_solvency"
+            },
+            "target": {
+              "const": "receipt_expansion_3m"
+            }
+          },
+          "required": [
+            "target",
+            "probabilities",
+            "reasons",
+            "horizon_start",
+            "horizon_end",
+            "calibration",
+            "scope",
+            "fit_label_cutoff"
+          ],
+          "type": "object"
+        }
+      },
+      "required": [
+        "receipt_contraction_3m",
+        "receipt_expansion_3m",
+        "current_receipt_dip_3m"
+      ],
+      "type": "object"
+    },
+    "request_id": {
+      "maxLength": 512,
+      "minLength": 1,
+      "pattern": "^\\S(?:[^\\x00-\\x1f]*\\S)?$",
+      "type": "string"
+    },
+    "schema_version": {
+      "const": "predictive-assessment-1"
+    },
+    "snapshot_id": {
+      "maxLength": 512,
+      "minLength": 1,
+      "pattern": "^\\S(?:[^\\x00-\\x1f]*\\S)?$",
+      "type": "string"
+    },
+    "view": {
+      "enum": [
+        "as_of",
+        "reconstructed_retrospective"
+      ]
+    },
+    "warnings": {
+      "items": {
+        "type": "string"
+      },
+      "type": "array"
+    }
+  },
+  "required": [
+    "schema_version",
+    "request_id",
+    "company_id",
+    "group_id",
+    "snapshot_id",
+    "model_version",
+    "feature_version",
+    "policy_version",
+    "as_of",
+    "view",
+    "input_sha256",
+    "bundle_sha256",
+    "evaluated_at",
+    "financial",
+    "change",
+    "predictions",
+    "model_inputs",
+    "explanations",
+    "warnings"
+  ],
+  "title": "Modelo predictivo \u2014 evaluaci\u00f3n",
+  "type": "object"
+}

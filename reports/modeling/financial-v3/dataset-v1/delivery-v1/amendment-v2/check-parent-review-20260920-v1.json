@@ -1,0 +1,104 @@
+{
+  "version": "financial-v3-delivery-parent-review-1",
+  "review_date_local": "2026-09-20",
+  "review_type": "parent_inline_fallback_not_independent",
+  "technical_delivery": "accepted_under_explicit_single_cache_amendment_with_disclosed_review_limitation",
+  "whole_goal_complete": false,
+  "scientific_utility_pass": false,
+  "independent_review": {
+    "completed": false,
+    "attempt": "Independent Amended V3 Delivery Review",
+    "failure": "service_model_rate_limit_before_any_tool_execution",
+    "trace_id": "774de2bbf1462635ebbf3bbc1cbaa500",
+    "fallback": "Allowed by user workflow, disclosed in conversation; no model or permission switch"
+  },
+  "parent_observed_checks": [
+    {
+      "command": ".venv/bin/python -B scripts/financial_v3_dataset_delivery_amendment.py verify",
+      "exit_code": 0,
+      "historical_exact_bindings": 3025,
+      "exception_count": 1,
+      "cache_path": "apps/app/tsconfig.tsbuildinfo",
+      "cache_sha256": "13fe2c0a94935bf288719f902d01a97fb854056e75f187d66b9e5f8a76d79051",
+      "old_delivery_evidence_unchanged": true,
+      "old_delivery_evidence_files": 46,
+      "current_source_files": 26,
+      "decision_sha256": "3fd536ba3b5432adb71282ae7da6933a0f1297a02306c7c88dbf2804d0bb44b5",
+      "current_source_receipt_sha256": "4e1bae6612f2ef08e9397a850d4a8ea3417e8c8f77dd025075d85cd159026bd2",
+      "historical_whole_worktree_integrity": false,
+      "original_verifier_expected_to_fail": true,
+      "source_queries": 0,
+      "outcome_queries": 0,
+      "fits": 0
+    },
+    {
+      "command": ".venv/bin/python -B -m unittest tests.test_financial_v3_dataset_delivery_amendment",
+      "exit_code": 0,
+      "tests_passed": 20,
+      "failures": 0
+    }
+  ],
+  "inspected": [
+    "scripts/financial_v3_dataset_delivery_amendment.py",
+    "tests/test_financial_v3_dataset_delivery_amendment.py",
+    "services/api/src/financial_v3.rs",
+    "services/api/src/finance.rs application integration diff",
+    "apps/app/app/dashboard/page.tsx application integration diff",
+    "apps/app/components/financial-v3-assessment.tsx",
+    "apps/app/lib/financial-v3.ts",
+    "amendment-v2 verification, command and source receipts"
+  ],
+  "review_conclusions": [
+    "Pinned amendment accepts only the exact generated cache path; old lost bytes and expected hash are preserved as an unresolved historical mismatch, not claimed recovered.",
+    "Other historical bindings, captured application-before bytes, scientific artifact inventories and current application sources remain checked separately.",
+    "Negative tests reject expanded exceptions, altered scientific bytes, symlinks, traversal, malformed cache and changed source-receipt field lists.",
+    "Existing company authorization precedes lazy shard loading; fixed dataset/model manifest pins and bounded local paths remain enforced.",
+    "The UI distinguishes retrospective reconstruction, native cash currency, EUR flow units, unavailable full health, receipt-only probabilities and failed utility.",
+    "Fallback is suitable for this local read-only experimental delivery: no automatic financial action or scientific promotion is enabled. It is not independent scientific or security certification."
+  ],
+  "worker_checks_referenced_not_reexecuted_by_parent": {
+    "evidence": "verification.json and command-*.json in this amendment directory",
+    "pure_python_fixture_tests": 127,
+    "bun_run_check": "passed on final source",
+    "typescript_tests": 8,
+    "ordinary_rust_tests": 12,
+    "explicit_real_export_rust_tests": 8,
+    "browser_steps": 15,
+    "v3_api_cuts": 112,
+    "v3_ui_cuts": 17,
+    "trajectory_api_cuts": 72,
+    "browser_errors": 0,
+    "full_financial_python_discovery": "not run; obsolete application-snapshot assertions remain unchanged and are not claimed passing on the delivered application"
+  },
+  "performance_comparison": {
+    "source": "../../model-v1/metrics-summary.json",
+    "same_v3_validation_population_only": true,
+    "validation_labeled": 28,
+    "validation_eligible": 345,
+    "validation_groups": 8,
+    "contraction": {
+      "constant_ap": 0.32142857142857145,
+      "persistence_ap": 0.443001443001443,
+      "constant_brier": 0.22874179931851704,
+      "persistence_brier": 0.2111266938971472,
+      "selected": "persistence",
+      "recall_at_0_6": 0.0,
+      "utility_pass": false
+    },
+    "expansion": {
+      "constant_ap": 0.35714285714285715,
+      "persistence_ap": 0.41000000000000003,
+      "constant_brier": 0.24318199155774806,
+      "persistence_brier": 0.22460917697535818,
+      "selected": "persistence",
+      "recall_at_0_6": 0.0,
+      "utility_pass": false
+    },
+    "interpretation": "Selected persistence improves on constant prevalence for these two proxies, but logistic candidates do not beat persistence on selection Brier. V1 deficit, V2 transitions and V3 receipt targets are not directly comparable. Small selection-biased validation does not establish predictive improvement or all six questions."
+  },
+  "remaining": [
+    "Full health remains unavailable; current receipt dip forecast has insufficient class support.",
+    "Predictive utility and anticipation remain failed or unvalidated.",
+    "Further modeling requires a separate versioned development protocol using admissible parts of the existing 24-month dataset; no acquisition prerequisite, no silent retuning or reopening sealed experiments."
+  ]
+}

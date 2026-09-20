@@ -1,0 +1,160 @@
+{
+  "command": "node reports/modeling/financial-v3/dataset-v1/delivery-v1/cache-recovery-1/recovery.mjs reconstruct",
+  "method": "Single TypeScript performIncrementalCompilation with immutable workspace virtual paths, source-before read overrides, current incremental seed, original config/include order, and intercepted build-info-only output. No actual app/config/cache writes.",
+  "target_sha256": "a3891095f07a0fd0c435132d2bc560e8970c79f2e9bc8945fe02b0a36affacbf",
+  "seed": {
+    "path": "apps/app/tsconfig.tsbuildinfo",
+    "bytes": 138287,
+    "sha256": "8ecfc04867158213c1034082f48adf108d0a002a1aa92058617cb4334c4307fc"
+  },
+  "typescript_version": "5.9.3",
+  "configuration": {
+    "options": {
+      "target": 9,
+      "lib": [
+        "lib.dom.d.ts",
+        "lib.dom.iterable.d.ts",
+        "lib.esnext.d.ts"
+      ],
+      "strict": true,
+      "noEmit": true,
+      "skipLibCheck": true,
+      "esModuleInterop": true,
+      "module": 99,
+      "moduleResolution": 100,
+      "resolveJsonModule": true,
+      "isolatedModules": true,
+      "jsx": 4,
+      "incremental": true,
+      "plugins": [
+        {
+          "name": "next"
+        }
+      ],
+      "allowJs": true,
+      "configFilePath": "/home/mikel/.herdr/worktrees/predictive-models/feat-training-devin/apps/app/tsconfig.json"
+    },
+    "root_names": [
+      "apps/app/next-env.d.ts",
+      "apps/app/next.config.ts",
+      "apps/app/lib/api.ts",
+      "apps/app/lib/format.ts",
+      "apps/app/lib/trajectory-types.ts",
+      "apps/app/lib/trajectory.test.ts",
+      "apps/app/lib/trajectory.ts",
+      "apps/app/lib/types.ts",
+      "apps/app/app/error.tsx",
+      "apps/app/app/layout.tsx",
+      "apps/app/app/page.tsx",
+      "apps/app/app/connect/page.tsx",
+      "apps/app/app/dashboard/page.tsx",
+      "apps/app/app/login/page.tsx",
+      "apps/app/components/auth-layout.tsx",
+      "apps/app/components/cash-chart.tsx",
+      "apps/app/components/connections.tsx",
+      "apps/app/components/dialog.tsx",
+      "apps/app/components/planner.tsx",
+      "apps/app/components/proxy-assessment.tsx",
+      "apps/app/components/trajectory-assessment.tsx",
+      "apps/app/.next/types/cache-life.d.ts",
+      "apps/app/.next/types/root-params.d.ts",
+      "apps/app/.next/types/routes.d.ts",
+      "apps/app/.next/types/validator.ts",
+      "apps/app/.next/dev/types/cache-life.d.ts",
+      "apps/app/.next/dev/types/root-params.d.ts",
+      "apps/app/.next/dev/types/routes.d.ts",
+      "apps/app/.next/dev/types/validator.ts"
+    ]
+  },
+  "excluded_new_v3_files": [
+    "apps/app/components/financial-v3-assessment.tsx",
+    "apps/app/lib/financial-v3.ts",
+    "apps/app/lib/financial-v3.test.ts"
+  ],
+  "virtual_source_overrides": [
+    {
+      "path": "apps/app/app/dashboard/page.tsx",
+      "bytes": 18784,
+      "sha256": "6dcccb6cf7886507fbf9537c07d2130b627338e314cf9da0bbc37ff439915fd8"
+    },
+    {
+      "path": "apps/app/app/globals.css",
+      "bytes": 25571,
+      "sha256": "5c1839468736cc9576695f8d191722baaf1e19ec1fcbc5af91f28c1911933574"
+    },
+    {
+      "path": "apps/app/components/trajectory-assessment.tsx",
+      "bytes": 15983,
+      "sha256": "f6871aa14d1d78dcbc884477be73fd539c0817d7139226a0c5afda675bc730be"
+    },
+    {
+      "path": "apps/app/lib/trajectory-types.ts",
+      "bytes": 4871,
+      "sha256": "18c184503486c10df53542b967ee0adc8c0a11782d382eb6f302f387f17ed888"
+    },
+    {
+      "path": "apps/app/lib/trajectory.test.ts",
+      "bytes": 1801,
+      "sha256": "76679c840f8efcadc389d0290ec182d8d94006a0b7330c5ca60218cecf8838d0"
+    },
+    {
+      "path": "apps/app/lib/trajectory.ts",
+      "bytes": 1539,
+      "sha256": "9d4181be8e521e72a620b273105480055c6192e4203df3feac6c9c82e1ae8def"
+    },
+    {
+      "path": "apps/app/lib/types.ts",
+      "bytes": 4306,
+      "sha256": "244b09e988837a5bfa0cfe47b1fff4d4c51998d236b9ebaae9e74c1632e8159c"
+    },
+    {
+      "path": "apps/app/next-env.d.ts",
+      "bytes": 288,
+      "sha256": "1862ac4bbbc5192d4bf562161df66ea547ed3e67173100656ab606ae9797db2b"
+    }
+  ],
+  "next_env_model": "CLI next typegen regenerates production .next/types imports before tsc. Modeled bytes match version already present in current root compiler cache; working dev next-env file is untouched.",
+  "generated_type_inputs": [
+    {
+      "path": "apps/app/.next/types/routes.d.ts",
+      "sha256": "db375d18994a507e67dcd457a7b4262d4695d4749dba51824af6478dafac6585"
+    },
+    {
+      "path": "apps/app/.next/types/root-params.d.ts",
+      "sha256": "f3387dd7800eec3c34273f7a8efad13e864598c7e8f788d321e407390989bb59"
+    },
+    {
+      "path": "apps/app/.next/types/cache-life.d.ts",
+      "sha256": "4f984436b10cfb43ccf7fc3114dcb851cbefa4d58b7d8ae741aaae0f6e330129"
+    },
+    {
+      "path": "apps/app/.next/types/validator.ts",
+      "sha256": "e372ac8a2bcde58e0ef2693e8e2abbdbab4ac52f54b34e360d81c5a9a9d1c500"
+    },
+    {
+      "path": "apps/app/.next/dev/types/cache-life.d.ts",
+      "sha256": "4f984436b10cfb43ccf7fc3114dcb851cbefa4d58b7d8ae741aaae0f6e330129"
+    },
+    {
+      "path": "apps/app/.next/dev/types/root-params.d.ts",
+      "sha256": "f3387dd7800eec3c34273f7a8efad13e864598c7e8f788d321e407390989bb59"
+    },
+    {
+      "path": "apps/app/.next/dev/types/routes.d.ts",
+      "sha256": "db375d18994a507e67dcd457a7b4262d4695d4749dba51824af6478dafac6585"
+    },
+    {
+      "path": "apps/app/.next/dev/types/validator.ts",
+      "sha256": "6913dacb8323257a81932cc176dcb8c1eeba54ab4e03077d3725f32e49b56ab8"
+    }
+  ],
+  "budget": {
+    "candidate_generations": 1,
+    "correction_generations_available_only_for_understood_difference": 1
+  },
+  "helper": {
+    "path": "reports/modeling/financial-v3/dataset-v1/delivery-v1/cache-recovery-1/recovery.mjs",
+    "bytes": 16021,
+    "sha256": "46f2916727644ea3ac965d28d1c883aab69512a03e8510fb169e15d9b7cb3df4"
+  }
+}

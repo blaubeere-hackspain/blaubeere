@@ -1,0 +1,173 @@
+{
+  "artifacts_sha256": {
+    "config.json": "6429b306683f37a4a3076711d0c8c4780a5c61ddef25a0ebdfe57529ef62f418",
+    "development.json": "3e09bfd20e81acd33b6441ccfea4d3a7beb87d8b5f5fae3c9e7b043f50a078cc",
+    "development.json.integrity.json": "9060e13b6f3e34390dad0e6218dd9c56e38dbd435acd73bb7a16b769fcf7cc79",
+    "development_receipt.json": "3f80139973912a339f914707f5c1921715796115768811317f184a211f0a7193",
+    "development_support.json": "0564f4734b8b2530968c3d42e5dd0ceab35318cb360d541f2fb0973b8e3ea887",
+    "development_support.json.integrity.json": "087c552afb92a3f21d92975cfed4e5dd5a0d48def267d2ba1ae72c8ce34ef7cf",
+    "final_training_receipt.json": "c8fab34aec998943d6b2cc698e7476f683ff2e3cffd5639109045630baf6169c",
+    "final_training_support.json": "b48b0863cb014fddf84aa0fd37d969c2410bd4136b3495128d92d12bccdfa125",
+    "final_training_support.json.integrity.json": "e6a1dc12f8bccb30d5eb14eb1026bb476517402bfd5657e067231f18e70dea57",
+    "freeze.json": "15fc94f99b4016f326cebebb5a47c11c138ee325b28f6e0bbeb2fae0a4d2011c",
+    "hgb_leaf15.fold1.json": "8214bb9dc85b60c34e0187688694f9a4f98591e75c33fe066fe8305aef6f1985",
+    "hgb_leaf15.fold1.json.integrity.json": "6bbbb4b040955feb08d24009486ac794909801c29db80a11ddd1abd2e3a23d59",
+    "hgb_leaf15.fold2.json": "97288da8125ba77f0959be9ca0f1892bb3625085d9e0e49a8cbac7010bd699a8",
+    "hgb_leaf15.fold2.json.integrity.json": "ff8d6fba6972ebb7d49995c352e02a23a7aedfae2f73c35059a8f26a0f86ed6f",
+    "hgb_leaf7.fold1.json": "d90149338fb24a0b714c9bf406d6d14d1e87cf4d2139aa5a9f27a16731f5bcc1",
+    "hgb_leaf7.fold1.json.integrity.json": "61561596e7a15e33954fde71ff41253a01b6d6d5e47bf863beea908d7e2980d3",
+    "hgb_leaf7.fold2.json": "30fe3033d8bd3f2968d41775440e5de3007ad1586a5cf3ac38d7b4e87cf945ed",
+    "hgb_leaf7.fold2.json.integrity.json": "de0555601058c2e078052bef090f5f06c57c143f9c136ef3536ffdbd96690a9a",
+    "logistic_c0.1.fold1.json": "81d976803aadbe1413056e8e300480baf42c0cf69682bdb7365e99329a390ee3",
+    "logistic_c0.1.fold1.json.integrity.json": "fdda345f7e59d91dc0380c486b14e0594e545bf2a633f72b2e7c57a1b87e6427",
+    "logistic_c0.1.fold2.json": "52280035193dd57fb056145aae5a78808de72dd8b8484b04bca68bafce4b9e2f",
+    "logistic_c0.1.fold2.json.integrity.json": "0f983ea6e71093f9680a4e64a3a1476c9633c74c1440050ca2d58877937f9551",
+    "logistic_c1.fold1.json": "0c52d4433802b381e88d5001428f60b791637f81ef92e3b1880a17892e2762f7",
+    "logistic_c1.fold1.json.integrity.json": "7c1499a9ddff91008ad0ad5722239764d0dbf68ba045e3c87ce5b6f0344922ce",
+    "logistic_c1.fold2.json": "ef1737d5bcbf3a55901304201c4d26c51dea61e4b64250d49847798019758f07",
+    "logistic_c1.fold2.json.integrity.json": "64ecc3afa8b232a266584f4bad61cd841a6c6e2732b0483e9f884260bf507130",
+    "model.joblib": "2ac7cffd080d6c0a22422c90a3b806ae2f053d585eb4b7330078ca9c588bcbf5",
+    "selection.json": "e1f641bcdf6b3dc0e5d68b3657661f7b3f68bb4d23f0ab7ef2c4b3596949edb7",
+    "selection.json.integrity.json": "7b09fe972426b61ca3cd725bcda0f7c7d6a83c5114f29194eaab4731261b8f01"
+  },
+  "candidate": {
+    "family": "hgb",
+    "id": "hgb_leaf15",
+    "max_leaf_nodes": 15
+  },
+  "feature_order": [
+    "operating_min_ratio",
+    "operating_max_ratio",
+    "net_ratio",
+    "operating_in_ratio",
+    "operating_out_ratio",
+    "financing_in_ratio",
+    "financing_out_ratio",
+    "uncertainty_ratio",
+    "log_gross",
+    "log_tx",
+    "log_accounts",
+    "operating_identified_ratio",
+    "net_ratio_mean_3m",
+    "net_ratio_std_3m",
+    "net_ratio_slope_3m",
+    "operating_min_ratio_mean_3m",
+    "operating_max_ratio_mean_3m",
+    "log_gross_mean_3m",
+    "log_gross_std_3m",
+    "deficit_frequency_3m",
+    "net_ratio_delta_prior_3m",
+    "log_gross_delta_prior_3m",
+    "net_ratio_mean_6m",
+    "net_ratio_std_6m",
+    "net_ratio_slope_6m",
+    "operating_min_ratio_mean_6m",
+    "operating_max_ratio_mean_6m",
+    "log_gross_mean_6m",
+    "log_gross_std_6m",
+    "deficit_frequency_6m",
+    "net_ratio_delta_prior_6m",
+    "log_gross_delta_prior_6m"
+  ],
+  "input_binding": {
+    "current_pointer_sha256": "1de7ef03dd4af13b481bf74c50b7201684a0146eb206b36cd0a90330a6e68d33",
+    "duckdb": "1.5.5",
+    "input_sha256": {
+      "data/marts/panel_flujos.parquet": "af5cf4be59d9e3e1a98841208b69b029127345cd9c02a47a553e986dc0c7ebd7",
+      "data/marts/targets_proxy.parquet": "6529ebeadd26f67925da0d7f2d0ed155295a57598393b7fdb0c6167f958f4fc0"
+    },
+    "python": "3.13.15",
+    "raw_input_sha256": {
+      "balances.csv": "86664c229cf52554d75d7efb864fc07a94a1bebcd61a3ac85abc344f3ba2a30c",
+      "banking_products.csv": "0fc5aa20fea32981a962cc08251720ece3f2afad8495910111d2fd8b16514d3c",
+      "companies.csv": "5496ad00a1e9228f7e756a55c71c512fd06a73ad45a09ce3f103a620a5ad72ae",
+      "debt_products.csv": "bf38430ccd15f6a9ca8769113c5f47d4aeee8fe55c425687731481cd002f05d8",
+      "debt_schedule_config.csv": "b0d6cc3e6810e31d526eb7f4be3c2abe31496f74f5ddd58163876d60de168ea2",
+      "groups.csv": "fa18d3f42cd24d7640bff22d7a9504293574c2338ce85d425e3134f18f169a8c",
+      "invoices.csv": "6686bd878244881bac78348a108852f3f30713ef244267f1fa3754b9be619c53",
+      "transactions.csv": "000a6820a7500c66aa70a17b3e813d0c57a8270b3c58f6f2f006708a20228f2b"
+    },
+    "run_id": "20260919T124814Z-e5302b58",
+    "run_manifest_sha256": "88059a142248927f2c6ae0816993eae6e1177abf3138f089df09d93bc642ce6b",
+    "run_path": "/home/mikel/.herdr/worktrees/predictive-models/feat-training-devin/data/runs/20260919T124814Z-e5302b58",
+    "source_sha256": {
+      "scripts/model_features.py": "984831778e8b9f2fa14be4064ecba2f98a882ca19fa2d53733594a87389b59c1",
+      "scripts/model_protocol.py": "a49307c5d1dd8846414d34007b028771284a95a110b1a57139073275a2d50c96",
+      "tests/test_model_features.py": "77dcfa92b97eb97fc43f7f320bff9a0cf266fa1388fb4247b5626eeb66c7497f",
+      "tests/test_model_protocol.py": "00024ffb0d775338593a907725ac12b06080d7b13d95f037fa341d0e3a58724f"
+    },
+    "target_access": "Byte-level SHA only in prepare; target parquet is never queried or parsed"
+  },
+  "loading_policy": "Trusted fixed local artifact only; SHA verifies integrity, not safety of external pickles",
+  "model_version": "experiment-v1:hgb_leaf15",
+  "parameters": {
+    "categorical_features": "from_dtype",
+    "class_weight": null,
+    "early_stopping": false,
+    "interaction_cst": null,
+    "l2_regularization": 5.0,
+    "learning_rate": 0.05,
+    "loss": "log_loss",
+    "max_bins": 255,
+    "max_depth": 3,
+    "max_features": 1.0,
+    "max_iter": 150,
+    "max_leaf_nodes": 15,
+    "min_samples_leaf": 20,
+    "monotonic_cst": null,
+    "n_iter_no_change": 10,
+    "random_state": 1729,
+    "scoring": "loss",
+    "tol": 1e-07,
+    "validation_fraction": 0.1,
+    "verbose": 0,
+    "warm_start": false
+  },
+  "prepared_sha256": "ddb51011076204f1f1856d09f2e346765ccb098df68efbce941e8ee68f9c0178",
+  "runtime": {
+    "cloudpickle": "3.1.2",
+    "duckdb": "1.5.5",
+    "joblib": "1.6.0",
+    "numpy": "2.5.3",
+    "python": "3.13.15",
+    "scikit-learn": "1.7.2",
+    "scipy": "1.18.1",
+    "threadpoolctl": "3.6.0"
+  },
+  "scope": "Synthetic retrospective probability estimate of target_deficit_3m proxy only; not calibrated, default, official health score, cash balance or causal diagnosis",
+  "source_sha256": {
+    "requirements-model.in": "f55c24e7326c77a470c0a2f70ed56268d12cb9958854443d95bf28f426ba30a2",
+    "requirements-model.txt": "3238a52ee95b37940369dd0e8c427602c0b226bb29b544429e488776bf5abc07",
+    "scripts/model_experiment.py": "bf6991272ba6ae80fe86a0bfb17f3b7ee258dcc6ac71577d846d76a62638cd48",
+    "scripts/model_features.py": "984831778e8b9f2fa14be4064ecba2f98a882ca19fa2d53733594a87389b59c1",
+    "scripts/model_inference.py": "b94e8391340a659b03fe139c7f7c5b1fc56c4a6a182ee7278d2485623b83cd5b",
+    "scripts/model_learning.py": "c1f4ced484bd47ece9c954f6fb2cca661ea95a0f32e3f6cb7cc342c7228a6651",
+    "scripts/model_protocol.py": "a49307c5d1dd8846414d34007b028771284a95a110b1a57139073275a2d50c96",
+    "scripts/model_training_io.py": "565c687d861669d90bc6ba4701946ea72f83df1db7ab5824f2fd0666f50b9c68",
+    "tests/test_model_training.py": "90ce65a8b4e14d5923c751d595601644363932e3a0a86352c1c0a1accda2b28e"
+  },
+  "status": "fitted_before_holdout",
+  "support": {
+    "censored": 3203,
+    "classes": {
+      "0": {
+        "groups": 105,
+        "rows": 1930
+      },
+      "1": {
+        "groups": 93,
+        "rows": 1700
+      }
+    },
+    "groups": 112,
+    "minimum": {
+      "groups_per_class": 5,
+      "groups_total": 10,
+      "rows_per_class": 20
+    },
+    "passed": true,
+    "prospective_rows": 6833
+  },
+  "train_prevalence": 0.46831955922865015,
+  "train_rows": 3630
+}

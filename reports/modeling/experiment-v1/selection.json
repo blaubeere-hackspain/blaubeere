@@ -1,0 +1,12 @@
+{
+  "artifacts_sha256": {
+    "config.json": "6429b306683f37a4a3076711d0c8c4780a5c61ddef25a0ebdfe57529ef62f418",
+    "development.json": "3e09bfd20e81acd33b6441ccfea4d3a7beb87d8b5f5fae3c9e7b043f50a078cc",
+    "development_support.json": "0564f4734b8b2530968c3d42e5dd0ceab35318cb360d541f2fb0973b8e3ea887",
+    "freeze.json": "15fc94f99b4016f326cebebb5a47c11c138ee325b28f6e0bbeb2fae0a4d2011c"
+  },
+  "development_sha256": "3e09bfd20e81acd33b6441ccfea4d3a7beb87d8b5f5fae3c9e7b043f50a078cc",
+  "next_action": "Fit selected candidate on frozen final training split",
+  "selected_candidate": "hgb_leaf15",
+  "status": "selected"
+}

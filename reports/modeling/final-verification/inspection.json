@@ -1,0 +1,63 @@
+{
+  "status": "writer_inspected_not_independent_review",
+  "maintained_paths_authored_or_edited_in_T6": [
+    "scripts/replay_model.py",
+    "tests/test_replay_model.py",
+    "scripts/check-deploy.ts",
+    "package.json",
+    "readme.md",
+    "reports/modeling/final-verification/verify.py"
+  ],
+  "evidence_paths": [
+    "reports/modeling/final-verification/baseline.json",
+    "reports/modeling/final-verification/commands.json",
+    "reports/modeling/final-verification/replay.json",
+    "reports/modeling/final-verification/summary.json",
+    "reports/modeling/final-verification/inspection.json",
+    "reports/modeling/final-verification/browser-summary.before.json",
+    "reports/modeling/final-verification/*.log",
+    "reports/modeling/final-verification/history/commands.*.json",
+    "reports/modeling/data_gate.json",
+    "reports/modeling/recheck.json",
+    "reports/modeling/history/data_gate.*.json",
+    "reports/modeling/history/recheck.*.json",
+    "reports/modeling/run_checks.cbb7114aed4d43deaa264b6bdb0d1193.log",
+    "reports/modeling/run_checks.c036c2444e9949a3bbffeb4fc784271c.log",
+    "reports/modeling/verify_ingest.a48311e0a0cb4e6d9e9e42d56d8add80.log",
+    "reports/modeling/verify_ingest.ac454188f1324a6e9f0851486bf948e8.log",
+    "reports/modeling/assessment-v1/browser-summary.json"
+  ],
+  "generated_not_manually_edited": [
+    "apps/app/next-env.d.ts",
+    "Next build/dev caches and type output",
+    "Rust target build/test output"
+  ],
+  "commands": [
+    {
+      "command": "git diff --check -- scripts/replay_model.py tests/test_replay_model.py scripts/check-deploy.ts package.json readme.md reports/modeling/final-verification/verify.py",
+      "exit_code": 0,
+      "warning": "Existing Git line-ending configuration warns LF will become CRLF in package.json; no Git settings changed. Untracked new files were inspected directly, not covered by git diff."
+    },
+    {
+      "command": "git diff -- scripts/check-deploy.ts package.json readme.md",
+      "exit_code": 0,
+      "scope": "Explicit maintained paths only; prior T4 changes in package.json/readme.md retained."
+    },
+    {
+      "command": "git status --short -- scripts/replay_model.py tests/test_replay_model.py scripts/check-deploy.ts package.json readme.md reports/modeling/final-verification/verify.py",
+      "exit_code": 0,
+      "result": "Modified package.json/readme.md/check-deploy.ts; new replay_model.py/test_replay_model.py/evidence verify.py. No staging or commits."
+    }
+  ],
+  "failure_cases_reviewed": [
+    "Pinned prediction seal and linked manifest/report verified before loading; fixed internal pickle loader only.",
+    "Run and panel hashes, path confinement, panel-only SQL projection, duplicate keys and company universe.",
+    "Exact metadata/features/unknowns/eligibility/missing reasons, finite probability bounds and fixed absolute 1e-12 tolerance.",
+    "Missing-current-month abstention and guards against live gate, training, final evaluation and target query helpers.",
+    "Both deployment shell texts parsed separately after CRLF-only normalization; malformed LF and CRLF rejected for each; runtime passed as data to mocked transport only.",
+    "Evidence preserves failed attempts; generated Next declaration hashes tracked separately without changes to G-DATA gate.",
+    "85 protected files unchanged, including eight raw CSVs, frozen model/protocol sources and artifacts, evaluation receipt, predictions, deployment scripts and published assessment payload."
+  ],
+  "remaining_action": "Parent independent final review; this evidence reports checks only, not overall goal completion or Jev adoption.",
+  "server_cleanup": "All recorded checks have zero surviving tracked non-zombie descendants. Browser summary confirms only owned process groups and temporary databases removed. No deployment or shared daemon started."
+}

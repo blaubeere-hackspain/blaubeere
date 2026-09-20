@@ -1,0 +1,209 @@
+{
+  "audit_policy": "Only structural counts, coverage, exclusions and invariant checks. No holdout outcomes or global prevalences queried. Existing build/tests are unmodified and logs retained without exposing target statistics.",
+  "availability": {
+    "limitation": "No observation/import/category revision logs. Month-end is an approved retrospective assumption, not verified known_on.",
+    "rule": "panel.available_at = last_day(month); transactions.date_ok sets month; booked final snapshot",
+    "source": "xray/marts/common.py:company_months; xray/marts/flujos.py:build_panel_flujos"
+  },
+  "blockers": [
+    "Required build/check commands missing or failed; no automatic retry permitted."
+  ],
+  "commands": [
+    {
+      "command": [
+        ".venv/bin/python",
+        "-B",
+        "-m",
+        "xray.cli",
+        "build"
+      ],
+      "exit_code": 0,
+      "log": "reports/modeling/build.log",
+      "log_sha256": "ce4753cdda588491572ea5e274eb60a458484f661cbe5dd293b2eee7c3df3424",
+      "unittest_summaries": [
+        {
+          "seconds": 8.793,
+          "tests": 61
+        }
+      ]
+    },
+    {
+      "command": [
+        "bash",
+        "scripts/run_checks.sh"
+      ],
+      "exit_code": 2,
+      "log": "reports/modeling/run_checks.log",
+      "log_sha256": "3b781b34f8248d87b60b522948048a3cf824593cdf0838431b72b190ea1794cb",
+      "unittest_summaries": []
+    }
+  ],
+  "excluded_features": [
+    "invoices",
+    "debt snapshots",
+    "balance snapshots",
+    "targets_proxy"
+  ],
+  "execution_notes": {
+    "incidents": [
+      {
+        "command": [
+          "git",
+          "diff",
+          "--check"
+        ],
+        "follow_up": "Limit all subsequent diff review to xray/pipeline.py, tests/test_pipeline.py, xray/model_audit.py and tests/test_model_audit.py. Do not repeat unscoped diff checks; verify raw identity by streaming SHA-256 only.",
+        "result": "Interrupted via kill_shell after unscoped whitespace check emitted materialized raw CSV lines. No raw file was changed. This violated the requested no-raw-print output discipline; no raw content is reproduced in this report."
+      }
+    ]
+  },
+  "fx_policy": "Approved reported division into EUR, native EUR identity; missing/ambiguous FX remains unknown. EUR is analytical reporting currency, not company base currency.",
+  "gate_status": "blocked",
+  "pending_later_stages": [
+    "Freeze explicit feature/as-of contract and group-disjoint temporal splits before training (T2).",
+    "Independent read-only review of final diff and data gate."
+  ],
+  "raw": {
+    "balances.csv": {
+      "command": [
+        "git",
+        "show",
+        "HEAD:data/balances.csv"
+      ],
+      "exit_code": 0,
+      "head_lfs_oid_sha256": "86664c229cf52554d75d7efb864fc07a94a1bebcd61a3ac85abc344f3ba2a30c",
+      "head_lfs_size": 480768,
+      "matches_head": true,
+      "sha256": "86664c229cf52554d75d7efb864fc07a94a1bebcd61a3ac85abc344f3ba2a30c",
+      "size": 480768
+    },
+    "banking_products.csv": {
+      "command": [
+        "git",
+        "show",
+        "HEAD:data/banking_products.csv"
+      ],
+      "exit_code": 0,
+      "head_lfs_oid_sha256": "0fc5aa20fea32981a962cc08251720ece3f2afad8495910111d2fd8b16514d3c",
+      "head_lfs_size": 596360,
+      "matches_head": true,
+      "sha256": "0fc5aa20fea32981a962cc08251720ece3f2afad8495910111d2fd8b16514d3c",
+      "size": 596360
+    },
+    "companies.csv": {
+      "command": [
+        "git",
+        "show",
+        "HEAD:data/companies.csv"
+      ],
+      "exit_code": 0,
+      "head_lfs_oid_sha256": "5496ad00a1e9228f7e756a55c71c512fd06a73ad45a09ce3f103a620a5ad72ae",
+      "head_lfs_size": 70591,
+      "matches_head": true,
+      "sha256": "5496ad00a1e9228f7e756a55c71c512fd06a73ad45a09ce3f103a620a5ad72ae",
+      "size": 70591
+    },
+    "debt_products.csv": {
+      "command": [
+        "git",
+        "show",
+        "HEAD:data/debt_products.csv"
+      ],
+      "exit_code": 0,
+      "head_lfs_oid_sha256": "bf38430ccd15f6a9ca8769113c5f47d4aeee8fe55c425687731481cd002f05d8",
+      "head_lfs_size": 268287,
+      "matches_head": true,
+      "sha256": "bf38430ccd15f6a9ca8769113c5f47d4aeee8fe55c425687731481cd002f05d8",
+      "size": 268287
+    },
+    "debt_schedule_config.csv": {
+      "command": [
+        "git",
+        "show",
+        "HEAD:data/debt_schedule_config.csv"
+      ],
+      "exit_code": 0,
+      "head_lfs_oid_sha256": "b0d6cc3e6810e31d526eb7f4be3c2abe31496f74f5ddd58163876d60de168ea2",
+      "head_lfs_size": 12922,
+      "matches_head": true,
+      "sha256": "b0d6cc3e6810e31d526eb7f4be3c2abe31496f74f5ddd58163876d60de168ea2",
+      "size": 12922
+    },
+    "groups.csv": {
+      "command": [
+        "git",
+        "show",
+        "HEAD:data/groups.csv"
+      ],
+      "exit_code": 0,
+      "head_lfs_oid_sha256": "fa18d3f42cd24d7640bff22d7a9504293574c2338ce85d425e3134f18f169a8c",
+      "head_lfs_size": 5243,
+      "matches_head": true,
+      "sha256": "fa18d3f42cd24d7640bff22d7a9504293574c2338ce85d425e3134f18f169a8c",
+      "size": 5243
+    },
+    "invoices.csv": {
+      "command": [
+        "git",
+        "show",
+        "HEAD:data/invoices.csv"
+      ],
+      "exit_code": 0,
+      "head_lfs_oid_sha256": "6686bd878244881bac78348a108852f3f30713ef244267f1fa3754b9be619c53",
+      "head_lfs_size": 172547599,
+      "matches_head": true,
+      "sha256": "6686bd878244881bac78348a108852f3f30713ef244267f1fa3754b9be619c53",
+      "size": 172547599
+    },
+    "transactions.csv": {
+      "command": [
+        "git",
+        "show",
+        "HEAD:data/transactions.csv"
+      ],
+      "exit_code": 0,
+      "head_lfs_oid_sha256": "000a6820a7500c66aa70a17b3e813d0c57a8270b3c58f6f2f006708a20228f2b",
+      "head_lfs_size": 472353364,
+      "matches_head": true,
+      "sha256": "000a6820a7500c66aa70a17b3e813d0c57a8270b3c58f6f2f006708a20228f2b",
+      "size": 472353364
+    }
+  },
+  "regression_before_fix": {
+    "budget": "One focused source-snapshot correction and one build recheck; no repeated build attempt.",
+    "command": [
+      ".venv/bin/python",
+      "-B",
+      "-m",
+      "unittest",
+      "tests.test_pipeline.SnapshotTest",
+      "-v"
+    ],
+    "exit_code": 1,
+    "failures": 4,
+    "missing_dependencies": [
+      "scripts/audit_financial_data.py",
+      "tests/fixtures/financial_audit/materialized/balances.csv",
+      "tests/fixtures/financial_audit/materialized/companies.csv"
+    ],
+    "observation": "Executed before changing xray/pipeline.py. Three dependency subtests and the exact snapshot-file-set assertion failed.",
+    "prior_failed_build": "data/runs/20260919T124113Z-d6362f50",
+    "targeted_after_fix": {
+      "command": [
+        ".venv/bin/python",
+        "-B",
+        "-m",
+        "unittest",
+        "tests.test_pipeline",
+        "tests.test_model_audit",
+        "-v"
+      ],
+      "exit_code": 0,
+      "observation": "Includes an isolated subprocess running all four real inventory tests from the copied snapshot, and a mocked one-attempt build-stop test.",
+      "tests_run": 12
+    },
+    "tests_run": 1
+  },
+  "scope": "G-DATA for synthetic retrospective cash-flow route only; not model acceptance or certified historical availability.",
+  "target": "target_deficit_3m"
+}

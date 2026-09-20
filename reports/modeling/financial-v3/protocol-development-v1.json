@@ -1,0 +1,668 @@
+{
+  "cash": {
+    "independent_balance_observations_required": 2,
+    "movement_and_stock_fx_are_interchangeable": false,
+    "relative_tolerance": 1e-06,
+    "requirements": [
+      "same_account_native_currency",
+      "exact_anchor_cutoff",
+      "complete_bridge_including_open_period_if_required",
+      "no_gap_filling",
+      "no_hidden_adjustments",
+      "unrestricted_evidence_separate",
+      "dated_stock_fx_for_aggregation"
+    ],
+    "reverse_formula": "B_start=B_end-sum(signed_native_movements)-signed_nontransaction_adjustments",
+    "scale_floor": 1,
+    "tolerance_formula": "max(currency_minor_unit, relative_tolerance*max(abs(observed_start),abs(observed_end),scale_floor))"
+  },
+  "clarifications": [
+    "Original design-proposal.md remains unchanged; this development protocol records inline-reviewed interpretations.",
+    "Payment-reduction evidence is cumulative since the fixed event reference; the same repayment need not be made again in each confirmation month.",
+    "AP constant reference uses evaluation prevalence on the same eligible evaluation rows, not training prevalence; best fixed baseline AP margin remains 0.05.",
+    "Same branch must establish both directional confirmation months; conditional recovery still requires two consecutive half-materiality recovery months.",
+    "Monthly as_of is a month-end DATE; cutoff is exclusive next UTC midnight. Precise anchor measured_at and opening/closing/instant/unknown semantics are retained, never inferred.",
+    "Nullable known_on is required in source_ref, never filled from retrieved_at/effective_at or retrospectively inferred payment dates.",
+    "Trend logistic C=1 and deterministic tie order clarify the bounded development candidate list; no fit is authorized by contract creation.",
+    "No-majority level labels are unknown; unanimous exceptional remains required. The independent financial rubric is not approved."
+  ],
+  "development": {
+    "additional_model_search_allowed": false,
+    "alerts": {
+      "conditional_decision_threshold": 0.6,
+      "confirmation_consecutive_origins": 2,
+      "first_watch_is_confirmed_alert": false,
+      "gaps": "suppress_issuance_and_break_confirmation_streak; no invented consecutive origins",
+      "one_per_sign_episode": true,
+      "probability_threshold": 0.6,
+      "reset_below_threshold_origins": 2
+    },
+    "conditional_candidates": [
+      {
+        "family": "constant",
+        "id": "class_prevalence"
+      },
+      {
+        "family": "last_primitive_state",
+        "id": "primitive_persistence"
+      },
+      {
+        "C": 1.0,
+        "family": "multinomial_logistic",
+        "id": "conditional_logistic_c1"
+      }
+    ],
+    "consumed_v2_reserved_origins_excluded": [
+      "2026-03-01",
+      "2026-05-01"
+    ],
+    "directional_candidates": [
+      {
+        "family": "constant",
+        "fit": "training_prevalence",
+        "id": "prevalence"
+      },
+      {
+        "family": "last_primitive_state",
+        "id": "persistence",
+        "probability": "training_only_estimate_or_null"
+      },
+      {
+        "C": 1.0,
+        "family": "logistic",
+        "features": [
+          "delta_recent3_prior3_F_over_S",
+          "delta_recent3_prior3_Q_over_S"
+        ],
+        "id": "trend"
+      },
+      {
+        "C": 0.1,
+        "family": "logistic",
+        "id": "scorecard_logistic_c0.1"
+      },
+      {
+        "C": 1.0,
+        "family": "logistic",
+        "id": "scorecard_logistic_c1"
+      }
+    ],
+    "fit_preprocessing_and_calibration": "training_only_with_maturation_purge",
+    "historical_origins_if_later_authorized": [
+      "2025-03-01",
+      "2025-09-01"
+    ],
+    "historical_outcome_cutoff_if_later_authorized": "2025-12-31",
+    "maximum_grouped_rolling_folds": 3,
+    "old_reserve_tuning_allowed": false,
+    "permitted_now": "Contract and invented fixtures only; no financial data queries, training, events, outcomes, real scores or application changes",
+    "scorecard_predictor_features": [
+      "five_dimension_points",
+      "E_over_S",
+      "observed_dimension_changes",
+      "receipts_growth",
+      "months_since_last_known_primitive_state"
+    ],
+    "selection_metric": "macro_group_brier_minimum",
+    "tie_order": [
+      "simpler_family",
+      "smaller_C",
+      "candidate_id"
+    ],
+    "tie_tolerance": 1e-06,
+    "v2_reserved_outcomes_through": "2026-08-31"
+  },
+  "evaluation": {
+    "activation_requires_separate_approval": true,
+    "bootstrap": {
+      "confidence": 0.95,
+      "finite_replicates_min": 1900,
+      "paired_brier_improvement_ci_lower_strict_min": 0,
+      "paired_recall_improvement_ci_lower_strict_min": 0,
+      "quantile_method": "linear",
+      "quantiles": [
+        0.025,
+        0.975
+      ],
+      "redraw_undefined": false,
+      "replicates": 2000,
+      "seed": 1729,
+      "shared_draws": true,
+      "unit": "group"
+    },
+    "conditional": {
+      "balanced_accuracy_vs_best_baseline_margin": 0.1,
+      "complete_followup_min": 0.8,
+      "decision_coverage_min": 0.7,
+      "groups_per_class": 10,
+      "mature_episodes_per_recovered_persistent_class": 50,
+      "mixed_cases": 30,
+      "precision_min_per_class": 0.6,
+      "recall_min_per_class": 0.6
+    },
+    "deterioration": {
+      "burden_max": 0.15,
+      "false_alert_share_max": 0.4,
+      "median_positive_lead_min": 1,
+      "precision_min": 0.6,
+      "recall_min": 0.6,
+      "recall_vs_best_baseline_margin": 0.1
+    },
+    "explanations": {
+      "causal_claims_allowed": false,
+      "coverage_min": 1.0,
+      "residual_tolerance_points": 1e-08
+    },
+    "freeze_gate": "New protocol/data-access receipt, code/features/transformations/models and final business-approved utility gates before any new confirmation outcomes; consumed/interrupted receipt never replayed",
+    "groups_final_test_v1_ever_eligible": false,
+    "improvement": {
+      "burden_max": 0.15,
+      "false_alert_share_max": 0.4,
+      "median_positive_lead_min": 1,
+      "precision_min": 0.6,
+      "recall_min": 0.5,
+      "recall_vs_best_baseline_margin": 0.1
+    },
+    "level": {
+      "exceptional_precision_min": 0.9,
+      "exceptional_prediction_groups": 10,
+      "exceptional_predictions": 30,
+      "groups": 50,
+      "headline_coverage_min": 0.7,
+      "references_per_class": 30,
+      "reviewed_company_months": 300,
+      "six_month_material_failure_rate_max": 0.1,
+      "solid_exceptional_precision_min": 0.8,
+      "weighted_kappa_ci_lower_min": 0.4,
+      "weighted_kappa_min": 0.6
+    },
+    "matching": {
+      "conditional_forecast_is_advance_detection": false,
+      "event_denominator": "independent_of_firing; require at least one input-eligible lead origin",
+      "identities": [
+        "events=matches+misses",
+        "alerts=matches+false+censored"
+      ],
+      "lead_months": [
+        1,
+        2,
+        3
+      ],
+      "one_to_one": true,
+      "order": "company_sign_actual_issue_time_then_earliest_unmatched_onset",
+      "unmatched": "false_only_with_complete_mature_followup_else_censored"
+    },
+    "new_dates_or_cohorts_fixed": false,
+    "new_external_groups_preferred_minimum": 50,
+    "probability_gates": {
+      "ap_reference": "evaluation_prevalence_constant_baseline",
+      "ap_vs_best_fixed_baseline_margin": 0.05,
+      "ap_vs_constant_margin": 0.1,
+      "brier_vs_best_baseline_max_factor": 0.95,
+      "conditional": "One-vs-rest per recovered/persistent class; also macro AP and per-class Brier/ECE",
+      "constant_reference": "Evaluate a constant prediction vector on exactly the same eligible labeled evaluation rows; AP equals their prevalence, not training prevalence",
+      "ece_equal_width_bins": 10,
+      "ece_max": 0.1,
+      "groups": 20,
+      "negative_support": 100,
+      "positive_support": 100
+    },
+    "status": "proposed_future_gates_not_business_approved",
+    "still_strong": {
+      "event_groups": 10,
+      "interpretation": "eligible_unvalidated_score_cohort_not_claimed_healthy",
+      "mature_events": 50,
+      "median_positive_lead_min": 1,
+      "origin_score_min": 80,
+      "precision_min": 0.6,
+      "prediction_coverage_min": 0.7,
+      "recall_min": 0.5,
+      "recall_vs_best_baseline_margin": 0.1
+    },
+    "support_directional": {
+      "event_groups": 20,
+      "groups": 50,
+      "mature_ascertainment_min": 0.8,
+      "mature_events": 100,
+      "mature_negatives": 100,
+      "prediction_coverage_min": 0.7
+    },
+    "temporal_stability": {
+      "insufficient_support": "failure_of_support_not_a_passing_third",
+      "prespecified_thirds": 3,
+      "thirds_passing_recall_precision_min": 2
+    }
+  },
+  "input_conventions": {
+    "availability_basis": [
+      "verified",
+      "retrospective",
+      "assumed",
+      "unknown"
+    ],
+    "cutoff": "knowledge_cutoff_exclusive is next-month-start 00:00:00Z; historical knowledge requires known_on strictly before this instant",
+    "duplicates": "Same company plus typed identity: byte-equivalent canonical records idempotent; any conflict rejects affected perimeter; no last-write-wins",
+    "known_on": "Required nullable UTC field; never alias effective_at, due_date, extraction, retrieved_at or simulated availability to historical knowledge",
+    "minor_units": "Source-verified currency minor unit supplied separately; do not assume all currencies use cents; no automatic quantization",
+    "money": "Fixed-point decimal strings, at most 38 digits and 12 fractional places; never native float or implicit int/bool",
+    "monthly_grain": "month YYYY-MM-01; as_of YYYY-MM-DD must equal calendar month-end; closed period [month_start,next_month_start)",
+    "numbers": "Finite binary64 ratios/points; bool is not a number; unknowns remain null",
+    "reconstruction_available_at": "max(all contributing known_on); null if any unknown, with availability basis kept separate",
+    "required_nullable_fields": "must be present; null is not zero",
+    "schema_clarifications": "Known-on/availability live only in source_ref. Date-grain obligation due_date replaces ambiguous due_at. Explicit version_id and allocation_policy added. Precise measured_at and cutoff_semantics required for anchors.",
+    "schemas": {
+      "account": {
+        "account_id": "id",
+        "company_id": "id",
+        "currency": "currency",
+        "effective_from": "date?",
+        "effective_to": "date?",
+        "product_type": "id",
+        "schema_version": "input_version",
+        "source_ref": "source",
+        "unrestricted_policy": "enum:verified_unrestricted|restricted|unknown"
+      },
+      "amendment": {
+        "amendment_id": "id",
+        "amount_native": "decimal",
+        "company_id": "id",
+        "currency": "currency",
+        "effective_at": "timestamp",
+        "kind": "enum:cancel|renegotiate|reverse|writeoff",
+        "obligation_id": "id",
+        "replacement_obligation_id": "id?",
+        "schema_version": "input_version",
+        "source_ref": "source"
+      },
+      "balance_anchor": {
+        "account_id": "id",
+        "amount_native": "decimal",
+        "anchor_id": "id",
+        "company_id": "id",
+        "currency": "currency",
+        "cutoff_semantics": "enum:opening|closing|instant|unknown",
+        "independently_observed": "bool",
+        "measured_at": "timestamp",
+        "schema_version": "input_version",
+        "source_ref": "source",
+        "unrestricted_native": "decimal?"
+      },
+      "cash_movement": {
+        "account_id": "id",
+        "amount_native": "decimal",
+        "booked_at": "timestamp",
+        "booking_status": "enum:booked|pending|unknown",
+        "classification_evidence": "id?",
+        "company_id": "id",
+        "currency": "currency",
+        "economic_bucket": "enum:operating|financing|investment|transfer|adjustment|unknown",
+        "movement_id": "id",
+        "obligation_allocation_ids": "ids",
+        "schema_version": "input_version",
+        "source_ref": "source",
+        "transfer_pair_id": "id?",
+        "value_at": "timestamp?"
+      },
+      "coverage_interval": {
+        "account_id": "id",
+        "company_id": "id",
+        "coverage_id": "id",
+        "from_inclusive": "timestamp",
+        "genuine_zero_activity": "bool",
+        "schema_version": "input_version",
+        "source_ref": "source",
+        "statement_complete": "bool",
+        "to_exclusive": "timestamp"
+      },
+      "fx_observation": {
+        "company_id": "id",
+        "currency": "currency",
+        "fx_id": "id",
+        "measured_at": "timestamp",
+        "rate_local_per_reporting": "decimal",
+        "reporting_currency": "currency",
+        "schema_version": "input_version",
+        "source_ref": "source",
+        "valuation_kind": "enum:transaction|stock|unknown"
+      },
+      "obligation": {
+        "company_id": "id",
+        "currency": "currency",
+        "due_date": "date?",
+        "effective_from": "date",
+        "effective_to": "date?",
+        "financial_product_id": "id?",
+        "installment_id": "id?",
+        "invoice_id": "id?",
+        "kind": "enum:operating_ap|financial_principal|financial_interest|other_payable|ar",
+        "obligation_id": "id",
+        "principal_or_face_amount": "decimal",
+        "role_verified": "bool",
+        "schema_version": "input_version",
+        "source_ref": "source",
+        "version_id": "id"
+      },
+      "settlement": {
+        "allocation_id": "id",
+        "allocation_policy": "enum:explicit|oldest_due_assumed|unknown",
+        "amount_native": "decimal",
+        "company_id": "id",
+        "component": "enum:principal|interest|fee|trade",
+        "currency": "currency",
+        "movement_id": "id?",
+        "obligation_id": "id",
+        "paid_at": "timestamp",
+        "schema_version": "input_version",
+        "source_ref": "source"
+      },
+      "universe_attestation": {
+        "attestation_id": "id",
+        "company_id": "id",
+        "effective_from": "date",
+        "effective_to": "date?",
+        "exhaustive": "bool",
+        "explicit_zero": "bool",
+        "schema_version": "input_version",
+        "source_kind": "enum:cash|operating_ap|financial_debt|ar",
+        "source_ref": "source"
+      }
+    },
+    "source_availability_helper": "Checks verified knowledge only; effective applicability, full provenance resolution, financial eligibility and future known schedules are caller responsibilities",
+    "source_ref_fields": [
+      "source_id",
+      "source_sha256",
+      "record_id",
+      "effective_at",
+      "known_on",
+      "retrieved_at",
+      "source_timezone",
+      "availability_basis"
+    ],
+    "source_timezone": "Required original timezone label; UTC times must already be resolved upstream, never infer timezone or DST",
+    "timestamps": "UTC YYYY-MM-DDTHH:MM:SS[.ffffff]Z, at most six fractional digits; dates are never implicitly timestamps",
+    "unknown_fields": "reject",
+    "validation_scope": "Input syntax/semantics and metadata only; not full output/API schema, cross-record reconciliation, ownership proof or economic truth"
+  },
+  "input_schema_version": "financial-v3-input-v1",
+  "mora": {
+    "buckets": [
+      {
+        "from_days": 1,
+        "multiplier": 1.0,
+        "to_days": 7
+      },
+      {
+        "from_days": 8,
+        "multiplier": 1.25,
+        "to_days": 30
+      },
+      {
+        "from_days": 31,
+        "multiplier": 1.5,
+        "to_days": 60
+      },
+      {
+        "from_days": 61,
+        "multiplier": 2.0,
+        "to_days": 90
+      },
+      {
+        "from_days": 91,
+        "multiplier": 3.0,
+        "to_days": 180
+      },
+      {
+        "from_days": 181,
+        "multiplier": 4.0,
+        "to_days": null
+      }
+    ],
+    "due_today_in_unpaid_due": true,
+    "due_today_weighted_exposure": 0,
+    "exposure_formula": "E=sum(unpaid_i*k(days_late_i) for days_late_i>0)",
+    "exposure_is_legal_debt_or_cash_expense": false,
+    "grace_days": 7,
+    "grace_semantics": "escalation_only_not_forgiveness",
+    "old_obligations_disappear": false,
+    "penalty_cap": 40,
+    "penalty_formula": "P=40*E/(S+E)"
+  },
+  "obligations": {
+    "allocation": "Explicit first; only evidenced bounded contract family may use oldest_due_then_id; assumed allocation blocks strict headline",
+    "amendments": "Dated effective and known lineage; cancellation/renegotiation/writeoff never silently reset age or count as payment recovery",
+    "ar_offset_allowed": false,
+    "explicit_zero_requires_exhaustive_attestation": true,
+    "interest_reduces_principal": false,
+    "principal_formula": "opening_principal+drawdowns-principal_allocations+principal_adjustments",
+    "remaining_formula": "face_or_principal+evidenced_adjustments-allocated_settlements",
+    "snapshot_repetition_allowed": false
+  },
+  "policy_version": "financial-v3-development-v1",
+  "reason_codes": [
+    "missing_source",
+    "universe_unverified",
+    "unknown_known_on",
+    "anchor_cutoff_unknown",
+    "anchor_invalid",
+    "unrestricted_cash_unverified",
+    "ledger_gap",
+    "reconciliation_unverified",
+    "reconciliation_mismatch",
+    "fx_missing",
+    "classification_ambiguous",
+    "role_unverified",
+    "due_date_unknown",
+    "settlement_history_missing",
+    "allocation_conflict",
+    "debt_vintage_missing",
+    "coverage_changed",
+    "insufficient_history",
+    "zero_reference",
+    "open_month",
+    "version_changed",
+    "immature_followup",
+    "new_test_missing",
+    "unverified_availability",
+    "future_known_on",
+    "duplicate_conflict",
+    "business_review_missing",
+    "confirmatory_approval_missing"
+  ],
+  "result_kind": "financial_health_v3",
+  "scorecard": {
+    "band_validation": "unvalidated_internal",
+    "bands": [
+      {
+        "lower": 0,
+        "name": "fragile",
+        "upper": 40,
+        "upper_inclusive": false
+      },
+      {
+        "lower": 40,
+        "name": "constrained",
+        "upper": 60,
+        "upper_inclusive": false
+      },
+      {
+        "lower": 60,
+        "name": "intermediate",
+        "upper": 80,
+        "upper_inclusive": false
+      },
+      {
+        "lower": 80,
+        "name": "solid_candidate",
+        "upper": 90,
+        "upper_inclusive": false
+      },
+      {
+        "lower": 90,
+        "name": "exceptional_candidate",
+        "upper": 100,
+        "upper_inclusive": true
+      }
+    ],
+    "base": 50,
+    "contribution_formula": "c_k=w_k*(dimension_k-50)",
+    "debt_service_future_months": 3,
+    "delta_formula": "sum(delta_c_k)-delta_P+delta_limit_adjustment; same version/perimeter and adjacent eligible months only",
+    "display_decimals": 1,
+    "explanation_residual_tolerance": 1e-08,
+    "formulas": {
+      "debt": "0.5*100*clip(1-D/(12*S),0,1)+0.5*100*clip(COV/2,0,1)",
+      "generation": "clip(50+100*mean(F_recent3)/S,0,100)",
+      "growth": "clip(50+100*(mean(R_recent3)-mean(R_prior3))/mean(R_prior3),0,100)",
+      "liquidity": "100*clip((C_adj/S)/3,0,1)",
+      "stability": "100*clip(1-std_population(F_last6/S)/0.5,0,1)"
+    },
+    "generation_input": "F_j=operating_receipts_j-operating_obligations_due_j; not cash payments or accounting profit",
+    "headline_gate": [
+      "five_dimensions",
+      "complete_obligations_mora",
+      "exhaustive_comparable_perimeter",
+      "reconciled_unrestricted_cash",
+      "valid_currency_aggregation",
+      "verified_operating_classification",
+      "six_contiguous_closed_months",
+      "strict_known_on_for_as_of"
+    ],
+    "liquidity_input": "C_adj=unrestricted_cash-U_due; U_due includes grace and due-today amounts",
+    "missing_core": "headline_null_no_weight_renormalization",
+    "no_payment_invariant": "Withhold A: cash+=A and U_due+=A; C_adj unchanged; F,S,growth,stability unchanged; D cannot improve; E/P nondecreasing; aggregate cannot improve",
+    "observed_direction_delta_points": 5,
+    "parameters": {
+      "debt_receipt_reference_months": 12,
+      "debt_service_weight": 0.5,
+      "debt_stock_weight": 0.5,
+      "liquidity_reference_months": 3,
+      "midpoint": 50,
+      "ratio_points": 100,
+      "service_coverage_ceiling": 2,
+      "stability_std_ceiling": 0.5
+    },
+    "prior_months": 3,
+    "range": [
+      0,
+      100
+    ],
+    "ratio_explanation": "(a_new-a_old)/b_old + a_new*(1/b_new-1/b_old); fixed order, noncausal; explicit display rounding residual",
+    "recent_months": 3,
+    "reference_formula": "S=mean(verified_comparable_operating_receipts[m-5..m]); require S>0",
+    "reference_months": 6,
+    "service_input": "J=mean(principal+interest due next3 under origin-known schedules); COV=max(mean(F_recent3),0)/J",
+    "total_formula": "unclipped=50+sum(c_k)-P; limit_adjustment=clip(unclipped,0,100)-unclipped; score=unclipped+limit_adjustment",
+    "weights": {
+      "debt": 0.2,
+      "generation": 0.25,
+      "growth": 0.15,
+      "liquidity": 0.25,
+      "stability": 0.15
+    },
+    "yoy_required_contiguous_months": 15,
+    "zero_denominator": "null_with_zero_reference",
+    "zero_service": "Only complete verified J=0 gives service subscore 100"
+  },
+  "source_scope": {
+    "development_groups": 200,
+    "financial_queries_authorized_by_this_contract": false,
+    "new_confirmation_data": "Untouched external groups or future dates with documented access/vintage ledger; never relabel old data",
+    "outcome_access_authorized": false,
+    "run_id": "20260919T124814Z-e5302b58",
+    "untouched_test_identified": false,
+    "v1_final_test_groups_excluded": 50,
+    "v2_reserve_consumed": true
+  },
+  "status": {
+    "automatic_alerts_enabled": false,
+    "blockers": [
+      "new_test_missing",
+      "business_review_missing",
+      "confirmatory_approval_missing",
+      "universe_unverified",
+      "unrestricted_cash_unverified",
+      "reconciliation_unverified",
+      "settlement_history_missing",
+      "debt_vintage_missing",
+      "role_unverified",
+      "unknown_known_on"
+    ],
+    "business_approved": false,
+    "confirmatory_approved": false,
+    "future_utility_gates": "Frozen development decision proposals, not business-approved confirmation criteria",
+    "independent_review_completed": false,
+    "review": "Parent inline fallback; separate read-only review unavailable due quota; trace held by parent.",
+    "scope": "frozen_development_only"
+  },
+  "targets": {
+    "conditional": {
+      "candidate_month_offsets": [
+        1,
+        2,
+        3
+      ],
+      "forecast_at_onset_offset": 1,
+      "label_at_onset_offset": 3,
+      "missing_followup": "unknown_censored",
+      "otherwise_fully_observed": "mixed",
+      "payment_reduction_evidence": "cumulative_since_reference_end_through_j",
+      "payment_reduction_scope": "Any overdue reduction credited to recovery must be evidenced allocated repayments of the affected obligations, cumulative from s-1 close through j; not fresh repeated repayment each month and never writeoff/renegotiation credit",
+      "persistence_rule": "same deterioration branch true at s+1,s+2,s+3",
+      "recovery_consecutive_months": 2,
+      "recovery_rule": "F_j>=F0-A/2 and Q_j<=Q0+A/2 and Z_j<A in two consecutive candidate months, with payment evidence for any overdue reduction used to satisfy recovery"
+    },
+    "confirmation_month_offsets": [
+      0,
+      1
+    ],
+    "derived_from_score_delta_alerts_or_v1_proxy": false,
+    "deterioration_branches": [
+      "Q_j-Q0>=A from unpaid obligations, not coverage change",
+      "F_j<=F0-A and F_j<0"
+    ],
+    "episode_exit_nonqualifying_months": 2,
+    "gaps": "unknown_not_episode_restart; require two observed nonqualifying months before new episode",
+    "improvement_branches": [
+      "Q0>=A and Q_j<=0.5*Q0 and cumulative_reference_obligation_payments_through_j>=A and Z_j<A and F_j>=F0-A",
+      "F_j>=F0+A and F_j>0 and Q_j<=Q0 and Z_j<A"
+    ],
+    "improvement_payment_evidence": "cumulative_since_reference_end_through_j",
+    "late_days_strictly_greater_than": 30,
+    "level_reference": {
+      "blinded_to_score": true,
+      "business_rubric_approved": false,
+      "classes": [
+        "fragile",
+        "constrained",
+        "ordinary",
+        "solid",
+        "exceptional"
+      ],
+      "decision": "strict majority for nonexceptional; unanimous exceptional; no majority or nonunanimous exceptional candidate is unknown",
+      "failure_rule": "undisputed unpaid >30d and >max(EUR1000,0.05*trailing_receipts), or independently adjudicated unplanned rescue finance",
+      "no_failure_implies_exceptional": false,
+      "reviewers": 3,
+      "safety_followup_months": 6
+    },
+    "materiality_eur": "1000",
+    "materiality_formula": "A=max(EUR1000,0.05*B)",
+    "materiality_receipts_fraction": 0.05,
+    "negative_followup_through_offset": 4,
+    "origin_onset_horizon_months": [
+      1,
+      2,
+      3
+    ],
+    "payment_evidence_scope": "Allocated repayments of obligations in Q0, measured from s-1 close through j; no repeated-payment requirement, no writeoff/renegotiation recovery credit",
+    "positive_observable_at": "max(required economic source known_on and confirmation close); never backdate",
+    "reference_formula": "B=mean(R_reference)>0; F0=mean(F_reference); Q0=real_unpaid_over30d_at_s_minus_1",
+    "reference_month_offsets": [
+      -3,
+      -2,
+      -1
+    ],
+    "same_branch_required_in_both_confirmation_months": true,
+    "sign_probabilities_complementary": false,
+    "signs_may_coexist": true
+  }
+}

@@ -1,6 +1,108 @@
 # Blaubeere
 
-Internal finance planning: understand a dated cash gap, inspect the evidence, and compare a baseline with two bounded plans. Product scope lives in [docs/PRODUCT.md](docs/PRODUCT.md), [docs/DASHBOARD.md](docs/DASHBOARD.md), and [docs/REQUIREMENTS.md](docs/REQUIREMENTS.md).
+**Current state: 20 September 2026.** Experimental financial-evidence inspection over **1,286 companies and 24 closed months**. The brief requires a monthly financial score as the foundation: identify strength, improvement, early deterioration, dip versus sustained decline, explain changes and measure anticipation. **That central score and the six-question predictive goal are not yet delivered.**
+
+The pipeline and application are reusable foundations, not substitutes for the score. Work has progressed through a deficit proxy, descriptive trajectory and receipt-change proxies; the next priority is the score and its validation, not another interface layer. The brief's 60–80 unseen companies is a generalization requirement, not a passed official test. We work with the existing dataset, without requiring acquisition of another one for internal development.
+
+| Stage | Evaluated objective | Current conclusion |
+|---|---|---|
+| V1 | Deficit in at least two of the next three months | HGB improves its constant baseline on the defined internal test; not global health |
+| V2 | Rule-based anticipation of sustained operating transitions | 2/37 improvement and 1/41 deterioration matches; anticipation not validated |
+| V3 | Receipt contraction/expansion and conditional receipt dip | Persistence wins; both utility gates fail, Q4 lacks support, full-health headline remains null |
+
+V1/V2/V3 targets and samples differ: their metrics are not a before/after comparison of the same predictor. In V3, selected persistence improves row Brier over a constant (0.228742→0.211127 and 0.243182→0.224609), but the logistic candidates do not beat persistence on selection Brier. Only **28/345** eligible validation origins have comparable labels, across 8 groups; recall is zero at 0.6. No automatic predictive alerts.
+
+Start with [data/model context](docs/DATA-MODEL-CONTEXT.md) and the [consolidated training report](reports/modeling/training-report.md). Product, buyer hypothesis, acceptance and interface: [PRODUCT](docs/PRODUCT.md), [REQUIREMENTS](docs/REQUIREMENTS.md), [DASHBOARD](docs/DASHBOARD.md). CFO/treasury are considered users; the data provider is the brief's buyer hypothesis, not a validated commercial sale.
+
+## Current workflow: local model report, application kept separate
+
+The model deliverable is a simple standalone local HTML artifact. It presents company/month evidence and experimental results from versioned analytical exports; inspecting it requires no application service. The central score and its validation remain the priority.
+
+Generate the visual artifact with Python's standard library only; no application server, installation, training, inference or evaluation is needed:
+
+```sh
+.venv/bin/python -B -m scripts.render_model_report
+.venv/bin/python -B -m scripts.render_model_report --check
+```
+
+Open `.local/model-report.html` directly in a browser. The standalone file embeds its data, CSS and JavaScript; it makes no network requests. It shows the current v3 export, company/month selectors, observed flows, growth, debt-service/invoice evidence, native-currency cash reconstruction, scoped components, experimental probabilities, all candidate metrics and explicit limitations. V1/v2 outputs remain available as historical analytical evidence. This report does not validate predictive utility.
+
+By default it includes the first three non-holdout company IDs in lexical order, not cases selected for good results. Choose companies or include the full export:
+
+```sh
+.venv/bin/python -B -m scripts.render_model_report --company COMP_0009 --company COMP_0179 --output .local/selected-model-report.html
+.venv/bin/python -B -m scripts.render_model_report --all-companies --output .local/all-model-report.html
+.venv/bin/python -B -m unittest tests.test_model_report -v
+bun run check
+```
+
+Outputs are deterministic and ignored by Git. An existing different report is never overwritten; choose a new `--output` filename. `--check` verifies the same selection without writing. Files contain every embedded company's selected export history and have no authentication: handle them as local analytical data, not as a publicly shareable application. Dataset/model manifests and consumed profiles are hash-verified, but old whole-worktree/application/document verifiers necessarily describe the previous integration and are not current acceptance commands. Their seals, receipts and results are not rewritten.
+
+Validate this documentation and its analytical artifact references without running models or services:
+
+```sh
+.venv/bin/python -B reports/modeling/financial-v3/dataset-v1/delivery-v1/amendment-v2/documentation-v1/verify_artifact_docs.py check
+```
+
+This check preserves prior document versions, v1/v2 report sections, sealed metrics and model artifacts. It does not verify frontend/backend state.
+
+<details>
+<summary>Historical v3/v2 technical evidence; commands bound to those revisions</summary>
+
+## V3 delivery: retrospective financial evidence
+
+The existing dashboard/API/MCP expose four separate modes: cash demo, v1 proxy, v2 trajectory and `financial_health_v3`. V3 preserves **30,864 company-month points** with flows, paid debt service, retrospective AP/AR and mora estimates, growth, scoped components and provisional native-currency cash reversal. Missing values are not zero; a scoped operating interval is not whole-company health and `[0,100]` is uninformative.
+
+Use process-only `ASSESSMENT_FILE="$PWD/reports/modeling/financial-v3/dataset-v1/index.json"` for both Rust services. Keep its fixed local manifest/schema/policy/profiles and `model-v1/` siblings. Dataset manifest SHA256: `e360ef33ba7cae39aa9c94d0f8e778f49c38a3985f77053a2f53bd4ae5ef8a44`; model manifest SHA256: `71eae8fef2ab3466fa2545d1c38f57977508cb79b7c051280b59e02253925428`. Startup caches metadata; authorization precedes individual shard reads. No runtime Python, fitting, inference, events or outcomes.
+
+`GET /api/companies/{id}/assessment?view=retrospective&as_of=2025-12-31` or MCP `get_cash_outlook({company_id, view: "retrospective", as_of: "2025-12-31"})` selects a retrospective month, not historical known-on evidence. Strict requests reject. Financial/model/reconstruction histories are filtered; future-anchor cash is separately dated. EUR flow/service/AP/document values are not cents; cash uses each account's native currency. No verified available cash or planning is inferred. Model probabilities stay null before January 2026 and for the 208 final-test product-only companies.
+
+### Verification state and safe inspection
+
+The scoped technical delivery passed current application checks, eight explicit real-export Rust tests and a four-mode 15-step browser run. Its final review used a disclosed **inline, non-independent fallback** after service quota failures. Technical acceptance does not make failed predictive utility successful.
+
+A user-authorized amendment treats exactly one TypeScript cache as regenerable, retaining the historical lost-byte failure and original seals. This documentation refresh preserves the seven previous documents and checks their analytical references, metric tables and model artifacts; frontend/backend state is not part of that verification. Verify this current documented revision from the root:
+
+```sh
+.venv/bin/python -B reports/modeling/financial-v3/dataset-v1/delivery-v1/amendment-v2/documentation-v1/verify_artifact_docs.py check
+```
+
+Evidence: [technical checks](reports/modeling/financial-v3/dataset-v1/delivery-v1/amendment-v2/verification.json), [parent review](reports/modeling/financial-v3/dataset-v1/delivery-v1/amendment-v2/check-parent-review-20260920-v1.json), and [documentation verifier](reports/modeling/financial-v3/dataset-v1/delivery-v1/amendment-v2/documentation-v1/verify_artifact_docs.py). Older whole-worktree/document-bound checkers verify their frozen documentation/application context, not today's rewritten documents. Their receipts and failure records are not edited to manufacture a pass. Historical 189-test Python results are not a claim that full current discovery passed; current test scopes are explicit in the report.
+
+The remaining sections describe preserved modes and operating commands. Do not blindly replay exclusive training/evaluation phases or old E2E helpers that append to protected historical report directories. Use a new versioned protocol for future model development; this documentation update authorizes no execution or deployment.
+
+## Operating trajectory v2 — descriptive review only
+
+[Goal v2 and the exact protocol design](reports/planning/financial-scoring-plan.md#preregistro-v2) fix rules and input identities before any new outcome inspection. The [versioned immutable JSON](reports/modeling/trajectory-v2/protocol.json) is materialised with an [exclusive hash receipt](reports/modeling/trajectory-v2/protocol-receipt.json). Contract fixtures and `python3 -B scripts/trajectory_contract.py --check` passed: byte hashes and assignment metadata only, 200 included groups and all 50 v1 final-test groups excluded. On its first successful check the verifier exclusively creates the receipt; subsequent checks verify it without rewriting. This phase does not run the data pipeline, train, infer, compute events/metrics or reopen the v1 test. The existing export and sealed development/reserved results now feed the app; this integration does not execute any model, inference, event-label or backtest phase.
+
+The addition stays inside the current dashboard, with the cash demo and planning panel preserved. No rebrand or four new pages. It shows every company × closed month from September 2024 through August 2026, retaining gaps, a robust current deficit/non-deficit state and a separate `improving` / `stable` / `deteriorating` / `insufficient_evidence` direction. Known receipts/payments ratios, base/trim uncertainty and arithmetic changes explain the evidence, not causal effects or model points. A deficit is not automatically deterioration, and missing evidence is not bad health.
+
+The frozen v1 probability is a separate `target_deficit_3m` overlay, only for eligible April–August 2026 month-ends after the 31 March training/selection label cutoff; earlier dates stay unavailable. This is retrospective simulation with a model physically trained in September, not proof of live historical issuance. No 0–100 official score, fabricated cash stock, new fits or new evaluation of the v1 target.
+
+V2 distinguishes provisional watch from a simulated alert confirmed at the second consecutive same-sign month-end, without backdating. The sealed report compares this candidate against a one-month baseline: reserved improvement 2/37 matches, 75 alerts, 48 false and 25 censored; deterioration 1/41, 73 alerts, 50 false and 22 censored. False-alert shares are 96% and 98.039%, not FPR; baseline matches are 3/37 and 7/41. **Anticipation not validated.** Only three candidate matches support the lead summary. Group intervals are aggregate, not individual probability CIs; censored rows remain unknown. V1 AP is a different target and is not a v2 event metric. The [v2 evaluation and delivery report (Spanish)](reports/modeling/trajectory-v2/assessment/report.md) records both methods, censoring, group intervals and the three unaltered development cases.
+
+Exclude all 50 v1 final-test groups from v2 development, event/alert evaluation and case selection. Development uses origins March–September 2025 and outcomes through December; the temporal reserve uses origins March–May 2026 and outcomes through August in the 200 train/validation groups. This is known-company evaluation on a shared synthetic corpus, not a new independent group holdout. Demo improvement, deterioration and recovered-dip cases come only from development; report unavailable types rather than borrowing reserve cases. All availability remains retrospective, not certified `known_on`.
+
+The user has communicated that the official test may change or be cancelled; this is **not organiser confirmation**. Official target, metric and submission format remain unconfirmed. Existing commands below document the existing system, not authorisation to run model/data workflows during this application-verification phase.
+
+### Load and verify the existing trajectory export
+
+Set process-only `ASSESSMENT_FILE` to the absolute `reports/modeling/trajectory-v2/assessment/companies.json` path in both Rust services. Keep its sibling `manifest.json`: startup pins both SHA256 identities, validates the exact nested company schema and temporal/count invariants, and shares a cached local dictionary. No HTTP/path reference resolver exists. The 103,942,971-byte export stays server-side; responses contain one authorised company and the selected history, never all companies' trajectories.
+
+`GET /api/companies/{id}/assessment?as_of=2025-05-31` and MCP `get_cash_outlook({company_id, as_of})` accept only exported closed months. Omitted/null MCP dates mean the explicitly labelled latest snapshot; malformed, non-month-end and out-of-range dates fail rather than falling back. Cash and v1 proxy accept only their original snapshot date. Trajectory responses add `selected_as_of`, `current_point`, `available_as_of` and safely resolved `trajectory_metadata`; historical company dates and points are filtered, full cases are hidden until confirmation, and global backtest metrics are omitted at historical cuts. The latest report is labelled as later retrospective methodology. Forecast remains null and all plan comparisons reject trajectory input.
+
+The authorised-only **Example retrospective development** selector retains `COMP_0009` deterioration and `COMP_0179` improvement (visible from 2025-05-31), and `COMP_0028` recovered dip (2025-06-30). Their onset is April 2025, their histories start September 2024, and no development-date probability is fabricated. Cases are not replaced to favour successful alerts.
+
+```sh
+cargo build --workspace
+TRAJECTORY_ASSESSMENT_FILE="$PWD/reports/modeling/trajectory-v2/assessment/companies.json" cargo test --workspace actual_trajectory -- --ignored
+bun run test:trajectory:e2e
+bun run check
+```
+
+The trajectory E2E uses existing Playwright and sandboxed system Chromium, bounded local ports/readiness, fresh temporary identities and unlogged random passwords. It verifies all three cases, all their historical API cuts, eligible April–August overlay, gaps, authorisation and old cash/v1 modes. Only new timestamped evidence is written under `reports/modeling/trajectory-v2/app-verification/`; it does not rewrite the v1 browser summary or any sealed result. No model/backtest replay is part of these application commands. Overall goal acceptance remains a separate coordinating decision.
+
+</details>
 
 ## Run locally
 
@@ -64,9 +166,52 @@ The default snapshot is [fixtures/companies.json](fixtures/companies.json), a sy
 
 Amounts are signed integer cents in one reporting currency per company. This version assumes two decimal places. Each flow carries a stable ID, due date, knowledge date, settled amount, source and contractual/estimated timing. Inputs are bounded, duplicate flow IDs are rejected, settlements are deducted, internal transfers are excluded, and facts learned after the assessment date do not enter the forecast. Open overdue items are projected on the next day and disclosed as an assumption.
 
-The upstream Data/Model workstreams own challenge CSV reconciliation, currency conversion, validated historical assessments and the official score. Rust imports their published Parquet outputs; the app does not compute a replacement challenge score. Health, driver and coverage evidence comes from the supplied snapshot. Missing business metrics require explicit finance-team inputs.
+The upstream Data/Model workstreams own challenge CSV reconciliation, currency conversion and the scope of historical assessments. No official target, metric, format or validated challenge score is confirmed. Rust imports their published Parquet outputs; the app does not import those CSVs directly or compute a replacement challenge score. The sealed proxy export remains separate analytical evidence. Any health field in the cash fixture is illustrative; driver and coverage evidence comes from the supplied snapshot. Missing business metrics require explicit finance-team inputs.
 
 Planning compares two deterministic candidates, not every possible plan. Funding is conditional on availability, assumed on day one at 8% annual interest, with principal repayment after the horizon. Growth applies only to incremental revenue and associated costs. Plans are held in the current browser session and are not saved to the database.
+
+## Sealed operating-deficit proxy assessments
+
+The [training report (Spanish)](reports/modeling/training-report.md) documents the dataset, target, temporal/group splits, features, candidates, selection, observed results and reproduction limits.
+
+This historical synthetic proxy remains offline analytical evidence; its former dashboard/API/MCP integration has been retired. It estimates `target_deficit_3m`: operating deficit in at least two of the next three **calendar months**, within the observed perimeter. This is a retrospective, uncalibrated proxy, not a default probability, official health score, cash balance, or causal diagnosis. The current snapshot closes on 2026-08-31 and covers 2026-09-01 through 2026-11-30; it is not a rolling 90-day forecast.
+
+```sh
+python3 scripts/export_assessments.py
+python3 scripts/export_assessments.py --check
+python3 -B -m unittest tests.test_export_assessments -v
+```
+
+The standard-library exporter reads only the sealed `reports/modeling/experiment-v1/latest_predictions.json` and linked experiment artifacts. It pins the approved prediction SHA, verifies integrity sidecars, report/model/selection links and model artifact hashes, and never trains, evaluates, loads a pickle, or reads raw data/target tables. It writes `reports/modeling/assessment-v1/companies.json` and `manifest.json`. Repeating the export is byte-identical; existing different output is rejected, never overwritten. `--check` verifies both output files without writing.
+
+For a read-only inference replay, use the pinned optional model environment (`requirements-model.txt`, Python 3.13.15), the sealed local model and its bound `data/runs` snapshot:
+
+```sh
+.venv/bin/python -B scripts/replay_model.py --check
+.venv/bin/python -B -m unittest tests.test_replay_model -v
+```
+
+Replay first verifies the exporter's approved prediction SHA and linked seals, then the fixed local model's source/dependency hashes and the bound run manifest/panel hashes. It projects only approved `panel_flujos` columns, rebuilds August 2026 features and compares every company, metadata field, feature, eligibility flag and missing reason exactly. Unknowns remain null and missing current months remain abstentions. Probabilities allow only an absolute `1e-12` difference; the JSON result reports the maximum error and exact-equality status. It does not train, query targets, reevaluate the held-out test, consult the live G-DATA gate, modify predictions, or accept external pickle paths. `--check` writes nothing; final verification evidence is recorded separately in `reports/modeling/final-verification/`.
+
+All 1,286 companies are preserved: 1,010 estimates and 276 explicit abstentions. Names are `Synthetic company <id>`. Each `kind: "proxy_only"` company has typed `predictive` evidence, eligibility and missing reasons, observed features, validation limits and provenance hashes. `opening_cash_cents`, `buffer_cents` and `health` are null; empty history/flows mean **unknown**, not no activity. EUR is an analytical source basis, not a claim about native reporting currency. These are historical export fields, not the current cash-input contract.
+
+Do not set `ASSESSMENT_FILE` to this proxy export: current API/MCP require the cash fixture shape with numeric opening cash/buffer; unknown fields are ignored, as before. The cash response no longer contains `cash_planning_available`, `cash_planning_reason`, or a company `kind`/`predictive` discriminator. Imported scoring-v4 assessments keep their separate `kind: "model"` contract unchanged.
+
+Validation is conditional on 131 observed labels out of 299 prospective rows across 31 groups. Average precision is 0.816 against prevalence 0.511; Brier is 0.188 against baseline 0.252. Relative Brier skill is 25.1% with a grouped fixed-fit 95% interval of 12.0–38.1%. This interval is not uncertainty on an individual probability and does not establish calibration or reliability for censored outcomes.
+
+The old proxy-specific Rust tests and `test:assessments:e2e` command were retired with that integration. Existing browser summaries remain historical evidence, not current application verification. Run `bun run check` for current web, build, authentication and Rust regressions.
+
+## Portable predictive model
+
+The [model package handoff](services/predictive/README.md) prepares the predictive model for the [dedicated Jio service plan](docs/plans/xray-prediction-model-jio-plan.md). It does not deploy a service or replace scoring v4.
+
+```sh
+.venv/bin/python -B scripts/build_predictive_bundle.py --output .local/predictive-model
+.venv/bin/python -B scripts/build_predictive_bundle.py --output .local/predictive-model --check
+.venv/bin/python -B -m unittest tests.test_predictive_bundle tests.test_predictive_runtime -v
+```
+
+Copy the complete generated directory, not all of `.local/`. It contains the selected estimators, inference runtime, financial input contracts and a synthetic smoke-test snapshot. Python 3.13.15 and its standard library suffice for inference; training data and third-party scientific packages are not required at runtime. HTTP serving, Jio deployment and productive Rust integration remain separate workstreams.
 
 ## Published Parquet assessments in the app
 
@@ -205,6 +350,8 @@ bun run check
 # With bun run dev running against the default demo snapshot:
 bun run test:integration
 ```
+
+`bun run check` includes deployment **validation only**, never a deployment: it runs `bash -n` separately on both shell files after normalizing CRLF to LF in memory, rejects malformed LF/CRLF fixtures, and exercises existing account/auth/origin checks against mocked tools and temporary script copies. Repository deployment scripts and policies are not rewritten.
 
 Checks cover TypeScript, production builds, Rust formatting/lints, authentication, company isolation, PKCE and token rotation, MCP transport, dated shortfalls and plan constraints. The integration check signs in through the app proxy, exercises OAuth and all three tools, then revokes its grant and signs out.
 

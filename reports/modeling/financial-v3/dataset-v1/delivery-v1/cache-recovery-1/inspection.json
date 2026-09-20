@@ -1,0 +1,1360 @@
+{
+  "target_sha256": "a3891095f07a0fd0c435132d2bc560e8970c79f2e9bc8945fe02b0a36affacbf",
+  "command": "node reports/modeling/financial-v3/dataset-v1/delivery-v1/cache-recovery-1/recovery.mjs inspect",
+  "typescript_version": "5.9.3",
+  "next_version": "16.3.5",
+  "module_paths": {
+    "typescript": "node_modules/.bun/typescript@5.9.3/node_modules/typescript/lib/typescript.js",
+    "next": "node_modules/.bun/next@16.3.5+6da4d20581282908/node_modules/next/package.json"
+  },
+  "scan": {
+    "roots": [
+      "apps/app",
+      "apps/landing",
+      "reports/modeling"
+    ],
+    "entries_visited": 3675,
+    "symlinks_followed": false,
+    "content_read_scope": "Only filenames containing tsbuildinfo, no unrelated cache secrets or data artifact contents",
+    "candidates": [
+      {
+        "path": "apps/app/.next/cache/.tsbuildinfo",
+        "bytes": 141729,
+        "sha256": "69b5368491a7c78ddaa248a76ba468b8b974dde1084f65c963f6dbb83f1cc561",
+        "parseable_build_info": true,
+        "version": "5.9.3",
+        "keys": [
+          "fileNames",
+          "fileIdsList",
+          "fileInfos",
+          "root",
+          "options",
+          "referencedMap",
+          "affectedFilesPendingEmit",
+          "version"
+        ],
+        "options": {
+          "allowJs": true,
+          "declarationMap": false,
+          "emitDeclarationOnly": false,
+          "esModuleInterop": true,
+          "jsx": 4,
+          "module": 99,
+          "skipLibCheck": true,
+          "strict": true,
+          "target": 9,
+          "tsBuildInfoFile": "./.tsbuildinfo"
+        },
+        "file_count": 582,
+        "roots": [
+          "../types/routes.d.ts",
+          "../types/root-params.d.ts",
+          "../../next-env.d.ts",
+          "../../next.config.ts",
+          "../../lib/api.ts",
+          "../../lib/trajectory-types.ts",
+          "../../lib/types.ts",
+          "../../lib/financial-v3.ts",
+          "../../lib/financial-v3.test.ts",
+          "../../lib/format.ts",
+          "../../lib/trajectory.ts",
+          "../../lib/trajectory.test.ts",
+          "../../app/error.tsx",
+          "../../app/layout.tsx",
+          "../../app/page.tsx",
+          "../../components/auth-layout.tsx",
+          "../../app/connect/page.tsx",
+          "../../components/cash-chart.tsx",
+          "../../components/dialog.tsx",
+          "../../components/planner.tsx",
+          "../../components/connections.tsx",
+          "../../components/proxy-assessment.tsx",
+          "../../components/trajectory-assessment.tsx",
+          "../../components/financial-v3-assessment.tsx",
+          "../../app/dashboard/page.tsx",
+          "../../app/login/page.tsx",
+          "../types/cache-life.d.ts",
+          "../types/validator.ts",
+          "../dev/types/cache-life.d.ts",
+          "../dev/types/root-params.d.ts",
+          "../dev/types/routes.d.ts",
+          "../dev/types/validator.ts"
+        ],
+        "app_entries": [
+          {
+            "id": 550,
+            "path": "../types/routes.d.ts",
+            "version": "db375d18994a507e67dcd457a7b4262d4695d4749dba51824af6478dafac6585",
+            "info": {
+              "version": "db375d18994a507e67dcd457a7b4262d4695d4749dba51824af6478dafac6585",
+              "affectsGlobalScope": true
+            }
+          },
+          {
+            "id": 551,
+            "path": "../types/root-params.d.ts",
+            "version": "f3387dd7800eec3c34273f7a8efad13e864598c7e8f788d321e407390989bb59",
+            "info": "f3387dd7800eec3c34273f7a8efad13e864598c7e8f788d321e407390989bb59"
+          },
+          {
+            "id": 552,
+            "path": "../../next-env.d.ts",
+            "version": "1862ac4bbbc5192d4bf562161df66ea547ed3e67173100656ab606ae9797db2b",
+            "info": "1862ac4bbbc5192d4bf562161df66ea547ed3e67173100656ab606ae9797db2b"
+          },
+          {
+            "id": 553,
+            "path": "../../next.config.ts",
+            "version": "b73bcccc177b7e9b897b6941f87182fb42e723d95f2b3144254804e275ac70f8",
+            "info": {
+              "version": "b73bcccc177b7e9b897b6941f87182fb42e723d95f2b3144254804e275ac70f8",
+              "signature": "dcf5ac2a74b210c989afe8db7be81feab5b524cde8e288e7e32118032c9b3f26"
+            }
+          },
+          {
+            "id": 554,
+            "path": "../../lib/api.ts",
+            "version": "634e96c26c0dff330ed6c38830bd46b3e5293293d0cb86f8e43a16ba21c6f9eb",
+            "info": {
+              "version": "634e96c26c0dff330ed6c38830bd46b3e5293293d0cb86f8e43a16ba21c6f9eb",
+              "signature": "689fb65f07a059363013fd00cf88cfe8d63cc59ca17074d8fcf3f3fcaeb7421d"
+            }
+          },
+          {
+            "id": 555,
+            "path": "../../lib/trajectory-types.ts",
+            "version": "18c184503486c10df53542b967ee0adc8c0a11782d382eb6f302f387f17ed888",
+            "info": "18c184503486c10df53542b967ee0adc8c0a11782d382eb6f302f387f17ed888"
+          },
+          {
+            "id": 556,
+            "path": "../../lib/types.ts",
+            "version": "fdc55f241fb90f16d4ad084b675c2273ffa7e59c325c979f3effcc858fe06321",
+            "info": {
+              "version": "fdc55f241fb90f16d4ad084b675c2273ffa7e59c325c979f3effcc858fe06321",
+              "signature": "19ecabe10532712bfe8a3b6c5862d5ba98088cac912757e9dc12ec5c0c9c36e8"
+            }
+          },
+          {
+            "id": 557,
+            "path": "../../lib/financial-v3.ts",
+            "version": "8a9130bc9459c6ab5628cf358879aab1d9a2e40fbb2fc6d1fb4979ea2fad7a4e",
+            "info": {
+              "version": "8a9130bc9459c6ab5628cf358879aab1d9a2e40fbb2fc6d1fb4979ea2fad7a4e",
+              "signature": "2d8db07be02becb7f998c732e52984435b866b540800078d2b33a1edf6bf3ed8"
+            }
+          },
+          {
+            "id": 558,
+            "path": "../../lib/financial-v3.test.ts",
+            "version": "01da265111a2b4b940ac9c8458591ef575f8bac18abcdb6f4fdf1cfd8da54b4b",
+            "info": {
+              "version": "01da265111a2b4b940ac9c8458591ef575f8bac18abcdb6f4fdf1cfd8da54b4b",
+              "signature": "8e609bb71c20b858c77f0e9f90bb1319db8477b13f9f965f1a1e18524bf50881"
+            }
+          },
+          {
+            "id": 559,
+            "path": "../../lib/format.ts",
+            "version": "46803c939a9dbc041a2e11d2dd6c5f376d5321e6f2628f821ee3f073d9b963d1",
+            "info": {
+              "version": "46803c939a9dbc041a2e11d2dd6c5f376d5321e6f2628f821ee3f073d9b963d1",
+              "signature": "869787a3b1a3d7f2d38dd49199fcd4a1969af2af59e14a30625777acd4b71306"
+            }
+          },
+          {
+            "id": 560,
+            "path": "../../lib/trajectory.ts",
+            "version": "9d4181be8e521e72a620b273105480055c6192e4203df3feac6c9c82e1ae8def",
+            "info": "9d4181be8e521e72a620b273105480055c6192e4203df3feac6c9c82e1ae8def"
+          },
+          {
+            "id": 561,
+            "path": "../../lib/trajectory.test.ts",
+            "version": "76679c840f8efcadc389d0290ec182d8d94006a0b7330c5ca60218cecf8838d0",
+            "info": "76679c840f8efcadc389d0290ec182d8d94006a0b7330c5ca60218cecf8838d0"
+          },
+          {
+            "id": 562,
+            "path": "../../app/error.tsx",
+            "version": "6b3d85b23befb4203f0808de3c9e8bd0ef6daeee0d2ac2865a3eb6cd04c2836f",
+            "info": {
+              "version": "6b3d85b23befb4203f0808de3c9e8bd0ef6daeee0d2ac2865a3eb6cd04c2836f",
+              "signature": "86d16541008ac04f1c125dc4f046804ef6725c37f0e7982db50a175941849c71"
+            }
+          },
+          {
+            "id": 563,
+            "path": "../../app/layout.tsx",
+            "version": "9aed9cb95855b346b87d9db5de81aa830b10d1c75fccb7470b75f2de4188693a",
+            "info": {
+              "version": "9aed9cb95855b346b87d9db5de81aa830b10d1c75fccb7470b75f2de4188693a",
+              "signature": "06dcb96258bacb62cb6177f73c350a2f608a2a27486790047c1e757d1349167b"
+            }
+          },
+          {
+            "id": 564,
+            "path": "../../app/page.tsx",
+            "version": "ab3b856a243fefb0b8dd2e562f7914041767a8c2b6939633c85e4e4e97df6ec0",
+            "info": {
+              "version": "ab3b856a243fefb0b8dd2e562f7914041767a8c2b6939633c85e4e4e97df6ec0",
+              "signature": "f5b5d4d2565e15fa4ea35249f6dfac49afe8d18383b09d6f2732010ea11ff387"
+            }
+          },
+          {
+            "id": 566,
+            "path": "../../components/auth-layout.tsx",
+            "version": "4587784c12a9c3f1ec01c16c1cb8bd9137ade113efd7a681d3aebe2dbe7f676d",
+            "info": {
+              "version": "4587784c12a9c3f1ec01c16c1cb8bd9137ade113efd7a681d3aebe2dbe7f676d",
+              "signature": "13478bed357498d8a3a59541410c5388c337045e6da898f68aa8c4b327ca0585"
+            }
+          },
+          {
+            "id": 567,
+            "path": "../../app/connect/page.tsx",
+            "version": "166b316ff507cf141291dc6128657b4401ff0f538557e1e3de0fe5a4e61bebba",
+            "info": {
+              "version": "166b316ff507cf141291dc6128657b4401ff0f538557e1e3de0fe5a4e61bebba",
+              "signature": "3a4bb6bb66216477cdb8f8e89fdf554165a6f5b0bad091fb9e26e4e11ca92726"
+            }
+          },
+          {
+            "id": 568,
+            "path": "../../components/cash-chart.tsx",
+            "version": "5a63c5a47f29cb0c9eb1a5da40ca9cba3c5b13dfd7d6d3fd1e37f93e1b337322",
+            "info": "5a63c5a47f29cb0c9eb1a5da40ca9cba3c5b13dfd7d6d3fd1e37f93e1b337322"
+          },
+          {
+            "id": 569,
+            "path": "../../components/dialog.tsx",
+            "version": "f5466470c4dd91c424485d2abdbaebcaca626f5240979100c3efe141c31005fe",
+            "info": {
+              "version": "f5466470c4dd91c424485d2abdbaebcaca626f5240979100c3efe141c31005fe",
+              "signature": "3848f0e3554a5772f98bb5b31845f91f559c624c64ddfe29e6e29f977d913a05"
+            }
+          },
+          {
+            "id": 570,
+            "path": "../../components/planner.tsx",
+            "version": "04eaf9028d760814d0902b4e74aa85bf4c5940a2d386a6056918c81c6ad1d341",
+            "info": "04eaf9028d760814d0902b4e74aa85bf4c5940a2d386a6056918c81c6ad1d341"
+          },
+          {
+            "id": 571,
+            "path": "../../components/connections.tsx",
+            "version": "eb526a0a81f01939466ae138cb82310a4270a884ad0320918d089e827e30a7d1",
+            "info": {
+              "version": "eb526a0a81f01939466ae138cb82310a4270a884ad0320918d089e827e30a7d1",
+              "signature": "a91af53092e33011ef5548c13acdbe8bf9e7876bb0004f5971784a7c5923fc66"
+            }
+          },
+          {
+            "id": 572,
+            "path": "../../components/proxy-assessment.tsx",
+            "version": "15d2d22dce6d42e0b93af1991186d338fd7a36723a5e4c65dcf9679cf23705cf",
+            "info": "15d2d22dce6d42e0b93af1991186d338fd7a36723a5e4c65dcf9679cf23705cf"
+          },
+          {
+            "id": 573,
+            "path": "../../components/trajectory-assessment.tsx",
+            "version": "f6871aa14d1d78dcbc884477be73fd539c0817d7139226a0c5afda675bc730be",
+            "info": "f6871aa14d1d78dcbc884477be73fd539c0817d7139226a0c5afda675bc730be"
+          },
+          {
+            "id": 574,
+            "path": "../../components/financial-v3-assessment.tsx",
+            "version": "755c93e056294a4eda02c0c8ccfdbcc0d415593672e5e9b594ce36a1aac3cad2",
+            "info": {
+              "version": "755c93e056294a4eda02c0c8ccfdbcc0d415593672e5e9b594ce36a1aac3cad2",
+              "signature": "c53ddd12c5b9dc75d790a07d2312cb71e67afe941c486b44a8d4181f1c7515de"
+            }
+          },
+          {
+            "id": 575,
+            "path": "../../app/dashboard/page.tsx",
+            "version": "5e92ba27d6f6322ad0b57fc485124ac96ea035d973947341cb5ea1695b8112c1",
+            "info": {
+              "version": "5e92ba27d6f6322ad0b57fc485124ac96ea035d973947341cb5ea1695b8112c1",
+              "signature": "09e680003f30e2deafa61b99e04a29b91d27b56df93a43bdc3c683285b550085"
+            }
+          },
+          {
+            "id": 576,
+            "path": "../../app/login/page.tsx",
+            "version": "ad779eb0c0b7002584bebde1a3786faf8e543cfd5769a34da81abcb2830b031d",
+            "info": {
+              "version": "ad779eb0c0b7002584bebde1a3786faf8e543cfd5769a34da81abcb2830b031d",
+              "signature": "63bde153cfa3cf0afe2a2a36aafa1a130e4b2caf41652c5d1dcbfaa0d6a9148c"
+            }
+          },
+          {
+            "id": 577,
+            "path": "../types/cache-life.d.ts",
+            "version": "4f984436b10cfb43ccf7fc3114dcb851cbefa4d58b7d8ae741aaae0f6e330129",
+            "info": "4f984436b10cfb43ccf7fc3114dcb851cbefa4d58b7d8ae741aaae0f6e330129"
+          },
+          {
+            "id": 578,
+            "path": "../types/validator.ts",
+            "version": "e372ac8a2bcde58e0ef2693e8e2abbdbab4ac52f54b34e360d81c5a9a9d1c500",
+            "info": "e372ac8a2bcde58e0ef2693e8e2abbdbab4ac52f54b34e360d81c5a9a9d1c500"
+          },
+          {
+            "id": 579,
+            "path": "../dev/types/cache-life.d.ts",
+            "version": "4f984436b10cfb43ccf7fc3114dcb851cbefa4d58b7d8ae741aaae0f6e330129",
+            "info": "4f984436b10cfb43ccf7fc3114dcb851cbefa4d58b7d8ae741aaae0f6e330129"
+          },
+          {
+            "id": 580,
+            "path": "../dev/types/root-params.d.ts",
+            "version": "f3387dd7800eec3c34273f7a8efad13e864598c7e8f788d321e407390989bb59",
+            "info": "f3387dd7800eec3c34273f7a8efad13e864598c7e8f788d321e407390989bb59"
+          },
+          {
+            "id": 581,
+            "path": "../dev/types/routes.d.ts",
+            "version": "db375d18994a507e67dcd457a7b4262d4695d4749dba51824af6478dafac6585",
+            "info": {
+              "version": "db375d18994a507e67dcd457a7b4262d4695d4749dba51824af6478dafac6585",
+              "affectsGlobalScope": true
+            }
+          },
+          {
+            "id": 582,
+            "path": "../dev/types/validator.ts",
+            "version": "6913dacb8323257a81932cc176dcb8c1eeba54ab4e03077d3725f32e49b56ab8",
+            "info": "6913dacb8323257a81932cc176dcb8c1eeba54ab4e03077d3725f32e49b56ab8"
+          }
+        ],
+        "diagnostics": [],
+        "pending_emit": [
+          582,
+          578,
+          567,
+          575,
+          562,
+          563,
+          576,
+          564,
+          566,
+          568,
+          571,
+          569,
+          574,
+          570,
+          572,
+          573,
+          554,
+          558,
+          557,
+          559,
+          555,
+          561,
+          560,
+          556,
+          553
+        ]
+      },
+      {
+        "path": "apps/app/tsconfig.tsbuildinfo",
+        "bytes": 138287,
+        "sha256": "8ecfc04867158213c1034082f48adf108d0a002a1aa92058617cb4334c4307fc",
+        "parseable_build_info": true,
+        "version": "5.9.3",
+        "keys": [
+          "fileNames",
+          "fileIdsList",
+          "fileInfos",
+          "root",
+          "options",
+          "referencedMap",
+          "affectedFilesPendingEmit",
+          "version"
+        ],
+        "options": {
+          "allowJs": true,
+          "esModuleInterop": true,
+          "jsx": 4,
+          "module": 99,
+          "skipLibCheck": true,
+          "strict": true,
+          "target": 9
+        },
+        "file_count": 582,
+        "roots": [
+          "./.next/types/routes.d.ts",
+          "./.next/types/root-params.d.ts",
+          "./next-env.d.ts",
+          "./next.config.ts",
+          "./lib/api.ts",
+          "./lib/trajectory-types.ts",
+          "./lib/types.ts",
+          "./lib/financial-v3.ts",
+          "./lib/financial-v3.test.ts",
+          "./lib/format.ts",
+          "./lib/trajectory.ts",
+          "./lib/trajectory.test.ts",
+          "./app/error.tsx",
+          "./app/layout.tsx",
+          "./app/page.tsx",
+          "./components/auth-layout.tsx",
+          "./app/connect/page.tsx",
+          "./components/cash-chart.tsx",
+          "./components/dialog.tsx",
+          "./components/planner.tsx",
+          "./components/connections.tsx",
+          "./components/proxy-assessment.tsx",
+          "./components/trajectory-assessment.tsx",
+          "./components/financial-v3-assessment.tsx",
+          "./app/dashboard/page.tsx",
+          "./app/login/page.tsx",
+          "./.next/types/cache-life.d.ts",
+          "./.next/types/validator.ts",
+          "./.next/dev/types/cache-life.d.ts",
+          "./.next/dev/types/root-params.d.ts",
+          "./.next/dev/types/routes.d.ts",
+          "./.next/dev/types/validator.ts"
+        ],
+        "app_entries": [
+          {
+            "id": 550,
+            "path": "./.next/types/routes.d.ts",
+            "version": "db375d18994a507e67dcd457a7b4262d4695d4749dba51824af6478dafac6585",
+            "info": {
+              "version": "db375d18994a507e67dcd457a7b4262d4695d4749dba51824af6478dafac6585",
+              "affectsGlobalScope": true
+            }
+          },
+          {
+            "id": 551,
+            "path": "./.next/types/root-params.d.ts",
+            "version": "f3387dd7800eec3c34273f7a8efad13e864598c7e8f788d321e407390989bb59",
+            "info": "f3387dd7800eec3c34273f7a8efad13e864598c7e8f788d321e407390989bb59"
+          },
+          {
+            "id": 552,
+            "path": "./next-env.d.ts",
+            "version": "1862ac4bbbc5192d4bf562161df66ea547ed3e67173100656ab606ae9797db2b",
+            "info": "1862ac4bbbc5192d4bf562161df66ea547ed3e67173100656ab606ae9797db2b"
+          },
+          {
+            "id": 553,
+            "path": "./next.config.ts",
+            "version": "b73bcccc177b7e9b897b6941f87182fb42e723d95f2b3144254804e275ac70f8",
+            "info": {
+              "version": "b73bcccc177b7e9b897b6941f87182fb42e723d95f2b3144254804e275ac70f8",
+              "signature": "dcf5ac2a74b210c989afe8db7be81feab5b524cde8e288e7e32118032c9b3f26"
+            }
+          },
+          {
+            "id": 554,
+            "path": "./lib/api.ts",
+            "version": "634e96c26c0dff330ed6c38830bd46b3e5293293d0cb86f8e43a16ba21c6f9eb",
+            "info": {
+              "version": "634e96c26c0dff330ed6c38830bd46b3e5293293d0cb86f8e43a16ba21c6f9eb",
+              "signature": "689fb65f07a059363013fd00cf88cfe8d63cc59ca17074d8fcf3f3fcaeb7421d"
+            }
+          },
+          {
+            "id": 555,
+            "path": "./lib/trajectory-types.ts",
+            "version": "18c184503486c10df53542b967ee0adc8c0a11782d382eb6f302f387f17ed888",
+            "info": "18c184503486c10df53542b967ee0adc8c0a11782d382eb6f302f387f17ed888"
+          },
+          {
+            "id": 556,
+            "path": "./lib/types.ts",
+            "version": "fdc55f241fb90f16d4ad084b675c2273ffa7e59c325c979f3effcc858fe06321",
+            "info": {
+              "version": "fdc55f241fb90f16d4ad084b675c2273ffa7e59c325c979f3effcc858fe06321",
+              "signature": "19ecabe10532712bfe8a3b6c5862d5ba98088cac912757e9dc12ec5c0c9c36e8"
+            }
+          },
+          {
+            "id": 557,
+            "path": "./lib/financial-v3.ts",
+            "version": "8a9130bc9459c6ab5628cf358879aab1d9a2e40fbb2fc6d1fb4979ea2fad7a4e",
+            "info": {
+              "version": "8a9130bc9459c6ab5628cf358879aab1d9a2e40fbb2fc6d1fb4979ea2fad7a4e",
+              "signature": "2d8db07be02becb7f998c732e52984435b866b540800078d2b33a1edf6bf3ed8"
+            }
+          },
+          {
+            "id": 558,
+            "path": "./lib/financial-v3.test.ts",
+            "version": "01da265111a2b4b940ac9c8458591ef575f8bac18abcdb6f4fdf1cfd8da54b4b",
+            "info": {
+              "version": "01da265111a2b4b940ac9c8458591ef575f8bac18abcdb6f4fdf1cfd8da54b4b",
+              "signature": "8e609bb71c20b858c77f0e9f90bb1319db8477b13f9f965f1a1e18524bf50881"
+            }
+          },
+          {
+            "id": 559,
+            "path": "./lib/format.ts",
+            "version": "46803c939a9dbc041a2e11d2dd6c5f376d5321e6f2628f821ee3f073d9b963d1",
+            "info": {
+              "version": "46803c939a9dbc041a2e11d2dd6c5f376d5321e6f2628f821ee3f073d9b963d1",
+              "signature": "869787a3b1a3d7f2d38dd49199fcd4a1969af2af59e14a30625777acd4b71306"
+            }
+          },
+          {
+            "id": 560,
+            "path": "./lib/trajectory.ts",
+            "version": "9d4181be8e521e72a620b273105480055c6192e4203df3feac6c9c82e1ae8def",
+            "info": "9d4181be8e521e72a620b273105480055c6192e4203df3feac6c9c82e1ae8def"
+          },
+          {
+            "id": 561,
+            "path": "./lib/trajectory.test.ts",
+            "version": "76679c840f8efcadc389d0290ec182d8d94006a0b7330c5ca60218cecf8838d0",
+            "info": "76679c840f8efcadc389d0290ec182d8d94006a0b7330c5ca60218cecf8838d0"
+          },
+          {
+            "id": 562,
+            "path": "./app/error.tsx",
+            "version": "6b3d85b23befb4203f0808de3c9e8bd0ef6daeee0d2ac2865a3eb6cd04c2836f",
+            "info": {
+              "version": "6b3d85b23befb4203f0808de3c9e8bd0ef6daeee0d2ac2865a3eb6cd04c2836f",
+              "signature": "86d16541008ac04f1c125dc4f046804ef6725c37f0e7982db50a175941849c71"
+            }
+          },
+          {
+            "id": 563,
+            "path": "./app/layout.tsx",
+            "version": "9aed9cb95855b346b87d9db5de81aa830b10d1c75fccb7470b75f2de4188693a",
+            "info": {
+              "version": "9aed9cb95855b346b87d9db5de81aa830b10d1c75fccb7470b75f2de4188693a",
+              "signature": "06dcb96258bacb62cb6177f73c350a2f608a2a27486790047c1e757d1349167b"
+            }
+          },
+          {
+            "id": 564,
+            "path": "./app/page.tsx",
+            "version": "ab3b856a243fefb0b8dd2e562f7914041767a8c2b6939633c85e4e4e97df6ec0",
+            "info": {
+              "version": "ab3b856a243fefb0b8dd2e562f7914041767a8c2b6939633c85e4e4e97df6ec0",
+              "signature": "f5b5d4d2565e15fa4ea35249f6dfac49afe8d18383b09d6f2732010ea11ff387"
+            }
+          },
+          {
+            "id": 566,
+            "path": "./components/auth-layout.tsx",
+            "version": "4587784c12a9c3f1ec01c16c1cb8bd9137ade113efd7a681d3aebe2dbe7f676d",
+            "info": {
+              "version": "4587784c12a9c3f1ec01c16c1cb8bd9137ade113efd7a681d3aebe2dbe7f676d",
+              "signature": "13478bed357498d8a3a59541410c5388c337045e6da898f68aa8c4b327ca0585"
+            }
+          },
+          {
+            "id": 567,
+            "path": "./app/connect/page.tsx",
+            "version": "166b316ff507cf141291dc6128657b4401ff0f538557e1e3de0fe5a4e61bebba",
+            "info": {
+              "version": "166b316ff507cf141291dc6128657b4401ff0f538557e1e3de0fe5a4e61bebba",
+              "signature": "3a4bb6bb66216477cdb8f8e89fdf554165a6f5b0bad091fb9e26e4e11ca92726"
+            }
+          },
+          {
+            "id": 568,
+            "path": "./components/cash-chart.tsx",
+            "version": "5a63c5a47f29cb0c9eb1a5da40ca9cba3c5b13dfd7d6d3fd1e37f93e1b337322",
+            "info": "5a63c5a47f29cb0c9eb1a5da40ca9cba3c5b13dfd7d6d3fd1e37f93e1b337322"
+          },
+          {
+            "id": 569,
+            "path": "./components/dialog.tsx",
+            "version": "f5466470c4dd91c424485d2abdbaebcaca626f5240979100c3efe141c31005fe",
+            "info": {
+              "version": "f5466470c4dd91c424485d2abdbaebcaca626f5240979100c3efe141c31005fe",
+              "signature": "3848f0e3554a5772f98bb5b31845f91f559c624c64ddfe29e6e29f977d913a05"
+            }
+          },
+          {
+            "id": 570,
+            "path": "./components/planner.tsx",
+            "version": "04eaf9028d760814d0902b4e74aa85bf4c5940a2d386a6056918c81c6ad1d341",
+            "info": "04eaf9028d760814d0902b4e74aa85bf4c5940a2d386a6056918c81c6ad1d341"
+          },
+          {
+            "id": 571,
+            "path": "./components/connections.tsx",
+            "version": "eb526a0a81f01939466ae138cb82310a4270a884ad0320918d089e827e30a7d1",
+            "info": {
+              "version": "eb526a0a81f01939466ae138cb82310a4270a884ad0320918d089e827e30a7d1",
+              "signature": "a91af53092e33011ef5548c13acdbe8bf9e7876bb0004f5971784a7c5923fc66"
+            }
+          },
+          {
+            "id": 572,
+            "path": "./components/proxy-assessment.tsx",
+            "version": "15d2d22dce6d42e0b93af1991186d338fd7a36723a5e4c65dcf9679cf23705cf",
+            "info": "15d2d22dce6d42e0b93af1991186d338fd7a36723a5e4c65dcf9679cf23705cf"
+          },
+          {
+            "id": 573,
+            "path": "./components/trajectory-assessment.tsx",
+            "version": "f6871aa14d1d78dcbc884477be73fd539c0817d7139226a0c5afda675bc730be",
+            "info": "f6871aa14d1d78dcbc884477be73fd539c0817d7139226a0c5afda675bc730be"
+          },
+          {
+            "id": 574,
+            "path": "./components/financial-v3-assessment.tsx",
+            "version": "755c93e056294a4eda02c0c8ccfdbcc0d415593672e5e9b594ce36a1aac3cad2",
+            "info": {
+              "version": "755c93e056294a4eda02c0c8ccfdbcc0d415593672e5e9b594ce36a1aac3cad2",
+              "signature": "c53ddd12c5b9dc75d790a07d2312cb71e67afe941c486b44a8d4181f1c7515de"
+            }
+          },
+          {
+            "id": 575,
+            "path": "./app/dashboard/page.tsx",
+            "version": "5e92ba27d6f6322ad0b57fc485124ac96ea035d973947341cb5ea1695b8112c1",
+            "info": {
+              "version": "5e92ba27d6f6322ad0b57fc485124ac96ea035d973947341cb5ea1695b8112c1",
+              "signature": "09e680003f30e2deafa61b99e04a29b91d27b56df93a43bdc3c683285b550085"
+            }
+          },
+          {
+            "id": 576,
+            "path": "./app/login/page.tsx",
+            "version": "ad779eb0c0b7002584bebde1a3786faf8e543cfd5769a34da81abcb2830b031d",
+            "info": {
+              "version": "ad779eb0c0b7002584bebde1a3786faf8e543cfd5769a34da81abcb2830b031d",
+              "signature": "63bde153cfa3cf0afe2a2a36aafa1a130e4b2caf41652c5d1dcbfaa0d6a9148c"
+            }
+          },
+          {
+            "id": 577,
+            "path": "./.next/types/cache-life.d.ts",
+            "version": "4f984436b10cfb43ccf7fc3114dcb851cbefa4d58b7d8ae741aaae0f6e330129",
+            "info": "4f984436b10cfb43ccf7fc3114dcb851cbefa4d58b7d8ae741aaae0f6e330129"
+          },
+          {
+            "id": 578,
+            "path": "./.next/types/validator.ts",
+            "version": "e372ac8a2bcde58e0ef2693e8e2abbdbab4ac52f54b34e360d81c5a9a9d1c500",
+            "info": "e372ac8a2bcde58e0ef2693e8e2abbdbab4ac52f54b34e360d81c5a9a9d1c500"
+          },
+          {
+            "id": 579,
+            "path": "./.next/dev/types/cache-life.d.ts",
+            "version": "4f984436b10cfb43ccf7fc3114dcb851cbefa4d58b7d8ae741aaae0f6e330129",
+            "info": "4f984436b10cfb43ccf7fc3114dcb851cbefa4d58b7d8ae741aaae0f6e330129"
+          },
+          {
+            "id": 580,
+            "path": "./.next/dev/types/root-params.d.ts",
+            "version": "f3387dd7800eec3c34273f7a8efad13e864598c7e8f788d321e407390989bb59",
+            "info": "f3387dd7800eec3c34273f7a8efad13e864598c7e8f788d321e407390989bb59"
+          },
+          {
+            "id": 581,
+            "path": "./.next/dev/types/routes.d.ts",
+            "version": "db375d18994a507e67dcd457a7b4262d4695d4749dba51824af6478dafac6585",
+            "info": {
+              "version": "db375d18994a507e67dcd457a7b4262d4695d4749dba51824af6478dafac6585",
+              "affectsGlobalScope": true
+            }
+          },
+          {
+            "id": 582,
+            "path": "./.next/dev/types/validator.ts",
+            "version": "6913dacb8323257a81932cc176dcb8c1eeba54ab4e03077d3725f32e49b56ab8",
+            "info": "6913dacb8323257a81932cc176dcb8c1eeba54ab4e03077d3725f32e49b56ab8"
+          }
+        ],
+        "diagnostics": [],
+        "pending_emit": [
+          582,
+          578,
+          567,
+          575,
+          562,
+          563,
+          576,
+          564,
+          566,
+          568,
+          571,
+          569,
+          574,
+          570,
+          572,
+          573,
+          554,
+          558,
+          557,
+          559,
+          555,
+          561,
+          560,
+          556,
+          553
+        ]
+      },
+      {
+        "path": "apps/landing/.next/cache/.tsbuildinfo",
+        "bytes": 134393,
+        "sha256": "58371393c4ebc122fe8cbc5e485a70268a3f5a370cd47c14e14df17e454e6912",
+        "parseable_build_info": true,
+        "version": "5.9.3",
+        "keys": [
+          "fileNames",
+          "fileIdsList",
+          "fileInfos",
+          "root",
+          "options",
+          "referencedMap",
+          "affectedFilesPendingEmit",
+          "version"
+        ],
+        "options": {
+          "allowJs": true,
+          "declarationMap": false,
+          "emitDeclarationOnly": false,
+          "esModuleInterop": true,
+          "jsx": 4,
+          "module": 99,
+          "skipLibCheck": true,
+          "strict": true,
+          "target": 9,
+          "tsBuildInfoFile": "./.tsbuildinfo"
+        },
+        "file_count": 558,
+        "roots": [
+          "../types/routes.d.ts",
+          "../types/root-params.d.ts",
+          "../../next-env.d.ts",
+          "../../next.config.ts",
+          "../../app/layout.tsx",
+          "../../app/page.tsx",
+          "../types/cache-life.d.ts",
+          "../types/validator.ts"
+        ],
+        "app_entries": [
+          {
+            "id": 550,
+            "path": "../types/routes.d.ts",
+            "version": "a384610388221cd70cffb4503cee7853b8b076f2b4a55324b20a4bdbd25a3538",
+            "info": {
+              "version": "a384610388221cd70cffb4503cee7853b8b076f2b4a55324b20a4bdbd25a3538",
+              "affectsGlobalScope": true
+            }
+          },
+          {
+            "id": 551,
+            "path": "../types/root-params.d.ts",
+            "version": "f3387dd7800eec3c34273f7a8efad13e864598c7e8f788d321e407390989bb59",
+            "info": "f3387dd7800eec3c34273f7a8efad13e864598c7e8f788d321e407390989bb59"
+          },
+          {
+            "id": 552,
+            "path": "../../next-env.d.ts",
+            "version": "1862ac4bbbc5192d4bf562161df66ea547ed3e67173100656ab606ae9797db2b",
+            "info": "1862ac4bbbc5192d4bf562161df66ea547ed3e67173100656ab606ae9797db2b"
+          },
+          {
+            "id": 553,
+            "path": "../../next.config.ts",
+            "version": "f2edd31721418e3ff8b1a7ed677f908faf05a43459efab02be9e9673c0850a36",
+            "info": "f2edd31721418e3ff8b1a7ed677f908faf05a43459efab02be9e9673c0850a36"
+          },
+          {
+            "id": 554,
+            "path": "../../app/layout.tsx",
+            "version": "9aed9cb95855b346b87d9db5de81aa830b10d1c75fccb7470b75f2de4188693a",
+            "info": "9aed9cb95855b346b87d9db5de81aa830b10d1c75fccb7470b75f2de4188693a"
+          },
+          {
+            "id": 556,
+            "path": "../../app/page.tsx",
+            "version": "acbac09f0576433bcd9191a76e8da7099e5e3503aa841a427e0f79cd090b4281",
+            "info": "acbac09f0576433bcd9191a76e8da7099e5e3503aa841a427e0f79cd090b4281"
+          },
+          {
+            "id": 557,
+            "path": "../types/cache-life.d.ts",
+            "version": "4f984436b10cfb43ccf7fc3114dcb851cbefa4d58b7d8ae741aaae0f6e330129",
+            "info": "4f984436b10cfb43ccf7fc3114dcb851cbefa4d58b7d8ae741aaae0f6e330129"
+          },
+          {
+            "id": 558,
+            "path": "../types/validator.ts",
+            "version": "8c738d7ab02122bec55d98eab2f5e875f5306ebffe56a6be96f2da0916a7ea71",
+            "info": "8c738d7ab02122bec55d98eab2f5e875f5306ebffe56a6be96f2da0916a7ea71"
+          }
+        ],
+        "diagnostics": [],
+        "pending_emit": [
+          558,
+          554,
+          556,
+          553
+        ]
+      },
+      {
+        "path": "apps/landing/tsconfig.tsbuildinfo",
+        "bytes": 131011,
+        "sha256": "c42e0ba778fe592e53a647cff3e82bb1a545d8363f36d1b05efcc557d36c71b5",
+        "parseable_build_info": true,
+        "version": "5.9.3",
+        "keys": [
+          "fileNames",
+          "fileIdsList",
+          "fileInfos",
+          "root",
+          "options",
+          "referencedMap",
+          "affectedFilesPendingEmit",
+          "version"
+        ],
+        "options": {
+          "allowJs": true,
+          "esModuleInterop": true,
+          "jsx": 4,
+          "module": 99,
+          "skipLibCheck": true,
+          "strict": true,
+          "target": 9
+        },
+        "file_count": 558,
+        "roots": [
+          "./.next/types/routes.d.ts",
+          "./.next/types/root-params.d.ts",
+          "./next-env.d.ts",
+          "./next.config.ts",
+          "./app/layout.tsx",
+          "./app/page.tsx",
+          "./.next/types/cache-life.d.ts",
+          "./.next/types/validator.ts"
+        ],
+        "app_entries": [
+          {
+            "id": 550,
+            "path": "./.next/types/routes.d.ts",
+            "version": "a384610388221cd70cffb4503cee7853b8b076f2b4a55324b20a4bdbd25a3538",
+            "info": {
+              "version": "a384610388221cd70cffb4503cee7853b8b076f2b4a55324b20a4bdbd25a3538",
+              "affectsGlobalScope": true
+            }
+          },
+          {
+            "id": 551,
+            "path": "./.next/types/root-params.d.ts",
+            "version": "f3387dd7800eec3c34273f7a8efad13e864598c7e8f788d321e407390989bb59",
+            "info": "f3387dd7800eec3c34273f7a8efad13e864598c7e8f788d321e407390989bb59"
+          },
+          {
+            "id": 552,
+            "path": "./next-env.d.ts",
+            "version": "1862ac4bbbc5192d4bf562161df66ea547ed3e67173100656ab606ae9797db2b",
+            "info": "1862ac4bbbc5192d4bf562161df66ea547ed3e67173100656ab606ae9797db2b"
+          },
+          {
+            "id": 553,
+            "path": "./next.config.ts",
+            "version": "f2edd31721418e3ff8b1a7ed677f908faf05a43459efab02be9e9673c0850a36",
+            "info": "f2edd31721418e3ff8b1a7ed677f908faf05a43459efab02be9e9673c0850a36"
+          },
+          {
+            "id": 554,
+            "path": "./app/layout.tsx",
+            "version": "9aed9cb95855b346b87d9db5de81aa830b10d1c75fccb7470b75f2de4188693a",
+            "info": "9aed9cb95855b346b87d9db5de81aa830b10d1c75fccb7470b75f2de4188693a"
+          },
+          {
+            "id": 556,
+            "path": "./app/page.tsx",
+            "version": "acbac09f0576433bcd9191a76e8da7099e5e3503aa841a427e0f79cd090b4281",
+            "info": "acbac09f0576433bcd9191a76e8da7099e5e3503aa841a427e0f79cd090b4281"
+          },
+          {
+            "id": 557,
+            "path": "./.next/types/cache-life.d.ts",
+            "version": "4f984436b10cfb43ccf7fc3114dcb851cbefa4d58b7d8ae741aaae0f6e330129",
+            "info": "4f984436b10cfb43ccf7fc3114dcb851cbefa4d58b7d8ae741aaae0f6e330129"
+          },
+          {
+            "id": 558,
+            "path": "./.next/types/validator.ts",
+            "version": "8c738d7ab02122bec55d98eab2f5e875f5306ebffe56a6be96f2da0916a7ea71",
+            "info": "8c738d7ab02122bec55d98eab2f5e875f5306ebffe56a6be96f2da0916a7ea71"
+          }
+        ],
+        "diagnostics": [],
+        "pending_emit": [
+          558,
+          554,
+          556,
+          553
+        ]
+      }
+    ],
+    "exact_copies": []
+  },
+  "parsed_config": {
+    "options": {
+      "target": 9,
+      "lib": [
+        "lib.dom.d.ts",
+        "lib.dom.iterable.d.ts",
+        "lib.esnext.d.ts"
+      ],
+      "strict": true,
+      "noEmit": true,
+      "skipLibCheck": true,
+      "esModuleInterop": true,
+      "module": 99,
+      "moduleResolution": 100,
+      "resolveJsonModule": true,
+      "isolatedModules": true,
+      "jsx": 4,
+      "incremental": true,
+      "plugins": [
+        {
+          "name": "next"
+        }
+      ],
+      "allowJs": true,
+      "configFilePath": "/home/mikel/.herdr/worktrees/predictive-models/feat-training-devin/apps/app/tsconfig.json"
+    },
+    "root_names": [
+      "apps/app/next-env.d.ts",
+      "apps/app/next.config.ts",
+      "apps/app/lib/api.ts",
+      "apps/app/lib/financial-v3.test.ts",
+      "apps/app/lib/financial-v3.ts",
+      "apps/app/lib/format.ts",
+      "apps/app/lib/trajectory-types.ts",
+      "apps/app/lib/trajectory.test.ts",
+      "apps/app/lib/trajectory.ts",
+      "apps/app/lib/types.ts",
+      "apps/app/app/error.tsx",
+      "apps/app/app/layout.tsx",
+      "apps/app/app/page.tsx",
+      "apps/app/app/connect/page.tsx",
+      "apps/app/app/dashboard/page.tsx",
+      "apps/app/app/login/page.tsx",
+      "apps/app/components/auth-layout.tsx",
+      "apps/app/components/cash-chart.tsx",
+      "apps/app/components/connections.tsx",
+      "apps/app/components/dialog.tsx",
+      "apps/app/components/financial-v3-assessment.tsx",
+      "apps/app/components/planner.tsx",
+      "apps/app/components/proxy-assessment.tsx",
+      "apps/app/components/trajectory-assessment.tsx",
+      "apps/app/.next/types/cache-life.d.ts",
+      "apps/app/.next/types/root-params.d.ts",
+      "apps/app/.next/types/routes.d.ts",
+      "apps/app/.next/types/validator.ts",
+      "apps/app/.next/dev/types/cache-life.d.ts",
+      "apps/app/.next/dev/types/root-params.d.ts",
+      "apps/app/.next/dev/types/routes.d.ts",
+      "apps/app/.next/dev/types/validator.ts"
+    ],
+    "errors": []
+  },
+  "source_before_files": [
+    "apps/app/app/dashboard/page.tsx",
+    "apps/app/app/globals.css",
+    "apps/app/components/trajectory-assessment.tsx",
+    "apps/app/lib/trajectory-types.ts",
+    "apps/app/lib/trajectory.test.ts",
+    "apps/app/lib/trajectory.ts",
+    "apps/app/lib/types.ts"
+  ],
+  "preservation": {
+    "unchanged": true,
+    "differences": [],
+    "hashes": {
+      ".devin/goal.md": {
+        "path": ".devin/goal.md",
+        "bytes": 77585,
+        "sha256": "2472f000f2eca5e7823b53896fdc2bdb67299e5c8f09fec72b72fd34ca63003e"
+      },
+      "apps/app/.next/dev/types/cache-life.d.ts": {
+        "path": "apps/app/.next/dev/types/cache-life.d.ts",
+        "bytes": 5905,
+        "sha256": "4f984436b10cfb43ccf7fc3114dcb851cbefa4d58b7d8ae741aaae0f6e330129"
+      },
+      "apps/app/.next/dev/types/root-params.d.ts": {
+        "path": "apps/app/.next/dev/types/root-params.d.ts",
+        "bytes": 101,
+        "sha256": "f3387dd7800eec3c34273f7a8efad13e864598c7e8f788d321e407390989bb59"
+      },
+      "apps/app/.next/dev/types/routes.d.ts": {
+        "path": "apps/app/.next/dev/types/routes.d.ts",
+        "bytes": 1545,
+        "sha256": "db375d18994a507e67dcd457a7b4262d4695d4749dba51824af6478dafac6585"
+      },
+      "apps/app/.next/dev/types/validator.ts": {
+        "path": "apps/app/.next/dev/types/validator.ts",
+        "bytes": 2947,
+        "sha256": "6913dacb8323257a81932cc176dcb8c1eeba54ab4e03077d3725f32e49b56ab8"
+      },
+      "apps/app/.next/types/cache-life.d.ts": {
+        "path": "apps/app/.next/types/cache-life.d.ts",
+        "bytes": 5905,
+        "sha256": "4f984436b10cfb43ccf7fc3114dcb851cbefa4d58b7d8ae741aaae0f6e330129"
+      },
+      "apps/app/.next/types/root-params.d.ts": {
+        "path": "apps/app/.next/types/root-params.d.ts",
+        "bytes": 101,
+        "sha256": "f3387dd7800eec3c34273f7a8efad13e864598c7e8f788d321e407390989bb59"
+      },
+      "apps/app/.next/types/routes.d.ts": {
+        "path": "apps/app/.next/types/routes.d.ts",
+        "bytes": 1545,
+        "sha256": "db375d18994a507e67dcd457a7b4262d4695d4749dba51824af6478dafac6585"
+      },
+      "apps/app/.next/types/validator.ts": {
+        "path": "apps/app/.next/types/validator.ts",
+        "bytes": 2917,
+        "sha256": "e372ac8a2bcde58e0ef2693e8e2abbdbab4ac52f54b34e360d81c5a9a9d1c500"
+      },
+      "apps/app/app/connect/page.tsx": {
+        "path": "apps/app/app/connect/page.tsx",
+        "bytes": 3218,
+        "sha256": "166b316ff507cf141291dc6128657b4401ff0f538557e1e3de0fe5a4e61bebba"
+      },
+      "apps/app/app/dashboard/page.tsx": {
+        "path": "apps/app/app/dashboard/page.tsx",
+        "bytes": 19276,
+        "sha256": "4ab513a4f2e7603cfe6bfcbb89f709130494bbc2a0f71bcd7aed425dfb276adf"
+      },
+      "apps/app/app/error.tsx": {
+        "path": "apps/app/app/error.tsx",
+        "bytes": 338,
+        "sha256": "6b3d85b23befb4203f0808de3c9e8bd0ef6daeee0d2ac2865a3eb6cd04c2836f"
+      },
+      "apps/app/app/globals.css": {
+        "path": "apps/app/app/globals.css",
+        "bytes": 26892,
+        "sha256": "1d49d0454e87242898544f0e9f3bfffb44eb6bfd563d1abbc64ebcd138791647"
+      },
+      "apps/app/app/layout.tsx": {
+        "path": "apps/app/app/layout.tsx",
+        "bytes": 498,
+        "sha256": "9aed9cb95855b346b87d9db5de81aa830b10d1c75fccb7470b75f2de4188693a"
+      },
+      "apps/app/app/login/page.tsx": {
+        "path": "apps/app/app/login/page.tsx",
+        "bytes": 2551,
+        "sha256": "ad779eb0c0b7002584bebde1a3786faf8e543cfd5769a34da81abcb2830b031d"
+      },
+      "apps/app/app/page.tsx": {
+        "path": "apps/app/app/page.tsx",
+        "bytes": 105,
+        "sha256": "ab3b856a243fefb0b8dd2e562f7914041767a8c2b6939633c85e4e4e97df6ec0"
+      },
+      "apps/app/components/auth-layout.tsx": {
+        "path": "apps/app/components/auth-layout.tsx",
+        "bytes": 1213,
+        "sha256": "4587784c12a9c3f1ec01c16c1cb8bd9137ade113efd7a681d3aebe2dbe7f676d"
+      },
+      "apps/app/components/cash-chart.tsx": {
+        "path": "apps/app/components/cash-chart.tsx",
+        "bytes": 6134,
+        "sha256": "5a63c5a47f29cb0c9eb1a5da40ca9cba3c5b13dfd7d6d3fd1e37f93e1b337322"
+      },
+      "apps/app/components/connections.tsx": {
+        "path": "apps/app/components/connections.tsx",
+        "bytes": 4973,
+        "sha256": "eb526a0a81f01939466ae138cb82310a4270a884ad0320918d089e827e30a7d1"
+      },
+      "apps/app/components/dialog.tsx": {
+        "path": "apps/app/components/dialog.tsx",
+        "bytes": 1318,
+        "sha256": "f5466470c4dd91c424485d2abdbaebcaca626f5240979100c3efe141c31005fe"
+      },
+      "apps/app/components/financial-v3-assessment.tsx": {
+        "path": "apps/app/components/financial-v3-assessment.tsx",
+        "bytes": 17341,
+        "sha256": "755c93e056294a4eda02c0c8ccfdbcc0d415593672e5e9b594ce36a1aac3cad2"
+      },
+      "apps/app/components/planner.tsx": {
+        "path": "apps/app/components/planner.tsx",
+        "bytes": 10502,
+        "sha256": "04eaf9028d760814d0902b4e74aa85bf4c5940a2d386a6056918c81c6ad1d341"
+      },
+      "apps/app/components/proxy-assessment.tsx": {
+        "path": "apps/app/components/proxy-assessment.tsx",
+        "bytes": 4759,
+        "sha256": "15d2d22dce6d42e0b93af1991186d338fd7a36723a5e4c65dcf9679cf23705cf"
+      },
+      "apps/app/components/trajectory-assessment.tsx": {
+        "path": "apps/app/components/trajectory-assessment.tsx",
+        "bytes": 15983,
+        "sha256": "f6871aa14d1d78dcbc884477be73fd539c0817d7139226a0c5afda675bc730be"
+      },
+      "apps/app/lib/api.ts": {
+        "path": "apps/app/lib/api.ts",
+        "bytes": 998,
+        "sha256": "634e96c26c0dff330ed6c38830bd46b3e5293293d0cb86f8e43a16ba21c6f9eb"
+      },
+      "apps/app/lib/financial-v3.test.ts": {
+        "path": "apps/app/lib/financial-v3.test.ts",
+        "bytes": 2303,
+        "sha256": "01da265111a2b4b940ac9c8458591ef575f8bac18abcdb6f4fdf1cfd8da54b4b"
+      },
+      "apps/app/lib/financial-v3.ts": {
+        "path": "apps/app/lib/financial-v3.ts",
+        "bytes": 6689,
+        "sha256": "8a9130bc9459c6ab5628cf358879aab1d9a2e40fbb2fc6d1fb4979ea2fad7a4e"
+      },
+      "apps/app/lib/format.ts": {
+        "path": "apps/app/lib/format.ts",
+        "bytes": 1196,
+        "sha256": "46803c939a9dbc041a2e11d2dd6c5f376d5321e6f2628f821ee3f073d9b963d1"
+      },
+      "apps/app/lib/trajectory-types.ts": {
+        "path": "apps/app/lib/trajectory-types.ts",
+        "bytes": 4871,
+        "sha256": "18c184503486c10df53542b967ee0adc8c0a11782d382eb6f302f387f17ed888"
+      },
+      "apps/app/lib/trajectory.test.ts": {
+        "path": "apps/app/lib/trajectory.test.ts",
+        "bytes": 1801,
+        "sha256": "76679c840f8efcadc389d0290ec182d8d94006a0b7330c5ca60218cecf8838d0"
+      },
+      "apps/app/lib/trajectory.ts": {
+        "path": "apps/app/lib/trajectory.ts",
+        "bytes": 1539,
+        "sha256": "9d4181be8e521e72a620b273105480055c6192e4203df3feac6c9c82e1ae8def"
+      },
+      "apps/app/lib/types.ts": {
+        "path": "apps/app/lib/types.ts",
+        "bytes": 4428,
+        "sha256": "fdc55f241fb90f16d4ad084b675c2273ffa7e59c325c979f3effcc858fe06321"
+      },
+      "apps/app/next-env.d.ts": {
+        "path": "apps/app/next-env.d.ts",
+        "bytes": 296,
+        "sha256": "0f70629890b72a0a82e91972cc032c04b658b26c265373cb711cf576bfbf8fcc"
+      },
+      "apps/app/next.config.ts": {
+        "path": "apps/app/next.config.ts",
+        "bytes": 481,
+        "sha256": "b73bcccc177b7e9b897b6941f87182fb42e723d95f2b3144254804e275ac70f8"
+      },
+      "apps/app/package.json": {
+        "path": "apps/app/package.json",
+        "bytes": 657,
+        "sha256": "3a741536da28c91cef92b6a45a4aaf853307bee5543849cc800159a994422648"
+      },
+      "apps/app/postcss.config.mjs": {
+        "path": "apps/app/postcss.config.mjs",
+        "bytes": 61,
+        "sha256": "e509558d3bdf129bc28908fc2954692855af95799cf253c0fc3cc038f5b364a9"
+      },
+      "apps/app/tsconfig.json": {
+        "path": "apps/app/tsconfig.json",
+        "bytes": 675,
+        "sha256": "0879ad928555b029e6a3094506858f9dc3b26c4b27ae607e3c86a2a0d1411384"
+      },
+      "apps/app/tsconfig.tsbuildinfo": {
+        "path": "apps/app/tsconfig.tsbuildinfo",
+        "bytes": 138287,
+        "sha256": "8ecfc04867158213c1034082f48adf108d0a002a1aa92058617cb4334c4307fc"
+      },
+      "docs/DASHBOARD.md": {
+        "path": "docs/DASHBOARD.md",
+        "bytes": 10443,
+        "sha256": "c4c98976e812c679652b024544b4feba1ba96416c115d81915d6bb0b67657339"
+      },
+      "docs/PRODUCT.md": {
+        "path": "docs/PRODUCT.md",
+        "bytes": 9464,
+        "sha256": "54733d350139b330b25ef69e2d731cb7a52819142546df8e40cd6bbbe913eb61"
+      },
+      "docs/REQUIREMENTS.md": {
+        "path": "docs/REQUIREMENTS.md",
+        "bytes": 14594,
+        "sha256": "e6bec2bf4f1e9aa18e65f3e34a0375f7376d80a239f77595a8f405e083980837"
+      },
+      "node_modules/.bun/next@16.3.5+6da4d20581282908/node_modules/next/package.json": {
+        "path": "node_modules/.bun/next@16.3.5+6da4d20581282908/node_modules/next/package.json",
+        "bytes": 3173,
+        "sha256": "73192ad53e2c6f25f5f81177819607dff0b254548932a0a225aad09307fd6772"
+      },
+      "node_modules/.bun/typescript@5.9.3/node_modules/typescript/lib/typescript.js": {
+        "path": "node_modules/.bun/typescript@5.9.3/node_modules/typescript/lib/typescript.js",
+        "bytes": 9112572,
+        "sha256": "3ae902c92cc44dace175c0e69e13a4b0899f6983c6121d76b9ab8dd5795e7675"
+      },
+      "node_modules/.bun/typescript@5.9.3/node_modules/typescript/package.json": {
+        "path": "node_modules/.bun/typescript@5.9.3/node_modules/typescript/package.json",
+        "bytes": 3620,
+        "sha256": "822ef7ca6452205657b6288b066481ecf508bfbf43455d715cf7d3ec457561e6"
+      },
+      "package.json": {
+        "path": "package.json",
+        "bytes": 1369,
+        "sha256": "5977a3eec3ab358f66b7bf617650ba3dd07fcd835a176cc4f02d9921a860268b"
+      },
+      "readme.md": {
+        "path": "readme.md",
+        "bytes": 29577,
+        "sha256": "2acac9bcdd12906331e659db34b4debb8544bccdfa8adaa40ec6ab55042b3cc3"
+      },
+      "reports/modeling/financial-v3/dataset-v1/delivery-v1/source-after-blocked.json": {
+        "path": "reports/modeling/financial-v3/dataset-v1/delivery-v1/source-after-blocked.json",
+        "bytes": 3977,
+        "sha256": "8e1866678150ce276ccd3e987c4789800fcebf35cff967e1d66f9cd5e7089b6c"
+      },
+      "reports/modeling/financial-v3/dataset-v1/delivery-v1/source-before/apps/app/app/dashboard/page.tsx": {
+        "path": "reports/modeling/financial-v3/dataset-v1/delivery-v1/source-before/apps/app/app/dashboard/page.tsx",
+        "bytes": 18784,
+        "sha256": "6dcccb6cf7886507fbf9537c07d2130b627338e314cf9da0bbc37ff439915fd8"
+      },
+      "reports/modeling/financial-v3/dataset-v1/delivery-v1/source-before/apps/app/app/globals.css": {
+        "path": "reports/modeling/financial-v3/dataset-v1/delivery-v1/source-before/apps/app/app/globals.css",
+        "bytes": 25571,
+        "sha256": "5c1839468736cc9576695f8d191722baaf1e19ec1fcbc5af91f28c1911933574"
+      },
+      "reports/modeling/financial-v3/dataset-v1/delivery-v1/source-before/apps/app/components/trajectory-assessment.tsx": {
+        "path": "reports/modeling/financial-v3/dataset-v1/delivery-v1/source-before/apps/app/components/trajectory-assessment.tsx",
+        "bytes": 15983,
+        "sha256": "f6871aa14d1d78dcbc884477be73fd539c0817d7139226a0c5afda675bc730be"
+      },
+      "reports/modeling/financial-v3/dataset-v1/delivery-v1/source-before/apps/app/lib/trajectory-types.ts": {
+        "path": "reports/modeling/financial-v3/dataset-v1/delivery-v1/source-before/apps/app/lib/trajectory-types.ts",
+        "bytes": 4871,
+        "sha256": "18c184503486c10df53542b967ee0adc8c0a11782d382eb6f302f387f17ed888"
+      },
+      "reports/modeling/financial-v3/dataset-v1/delivery-v1/source-before/apps/app/lib/trajectory.test.ts": {
+        "path": "reports/modeling/financial-v3/dataset-v1/delivery-v1/source-before/apps/app/lib/trajectory.test.ts",
+        "bytes": 1801,
+        "sha256": "76679c840f8efcadc389d0290ec182d8d94006a0b7330c5ca60218cecf8838d0"
+      },
+      "reports/modeling/financial-v3/dataset-v1/delivery-v1/source-before/apps/app/lib/trajectory.ts": {
+        "path": "reports/modeling/financial-v3/dataset-v1/delivery-v1/source-before/apps/app/lib/trajectory.ts",
+        "bytes": 1539,
+        "sha256": "9d4181be8e521e72a620b273105480055c6192e4203df3feac6c9c82e1ae8def"
+      },
+      "reports/modeling/financial-v3/dataset-v1/delivery-v1/source-before/apps/app/lib/types.ts": {
+        "path": "reports/modeling/financial-v3/dataset-v1/delivery-v1/source-before/apps/app/lib/types.ts",
+        "bytes": 4306,
+        "sha256": "244b09e988837a5bfa0cfe47b1fff4d4c51998d236b9ebaae9e74c1632e8159c"
+      },
+      "reports/modeling/financial-v3/dataset-v1/delivery-v1/source-before/docs/DASHBOARD.md": {
+        "path": "reports/modeling/financial-v3/dataset-v1/delivery-v1/source-before/docs/DASHBOARD.md",
+        "bytes": 8115,
+        "sha256": "f3c7a988ffc11fe6ec5f373b6e49ef85c310862ce246a3dd88570d5d71a1e9a0"
+      },
+      "reports/modeling/financial-v3/dataset-v1/delivery-v1/source-before/docs/PRODUCT.md": {
+        "path": "reports/modeling/financial-v3/dataset-v1/delivery-v1/source-before/docs/PRODUCT.md",
+        "bytes": 7492,
+        "sha256": "ae160daff8f4afaa097ea80882f099e94c22a486115a82385190673a1a074909"
+      },
+      "reports/modeling/financial-v3/dataset-v1/delivery-v1/source-before/docs/REQUIREMENTS.md": {
+        "path": "reports/modeling/financial-v3/dataset-v1/delivery-v1/source-before/docs/REQUIREMENTS.md",
+        "bytes": 11592,
+        "sha256": "9929a6ded55673e94855d1c1a96d32d00fbe1ba3566df5dd6bdd5497b617cc4b"
+      },
+      "reports/modeling/financial-v3/dataset-v1/delivery-v1/source-before/package.json": {
+        "path": "reports/modeling/financial-v3/dataset-v1/delivery-v1/source-before/package.json",
+        "bytes": 1261,
+        "sha256": "1e89e0ec7887482f68776eb5098d9a9f4cb32c974d300ca58558726eae9d69ad"
+      },
+      "reports/modeling/financial-v3/dataset-v1/delivery-v1/source-before/readme.md": {
+        "path": "reports/modeling/financial-v3/dataset-v1/delivery-v1/source-before/readme.md",
+        "bytes": 24984,
+        "sha256": "4a51ab7bb8b5db396a0cf142a16955c127256f858c491b9c4662804278042198"
+      },
+      "reports/modeling/financial-v3/dataset-v1/delivery-v1/source-before/services/api/src/finance.rs": {
+        "path": "reports/modeling/financial-v3/dataset-v1/delivery-v1/source-before/services/api/src/finance.rs",
+        "bytes": 20667,
+        "sha256": "2d2403d70988e0cc27ac1ba17096bce549dbe2155ff38b9bbac8be21ef9512fe"
+      },
+      "reports/modeling/financial-v3/dataset-v1/delivery-v1/source-before/services/api/src/lib.rs": {
+        "path": "reports/modeling/financial-v3/dataset-v1/delivery-v1/source-before/services/api/src/lib.rs",
+        "bytes": 7165,
+        "sha256": "a5b647213a33dbccdaca2f81b31d5ce01ca4037ff5cae6ead4b430f9eb6f0bf3"
+      },
+      "reports/modeling/financial-v3/dataset-v1/delivery-v1/source-before/services/api/src/main.rs": {
+        "path": "reports/modeling/financial-v3/dataset-v1/delivery-v1/source-before/services/api/src/main.rs",
+        "bytes": 1496,
+        "sha256": "ac4333fc157be9fb22949eb36464ffd36c2cbda4f3480d1d1842f98f48f86d18"
+      },
+      "reports/modeling/financial-v3/dataset-v1/delivery-v1/source-before/services/mcp/src/main.rs": {
+        "path": "reports/modeling/financial-v3/dataset-v1/delivery-v1/source-before/services/mcp/src/main.rs",
+        "bytes": 13329,
+        "sha256": "061ba5a6fd2254e6a25b0786dd0a20969cd36863b5341eab334af2aecfcd62de"
+      },
+      "reports/modeling/financial-v3/dataset-v1/delivery-v1/transition-pin.json": {
+        "path": "reports/modeling/financial-v3/dataset-v1/delivery-v1/transition-pin.json",
+        "bytes": 83,
+        "sha256": "ba6a0ec0c267e06496d17dde73b10be3377618f5fdcbee9c162540f5326074b6"
+      },
+      "reports/modeling/financial-v3/dataset-v1/delivery-v1/transition.json": {
+        "path": "reports/modeling/financial-v3/dataset-v1/delivery-v1/transition.json",
+        "bytes": 431089,
+        "sha256": "c878d0e2767bbf71e5ae2a0da5d27709081817d0d004b5c10984b76690f33f45"
+      },
+      "reports/modeling/financial-v3/dataset-v1/delivery-v1/verification.json": {
+        "path": "reports/modeling/financial-v3/dataset-v1/delivery-v1/verification.json",
+        "bytes": 14584,
+        "sha256": "030ee1352baa4c88d670bcd61092ffb1439b13a521312a0e1b2a0e5a32697566"
+      },
+      "reports/modeling/financial-v3/dataset-v1/manifest.json": {
+        "path": "reports/modeling/financial-v3/dataset-v1/manifest.json",
+        "bytes": 123051,
+        "sha256": "e360ef33ba7cae39aa9c94d0f8e778f49c38a3985f77053a2f53bd4ae5ef8a44"
+      },
+      "reports/modeling/financial-v3/dataset-v1/model-v1/manifest.json": {
+        "path": "reports/modeling/financial-v3/dataset-v1/model-v1/manifest.json",
+        "bytes": 107340,
+        "sha256": "71eae8fef2ab3466fa2545d1c38f57977508cb79b7c051280b59e02253925428"
+      },
+      "scripts/check-financial-v3-e2e.ts": {
+        "path": "scripts/check-financial-v3-e2e.ts",
+        "bytes": 18328,
+        "sha256": "7e01c9558c2a23ffd06970e66c559e804e328fb563225ac9bdd1d0892e44def8"
+      },
+      "scripts/financial_v3_dataset_delivery.py": {
+        "path": "scripts/financial_v3_dataset_delivery.py",
+        "bytes": 10440,
+        "sha256": "c22c57c260516ec571ac68b9ef20d0cbe8c79e05d72deca98fd9a47a38f45ba1"
+      },
+      "services/api/src/finance.rs": {
+        "path": "services/api/src/finance.rs",
+        "bytes": 21826,
+        "sha256": "d4e835c88898b21c862b3e7713853d8fff797df0846ffbf17f17207eecaab2e5"
+      },
+      "services/api/src/financial_v3.rs": {
+        "path": "services/api/src/financial_v3.rs",
+        "bytes": 24793,
+        "sha256": "99d4a8eca55f55e03b8002302b62f203401fcd6423a6d822423c2cfd5b1c8238"
+      },
+      "services/api/src/financial_v3_tests.rs": {
+        "path": "services/api/src/financial_v3_tests.rs",
+        "bytes": 10851,
+        "sha256": "d349202f5ceca8e66945e391436f03612aaad57c71e97059a515f203e37a6458"
+      },
+      "services/api/src/lib.rs": {
+        "path": "services/api/src/lib.rs",
+        "bytes": 7202,
+        "sha256": "3669acdef0c809a68500dfd7c28f02293d107de7a1e972d7b53552b89999f2ad"
+      },
+      "services/api/src/main.rs": {
+        "path": "services/api/src/main.rs",
+        "bytes": 1496,
+        "sha256": "ac4333fc157be9fb22949eb36464ffd36c2cbda4f3480d1d1842f98f48f86d18"
+      },
+      "services/mcp/src/financial_v3_tests.rs": {
+        "path": "services/mcp/src/financial_v3_tests.rs",
+        "bytes": 4988,
+        "sha256": "c02ed5c28aa4e3decf7f93901e30522c13e1b3a447e785c533a0079651c32eb4"
+      },
+      "services/mcp/src/main.rs": {
+        "path": "services/mcp/src/main.rs",
+        "bytes": 14015,
+        "sha256": "2378d12cf1e4305a421f9f7cac6642c6bdd000718ab553ad18007f1346102e69"
+      }
+    }
+  },
+  "writes": "Exclusive new recovery reports only; no compiler invoked"
+}

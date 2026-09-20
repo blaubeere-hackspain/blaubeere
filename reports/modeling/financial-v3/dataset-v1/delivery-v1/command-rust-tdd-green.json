@@ -1,0 +1,14 @@
+{
+  "command": [
+    "cargo",
+    "test",
+    "--offline",
+    "-p",
+    "blaubeere-api",
+    "financial_v3_schema_dates_paths_and_hashes_fail_closed"
+  ],
+  "exit_code": 0,
+  "started_at": "2026-09-19T22:48:40.342931+00:00",
+  "stderr": "   Compiling blaubeere-api v0.1.0 (/home/mikel/.herdr/worktrees/predictive-models/feat-training-devin/services/api)\n    Finished `test` profile [unoptimized + debuginfo] target(s) in 7.67s\n     Running unittests src/lib.rs (target/debug/deps/blaubeere_api-a6bc76fb43c59374)\n     Running unittests src/main.rs (target/debug/deps/blaubeere_api-8516ad9d8c6922bb)\n",
+  "stdout": "\nrunning 1 test\ntest financial_v3_tests::financial_v3_schema_dates_paths_and_hashes_fail_closed ... ok\n\ntest result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 14 filtered out; finished in 0.00s\n\n\nrunning 0 tests\n\ntest result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n"
+}

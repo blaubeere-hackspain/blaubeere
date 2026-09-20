@@ -1,0 +1,142 @@
+{
+  "command": "bun run test:trajectory:e2e",
+  "steps": [
+    {
+      "name": "COMP_0001 unauthenticated assessment rejected and browser login",
+      "status": "passed"
+    },
+    {
+      "name": "negative backtest, distinct axes, no planner, bounded latest payload",
+      "status": "passed"
+    },
+    {
+      "name": "all 24 closed-month API cuts for all three deterministic development cases",
+      "status": "passed"
+    },
+    {
+      "name": "COMP_0009 browser earliest/preconfirmation/confirmation/postconfirmation history",
+      "status": "passed"
+    },
+    {
+      "name": "COMP_0179 browser earliest/preconfirmation/confirmation/postconfirmation history",
+      "status": "passed"
+    },
+    {
+      "name": "COMP_0028 browser earliest/preconfirmation/confirmation/postconfirmation history",
+      "status": "passed"
+    },
+    {
+      "name": "keyboard company/month selection and eligible April–August separate probability overlay",
+      "status": "passed"
+    },
+    {
+      "name": "gap segmentation and accessible monthly evidence disclosure",
+      "status": "passed"
+    },
+    {
+      "name": "authorized roster only, unauthorized 403, invalid dates rejected, compare blocked",
+      "status": "passed"
+    },
+    {
+      "name": "COMP_0001 unauthenticated assessment rejected and browser login",
+      "status": "passed"
+    },
+    {
+      "name": "sealed v1 proxy eligible/abstained UI and no historical backdating regression",
+      "status": "passed"
+    },
+    {
+      "name": "DEMO_001 unauthenticated assessment rejected and browser login",
+      "status": "passed"
+    },
+    {
+      "name": "cash demo forecast funding gap, planner and historical rejection regression",
+      "status": "passed"
+    }
+  ],
+  "companies": 1286,
+  "points": 30864,
+  "companies_sha256": "2c9cbfd1cb5f8976cbff5184f7eabcc796fe86763de0e0cc512c2448a579a5c9",
+  "manifest_sha256": "fe7e57c28a92eefbf04c6e456ba639ac6df9c481441eeda8bbfab1326458aae3",
+  "environment": "Fresh temporary SQLite, random unlogged passwords, sandboxed system Chromium, loopback-only browser traffic, no screenshots or stored sessions",
+  "source_sha256": {
+    "package.json": "1e89e0ec7887482f68776eb5098d9a9f4cb32c974d300ca58558726eae9d69ad",
+    "scripts/check-trajectory-e2e.ts": "e2e8900e8bbe68d38bff86c8d1a39ff53095a276260ce9a28a45b59ea8f1fe6a",
+    "services/api/src/finance.rs": "2d2403d70988e0cc27ac1ba17096bce549dbe2155ff38b9bbac8be21ef9512fe",
+    "services/api/src/trajectory.rs": "8689fab9c391659d2c177f7d037a441df01a6d44dbae089a0a07cc9e1af5a551",
+    "services/api/src/trajectory_tests.rs": "4bd8619fea81657842501483779c020db971a567f76e230264ae1cc4768bbc95",
+    "services/api/src/main.rs": "ac4333fc157be9fb22949eb36464ffd36c2cbda4f3480d1d1842f98f48f86d18",
+    "services/mcp/src/main.rs": "061ba5a6fd2254e6a25b0786dd0a20969cd36863b5341eab334af2aecfcd62de",
+    "services/mcp/src/trajectory_tests.rs": "eb49249138eb294e7f239f3e5dfb97c735ffc604091052f0ad08a4f5aca45ce3",
+    "apps/app/app/dashboard/page.tsx": "6dcccb6cf7886507fbf9537c07d2130b627338e314cf9da0bbc37ff439915fd8",
+    "apps/app/app/globals.css": "5c1839468736cc9576695f8d191722baaf1e19ec1fcbc5af91f28c1911933574",
+    "apps/app/components/trajectory-assessment.tsx": "f6871aa14d1d78dcbc884477be73fd539c0817d7139226a0c5afda675bc730be",
+    "apps/app/lib/types.ts": "244b09e988837a5bfa0cfe47b1fff4d4c51998d236b9ebaae9e74c1632e8159c",
+    "apps/app/lib/trajectory.ts": "9d4181be8e521e72a620b273105480055c6192e4203df3feac6c9c82e1ae8def",
+    "apps/app/lib/trajectory-types.ts": "18c184503486c10df53542b967ee0adc8c0a11782d382eb6f302f387f17ed888",
+    "apps/app/lib/trajectory.test.ts": "76679c840f8efcadc389d0290ec182d8d94006a0b7330c5ca60218cecf8838d0"
+  },
+  "browser": {
+    "version": "152.0.7977.82",
+    "executable": "/usr/bin/chromium",
+    "sandbox": true,
+    "headless": true
+  },
+  "status": "passed",
+  "max_response_bytes": 115763,
+  "api_historical_responses": 78,
+  "ui_historical_cuts": 26,
+  "page_errors": [],
+  "protected_sha256": {
+    "scripts/trajectory_contract.py": "ee11a75ef2d0bf585ccdf2654152fc438e3f291166667d05497d1b8ec80df8f8",
+    "scripts/trajectory_signals.py": "7f672aab1f0e95d680b8558686e4c27b44bad167a978412ccb00f9f46e30e45f",
+    "scripts/trajectory_events.py": "11dcaa096c564e6b3e92b671d39f6cedc7ca92984ddca8b781bf73c03547db60",
+    "scripts/trajectory_metrics.py": "4f322f27f7381ec17a524c9810f866fe7adf0332aba5fa42c45221138fa9eb61",
+    "scripts/trajectory_backtest.py": "1f1159167a379778c0042c8043aaee8af05e2020fa94cdd631b7267534bc9b5b",
+    "scripts/trajectory_overlay.py": "5d815bd318847a83c6ed61b7f85646c9991e56b8b6ab1656d5d33e7f77638dd2",
+    "scripts/trajectory_export.py": "ca680fa8aa20015d3b59f0798ef5b6e88a80b86608eea39e6563add95915d981",
+    "reports/modeling/assessment-v1/companies.json": "77fc696af57781dbd5e06205c56923ed04d40f89ad17d5a3a546b689cf7e707f",
+    "reports/modeling/assessment-v1/manifest.json": "a530b67f81adba9ccca03446802b77c38afe071e187364f4453538d23871e13f",
+    "reports/modeling/assessment-v1/browser-summary.json": "c7a77e6fb2033a86bb7590792676f80e042a3b405d7b81c2d7d5536a15da3e8d",
+    "reports/modeling/trajectory-v2/assessment/companies.json": "2c9cbfd1cb5f8976cbff5184f7eabcc796fe86763de0e0cc512c2448a579a5c9",
+    "reports/modeling/trajectory-v2/assessment/manifest.json": "fe7e57c28a92eefbf04c6e456ba639ac6df9c481441eeda8bbfab1326458aae3",
+    "reports/modeling/trajectory-v2/protocol.json": "d37ee0cad9101b4e6ae1dbc39f69d471ff7457b2cf3c5dac8ac5bd786c70159d",
+    "reports/modeling/trajectory-v2/protocol-receipt.json": "c81ae93923bebd08c7b43cb6053698c75b627f9e7e1947010df7be77d2122aa5",
+    "reports/modeling/trajectory-v2/execution-manifest.json": "5a2b05bb2a83757ceaf18465c81f6db48c812a0036dcc2dd82c9566eca5f9a33",
+    "reports/modeling/trajectory-v2/execution-manifest.json.sha256": "c46bf061f15b4836bbdbfd53d77a29de209e6201845b18c467bc9218f1d7cc22",
+    "reports/modeling/trajectory-v2/development-access.json": "766cae7e2d6859202561dae402dc6a34b0b25470c91f95103281db793b5f6bec",
+    "reports/modeling/trajectory-v2/development-access.json.sha256": "dc3c1dd4dcd805a816070e409962558dde6e1da3892199893b4a641a6a0c2baa",
+    "reports/modeling/trajectory-v2/development-events.json": "ce9675d1d40f2c814e7e1a4fb5bab0ff8227390ee352af2595747f0e57bb38cb",
+    "reports/modeling/trajectory-v2/development-events.json.sha256": "4d1785a24c80f3eed7acb1b042ef0fc005ea80475d8dacdfcdcd43bfe27f6b3a",
+    "reports/modeling/trajectory-v2/development-alerts.json": "a1815181c5759f5a29174278715681586824f235be947635616fa1526ebab568",
+    "reports/modeling/trajectory-v2/development-alerts.json.sha256": "cb0a03f1b17f1e366041000491384a06fa8d2b4706aa804de5da6e0bcd0e47a7",
+    "reports/modeling/trajectory-v2/development-event-windows.parquet": "20cc7b1e154742c06d30de5d18c36011ea57ee8fb33bb0640ca40f18fd54f0a5",
+    "reports/modeling/trajectory-v2/development-event-windows.parquet.sha256": "0611eebf5d89bc9d63abb74677fe07a371840a95a588f76fd6cfa49a53961b21",
+    "reports/modeling/trajectory-v2/development-group-diagnostics.json": "95d0f72ca0670716e67dec2fae5dc9c56688f2d6d52b69cfb223ea523e9883cc",
+    "reports/modeling/trajectory-v2/development-group-diagnostics.json.sha256": "f9a511477b5b7e1fc9e081f0f7f2324fe45ebadd77501be849665d15a0300994",
+    "reports/modeling/trajectory-v2/development-cases.json": "ca2cff2c50931bcdcc8d0d97b314526d46c71bf8226eee8933bcbddc9916428d",
+    "reports/modeling/trajectory-v2/development-cases.json.sha256": "fe498d2d900ad6623edf46963ea39566cc04c992d073ecb4bab5dc7c72d0032b",
+    "reports/modeling/trajectory-v2/development-case-history.parquet": "665f83231fae5d30218220bfdde337d1360dd5059277d0f80db758b7b526dc2e",
+    "reports/modeling/trajectory-v2/development-case-history.parquet.sha256": "b8273044ec218d40cc3376b262ee120041a3d00d109991d5dd3a02e7154e490d",
+    "reports/modeling/trajectory-v2/development-report.json": "ea04bb583ec83330dc5c0dfc329397bb5b35274f33ed947e9236172a4a55a2af",
+    "reports/modeling/trajectory-v2/development-report.json.sha256": "a1344ae2c844d09c2804f806885c2887f1d248712fbd1b072592233eb5ce527d",
+    "reports/modeling/trajectory-v2/development-completion.json": "7b1706b93ff33a72ca7612f32ad4ad0c52d51fbae8fb6cc287c5c8a38b7faf5d",
+    "reports/modeling/trajectory-v2/development-completion.json.sha256": "a20182b0f8a33de64a716ed2497254bb821bfb7beef5ffd957664141daeb492a",
+    "reports/modeling/trajectory-v2/reserved-access.json": "2decf275e47ef57fbfe4de17753455b121115185a5c3a66ed938c481abfc04b2",
+    "reports/modeling/trajectory-v2/reserved-access.json.sha256": "6960f0130248b030153f9f18347403b6a388c07de385ec9ab97529cfb6bf8ce8",
+    "reports/modeling/trajectory-v2/reserved-events.json": "65861fde96feba6fe47af4558b09eba46d0e276ad458428918d6d119541226f7",
+    "reports/modeling/trajectory-v2/reserved-events.json.sha256": "83e28125ac43573f0884e56b660e3afdc200fa373f60a470d27af4049e402267",
+    "reports/modeling/trajectory-v2/reserved-alerts.json": "0c257a3751848ada8a5971632eeddee72ef0146fa2f08ab6600dd74b0f564f70",
+    "reports/modeling/trajectory-v2/reserved-alerts.json.sha256": "51568d14790453689102bb9a15d47b80d47f87f445005f8bd65299d9f0640648",
+    "reports/modeling/trajectory-v2/reserved-event-windows.parquet": "5803f3af316d6335c83485306dcbdfcba75b98f013a75e074cfb7f93e2fc7de6",
+    "reports/modeling/trajectory-v2/reserved-event-windows.parquet.sha256": "1f799a9f0ac06ebebd3772bf56f04bfba5d3a2fb44be6276502fdbf803470b0b",
+    "reports/modeling/trajectory-v2/reserved-group-diagnostics.json": "6ca0a72568f2ad75daf2392079e49301cad594d767010ecb188d247fdc75c079",
+    "reports/modeling/trajectory-v2/reserved-group-diagnostics.json.sha256": "d93a2013ac757d91cef599fd0938f2b76e8c2e78bb30463d8bbd8f91f2dbb6f7",
+    "reports/modeling/trajectory-v2/reserved-report.json": "9498d0798cc48caf04fd3020fe7a86cc9c1c7ed12d5f4ebfb674df1d61e683ac",
+    "reports/modeling/trajectory-v2/reserved-report.json.sha256": "5c86466c3b9d0fb7c3a85a718e5be4164c1c74e3b4df28027f87cd8b6f889922",
+    "reports/modeling/trajectory-v2/reserved-completion.json": "6a359b3c33485eba84a2471699ec6582ba0ef2ac73e0e0b54bf1bdc173786e19",
+    "reports/modeling/trajectory-v2/reserved-completion.json.sha256": "0db4188cb77d6421a5dec7fa781f68db8bba303d08571d25bab26048886fd737"
+  },
+  "protected_unchanged": true,
+  "cleanup": "Only owned process groups stopped; all temporary identity databases removed"
+}

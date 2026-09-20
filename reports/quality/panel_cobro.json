@@ -14,16 +14,16 @@
   "facturas": {
     "rows_in_dataset": 897894,
     "universo_cartera": 748316,
-    "universo_eur_conocido_abs": 6628385477.857527,
+    "universo_eur_conocido_abs": 6628385477.857518,
     "excluidas": {
       "cancel": {
         "n": 13699,
-        "eur_conocido_abs": 118258575.94737636,
+        "eur_conocido_abs": 118258575.94737634,
         "motivo": "factura cancelada: ni cobro ni deuda"
       },
       "tipo_no_invoice": {
         "n": 135879,
-        "eur_conocido_abs": 2245644226.2846594,
+        "eur_conocido_abs": 2245644226.284672,
         "motivo": "document_type_norm <> 'invoice'"
       },
       "fecha_invalida": {
@@ -49,11 +49,11 @@
   "serie_mensual": [
     {
       "mes": "2024-09",
-      "ar_abierto_eur": 10866978.747551708,
+      "ar_abierto_eur": 10866978.747551706,
       "ar_abierto_norm_mediana": null,
-      "ar_pct_vencido": 0.2046957983206064,
-      "ap_abierto_eur": 12654329.847894825,
-      "ap_pct_vencido": 0.07177867762286774
+      "ar_pct_vencido": 0.20469579832060641,
+      "ap_abierto_eur": 12654329.847894821,
+      "ap_pct_vencido": 0.07177867762286776
     },
     {
       "mes": "2024-10",
@@ -69,13 +69,13 @@
       "ar_abierto_norm_mediana": 2.098538568908278,
       "ar_pct_vencido": 0.23039018659911137,
       "ap_abierto_eur": 35063013.916112006,
-      "ap_pct_vencido": 0.29040636406352704
+      "ap_pct_vencido": 0.2904063640635271
     },
     {
       "mes": "2024-12",
-      "ar_abierto_eur": 41706786.86552398,
+      "ar_abierto_eur": 41706786.86552399,
       "ar_abierto_norm_mediana": 2.380063787191247,
-      "ar_pct_vencido": 0.386330619585207,
+      "ar_pct_vencido": 0.38633061958520687,
       "ap_abierto_eur": 27142412.252304785,
       "ap_pct_vencido": 0.3038456033327307
     },
@@ -83,25 +83,25 @@
       "mes": "2025-01",
       "ar_abierto_eur": 59484437.268269956,
       "ar_abierto_norm_mediana": 2.7901336874614717,
-      "ar_pct_vencido": 0.33936060234212695,
+      "ar_pct_vencido": 0.3393606023421269,
       "ap_abierto_eur": 33188738.480366565,
       "ap_pct_vencido": 0.5292538040901601
     },
     {
       "mes": "2025-02",
-      "ar_abierto_eur": 67283939.48078947,
-      "ar_abierto_norm_mediana": 2.7170690577729153,
-      "ar_pct_vencido": 0.35685807158566557,
+      "ar_abierto_eur": 67283939.4807895,
+      "ar_abierto_norm_mediana": 2.7170690577729157,
+      "ar_pct_vencido": 0.3568580715856654,
       "ap_abierto_eur": 33654725.83685872,
-      "ap_pct_vencido": 0.48087307066891377
+      "ap_pct_vencido": 0.4808730706689138
     },
     {
       "mes": "2025-03",
       "ar_abierto_eur": 82847214.54481563,
-      "ar_abierto_norm_mediana": 2.8624044848154657,
-      "ar_pct_vencido": 0.37756034163322205,
+      "ar_abierto_norm_mediana": 2.862404484815465,
+      "ar_pct_vencido": 0.377560341633222,
       "ap_abierto_eur": 48954869.22964747,
-      "ap_pct_vencido": 0.38066393745469873
+      "ap_pct_vencido": 0.38066393745469884
     },
     {
       "mes": "2025-04",
@@ -116,23 +116,23 @@
       "ar_abierto_eur": 122275200.29598843,
       "ar_abierto_norm_mediana": 3.0,
       "ar_pct_vencido": 0.6113988500474397,
-      "ap_abierto_eur": 41736695.36801076,
-      "ap_pct_vencido": 0.32144865065692974
+      "ap_abierto_eur": 41736695.36801075,
+      "ap_pct_vencido": 0.3214486506569298
     },
     {
       "mes": "2025-06",
-      "ar_abierto_eur": 132208078.5513435,
-      "ar_abierto_norm_mediana": 2.704415644316189,
-      "ar_pct_vencido": 0.6013177282407912,
-      "ap_abierto_eur": 45656395.784917906,
+      "ar_abierto_eur": 132208078.55134353,
+      "ar_abierto_norm_mediana": 2.7044156443161893,
+      "ar_pct_vencido": 0.6013177282407911,
+      "ap_abierto_eur": 45656395.7849179,
       "ap_pct_vencido": 0.486761415534595
     },
     {
       "mes": "2025-07",
-      "ar_abierto_eur": 143615999.3256167,
+      "ar_abierto_eur": 143615999.32561672,
       "ar_abierto_norm_mediana": 2.540995163966162,
       "ar_pct_vencido": 0.6464326469457982,
-      "ap_abierto_eur": 52966430.08252439,
+      "ap_abierto_eur": 52966430.08252438,
       "ap_pct_vencido": 0.47072311766894326
     },
     {
@@ -141,7 +141,7 @@
       "ar_abierto_norm_mediana": 2.8428995212555623,
       "ar_pct_vencido": 0.7514271359759259,
       "ap_abierto_eur": 52169348.17573724,
-      "ap_pct_vencido": 0.49503582901862564
+      "ap_pct_vencido": 0.49503582901862553
     },
     {
       "mes": "2025-09",
@@ -149,7 +149,7 @@
       "ar_abierto_norm_mediana": 3.0,
       "ar_pct_vencido": 0.6583371023612518,
       "ap_abierto_eur": 57280604.523837544,
-      "ap_pct_vencido": 0.45831810470231127
+      "ap_pct_vencido": 0.4583181047023113
     },
     {
       "mes": "2025-10",
@@ -173,47 +173,47 @@
       "ar_abierto_norm_mediana": 2.2488868971979663,
       "ar_pct_vencido": 0.5398903722852977,
       "ap_abierto_eur": 76376096.0416378,
-      "ap_pct_vencido": 0.4056177496096755
+      "ap_pct_vencido": 0.40561774960967556
     },
     {
       "mes": "2026-01",
       "ar_abierto_eur": 162929344.87259686,
-      "ar_abierto_norm_mediana": 2.5098088162924674,
+      "ar_abierto_norm_mediana": 2.509808816292467,
       "ar_pct_vencido": 0.6627259660444763,
-      "ap_abierto_eur": 66798061.41299552,
-      "ap_pct_vencido": 0.4747022555664147
+      "ap_abierto_eur": 66798061.412995525,
+      "ap_pct_vencido": 0.47470225556641465
     },
     {
       "mes": "2026-02",
       "ar_abierto_eur": 156507329.37761644,
       "ar_abierto_norm_mediana": 2.274558801878765,
       "ar_pct_vencido": 0.6068608566074604,
-      "ap_abierto_eur": 50715764.44891194,
-      "ap_pct_vencido": 0.61527230776319
+      "ap_abierto_eur": 50715764.448911935,
+      "ap_pct_vencido": 0.6152723077631901
     },
     {
       "mes": "2026-03",
-      "ar_abierto_eur": 167577910.90600675,
-      "ar_abierto_norm_mediana": 2.5864305216174284,
-      "ar_pct_vencido": 0.5857388242742316,
+      "ar_abierto_eur": 167577910.90600678,
+      "ar_abierto_norm_mediana": 2.5864305216174275,
+      "ar_pct_vencido": 0.5857388242742315,
       "ap_abierto_eur": 45203397.260768436,
-      "ap_pct_vencido": 0.3606755203892868
+      "ap_pct_vencido": 0.36067552038928674
     },
     {
       "mes": "2026-04",
       "ar_abierto_eur": 175264410.28774673,
-      "ar_abierto_norm_mediana": 2.18369103444814,
+      "ar_abierto_norm_mediana": 2.183691034448141,
       "ar_pct_vencido": 0.5433428938027101,
-      "ap_abierto_eur": 46999634.49866658,
-      "ap_pct_vencido": 0.27797164123643325
+      "ap_abierto_eur": 46999634.498666584,
+      "ap_pct_vencido": 0.2779716412364332
     },
     {
       "mes": "2026-05",
-      "ar_abierto_eur": 159205264.45241484,
+      "ar_abierto_eur": 159205264.4524148,
       "ar_abierto_norm_mediana": 2.1352187743601703,
-      "ar_pct_vencido": 0.6171200146631589,
+      "ar_pct_vencido": 0.617120014663159,
       "ap_abierto_eur": 55320301.25664263,
-      "ap_pct_vencido": 0.2478005954944154
+      "ap_pct_vencido": 0.24780059549441538
     },
     {
       "mes": "2026-06",
@@ -226,16 +226,16 @@
     {
       "mes": "2026-07",
       "ar_abierto_eur": 180268025.7218624,
-      "ar_abierto_norm_mediana": 2.1622193343543916,
+      "ar_abierto_norm_mediana": 2.162219334354392,
       "ar_pct_vencido": 0.5811962970461516,
       "ap_abierto_eur": 54258085.562675126,
-      "ap_pct_vencido": 0.4624448452120412
+      "ap_pct_vencido": 0.46244484521204116
     },
     {
       "mes": "2026-08",
       "ar_abierto_eur": 197403287.50712296,
       "ar_abierto_norm_mediana": 2.3507528688879082,
-      "ar_pct_vencido": 0.6022907331507907,
+      "ar_pct_vencido": 0.6022907331507908,
       "ap_abierto_eur": 52595442.19197404,
       "ap_pct_vencido": 0.6764307233974914
     }
@@ -243,19 +243,19 @@
   "aging_ultimo_mes": {
     "mes": "2026-08",
     "ar": {
-      "vencido_eur": 118894170.75904143,
+      "vencido_eur": 118894170.75904144,
       "aging_0_30_eur": 14393748.540000003,
-      "aging_0_30_pct": 0.12106353447025842,
+      "aging_0_30_pct": 0.1210635344702584,
       "aging_31_60_eur": 11236436.461950455,
-      "aging_31_60_pct": 0.09450788369366686,
+      "aging_31_60_pct": 0.09450788369366685,
       "aging_61_90_eur": 10020146.96,
-      "aging_61_90_pct": 0.08427786573580193,
+      "aging_61_90_pct": 0.08427786573580191,
       "aging_91_180_eur": 22192134.401379306,
-      "aging_91_180_pct": 0.1866545202317388,
+      "aging_91_180_pct": 0.18665452023173879,
       "aging_181_360_eur": 42369039.00201452,
-      "aging_181_360_pct": 0.3563592624560403,
+      "aging_181_360_pct": 0.35635926245604027,
       "aging_360_mas_eur": 18682665.393697232,
-      "aging_360_mas_pct": 0.1571369334124944
+      "aging_360_mas_pct": 0.15713693341249438
     },
     "ap": {
       "vencido_eur": 35577173.00932794,
@@ -326,7 +326,7 @@
       },
       {
         "mes": "2025-02",
-        "coh_pct_cobrado_30d": 0.4706781222719198,
+        "coh_pct_cobrado_30d": 0.47067812227191974,
         "n_null_censura_30d": 0,
         "coh_pct_cobrado_60d": 0.5611657891046566,
         "n_null_censura_60d": 0,
@@ -407,7 +407,7 @@
       },
       {
         "mes": "2025-11",
-        "coh_pct_cobrado_30d": 0.5395110250098958,
+        "coh_pct_cobrado_30d": 0.5395110250098959,
         "n_null_censura_30d": 0,
         "coh_pct_cobrado_60d": 0.6345140184265083,
         "n_null_censura_60d": 0,
@@ -443,7 +443,7 @@
       },
       {
         "mes": "2026-03",
-        "coh_pct_cobrado_30d": 0.4678744212322384,
+        "coh_pct_cobrado_30d": 0.4678744212322385,
         "n_null_censura_30d": 0,
         "coh_pct_cobrado_60d": 0.6054033775257507,
         "n_null_censura_60d": 0,
@@ -463,7 +463,7 @@
         "mes": "2026-05",
         "coh_pct_cobrado_30d": 0.45676580832130065,
         "n_null_censura_30d": 0,
-        "coh_pct_cobrado_60d": 0.592957877310268,
+        "coh_pct_cobrado_60d": 0.5929578773102681,
         "n_null_censura_60d": 0,
         "coh_pct_cobrado_90d": 0.6694907163584137,
         "n_null_censura_90d": 0
@@ -527,17 +527,17 @@
       {
         "moneda": "USD",
         "n": 25626,
-        "nominal_contable_abs": 1133193757.6648364
+        "nominal_contable_abs": 1133193757.6648378
       },
       {
         "moneda": "GBP",
         "n": 17265,
-        "nominal_contable_abs": 393320728.9061974
+        "nominal_contable_abs": 393320728.9061975
       },
       {
         "moneda": "CLP",
         "n": 7883,
-        "nominal_contable_abs": 31807014944.242428
+        "nominal_contable_abs": 31807014944.242424
       },
       {
         "moneda": "MXN",
@@ -547,27 +547,27 @@
       {
         "moneda": "COP",
         "n": 5582,
-        "nominal_contable_abs": 558680440053.831
+        "nominal_contable_abs": 558680440053.8308
       },
       {
         "moneda": "BRL",
         "n": 5057,
-        "nominal_contable_abs": 250361151.43110657
+        "nominal_contable_abs": 250361151.4311066
       },
       {
         "moneda": "DKK",
         "n": 4853,
-        "nominal_contable_abs": 110476188.33609979
+        "nominal_contable_abs": 110476188.33609983
       },
       {
         "moneda": "CAD",
         "n": 3092,
-        "nominal_contable_abs": 33197449.25980006
+        "nominal_contable_abs": 33197449.25980004
       },
       {
         "moneda": "AUD",
         "n": 2950,
-        "nominal_contable_abs": 60070280.0538276
+        "nominal_contable_abs": 60070280.053827606
       },
       {
         "moneda": "PEN",
@@ -577,7 +577,7 @@
       {
         "moneda": "MYR",
         "n": 2145,
-        "nominal_contable_abs": 3354765.7957249023
+        "nominal_contable_abs": 3354765.7957249056
       },
       {
         "moneda": "NAD",
@@ -587,7 +587,7 @@
       {
         "moneda": "ARS",
         "n": 1580,
-        "nominal_contable_abs": 11852542651.342554
+        "nominal_contable_abs": 11852542651.342552
       },
       {
         "moneda": "AED",
@@ -597,17 +597,17 @@
       {
         "moneda": "MZN",
         "n": 1217,
-        "nominal_contable_abs": 252858966.7743925
+        "nominal_contable_abs": 252858966.77439246
       },
       {
         "moneda": "SGD",
         "n": 644,
-        "nominal_contable_abs": 117250556.57263209
+        "nominal_contable_abs": 117250556.57263206
       },
       {
         "moneda": "NZD",
         "n": 294,
-        "nominal_contable_abs": 1975980.1732967033
+        "nominal_contable_abs": 1975980.1732967035
       },
       {
         "moneda": "INR",
@@ -617,7 +617,7 @@
       {
         "moneda": "MAD",
         "n": 55,
-        "nominal_contable_abs": 3823401.6900000004
+        "nominal_contable_abs": 3823401.69
       },
       {
         "moneda": "PLN",

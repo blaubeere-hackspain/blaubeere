@@ -1,0 +1,434 @@
+{
+  "current_receipt_dip_3m": {
+    "candidates": {
+      "constant": {
+        "alert_rate": null,
+        "all_validation_predictions": 0,
+        "average_precision": null,
+        "brier": null,
+        "ece5": null,
+        "mean_company_brier": null,
+        "mean_group_brier": null,
+        "missing_predictions": 12,
+        "precision": null,
+        "predicted_rows": 0,
+        "recall": null,
+        "unknown_label_predictions": 0
+      },
+      "logistic_C1": {
+        "alert_rate": null,
+        "all_validation_predictions": 0,
+        "average_precision": null,
+        "brier": null,
+        "ece5": null,
+        "mean_company_brier": null,
+        "mean_group_brier": null,
+        "missing_predictions": 12,
+        "precision": null,
+        "predicted_rows": 0,
+        "recall": null,
+        "unknown_label_predictions": 0
+      }
+    },
+    "selected": null,
+    "training": {
+      "censor_reasons_nonexclusive": {
+        "changed_or_missing_observed_accounts": 804,
+        "incomplete_receipt_months": 1307,
+        "input_ineligible": 2704,
+        "nonpositive_receipt_reference": 2,
+        "not_current_receipt_dip": 128
+      },
+      "eligible_inputs": 1536,
+      "labeled": 61,
+      "labeled_fraction_of_eligible": 0.039713541666666664,
+      "origins": 4240,
+      "support": {
+        "adequate": false,
+        "companies": 31,
+        "groups": 17,
+        "minimum_groups_per_class": 5,
+        "minimum_rows_per_class": 20,
+        "minimum_total_groups": 10,
+        "per_class": {
+          "mixed": {
+            "companies": 9,
+            "groups": 7,
+            "rows": 12
+          },
+          "persistent": {
+            "companies": 20,
+            "groups": 13,
+            "rows": 38
+          },
+          "recovered": {
+            "companies": 9,
+            "groups": 9,
+            "rows": 11
+          }
+        },
+        "rows": 61
+      },
+      "unknown_or_not_in_cohort": 4179
+    },
+    "utility": {
+      "checks": {
+        "selected_model": false
+      },
+      "pass": false,
+      "reason": "insufficient_support_or_no_validation_predictions"
+    },
+    "validation": {
+      "censor_reasons_nonexclusive": {
+        "changed_or_missing_observed_accounts": 160,
+        "incomplete_receipt_months": 313,
+        "input_ineligible": 345,
+        "nonpositive_receipt_reference": 1,
+        "not_current_receipt_dip": 16
+      },
+      "eligible_inputs": 345,
+      "labeled": 12,
+      "labeled_fraction_of_eligible": 0.034782608695652174,
+      "origins": 690,
+      "support": {
+        "adequate": false,
+        "companies": 7,
+        "groups": 5,
+        "minimum_groups_per_class": 5,
+        "minimum_rows_per_class": 20,
+        "minimum_total_groups": 10,
+        "per_class": {
+          "mixed": {
+            "companies": 2,
+            "groups": 2,
+            "rows": 2
+          },
+          "persistent": {
+            "companies": 3,
+            "groups": 3,
+            "rows": 5
+          },
+          "recovered": {
+            "companies": 5,
+            "groups": 4,
+            "rows": 5
+          }
+        },
+        "rows": 12
+      },
+      "unknown_or_not_in_cohort": 678
+    }
+  },
+  "receipt_contraction_3m": {
+    "candidates": {
+      "constant": {
+        "alert_rate": 0.0,
+        "all_validation_predictions": 345,
+        "average_precision": 0.32142857142857145,
+        "brier": 0.22874179931851704,
+        "ece5": 0.10309973045822092,
+        "mean_company_brier": 0.23968682913147132,
+        "mean_group_brier": 0.2415450338198647,
+        "missing_predictions": 0,
+        "precision": null,
+        "predicted_rows": 28,
+        "recall": 0.0,
+        "unknown_label_predictions": 317
+      },
+      "logistic_C0.1": {
+        "alert_rate": 0.10714285714285714,
+        "all_validation_predictions": 345,
+        "average_precision": 0.3916482694260472,
+        "brier": 0.2675088700409228,
+        "ece5": 0.302616284808189,
+        "mean_company_brier": 0.26521761098668306,
+        "mean_group_brier": 0.27624558333474347,
+        "missing_predictions": 0,
+        "precision": 0.3333333333333333,
+        "predicted_rows": 28,
+        "recall": 0.1111111111111111,
+        "unknown_label_predictions": 317
+      },
+      "logistic_C1": {
+        "alert_rate": 0.32142857142857145,
+        "all_validation_predictions": 345,
+        "average_precision": 0.47185440789305527,
+        "brier": 0.27811298469700635,
+        "ece5": 0.2779111496227881,
+        "mean_company_brier": 0.2760027481986866,
+        "mean_group_brier": 0.295790965336072,
+        "missing_predictions": 0,
+        "precision": 0.4444444444444444,
+        "predicted_rows": 28,
+        "recall": 0.4444444444444444,
+        "unknown_label_predictions": 317
+      },
+      "persistence": {
+        "alert_rate": 0.0,
+        "all_validation_predictions": 345,
+        "average_precision": 0.443001443001443,
+        "brier": 0.2111266938971472,
+        "ece5": 0.16234841498935085,
+        "mean_company_brier": 0.20890272275309538,
+        "mean_group_brier": 0.2089771442837549,
+        "missing_predictions": 0,
+        "precision": null,
+        "predicted_rows": 28,
+        "recall": 0.0,
+        "unknown_label_predictions": 317
+      },
+      "trend": {
+        "alert_rate": 0.39285714285714285,
+        "all_validation_predictions": 345,
+        "average_precision": 0.3953823953823954,
+        "brier": 0.25428571428571434,
+        "ece5": 0.15714285714285717,
+        "mean_company_brier": 0.2763636363636364,
+        "mean_group_brier": 0.27125000000000005,
+        "missing_predictions": 0,
+        "precision": 0.45454545454545453,
+        "predicted_rows": 28,
+        "recall": 0.5555555555555556,
+        "unknown_label_predictions": 317
+      }
+    },
+    "selected": "persistence",
+    "training": {
+      "censor_reasons_nonexclusive": {
+        "changed_or_missing_observed_accounts": 670,
+        "incomplete_receipt_months": 1276,
+        "input_ineligible": 2704
+      },
+      "eligible_inputs": 1536,
+      "labeled": 212,
+      "labeled_fraction_of_eligible": 0.13802083333333334,
+      "origins": 4240,
+      "support": {
+        "adequate": true,
+        "companies": 63,
+        "groups": 25,
+        "minimum_groups_per_class": 5,
+        "minimum_rows_per_class": 20,
+        "minimum_total_groups": 10,
+        "per_class": {
+          "0": {
+            "companies": 48,
+            "groups": 21,
+            "rows": 122
+          },
+          "1": {
+            "companies": 38,
+            "groups": 19,
+            "rows": 90
+          }
+        },
+        "rows": 212
+      },
+      "unknown_or_not_in_cohort": 4028
+    },
+    "utility": {
+      "checks": {
+        "alert_rate": true,
+        "ap_gain_vs_prevalence": true,
+        "brier_gain_vs_best_simple": false,
+        "brier_gain_vs_prevalence": true,
+        "calibration_ece5": false,
+        "labeled_fraction_of_eligible": false,
+        "precision": false,
+        "recall": false,
+        "validation_support": false
+      },
+      "pass": false,
+      "selection_bias": "Same internal validation used for selection and utility; not independent acceptance even if all criteria pass."
+    },
+    "validation": {
+      "censor_reasons_nonexclusive": {
+        "changed_or_missing_observed_accounts": 176,
+        "incomplete_receipt_months": 315,
+        "input_ineligible": 345
+      },
+      "eligible_inputs": 345,
+      "labeled": 28,
+      "labeled_fraction_of_eligible": 0.08115942028985507,
+      "origins": 690,
+      "support": {
+        "adequate": false,
+        "companies": 11,
+        "groups": 8,
+        "minimum_groups_per_class": 5,
+        "minimum_rows_per_class": 20,
+        "minimum_total_groups": 10,
+        "per_class": {
+          "0": {
+            "companies": 9,
+            "groups": 7,
+            "rows": 19
+          },
+          "1": {
+            "companies": 6,
+            "groups": 6,
+            "rows": 9
+          }
+        },
+        "rows": 28
+      },
+      "unknown_or_not_in_cohort": 662
+    }
+  },
+  "receipt_expansion_3m": {
+    "candidates": {
+      "constant": {
+        "alert_rate": 0.0,
+        "all_validation_predictions": 345,
+        "average_precision": 0.35714285714285715,
+        "brier": 0.24318199155774806,
+        "ece5": 0.11657681940700804,
+        "mean_company_brier": 0.23082799335469326,
+        "mean_group_brier": 0.23082799335469323,
+        "missing_predictions": 0,
+        "precision": null,
+        "predicted_rows": 28,
+        "recall": 0.0,
+        "unknown_label_predictions": 317
+      },
+      "logistic_C0.1": {
+        "alert_rate": 0.0,
+        "all_validation_predictions": 345,
+        "average_precision": 0.3576369282891022,
+        "brier": 0.25169365565133456,
+        "ece5": 0.1585830147031631,
+        "mean_company_brier": 0.2412468656322595,
+        "mean_group_brier": 0.2457136597802262,
+        "missing_predictions": 0,
+        "precision": null,
+        "predicted_rows": 28,
+        "recall": 0.0,
+        "unknown_label_predictions": 317
+      },
+      "logistic_C1": {
+        "alert_rate": 0.07142857142857142,
+        "all_validation_predictions": 345,
+        "average_precision": 0.39976208976208977,
+        "brier": 0.2709159754176074,
+        "ece5": 0.17155282080945358,
+        "mean_company_brier": 0.2683225287562995,
+        "mean_group_brier": 0.2856044423397308,
+        "missing_predictions": 0,
+        "precision": 0.0,
+        "predicted_rows": 28,
+        "recall": 0.0,
+        "unknown_label_predictions": 317
+      },
+      "persistence": {
+        "alert_rate": 0.0,
+        "all_validation_predictions": 345,
+        "average_precision": 0.41000000000000003,
+        "brier": 0.22460917697535818,
+        "ece5": 0.08015976183952331,
+        "mean_company_brier": 0.22258973575744712,
+        "mean_group_brier": 0.22911206916526858,
+        "missing_predictions": 0,
+        "precision": null,
+        "predicted_rows": 28,
+        "recall": 0.0,
+        "unknown_label_predictions": 317
+      },
+      "trend": {
+        "alert_rate": 0.5,
+        "all_validation_predictions": 345,
+        "average_precision": 0.32857142857142857,
+        "brier": 0.3828571428571429,
+        "ece5": 0.3714285714285715,
+        "mean_company_brier": 0.3945454545454546,
+        "mean_group_brier": 0.3775000000000001,
+        "missing_predictions": 0,
+        "precision": 0.2857142857142857,
+        "predicted_rows": 28,
+        "recall": 0.4,
+        "unknown_label_predictions": 317
+      }
+    },
+    "selected": "persistence",
+    "training": {
+      "censor_reasons_nonexclusive": {
+        "changed_or_missing_observed_accounts": 670,
+        "incomplete_receipt_months": 1276,
+        "input_ineligible": 2704
+      },
+      "eligible_inputs": 1536,
+      "labeled": 212,
+      "labeled_fraction_of_eligible": 0.13802083333333334,
+      "origins": 4240,
+      "support": {
+        "adequate": true,
+        "companies": 63,
+        "groups": 25,
+        "minimum_groups_per_class": 5,
+        "minimum_rows_per_class": 20,
+        "minimum_total_groups": 10,
+        "per_class": {
+          "0": {
+            "companies": 56,
+            "groups": 22,
+            "rows": 161
+          },
+          "1": {
+            "companies": 29,
+            "groups": 18,
+            "rows": 51
+          }
+        },
+        "rows": 212
+      },
+      "unknown_or_not_in_cohort": 4028
+    },
+    "utility": {
+      "checks": {
+        "alert_rate": true,
+        "ap_gain_vs_prevalence": true,
+        "brier_gain_vs_best_simple": false,
+        "brier_gain_vs_prevalence": false,
+        "calibration_ece5": true,
+        "labeled_fraction_of_eligible": false,
+        "precision": false,
+        "recall": false,
+        "validation_support": false
+      },
+      "pass": false,
+      "selection_bias": "Same internal validation used for selection and utility; not independent acceptance even if all criteria pass."
+    },
+    "validation": {
+      "censor_reasons_nonexclusive": {
+        "changed_or_missing_observed_accounts": 176,
+        "incomplete_receipt_months": 315,
+        "input_ineligible": 345
+      },
+      "eligible_inputs": 345,
+      "labeled": 28,
+      "labeled_fraction_of_eligible": 0.08115942028985507,
+      "origins": 690,
+      "support": {
+        "adequate": false,
+        "companies": 11,
+        "groups": 8,
+        "minimum_groups_per_class": 5,
+        "minimum_rows_per_class": 20,
+        "minimum_total_groups": 10,
+        "per_class": {
+          "0": {
+            "companies": 10,
+            "groups": 8,
+            "rows": 18
+          },
+          "1": {
+            "companies": 8,
+            "groups": 6,
+            "rows": 10
+          }
+        },
+        "rows": 28
+      },
+      "unknown_or_not_in_cohort": 662
+    }
+  }
+}

@@ -1,0 +1,1 @@
+scripts/verify_ingest.sh: line 10: set: pipefail: invalid option name

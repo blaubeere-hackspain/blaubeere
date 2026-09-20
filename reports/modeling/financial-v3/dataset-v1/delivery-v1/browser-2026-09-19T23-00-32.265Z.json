@@ -1,0 +1,42 @@
+{
+  "command": "bun run test:financial-v3:e2e",
+  "source_queries": 0,
+  "outcome_queries": 0,
+  "inference": 0,
+  "ids": [
+    "COMP_0001",
+    "COMP_0003",
+    "COMP_0014",
+    "COMP_0252"
+  ],
+  "mixed_currency_company": "COMP_0014",
+  "largest_profile_company": "COMP_0252",
+  "steps": [
+    {
+      "name": "COMP_0001 unauthenticated API and browser login",
+      "status": "passed"
+    },
+    {
+      "name": "negative scientific result, no headline/planner, sources and units",
+      "status": "passed"
+    },
+    {
+      "name": "all 24 API cuts, four real profiles including holdout/mixed-currency/largest",
+      "status": "passed"
+    }
+  ],
+  "browser": {
+    "version": "152.0.7977.82",
+    "executablePath": "/usr/bin/chromium",
+    "sandbox": true
+  },
+  "status": "failed",
+  "failed_step": "COMP_0001 browser closed months, gaps, probabilities and currency",
+  "error": "expect(locator).toHaveText(expected) failed\n\nLocator: getByTestId('financial-v3-cutoff')\nExpected string: \"2026-08-31\"\nReceived: <element(s) not found>\nTimeout: 5000ms\n\nCall log:\n\u001b[2m  - Expect \"to.have.text\" with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for getByTestId('financial-v3-cutoff')\u001b[22m\n",
+  "v3_api_cuts": 96,
+  "v3_ui_cuts": 0,
+  "trajectory_api_cuts": 0,
+  "max_response_bytes": 393106,
+  "page_errors": [],
+  "cleanup": "Only owned process groups and freshly created ephemeral identity directories removed"
+}

@@ -1,0 +1,103 @@
+{
+  "eligible_feature_rows": 7132,
+  "feature_rows": 17664,
+  "group_counts": {
+    "final_test": 50,
+    "train": 150,
+    "validation": 50
+  },
+  "ineligibility_reasons": {
+    "less_than_three_prior_months": 9582,
+    "missing_month": 2156,
+    "no_cash_activity": 8482,
+    "nonpositive_or_unknown_gross": 3,
+    "unknown_fx": 725
+  },
+  "label_support": "NOT_INSPECTED; minimum class support is a mandatory T3 gate before metrics",
+  "missing_by_feature": {
+    "deficit_frequency_3m": 14379,
+    "deficit_frequency_6m": 15984,
+    "financing_in_ratio": 8040,
+    "financing_out_ratio": 8040,
+    "log_accounts": 8040,
+    "log_gross": 8040,
+    "log_gross_delta_prior_3m": 10588,
+    "log_gross_delta_prior_6m": 12735,
+    "log_gross_mean_3m": 9807,
+    "log_gross_mean_6m": 12066,
+    "log_gross_std_3m": 9807,
+    "log_gross_std_6m": 12066,
+    "log_tx": 8040,
+    "net_ratio": 8040,
+    "net_ratio_delta_prior_3m": 10588,
+    "net_ratio_delta_prior_6m": 12735,
+    "net_ratio_mean_3m": 9807,
+    "net_ratio_mean_6m": 12066,
+    "net_ratio_slope_3m": 9807,
+    "net_ratio_slope_6m": 12066,
+    "net_ratio_std_3m": 9807,
+    "net_ratio_std_6m": 12066,
+    "operating_identified_ratio": 8040,
+    "operating_in_ratio": 8040,
+    "operating_max_ratio": 8040,
+    "operating_max_ratio_mean_3m": 9807,
+    "operating_max_ratio_mean_6m": 12066,
+    "operating_min_ratio": 8040,
+    "operating_min_ratio_mean_3m": 9807,
+    "operating_min_ratio_mean_6m": 12066,
+    "operating_out_ratio": 8040,
+    "uncertainty_ratio": 8040
+  },
+  "report_type": "structural_only_no_outcomes",
+  "splits": {
+    "final_test": {
+      "companies": 156,
+      "groups": 42,
+      "maturity_max": "2026-08-31",
+      "origin_max": "2026-05-01",
+      "origin_min": "2026-04-01",
+      "rows": 299
+    },
+    "final_train": {
+      "companies": 715,
+      "groups": 131,
+      "maturity_max": "2026-03-31",
+      "origin_max": "2025-12-01",
+      "origin_min": "2024-12-01",
+      "rows": 6833
+    },
+    "fold1_train": {
+      "companies": 322,
+      "groups": 64,
+      "maturity_max": "2025-06-30",
+      "origin_max": "2025-03-01",
+      "origin_min": "2024-12-01",
+      "rows": 1209
+    },
+    "fold1_validation": {
+      "companies": 125,
+      "groups": 28,
+      "maturity_max": "2025-12-31",
+      "origin_max": "2025-09-01",
+      "origin_min": "2025-07-01",
+      "rows": 358
+    },
+    "fold2_train": {
+      "companies": 467,
+      "groups": 87,
+      "maturity_max": "2025-09-30",
+      "origin_max": "2025-06-01",
+      "origin_min": "2024-12-01",
+      "rows": 2507
+    },
+    "fold2_validation": {
+      "companies": 134,
+      "groups": 30,
+      "maturity_max": "2026-03-31",
+      "origin_max": "2025-12-01",
+      "origin_min": "2025-10-01",
+      "rows": 386
+    }
+  },
+  "structural_blockers": []
+}

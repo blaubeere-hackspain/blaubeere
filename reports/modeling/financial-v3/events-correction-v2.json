@@ -1,0 +1,243 @@
+{
+  "verification_version": "financial-v3-events-correction-v2",
+  "task": "New explicitly authorized bounded V3T6 correction cycle",
+  "status": "bounded_corrections_passed_development_only",
+  "whole_v3t6_complete": false,
+  "predictive_model_validated": false,
+  "root": "/home/mikel/.herdr/worktrees/predictive-models/feat-training-devin",
+  "authorization": {
+    "source": ".devin/goal.md:9-14 and explicit user correction instruction",
+    "prior_stop_preserved": true,
+    "prior_report": "reports/modeling/financial-v3/events-verification-v1.json",
+    "prior_report_sha256_before_and_after": "62b7e0c5738e73a25d26924f44a164d82f6acf366fc42c34178612a4ba965fe9",
+    "budget": "One newly authorized correction/recheck for the stopped matching fixture. Each separately reproduced semantic root also received one correction/recheck. No persistent failure, no second correction on the same root, and no silent reset of the original STOP history.",
+    "dataset_amendment": "The existing 24-month dataset is the future internal-retrospective delivery basis, not an external-data acquisition prerequisite. Its real adaptation and internal-retrospective protocol are a separate version/task. This correction cycle did not authorize any real outcome queries, real training/evaluation, modification of frozen development policy, or promotion of fixtures."
+  },
+  "side_effect_boundaries": {
+    "real_outcome_queries": 0,
+    "real_models_fitted": 0,
+    "real_evaluations": 0,
+    "fixture_only_model_fitting_executed_by_existing_tests": true,
+    "company_models_exported": 0,
+    "automatic_alerts_enabled": false,
+    "goal_written": false,
+    "original_verification_report_rewritten": false,
+    "core_contract_protocol_sealed_tests_or_data_modified": false,
+    "docs_api_ui_modified": false,
+    "network_dependency_configuration_or_git_mutation_operations": 0,
+    "subagents_or_comments_added": 0,
+    "independent_review_completed": false
+  },
+  "changed_paths": [
+    "scripts/financial_v3_events.py",
+    "tests/test_financial_v3_events.py",
+    "tests/test_financial_v3_evaluate.py",
+    "reports/modeling/financial-v3/events-correction-v2.json"
+  ],
+  "unchanged_interfaces": "Public signatures and frozen constants are unchanged. financial_v3_learning.py and financial_v3_evaluate.py were not edited. Only the internal event scan state and payment-reduction check changed.",
+  "corrections": [
+    {
+      "root": "Stopped false-versus-censored fixture lacked December baseline",
+      "path": "tests/test_financial_v3_evaluate.py:153-172",
+      "change": "Prepend invented December 2024 economic history to the resolvably-false fixture; retain one match, one false and one event. Add a separate unchanged January-start history asserting one match, zero false and one censored February-origin alert. Strict timing and censoring rules were not changed.",
+      "rechecks_used_this_cycle": 1,
+      "resolved": true
+    },
+    {
+      "root": "Two fixtures mixed shortened issuance history with uninterrupted-high matching history",
+      "path": "tests/test_financial_v3_evaluate.py:44-83",
+      "change": "Build alerts from the exact complete probability/abstention origin sequence passed to replay and matching. Late October issuance has no probabilities before September; April issuance has probabilities only in March/April. All 12 origins remain input-eligible. Assert identical event and opportunity denominators despite missing probabilities. Existing trimmed-history/phantom-reissue rejection remains intact at lines142-151.",
+      "rechecks_used_this_cycle": 1,
+      "resolved": true
+    },
+    {
+      "root": "Unknown unconfirmed-candidate episode state was lost after a gap left the rolling history",
+      "path": "scripts/financial_v3_events.py:275-284",
+      "change": "When the origin or required confirmation is unknown and a valid past-three reference exists, latch that fixed reference as an unknown episode. The existing active-state logic then requires two consecutive fully observed nonqualifying months before reset; additional gaps break the reset streak. No event or negative label is invented while the state remains unresolved.",
+      "tests": "tests/test_financial_v3_events.py:217-258; both signs, absent month, unknown Z, unknown F, fully complete later label window, fixed-reference reset, and another gap interrupting reset.",
+      "rechecks_used_this_cycle": 1,
+      "resolved": true
+    },
+    {
+      "root": "Payments before a newly overdue peak could mask subsequent cancellation",
+      "path": "scripts/financial_v3_events.py:325-344",
+      "change": "Retain the complete per-obligation DebtState at its observed overdue peak, including the payment and nonpayment-adjustment stocks. A credited reduction now requires post-peak allocated payment at least as large as the legal reduction and the exact Decimal roll-forward: peak remaining + adjustment since peak - payment since peak = current remaining. Writeoff is not in the payment credit. The same cumulative post-peak payment can support both recovery months without being paid again.",
+      "tests": "tests/test_financial_v3_events.py:261-352; pre-peak1500 payment with later1000 cancellation/renegotiation, partial post-peak payment plus cancellation, valid post-peak1000 payment, unreconciled amendment, persistent writeoff, missing Q/Z, and composed core provenance.",
+      "rechecks_used_this_cycle": 1,
+      "resolved": true
+    }
+  ],
+  "financial_core_inspection": {
+    "source": "scripts/financial_v3_obligations.py:222-249,285-290; scripts/financial_v3_events.py:119-172",
+    "findings": "Core paid is cumulative explicitly allocated settlement, with linked bank-payment and allocation sources. Cancellations/renegotiations change legal remaining and preserve lineage; writeoff is recorded separately and does not extinguish the unpaid legal amount. The existing adapter derives nonpayment_adjustment=remaining+paid-face, preserves written_off/replacement IDs and combines cross-module provenance.",
+    "composed_fixture_result": "Face800, allocated paid300, cancellation200 and writeoff100 produce remaining300, paid300, written_off100, nonpayment_adjustment=-200, Q300. Allocation, bank payment, cancellation and writeoff source refs remain present. Ambiguous intramonth Z remains null, not zero.",
+    "core_files_changed": false
+  },
+  "attempts": [
+    {
+      "phase": "before_identity_hashes",
+      "command": ".venv/bin/python -B -c \"from scripts.financial_v3_contract import ROOT, file_hash; import json; paths = ['scripts/financial_v3_events.py','scripts/financial_v3_learning.py','scripts/financial_v3_evaluate.py','tests/test_financial_v3_events.py','tests/test_financial_v3_learning.py','tests/test_financial_v3_evaluate.py','reports/modeling/financial-v3/events-verification-v1.json','scripts/financial_v3_cash.py','scripts/financial_v3_obligations.py','scripts/financial_v3_features.py','scripts/financial_v3_score.py','scripts/financial_v3_engine.py']; print(json.dumps({p: file_hash(ROOT / p) for p in paths}, indent=2))\"",
+      "exit_code": 0,
+      "result": "Captured twelve before hashes, including immutable prior STOP report and five financial-core modules."
+    },
+    {
+      "phase": "reproduce_all_three_original_red_fixtures_before_edits",
+      "command": ".venv/bin/python -B -m unittest tests.test_financial_v3_evaluate.EvaluationTests.test_matching_denominator_misses_and_false_censored_identities tests.test_financial_v3_evaluate.EvaluationTests.test_complete_followup_false_gap_is_censored_and_one_to_one tests.test_financial_v3_evaluate.ExtendedEvaluationTests.test_one_to_one_two_valid_episodes_same_event -v",
+      "exit_code": 1,
+      "tests": 3,
+      "seconds": 0.011,
+      "result": "Reproduced exactly two prospective-history replay errors and false=0 versus expected1 in the stopped fixture."
+    },
+    {
+      "phase": "one_new_authorized_fixture_correction_recheck",
+      "command": ".venv/bin/python -B -m unittest tests.test_financial_v3_evaluate -v",
+      "exit_code": 0,
+      "tests": 15,
+      "seconds": 0.058,
+      "result": "All15 evaluator tests pass, including all three original failures, separate missing-December censoring and phantom/trimmed-history rejection. No production evaluator changes."
+    },
+    {
+      "phase": "candidate_gap_tests_first_expected_red",
+      "command": ".venv/bin/python -B -m unittest tests.test_financial_v3_events.CandidateGapCorrectionTests -v",
+      "exit_code": 1,
+      "tests": 3,
+      "failed_assertions_including_subtests": 8,
+      "seconds": 0.011,
+      "result": "Six sign/gap cases wrongly labeled a fully followed later origin0 after the original gap rolled out. Two reset-state assertions also failed. One shared missing-unknown-candidate-state root."
+    },
+    {
+      "phase": "candidate_gap_one_correction_recheck",
+      "command": ".venv/bin/python -B -m unittest tests.test_financial_v3_events.CandidateGapCorrectionTests -v",
+      "exit_code": 0,
+      "tests": 3,
+      "seconds": 0.007,
+      "result": "All candidate-gap/reset regressions pass after the single fixed-reference unknown-state correction."
+    },
+    {
+      "phase": "peak_payment_tests_first_expected_red",
+      "command": ".venv/bin/python -B -m unittest tests.test_financial_v3_events.PeakPaymentCorrectionTests -v",
+      "exit_code": 1,
+      "tests": 6,
+      "failed_assertions_including_subtests": 4,
+      "seconds": 0.058,
+      "result": "Cancellation, renegotiation, partial payment plus cancellation, and unreconciled adjustment were incorrectly recovered. Positive payment, writeoff, unknowns and core-provenance tests already passed."
+    },
+    {
+      "phase": "peak_payment_one_correction_recheck",
+      "command": ".venv/bin/python -B -m unittest tests.test_financial_v3_events.PeakPaymentCorrectionTests -v",
+      "exit_code": 0,
+      "tests": 6,
+      "seconds": 0.056,
+      "result": "All six tests pass after the single post-peak payment/adjustment reconciliation correction."
+    },
+    {
+      "phase": "final_focused_v3t6_suite",
+      "command": ".venv/bin/python -B -m unittest tests.test_financial_v3_events tests.test_financial_v3_learning tests.test_financial_v3_evaluate -v",
+      "exit_code": 0,
+      "tests": 52,
+      "seconds": 3.475,
+      "result": "All52 focused tests pass; no skips or failures. Fixture-only models fitted by existing bounded learner tests."
+    },
+    {
+      "phase": "full_financial_v3_suite",
+      "command": ".venv/bin/python -B -m unittest discover -s tests -p 'test_financial_v3_*.py' -v",
+      "exit_code": 0,
+      "tests": 133,
+      "seconds": 6.939,
+      "result": "All133 V3 tests pass: unchanged81 core/contract/audit plus52 V3T6 tests. No skips or failures."
+    },
+    {
+      "phase": "full_repository_suite_safety_review",
+      "command": ".venv/bin/python -B -m unittest discover -s tests -v",
+      "executed": false,
+      "exit_code": null,
+      "result": "Not safe under this cycle's explicit no-real-outcome-query restriction. tests/test_marts.py:22-24 binds the real targets_proxy.parquet and :93-110 queries target_deficit_3m, future deficit and future collection outcomes. The full suite is not entirely invented/temp fixtures. Did not execute, modify or silently skip those tests."
+    },
+    {
+      "phase": "final_contract_integrity",
+      "command": ".venv/bin/python -B scripts/financial_v3_contract.py --check",
+      "exit_code": 0,
+      "result": "ok=true;8 bound assets; frozen protocol, policy and receipt hashes unchanged; no financial queries or outcome reads."
+    },
+    {
+      "phase": "final_protected_integrity",
+      "command": ".venv/bin/python -B scripts/financial_v3_audit.py --check",
+      "exit_code": 0,
+      "result": "ok=true;541 protected assets;differences=[];old document bytes preserved as suffix;hash-only."
+    },
+    {
+      "phase": "targeted_git_whitespace_check",
+      "command": "git diff --check -- scripts/financial_v3_events.py tests/test_financial_v3_events.py tests/test_financial_v3_evaluate.py reports/modeling/financial-v3/events-correction-v2.json",
+      "exit_code": 0,
+      "result": "No output or whitespace errors. These V3 sources were previously untracked; specialized grep additionally checked the three changed Python files for trailing whitespace/comments and found none. No Git mutation performed."
+    },
+    {
+      "phase": "after_identity_hashes",
+      "command": ".venv/bin/python -B -c \"from scripts.financial_v3_contract import ROOT, file_hash; import json; paths = ['scripts/financial_v3_events.py','scripts/financial_v3_learning.py','scripts/financial_v3_evaluate.py','tests/test_financial_v3_events.py','tests/test_financial_v3_learning.py','tests/test_financial_v3_evaluate.py','reports/modeling/financial-v3/events-verification-v1.json','scripts/financial_v3_cash.py','scripts/financial_v3_obligations.py','scripts/financial_v3_features.py','scripts/financial_v3_score.py','scripts/financial_v3_engine.py']; print(json.dumps({p: file_hash(ROOT / p) for p in paths}, indent=2))\"",
+      "exit_code": 0,
+      "result": "Only events.py, events tests and evaluator tests changed among these twelve paths; prior report, learning/evaluator modules, learning tests and all five core modules are byte-identical."
+    }
+  ],
+  "full_suite_inspection": {
+    "safe_fixture_write_examples": [
+      "tests/test_pipeline.py:16-149 redirects snapshots, publication paths and builds to TemporaryDirectory or mocks.",
+      "tests/test_regressions.py:13-47 redirects every data/report path into a temporary workspace.",
+      "tests/test_model_training.py:189-238 redirects toy final-evaluation outputs/labels to ModelProtocolTest's temporary fixture; :240-285 fits only toy arrays in temporary directories.",
+      "tests/test_trajectory_contract.py:11-47 creates temporary fake protocol/run/model roots; test_trajectory_backtest.py uses those roots for writes and toy outcomes."
+    ],
+    "real_read_boundaries_found": [
+      "tests/test_marts.py:13-24,93-110 loads and queries real future targets: decisive blocker for running unfiltered discovery in this task.",
+      "tests/test_trajectory_export.py:233-291 performs guarded existing-model inference and input-only real panel reads, plus sealed summary reads; it does not fit or reevaluate outcomes but confirms the full suite is not fixture-only.",
+      "tests/test_replay_model.py:189-221 similarly performs guarded fixed-model inference replay; tests/test_contracts.py reads existing clean/interim financial records."
+    ],
+    "action": "No broad-suite command was run. Parent should handle the broader test authorization/selection separately, preserving the no-new-outcomes boundary; no claim of a full repository green suite is made."
+  },
+  "sha256_before": {
+    "scripts/financial_v3_events.py": "1b55e31e602eca373bdea3abbad9ccfb03f0ec3714c57811f369683966b50e22",
+    "scripts/financial_v3_learning.py": "0c0c7d52fa7eef4c68f5a6ad4ede10897521df93dd008387300bd9a4d6930787",
+    "scripts/financial_v3_evaluate.py": "e0c1a759005b64287bf6d0f15bdac732b9ee4ff50d6b7980fa8cb62b0456a29b",
+    "tests/test_financial_v3_events.py": "4dad23bf31cfab73482b4ff0eaef642ba99ae77befc9c557834b364410d6e8bd",
+    "tests/test_financial_v3_learning.py": "4657cf28bad0ccb337c3149d6c916a5e55025d182c6b2bc8914451abc2579fa2",
+    "tests/test_financial_v3_evaluate.py": "09fcae1a5e7a2bdbf63142d2b54768484e354efbb98b22492d05dba91a50dac3",
+    "reports/modeling/financial-v3/events-verification-v1.json": "62b7e0c5738e73a25d26924f44a164d82f6acf366fc42c34178612a4ba965fe9",
+    "scripts/financial_v3_cash.py": "84ec22bacb96d099c327b1ab2290e57ecae58e3199b4288cddc077ce167de88c",
+    "scripts/financial_v3_obligations.py": "9f4b5a30a3e7198af991e6f7ef70654eb6e19b6dd250be59c9494a37b623f7c4",
+    "scripts/financial_v3_features.py": "de825a9d4501379652ab2fc221f15cbf8c5bf2098c80869cefc1ba363a49cc7a",
+    "scripts/financial_v3_score.py": "ece6d388cc8c16d9a48ece93d7c5ec4dc4821374a5f881714149dff3dafea3ec",
+    "scripts/financial_v3_engine.py": "855e3587c10c85ce0c6df8666732e237e80aa752f96a048ad98456fca1cd444a"
+  },
+  "sha256_after": {
+    "scripts/financial_v3_events.py": "a5eea0367c40f888fc6bda3493f460bac5ee453c2ce11c5eb47572665a16543f",
+    "scripts/financial_v3_learning.py": "0c0c7d52fa7eef4c68f5a6ad4ede10897521df93dd008387300bd9a4d6930787",
+    "scripts/financial_v3_evaluate.py": "e0c1a759005b64287bf6d0f15bdac732b9ee4ff50d6b7980fa8cb62b0456a29b",
+    "tests/test_financial_v3_events.py": "a260b9cc39a7604f7522a04ada7ecf8f003f70b5d8f02d7dd673d4162f899614",
+    "tests/test_financial_v3_learning.py": "4657cf28bad0ccb337c3149d6c916a5e55025d182c6b2bc8914451abc2579fa2",
+    "tests/test_financial_v3_evaluate.py": "889168a7d3d183192fd11fed87598f7c7f0e015a6ea093d45eb704a893bf2389",
+    "reports/modeling/financial-v3/events-verification-v1.json": "62b7e0c5738e73a25d26924f44a164d82f6acf366fc42c34178612a4ba965fe9",
+    "scripts/financial_v3_cash.py": "84ec22bacb96d099c327b1ab2290e57ecae58e3199b4288cddc077ce167de88c",
+    "scripts/financial_v3_obligations.py": "9f4b5a30a3e7198af991e6f7ef70654eb6e19b6dd250be59c9494a37b623f7c4",
+    "scripts/financial_v3_features.py": "de825a9d4501379652ab2fc221f15cbf8c5bf2098c80869cefc1ba363a49cc7a",
+    "scripts/financial_v3_score.py": "ece6d388cc8c16d9a48ece93d7c5ec4dc4821374a5f881714149dff3dafea3ec",
+    "scripts/financial_v3_engine.py": "855e3587c10c85ce0c6df8666732e237e80aa752f96a048ad98456fca1cd444a"
+  },
+  "protected_integrity_before_after": {
+    "before_check_source": "Parent reproduced contract--check8 and audit--check541 before this newly authorized cycle; original report also records identical protocol/receipt hashes. Worker independently captured twelve before-file hashes.",
+    "after_check_source": "Worker executed both read-only --check commands successfully after all corrections and tests.",
+    "protocol_sha256_before_and_after": "aefaec5905af75e0d0ea61561967a6ad7dbf0731845bf5cf853eaab57be590f0",
+    "receipt_sha256_before_and_after": "7fb94394bff8224ab4016bb57653d5222e9b3d3b182e78cad82efe34b3f860f5",
+    "policy_canonical_sha256_before_and_after": "8ad1ce33e76cda8360003976b619c6c7b8cad9124243be7a79a1d5a71e21b3e1",
+    "bound_assets": 8,
+    "protected_assets": 541,
+    "differences": []
+  },
+  "unresolved_this_bounded_correction": [],
+  "remaining_v3t6_and_parent_actions": [
+    "Independent reviewer still needs to assess the corrected event state/payment semantics and broader original implementation; no independent-review claim is made here.",
+    "The generic fixture functions are not a complete internal-real-data runner. The existing24-month adaptation, allowed groups/periods, provenance/availability assumptions and internal-retrospective evaluation require the separately authorized versioned task. Do not modify the frozen development contract or relabel consumed data as untouched confirmation.",
+    "Intramonth newly-late Z remains unavailable when monthly core outputs do not certify crossing-time exposure; foreign-currency event materiality and incomplete economic evidence also retain abstention. This cycle did not add an intramonth real-data adapter.",
+    "Full candidate-wise event-weighted paired uncertainty, comprehensive company/group aggregation, all utility gates and real label-source validation remain broader implementation work documented in the unchanged v1 report, not completed by these fixes.",
+    "Q1 independent reference assessment and predictive acceptance remain unvalidated. Missing headline still blocks prediction, fixture models cannot be company exports, automatic alerts stay disabled, and the old confirmatory entry remains closed under its unchanged policy.",
+    "Parent alone updates .devin/goal.md. This cycle supports closing the bounded correction item, not declaring the entire V3T6 or goal complete.",
+    "Unfiltered repository unittest discovery was intentionally not executed because it queries real future targets; retain that verification limitation rather than reporting a full-suite pass."
+  ]
+}

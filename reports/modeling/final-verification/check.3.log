@@ -1,0 +1,99 @@
+$ bun run test:deploy && bun run test:web && bun run typecheck && bun run build && bun run check:rust
+$ bun scripts/check-deploy.ts
+Shell syntax checks passed: deploy/jio.sh and deploy/runtime.sh; invalid LF/CRLF shell rejected for both.
+Deployment checks passed: Blaubeere account, exact revision, HTTPS origins, stopped-VM recovery and authentication failures.
+$ bun scripts/check-web.ts
+Web checks passed: redirects, exact money input, dated horizons, chart scales, dialog boundaries, validation errors and proxy display guards.
+$ bun --cwd apps/app typecheck && bun --cwd apps/landing typecheck
+$ next typegen && tsc --noEmit
+Generating route types...
+✓ Types generated successfully
+$ next typegen && tsc --noEmit
+Generating route types...
+✓ Types generated successfully
+$ bun --cwd apps/app build && bun --cwd apps/landing build
+$ next build
+▲ Next.js 16.3.5 (Turbopack)
+✓ Running next.config.ts took 26ms
+
+  Creating an optimized production build ...
+✓ Compiled successfully in 1323ms
+  Running TypeScript ...
+  Finished TypeScript in 1740ms ...
+  Collecting page data using 7 workers ...
+  Generating static pages using 7 workers (0/6) ...
+  Generating static pages using 7 workers (1/6) 
+  Generating static pages using 7 workers (2/6) 
+  Generating static pages using 7 workers (4/6) 
+✓ Generating static pages using 7 workers (6/6) in 665ms
+  Finalizing page optimization ...
+
+Route (app)
+┌ ○ /
+├ ○ /_not-found
+├ ○ /connect
+├ ○ /dashboard
+└ ○ /login
+
+
+○  (Static)  prerendered as static content
+
+$ next build
+▲ Next.js 16.3.5 (Turbopack)
+✓ Running next.config.ts took 43ms
+
+  Creating an optimized production build ...
+✓ Compiled successfully in 8.5s
+  Running TypeScript ...
+  Finished TypeScript in 1558ms ...
+  Collecting page data using 4 workers ...
+  Generating static pages using 4 workers (0/3) ...
+✓ Generating static pages using 4 workers (3/3) in 575ms
+  Finalizing page optimization ...
+
+Route (app)
+┌ ○ /
+└ ○ /_not-found
+
+
+○  (Static)  prerendered as static content
+
+$ cargo fmt --check && cargo clippy --workspace --all-targets -- -D warnings && cargo test --workspace
+    Finished `dev` profile [unoptimized + debuginfo] target(s) in 0.33s
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.34s
+     Running unittests src/lib.rs (target/debug/deps/blaubeere_api-a7162cfa0bfbf07d)
+
+running 10 tests
+test proxy_tests::actual_export_loads_all_1286_companies ... ignored, requires explicit EXPORTED_ASSESSMENT_FILE generated from sealed predictions
+test tests::origins_match_the_served_oauth_endpoints ... ok
+test proxy_tests::proxy_numbers_preserve_ieee754_roundtrip ... ok
+test finance::tests::early_shortfalls_survive_later_receipts_and_future_knowledge_is_excluded ... ok
+test proxy_tests::valid_proxy_and_abstention_never_produce_cash ... ok
+test proxy_tests::old_demo_retains_cash_forecast_and_planning ... ok
+test finance::tests::plans_enforce_the_whole_path_and_preserve_baseline_and_health ... ok
+test proxy_tests::inconsistent_proxy_payloads_fail_closed ... ok
+test oauth::tests::pkce_codes_rotate_refresh_tokens_and_revoke_replayed_grants ... ok
+test tests::sessions_require_sign_in_origin_and_company_membership ... ok
+
+test result: ok. 9 passed; 0 failed; 1 ignored; 0 measured; 0 filtered out; finished in 4.70s
+
+     Running unittests src/main.rs (target/debug/deps/blaubeere_api-2031d536f51612e4)
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running unittests src/main.rs (target/debug/deps/blaubeere_mcp-b812fb3845110f8e)
+
+running 2 tests
+test proxy_tests::actual_export_mcp_rejects_proxy_plans ... ignored, requires explicit EXPORTED_ASSESSMENT_FILE generated from sealed predictions
+test tests::transport_challenges_and_enforces_company_access ... ok
+
+test result: ok. 1 passed; 0 failed; 1 ignored; 0 measured; 0 filtered out; finished in 1.02s
+
+   Doc-tests blaubeere_api
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+

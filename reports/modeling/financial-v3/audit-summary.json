@@ -1,0 +1,76 @@
+{
+  "version": "financial-v3-audit-summary-1",
+  "status": "V3T1 evidence captured; V3T2 development proposal, not predictive acceptance",
+  "evidence": "audit.json",
+  "protected_baseline": "protected-baseline.json",
+  "run_id": "20260919T124814Z-e5302b58",
+  "source_scope": {
+    "synthetic": true,
+    "all_group_inventory": "15 source schemas and row counts; includes no target schema or target values",
+    "financial_completeness": "1078 companies in 200 train/validation groups; all 50 v1 final_test groups excluded",
+    "global_fx_exception": "Existing aggregate FX evidence mart only: 24 EUR identity rates, 405 non-EUR currency-months with no applicable rate; no outcome analysis",
+    "read_operations": "22 bounded aggregate queries plus 15 schema-only LIMIT 0 queries and 15 count-only queries; DuckDB 1.5.5 in memory; no spill, data writes, pipelines or models",
+    "protected_assets": 541
+  },
+  "findings": [
+    {
+      "id": "ledger",
+      "evidence_key": "aggregate_input_coverage_development_groups_only.account_coverage_summary",
+      "facts": "4130 cash products; 3516 have booked closed-month activity, only 472 have activity in all 24 months; 2694 first appear after September 2024, 1139 last appear before August 2026, and 614 have no observed booked activity in the closed period.",
+      "monthly_endpoints": "September 2024: 376 companies, 822 products, 31815 rows; August 2026: 966 companies, 2377 products, 116470 rows. Full monthly counts and internal-gap distribution are in audit.json.",
+      "consequence": "Do not equate 24 calendar slots or a current balance with 24 months of complete ledgers. Activity gaps may be inactivity or missing feeds; neither zero nor interpolation is justified. Even all-24 activity is not a completeness attestation."
+    },
+    {
+      "id": "anchor",
+      "evidence_key": "aggregate_input_coverage_development_groups_only.cash_anchor_coverage",
+      "facts": "3972 of 4130 cash products have anchors; 3967 are finite after cleaning, 3204 are EUR; 472 have both a finite anchor and all-24 activity. Every development product with a balance has only one snapshot. All 3972 cash anchors lack available balances; date fields are midnight and do not say opening versus closing.",
+      "timing": "Checking anchors range August 28 to September 1, 2026; 7102 booked cash transactions on anchor calendar days affect 1296 products. Those open-period movements matter for anchor bridging even though September is not a scored closed month.",
+      "consequence": "No independently reconciled or unrestricted cash history can currently be certified. Subtracting EUR transaction sums from a converted snapshot is not a valid FX reconciliation. Future-anchor provenance must prevent earlier as-of use."
+    },
+    {
+      "id": "debt",
+      "evidence_key": "aggregate_input_coverage_development_groups_only.debt_snapshot",
+      "facts": "All-group inventory: 2239 debt products and 87 schedule configurations. Development: 1914 debt products in 330 companies; 76 schedules in 33 companies, 66 settlement accounts found in the same company/currency, 62 with observed closed-month cash activity. Only 335 debt products have any ledger rows. 645 have reported zero snapshot outstanding, 1152 have negative raw outstanding.",
+      "consequence": "Snapshot sign convention, zero outstanding and absence of transactions do not establish debt absence or historical balances. Latest rates and next/last dates cannot recreate historical schedules. Settlement-account existence is not payment allocation. Existing panel_deuda measures identified paid service, not complete obligations due or outstanding debt."
+    },
+    {
+      "id": "invoices",
+      "evidence_key": "aggregate_input_coverage_development_groups_only.invoice_source_completeness",
+      "facts": "788477 development documents in 679 companies; 20201 missing/invalid due dates, 88814 missing EUR amounts, 561742 terminal settlement dates, 208209 non-paid documents with payment_date that is not actual settlement, 6158 possible partial-payment snapshots, 282 paid-with-pending contradictions. Invoice-only signs: 397588 negative, 267168 positive, 780 zero/null.",
+      "consequence": "Positive/negative AP/AR assignment is a legacy sign proxy, not an explicit verified role field. A final paid date is not a history of partial payments. No obligation/payment allocation key, dated cancellation/renegotiation log, historical import time or completeness attestation is present. Credit/refund/group/payment documents must not be double counted as invoices."
+    },
+    {
+      "id": "flows_growth",
+      "evidence_key": "aggregate_input_coverage_development_groups_only.panel_flow_input_coverage",
+      "facts": "Of 25872 development company-months, 17893 have cash activity, 16478 a known cash net, 6112 fully identified operating receipts, 4470 fully identified operating payments, 2892 a fully identified operating net; 14973 have classification ambiguity and 1415 missing EUR. Only 1584 company-months have six contiguous known-receipt months; 243 have fifteen.",
+      "consequence": "Known-receipt history is only a necessary condition for comparable growth, not verification of sales or company completeness. Financing, transfers, asset disposals, unknown categories, changing account perimeter and payment retention cannot become growth. Manual simulator growth_pct is not a source."
+    },
+    {
+      "id": "timestamps",
+      "evidence_key": "aggregate_input_coverage_development_groups_only.transaction_dates",
+      "facts": "Development transaction dates span September 1, 2024 to September 1, 2026 22:59:35; 7946 open-month rows; booking and value timestamps differ in 288145 rows. All booking/value timestamps and nominal amounts are syntactically usable, and transaction/invoice IDs have no counted duplicates/nulls.",
+      "consequence": "Syntactic validity is not economic correctness or historical availability. created_at is onboarding/connection, date is booking, value_date is bank value date; none is immutable known_on. Existing mart available_at is a construction rule, not historical ingestion evidence."
+    }
+  ],
+  "headline_score_gate": {
+    "certifiable_complete_company_scores_from_this_audit": 0,
+    "meaning": "Eligibility conclusion under the proposed strict contract, not a computed score distribution or new model evaluation",
+    "reasons": ["unrestricted_cash_unverified", "anchor_cutoff_unknown", "ledger_completeness_unverified", "obligation_universe_incomplete", "historical_settlement_allocations_missing", "known_on_missing"],
+    "policy": "Publish known subtotals/dimensions only with explicit scope; headline score null. Missing evidence must not improve health and must not be treated as economic distress either."
+  },
+  "future_evaluation_blocker": {
+    "untouched_test_identified": false,
+    "v1": "All 50 final_test groups permanently excluded from v3 development, event creation, case selection and confirmatory evaluation. Existing evaluation receipt preserved, not reopened.",
+    "v2": "reserved-access.json consumed=true. March-May 2026 origins and outcomes through August 2026 were already evaluated. Changing targets or partition names does not create independence.",
+    "required": "New future dates or external cohorts with a documented access ledger and availability vintages, sealed before outcomes are inspected. Prefer external unseen groups; future dates on known non-final_test groups test temporal transport only.",
+    "permitted_next": "Generic financial methods, invented fixtures, and explicitly retrospective/development-only exploration of existing 200 groups. No confirmatory run, new old-reserve labels, tuning on v2 reserve, or claim that all six questions are answered."
+  },
+  "requested_new_evidence": [
+    "Complete account/product universe with effective opening/closure dates and currency histories; statement coverage attestations including genuine zero-activity intervals.",
+    "Opening/closing anchor semantics, timezone, immutable available_at, unrestricted/blocked amounts, at least two independent balance observations per reconciliation span and documented adjustments.",
+    "Native-currency movement ledger and month-end/anchor FX valuations with availability; no estimated cross-currency balancing plug.",
+    "Versioned financial-debt principal roll-forwards, drawdowns, installment due amounts, interest components/rates and dated amendments; explicit zero-debt attestations where applicable.",
+    "AP/AR role verification, unique obligations, complete due-date cohorts, partial-payment allocations, cancellation/renegotiation/reversal events and their known_on times.",
+    "Independent future economic follow-up and blinded financial reference judgments on untouched data; no official-rating or bankruptcy claim."
+  ]
+}

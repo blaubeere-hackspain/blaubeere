@@ -1,0 +1,102 @@
+{
+  "availability_policy": "Missing and Git LFS pointer files are unavailable, never zero rows.",
+  "contract_status": "provisional",
+  "contract_version": "1.0.0",
+  "open_questions": [
+    "Extraction date, availability date, and historical known_at timestamps are unavailable.",
+    "Invoice, payment, due-date, status, FX, and balance semantics require owner confirmation.",
+    "License and permitted use of financial source data require owner confirmation."
+  ],
+  "provisional_unit": "company \u00d7 closed month \u00d7 currency",
+  "relationship_policy": "Do not infer foreign keys or economic event semantics until source schema is available and reviewed.",
+  "tables": [
+    {
+      "columns": [],
+      "path": "data/balances.csv",
+      "primary_key": {
+        "columns": [],
+        "status": "pending"
+      },
+      "relationships": [],
+      "schema_status": "pending_until_materialized",
+      "table": "balances"
+    },
+    {
+      "columns": [],
+      "path": "data/banking_products.csv",
+      "primary_key": {
+        "columns": [],
+        "status": "pending"
+      },
+      "relationships": [],
+      "schema_status": "pending_until_materialized",
+      "table": "banking_products"
+    },
+    {
+      "columns": [],
+      "path": "data/companies.csv",
+      "primary_key": {
+        "columns": [],
+        "status": "pending"
+      },
+      "relationships": [],
+      "schema_status": "pending_until_materialized",
+      "table": "companies"
+    },
+    {
+      "columns": [],
+      "path": "data/debt_products.csv",
+      "primary_key": {
+        "columns": [],
+        "status": "pending"
+      },
+      "relationships": [],
+      "schema_status": "pending_until_materialized",
+      "table": "debt_products"
+    },
+    {
+      "columns": [],
+      "path": "data/debt_schedule_config.csv",
+      "primary_key": {
+        "columns": [],
+        "status": "pending"
+      },
+      "relationships": [],
+      "schema_status": "pending_until_materialized",
+      "table": "debt_schedule_config"
+    },
+    {
+      "columns": [],
+      "path": "data/groups.csv",
+      "primary_key": {
+        "columns": [],
+        "status": "pending"
+      },
+      "relationships": [],
+      "schema_status": "pending_until_materialized",
+      "table": "groups"
+    },
+    {
+      "columns": [],
+      "path": "data/invoices.csv",
+      "primary_key": {
+        "columns": [],
+        "status": "pending"
+      },
+      "relationships": [],
+      "schema_status": "pending_until_materialized",
+      "table": "invoices"
+    },
+    {
+      "columns": [],
+      "path": "data/transactions.csv",
+      "primary_key": {
+        "columns": [],
+        "status": "pending"
+      },
+      "relationships": [],
+      "schema_status": "pending_until_materialized",
+      "table": "transactions"
+    }
+  ]
+}

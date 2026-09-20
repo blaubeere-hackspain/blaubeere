@@ -1,0 +1,180 @@
+{
+  "version": "financial-v3-dataset-v1-delivery-v1",
+  "status": "STOP_integrity_blocked_not_accepted_complete",
+  "root": "/home/mikel/.herdr/worktrees/predictive-models/feat-training-devin",
+  "goal_complete": false,
+  "V3T8_accepted_complete": false,
+  "application_implemented": true,
+  "scientific_result": {
+    "scope": "internal_retrospective_receipt_proxies_selection_biased_not_independent_test",
+    "utility_pass": false,
+    "selected_both_binary_targets": "persistence",
+    "validation_labeled": 28,
+    "validation_eligible": 345,
+    "validation_groups": 8,
+    "contraction_ap_rounded": 0.443,
+    "contraction_brier_rounded": 0.211,
+    "expansion_ap_rounded": 0.41,
+    "expansion_brier_rounded": 0.225,
+    "recall_at_0_6_both": 0,
+    "Q4": "insufficient_training_classes_no_forecast",
+    "full_health_headline": null,
+    "automatic_alerts": false,
+    "all_six_questions_answered": false,
+    "anticipation_validated": false
+  },
+  "delivery": {
+    "assessment_file": "reports/modeling/financial-v3/dataset-v1/index.json",
+    "process_only_setting": "ASSESSMENT_FILE=\"$PWD/reports/modeling/financial-v3/dataset-v1/index.json\"",
+    "api_example": "GET /api/companies/COMP_0001/assessment?view=retrospective&as_of=2025-12-31",
+    "mcp_example": "get_cash_outlook({company_id: 'COMP_0001', view: 'retrospective', as_of: '2025-12-31'})",
+    "verification_command": ".venv/bin/python -B scripts/financial_v3_dataset_delivery.py verify",
+    "verification_current_result": "fails on historical compiler-cache hash; not waived",
+    "runtime": "Rust reads pinned local JSON metadata and authorized company shards only; no Python/model pickle/inference/events/labels",
+    "semantics": "Retrospective month selection, never strict known-on. Strict requests rejected; all financial/model/reconstruction points filtered. Cash moved into separately labelled future-anchor retrospective section. Raw anchor balances and latest debt snapshot context omitted. Experiment report explicitly later methodology, never historical evidence.",
+    "units": "Flow/service/AP/AR/document values are EUR units, not cents. Cash reconstruction uses each account native currency independently, not company reporting currency.",
+    "planning": "V3 always rejects cash planning regardless of caller assumptions"
+  },
+  "integrity": {
+    "transition": "transition.json",
+    "transition_sha256": "c878d0e2767bbf71e5ae2a0da5d27709081817d0d004b5c10984b76690f33f45",
+    "capture_command": ".venv/bin/python -B scripts/financial_v3_dataset_delivery.py capture",
+    "capture_exit_code": 0,
+    "captured_before_application_files": 16,
+    "historical_bindings_checked_before_any_app_edit": 3026,
+    "before_bytes_directory": "source-before/",
+    "all_captured_before_bytes_still_match": true,
+    "current_source_hashes": "source-after-blocked.json",
+    "successful_source_after_manifest_issued": false,
+    "dataset_manifest_sha256": "e360ef33ba7cae39aa9c94d0f8e778f49c38a3985f77053a2f53bd4ae5ef8a44",
+    "model_manifest_sha256": "71eae8fef2ab3466fa2545d1c38f57977508cb79b7c051280b59e02253925428",
+    "diagnostic_command": ".venv/bin/python -B scripts/financial_v3_dataset_delivery.py diagnose",
+    "diagnostic_exit_code": 0,
+    "diagnostic_exit_meaning": "Report creation only, NOT integrity acceptance",
+    "historical_bound_hash_differences_after_authorized_source_snapshot_resolution": [
+      {
+        "path": "apps/app/tsconfig.tsbuildinfo",
+        "expected_sha256": "a3891095f07a0fd0c435132d2bc560e8970c79f2e9bc8945fe02b0a36affacbf",
+        "actual_sha256": "8ecfc04867158213c1034082f48adf108d0a002a1aa92058617cb4334c4307fc",
+        "reason": "Required TypeScript check/build regenerated a Git-untracked compiler cache that old scientific seals also bound. Its hash was captured but exact original bytes were not captured among the authorized app source snapshots.",
+        "authorized_transition": false,
+        "waived": false,
+        "safe_restoration_available_in_this_attempt": false
+      }
+    ],
+    "other_3025_historical_bound_hashes": "equal, including dataset/model/data, scientific sources/tests, old artifacts and captured authorized before bytes",
+    "old_seals_checkers_and_frozen_python_tests_edited": false,
+    "legacy_scope": "Old whole-worktree financial_v3_audit/dataset/model checkers and tests/test_financial_v3_dataset_validation.py:test_all_input_and_protected_hashes_after assert historical application bytes. They were NOT claimed passing on changed app. New snapshot verifier also correctly fails rather than skipping the compiler cache.",
+    "stop_action": "No further application corrections or verification retries after integrity blocker. Do not widen the fixed transition or edit old seals. Parent must resolve original-cache-byte recovery (matching exact historic hash) or obtain a separately explicit authorized policy decision; no implicit waiver.",
+    "git_cache_lookup": {"command": "git ls-files --error-unmatch apps/app/tsconfig.tsbuildinfo", "exit_code": 1, "result": "not tracked by Git"}
+  },
+  "checks": {
+    "bun_run_check": {
+      "evidence": "command-app-check-clippy-recheck.json",
+      "exit_code": 0,
+      "web_unit_tests": 8,
+      "rust_api_passed": 11,
+      "rust_mcp_passed": 1,
+      "rust_ignored_then_run_explicitly": 8,
+      "typecheck_app_and_landing": "passed",
+      "production_build_app_and_landing": "passed",
+      "cargo_fmt_and_clippy": "passed",
+      "scope_note": "This full check preceded the final one-line same-company selection guard. That guard was then verified in successful browser rerun. Full check not rerun after final guard because integrity STOP was discovered. Final documentation/diagnostic helper edits are reporting-only."
+    },
+    "real_exports": {
+      "command": "cargo test --offline --workspace -- --ignored --nocapture",
+      "environment": {
+        "FINANCIAL_V3_ASSESSMENT_FILE": "/home/mikel/.herdr/worktrees/predictive-models/feat-training-devin/reports/modeling/financial-v3/dataset-v1/index.json",
+        "TRAJECTORY_ASSESSMENT_FILE": "/home/mikel/.herdr/worktrees/predictive-models/feat-training-devin/reports/modeling/trajectory-v2/assessment/companies.json",
+        "EXPORTED_ASSESSMENT_FILE": "/home/mikel/.herdr/worktrees/predictive-models/feat-training-devin/reports/modeling/assessment-v1/companies.json"
+      },
+      "evidence": "command-rust-real-all.json",
+      "exit_code": 0,
+      "api_passed": 5,
+      "mcp_passed": 3,
+      "v3_companies_validated": 1286,
+      "v3_financial_points_validated": 30864,
+      "v3_final_test_abstentions": 208,
+      "unauthorized_API_and_MCP_shard_reads": 0,
+      "startup_shard_reads": 0,
+      "coverage": "Pinned-loader corruption; schema/path/symlink/hash/date failures; retrospective filtering; null pre-Jan2026 probabilities; holdout null; strict-known-on rejection; authorization before I/O; unconditional plan rejection; unchanged v1/v2 real exports."
+    },
+    "rust_build": {"command": "cargo build --offline --workspace", "exit_code": 0, "evidence": "command-build-rust.json"},
+    "browser": {
+      "command": "bun run test:financial-v3:e2e",
+      "passed_evidence": "browser-2026-09-19T23-01-45.482Z.json",
+      "failed_attempt_preserved": "browser-2026-09-19T23-00-32.265Z.json",
+      "exit_code": 0,
+      "passed_steps": 15,
+      "v3_api_cuts": 112,
+      "v3_ui_cuts": 17,
+      "trajectory_api_cuts": 72,
+      "trajectory_UI_case_month_cuts": 9,
+      "max_response_bytes": 393106,
+      "companies": ["COMP_0001", "COMP_0003", "COMP_0014", "COMP_0252"],
+      "coverage": "Four real V3 profiles including final-test, mixed-currency and largest shard; all 24 API months each plus 16 API/UI comparisons; keyboard and mobile; gaps; exact filtered financial/reconstruction rows; separate probabilities and failed-science banner; 401/403; invalid/strict dates; plan rejection; three v2 development cases; v1 eligible/abstained; cash demo funding 210000000 cents and planner.",
+      "page_errors": [],
+      "browser_version": "152.0.7977.82",
+      "sandbox": true,
+      "environment": "Existing system Chromium, loopback-only browser requests, ephemeral SQLite identities, random unlogged credentials. Only owned process groups and newly created temporary identity directories cleaned up."
+    },
+    "git_diff_check": {"command": "git diff --check && git status --short", "exit_code": 0, "note": "Existing CRLF normalization warnings; no config changes made."},
+    "not_run": [
+      "Python test discovery that could query real targets or refit/evaluate scientific experiments",
+      "Old whole-worktree scientific checkers on modified application (documented incompatible historical-source contract)",
+      "Old E2E helpers that write old protected artifact directories",
+      "Independent final review (no separate reviewer/subagent spawned)",
+      "Full bun check after final one-line browser fix; stopped on integrity blocker before another run"
+    ]
+  },
+  "failed_attempts_and_correction_budget": [
+    {"id": "rust-tests-first", "evidence": "command-rust-tdd-red.json", "failure": "new V3 module/fields absent, expected RED", "focused_implementations": 1, "recheck": "command-rust-tdd-green.json", "resolved": true},
+    {"id": "ts-tests-first", "evidence": "command-ts-tdd-red.json", "failure": "new helper absent, expected RED", "focused_implementations": 1, "recheck": "command-ts-tdd-green.json", "resolved": true},
+    {"id": "jsx-parentheses", "evidence": "command-app-check-first.json", "failure": "one excess closing parenthesis in each of two nested flatMap/map JSX tables", "focused_corrections": 1, "recheck": "command-app-check-jsx-recheck.json", "resolved": true, "next_failure_distinct": "bun:test type declarations"},
+    {"id": "test-runner-types", "evidence": "command-app-check-jsx-recheck.json", "failure": "bun:test declarations absent in existing TS dependencies", "focused_corrections": 1, "correction": "use existing node:test/node:assert pattern, no dependency change", "recheck": "command-app-check-testtypes-recheck.json", "resolved": true, "next_failure_distinct": "clippy owned comparison"},
+    {"id": "clippy-owned-comparison", "evidence": "command-app-check-testtypes-recheck.json", "failure": "unnecessary owned comparison", "focused_corrections": 1, "recheck": "command-app-check-clippy-recheck.json", "resolved": true},
+    {"id": "same-company-selection", "evidence": "command-browser-first.json", "failure": "selecting current company cleared assessment without changed effect dependency", "focused_corrections": 1, "correction": "return early when selected company is unchanged", "recheck": "command-browser-same-company-recheck.json", "resolved": true},
+    {"id": "historical-compiler-cache", "evidence": "command-scientific-snapshot-first.json", "failure": "historically bound generated tsbuildinfo bytes changed by required checks", "focused_corrections": 0, "rechecks": 0, "resolved": false, "decision": "STOP; original bytes unavailable, no safe correction or silent exception"}
+  ],
+  "additional_execution_notes": [
+    "Before app editing: pwd/git status, read-only contract/schema/source inspection, parent directory ls, then exclusive capture. Hash-only historical verification touched no target values.",
+    "Read-only inspect helper printed two product profiles and index summaries, no target datasets or model parameter files.",
+    "rustfmt --edition 2024 --config skip_children=true services/api/src/finance.rs services/api/src/lib.rs services/api/src/financial_v3.rs services/api/src/financial_v3_tests.rs services/mcp/src/main.rs services/mcp/src/financial_v3_tests.rs exited 0; later formatted only new API tests after adding corruption coverage. skip_children preserved frozen trajectory modules.",
+    "Initial Bun filename-filter invocation also discovered a source-before trajectory test copy. Test script was made explicit with ./ file paths; final counts refer only to live files. No old test was modified.",
+    "Real-export initial API-only run also passed 2 tests before adding separate corruption and MCP coverage; evidence command-rust-real-v3-first.json.",
+    "No app changes after integrity STOP; remaining edits only document blocker and produce diagnostic source-after hashes."
+  ],
+  "changed_existing_source_paths": [
+    "services/api/src/finance.rs", "services/api/src/lib.rs", "services/mcp/src/main.rs",
+    "apps/app/app/dashboard/page.tsx", "apps/app/app/globals.css", "apps/app/lib/types.ts",
+    "package.json", "readme.md", "docs/PRODUCT.md", "docs/REQUIREMENTS.md", "docs/DASHBOARD.md"
+  ],
+  "new_source_paths": [
+    "services/api/src/financial_v3.rs", "services/api/src/financial_v3_tests.rs",
+    "services/mcp/src/financial_v3_tests.rs", "apps/app/components/financial-v3-assessment.tsx",
+    "apps/app/lib/financial-v3.ts", "apps/app/lib/financial-v3.test.ts",
+    "scripts/financial_v3_dataset_delivery.py", "scripts/check-financial-v3-e2e.ts"
+  ],
+  "incidental_generated_changed_path": "apps/app/tsconfig.tsbuildinfo",
+  "preserved_preexisting_changes": "Existing v2 source/export/docs changes were not reverted; services/api/src/main.rs, trajectory component/helpers/tests, old scientific source/tests/exports, training report and planning remain untouched by this worker. .devin/goal.md only read, parent-only updates required.",
+  "report_scope": "All new reports/snapshots/command logs are under dataset-v1/delivery-v1 only.",
+  "prohibited_actions": {
+    "subagents_spawned": 0,
+    "dependency_installs": 0,
+    "network_dependency_calls": 0,
+    "scientific_source_queries": 0,
+    "outcome_queries": 0,
+    "model_fits": 0,
+    "evaluations_reopened": 0,
+    "git_commits_or_pushes": 0,
+    "shared_env_or_security_policy_changes": 0,
+    "old_scientific_artifact_writes": 0
+  },
+  "remaining_parent_actions": [
+    "Keep V3T8/V3T9 blocked; update parent-only .devin/goal.md and disclose compiler-cache preservation mistake.",
+    "Resolve apps/app/tsconfig.tsbuildinfo exact historical byte restoration or obtain explicit revised authorization without changing old scientific seals or claiming old checks pass.",
+    "After authorized resolution, recheck current source binding/integrity and full application suite; avoid regenerating any protected historical cache without first preserving exact bytes.",
+    "Perform separate technical review; no independent review was performed here.",
+    "Maintain scientific nonacceptance: utility failed, Q4 unsupported, full health null and alerts off. UI/E2E success is not whole-goal completion."
+  ]
+}

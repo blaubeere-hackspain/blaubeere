@@ -1,0 +1,50 @@
+{
+  "all_v3_tests_pass": true,
+  "code_sha256": {
+    "scripts/financial_v3_dataset_model.py": "ef8e84e8d616b95e98614cc59f4f3d58151e3770243615e4c8d8fcdd09f8fcab",
+    "scripts/financial_v3_dataset_model_metrics.py": "040ee3e200b9775bf4091b65f90a2b1c5463b51338522d3533fb27027aec4ce5",
+    "tests/test_financial_v3_dataset_model.py": "ce7f7042233ff1fe6df246dcf791481082389453c7f868d64c3f5aebde4cf814"
+  },
+  "commands": [
+    {
+      "command": "pwd && ls",
+      "exit_code": 0,
+      "purpose": "root verification"
+    },
+    {
+      "command": "ls -ld scripts tests reports/modeling/financial-v3/dataset-v1 .venv/bin/python",
+      "exit_code": 0
+    },
+    {
+      "command": ".venv/bin/python -B -m unittest tests.test_financial_v3_dataset_model",
+      "exit_code": 1,
+      "reason": "Expected tests-first RED: new model module absent; no data queries or real fits",
+      "tests": 1
+    },
+    {
+      "command": ".venv/bin/python -B -m unittest tests.test_financial_v3_dataset_model",
+      "exit_code": 0,
+      "reason": "Initial fixture suite GREEN; further scope tests added before freeze",
+      "tests": 21
+    },
+    {
+      "command": ".venv/bin/python -B -m unittest tests.test_financial_v3_dataset_model",
+      "exit_code": 0,
+      "stderr": "........................\n----------------------------------------------------------------------\nRan 24 tests in 0.136s\n\nOK\n",
+      "stdout": ""
+    },
+    {
+      "command": ".venv/bin/python -B -m unittest discover -s tests -p test_financial_v3*.py",
+      "exit_code": 0,
+      "stderr": ".............................................................................................................................................................................................\n----------------------------------------------------------------------\nRan 189 tests in 20.140s\n\nOK\n",
+      "stdout": "{\n  \"ok\": true\n}\n{\n  \"ok\": true\n}\n{\"artifact_count_without_verification\": 1295, \"artifact_sha256\": {\"coverage.json\": \"4393dbb4bd5d9668270559b5e43a9f55acc43e6c5724265881473ae90cc2b7da\", \"features.jsonl\": \"a822dbe7300af5495ca9ef5f90a4de3acfdbf2d95fffd845c6eb21c1c917afaf\", \"index.json\": \"f588434ab5656bf0eb51266a33b869bad1fa85ec8f5842a5c54791f99e716f65\", \"manifest.json\": \"e360ef33ba7cae39aa9c94d0f8e778f49c38a3985f77053a2f53bd4ae5ef8a44\", \"policy.json\": \"1499b9bbf54621da44eff1262bdd1579466df5ebcbc564a8c43669f528197f5f\", \"queries.json\": \"5eab62efc7bf84d963fe392d20f6529c4b9879a75a7a25308f2ebb7539824932\", \"receipt.json\": \"aabc196abd84e70aa78bb56270866e1e3ba25f023ebe468b4425ebe9fd48e871\", \"sample.json\": \"b3c99279ab1b0714d464e7697233755ca4569a0a041e8ddd4e546bbdab7c053f\", \"schema.json\": \"91652d4faa6579250d31158b75c4b44ce785156288f1ee218f72c543ea3373dd\"}, \"component_example\": [{\"company_id\": \"COMP_0037\", \"due_face_proxy\": 112969.38, \"month\": \"2025-07-01\", \"score\": {\"components\": {\"generation\": 0.0, \"growth\": 24.14013333333333, \"stability\": 0}, \"full_company_interval\": [0, 100], \"headline\": null, \"missing_components\": [], \"mora_penalty_range\": [0.10072188600738688, 0.10072188600738688], \"operating_scope_interval\": [7.141318113992613, 7.141318113992613], \"operating_scope_score\": null, \"receipt_reference\": 43535.03333333333}}], \"example_selection\": \"First lexicographic non-holdout company with all observed components in development dates; source coverage only, no labels or outcomes\", \"feature_bytes\": 4000266, \"index_bytes\": 325075, \"input_hash_count\": 11, \"input_queries_export\": 11, \"max_profile_bytes\": 359473, \"new_code_sha256\": {\"scripts/financial_v3_dataset.py\": \"e9b6a89ff3dd54aeb998ef092e59109560eedfae79aafc7ae73c03eb69dbe979\", \"scripts/financial_v3_dataset_contract.py\": \"2b0d9bbcf68d9678168f278632e1798f34420824b56b71ac09972eae159ac00e\", \"scripts/financial_v3_dataset_model.py\": \"ef8e84e8d616b95e98614cc59f4f3d58151e3770243615e4c8d8fcdd09f8fcab\", \"scripts/financial_v3_dataset_model_metrics.py\": \"040ee3e200b9775bf4091b65f90a2b1c5463b51338522d3533fb27027aec4ce5\", \"tests/test_financial_v3_dataset.py\": \"8940b2b681a08530f6c1b300dfade4365a0bdf976980ecbd52acd054cbfcc7f2\", \"tests/test_financial_v3_dataset_contract.py\": \"46efa0b2caf58f17518b14362e1101cbb1aef45e43c156c6e0c71bcc43a40621\", \"tests/test_financial_v3_dataset_model.py\": \"ce7f7042233ff1fe6df246dcf791481082389453c7f868d64c3f5aebde4cf814\", \"tests/test_financial_v3_dataset_validation.py\": \"2d8c84bac0fd19b73b9d5580ab46ecbb7f96b4e50445ddab58b8cad36ca0d961\"}, \"numeric_example\": {\"company_id\": \"COMP_0001\", \"documents\": {\"ap_due_face\": 34506.18000000001, \"ap_due_known\": 34506.18000000001, \"ap_issued_known\": 42934.6, \"ar_issued_known\": 105845.57999999999, \"due_missing_eur_rows\": 0, \"issued_rows\": 25, \"unknown_due_rows\": 0}, \"flow\": {\"bounds_without_outliers\": [28094.13000000002, 28094.13000000002], \"composition\": {\"adjustment\": [0.0, 0.0], \"financing\": [0.0, 0.0], \"investment\": [0.0, 0.0], \"operating\": [102924.99, 74830.85999999999], \"transfer\": [0.0, 0.0], \"unknown\": [0.0, 0.0]}, \"coverage\": {\"active_accounts\": 2, \"ambiguous_rows\": 0, \"classification\": 1.0, \"eur\": 1.0, \"missing_eur_rows\": 0}, \"known_in_out\": [102924.99000000002, 74830.86000000002], \"net_known\": 28094.129999999997, \"net_observed\": 28094.129999999997, \"observed\": true, \"operating_bounds\": [28094.13000000002, 28094.13000000002], \"operating_payments\": 74830.85999999999, \"operating_receipts\": 102924.99, \"reason\": null, \"rows\": 32}, \"month\": \"2026-08-01\", \"score\": {\"components\": {\"generation\": null, \"growth\": null, \"stability\": null}, \"full_company_interval\": [0, 100], \"headline\": null, \"missing_components\": [\"generation\", \"growth\", \"stability\"], \"mora_penalty_range\": [0.0, 40.0], \"operating_scope_interval\": [0.0, 100.0], \"operating_scope_score\": null, \"receipt_reference\": null}}, \"profile_bytes\": 149696834, \"protected_after_match\": true, \"protected_before_count\": 574}\n"
+    }
+  ],
+  "fixture_training_only": true,
+  "new_tests_pass": true,
+  "real_model_fits": 0,
+  "real_outcome_queries": 0,
+  "recorded_at": "2026-09-19T22:15:22.241226+00:00",
+  "review_scope": "Dataset review 89ed47ac previously approved scoped development; no claim this new model has independent review.",
+  "version": "financial-v3-dataset-v1-model-v1-receipt-extension-1"
+}

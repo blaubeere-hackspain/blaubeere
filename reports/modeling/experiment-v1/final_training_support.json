@@ -1,0 +1,21 @@
+{
+  "censored": 3203,
+  "classes": {
+    "0": {
+      "groups": 105,
+      "rows": 1930
+    },
+    "1": {
+      "groups": 93,
+      "rows": 1700
+    }
+  },
+  "groups": 112,
+  "minimum": {
+    "groups_per_class": 5,
+    "groups_total": 10,
+    "rows_per_class": 20
+  },
+  "passed": true,
+  "prospective_rows": 6833
+}

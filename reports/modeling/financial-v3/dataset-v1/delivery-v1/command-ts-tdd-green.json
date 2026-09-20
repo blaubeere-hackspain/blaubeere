@@ -1,0 +1,11 @@
+{
+  "command": [
+    "bun",
+    "test",
+    "apps/app/lib/financial-v3.test.ts"
+  ],
+  "exit_code": 0,
+  "started_at": "2026-09-19T22:53:01.351400+00:00",
+  "stderr": "\napps/app/lib/financial-v3.test.ts:\n(pass) financial v3 retrospective delivery > native units are not cents and missing data never become zero [36.00ms]\n(pass) financial v3 retrospective delivery > calendar selection and real gaps are not interpolated [2.00ms]\n(pass) financial v3 retrospective delivery > retrospective cutoff is required and later rows are removed\n(pass) financial v3 retrospective delivery > no full health visualization or fabricated midpoint [1.00ms]\n(pass) financial v3 retrospective delivery > probabilities are receipt-only, preselection and holdout stay null\n\n 5 pass\n 0 fail\n 17 expect() calls\nRan 5 tests across 1 file. [88.00ms]\n",
+  "stdout": "bun test v1.3.12 (700fc117)\n"
+}

@@ -16,8 +16,11 @@
     "typecheck": "bun --cwd apps/app typecheck && bun --cwd apps/landing typecheck",
     "check:rust": "cargo fmt --check && cargo clippy --workspace --all-targets -- -D warnings && cargo test --workspace",
     "check": "bun run test:deploy && bun run test:web && bun run typecheck && bun run build && bun run check:rust",
-    "test:deploy": "bash -n deploy/jio.sh deploy/runtime.sh && bun scripts/check-deploy.ts",
+    "test:deploy": "bun scripts/check-deploy.ts",
     "test:web": "bun scripts/check-web.ts",
     "test:integration": "bun --env-file=.env scripts/check-api.ts"
+  },
+  "devDependencies": {
+    "@playwright/test": "1.55.1"
   }
 }

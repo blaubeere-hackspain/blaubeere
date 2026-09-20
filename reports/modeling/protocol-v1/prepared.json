@@ -1,0 +1,79 @@
+{
+  "artifacts_sha256": {
+    "coverage.json": "c67c528374a3ad796519b92d8ca6b52aa8cb60829b5a328b4f0e74c87cfdcf69",
+    "feature_contract.json": "fc63dd509e547fdf41f89a6b05012947531e9f1590e5f71771219f83a0539fab",
+    "features.parquet": "52007e1f7fa003d632bfb7ace2170a2eff1ccb14f8753c864f3b758bb6ad412f",
+    "group_assignment.json": "180e6373477e1c2fd12c69677bb43781a6c7c52334f38efc362d6b30d54217e4",
+    "protocol.json": "b313de697e5daded3027db6ea18f4221649efcb899f23312768b5fcb4f2f9034",
+    "splits/final_test.parquet": "f12e68bf35da7de4bcc0ecb34421e8a02d909c77a5a58e64d1ed154f5e97167b",
+    "splits/final_train.parquet": "8188112e04ff4898ddaa241f15e272afcf6c605ef11c6d1fb8b9397682177267",
+    "splits/fold1_train.parquet": "03786d2ed7595eb21e2effa883b36dc3cf0a58557b182da50da793eeb1281061",
+    "splits/fold1_validation.parquet": "691051ac7deedc9428473fdcb9223307afe27b64618467f5e94d0a51cb98730f",
+    "splits/fold2_train.parquet": "c569bd727eb03ad9ba721817dbec34d204970fcf0df753714cd5909dcfdf9f4f",
+    "splits/fold2_validation.parquet": "2d7fc3019bd43008a48ec67c02d6874d00139e8941b65591282a24627b8b0455"
+  },
+  "binding": {
+    "current_pointer_sha256": "1de7ef03dd4af13b481bf74c50b7201684a0146eb206b36cd0a90330a6e68d33",
+    "duckdb": "1.5.5",
+    "input_sha256": {
+      "data/marts/panel_flujos.parquet": "af5cf4be59d9e3e1a98841208b69b029127345cd9c02a47a553e986dc0c7ebd7",
+      "data/marts/targets_proxy.parquet": "6529ebeadd26f67925da0d7f2d0ed155295a57598393b7fdb0c6167f958f4fc0"
+    },
+    "panel_schema": {
+      "ambiguo_entradas_conocido_eur": "DOUBLE",
+      "ambiguo_salidas_conocido_eur": "DOUBLE",
+      "available_at": "DATE",
+      "cobros_operativos_conocido_eur": "DOUBLE",
+      "company_id": "VARCHAR",
+      "es_calentamiento": "BOOLEAN",
+      "financiacion_entradas_conocido_eur": "DOUBLE",
+      "financiacion_salidas_conocido_eur": "DOUBLE",
+      "group_id": "VARCHAR",
+      "month": "DATE",
+      "n_cuentas_activas": "BIGINT",
+      "n_sin_eur": "BIGINT",
+      "n_tx_caja": "BIGINT",
+      "neto_caja_eur": "DOUBLE",
+      "operativo_max_eur": "DOUBLE",
+      "operativo_max_sin_atipicos_eur": "DOUBLE",
+      "operativo_min_eur": "DOUBLE",
+      "operativo_min_sin_atipicos_eur": "DOUBLE",
+      "pagos_operativos_conocido_eur": "DOUBLE",
+      "tiene_actividad_caja": "BOOLEAN",
+      "volumen_caja_conocido_eur": "DOUBLE"
+    },
+    "python": "3.13.15",
+    "raw_input_sha256": {
+      "balances.csv": "86664c229cf52554d75d7efb864fc07a94a1bebcd61a3ac85abc344f3ba2a30c",
+      "banking_products.csv": "0fc5aa20fea32981a962cc08251720ece3f2afad8495910111d2fd8b16514d3c",
+      "companies.csv": "5496ad00a1e9228f7e756a55c71c512fd06a73ad45a09ce3f103a620a5ad72ae",
+      "debt_products.csv": "bf38430ccd15f6a9ca8769113c5f47d4aeee8fe55c425687731481cd002f05d8",
+      "debt_schedule_config.csv": "b0d6cc3e6810e31d526eb7f4be3c2abe31496f74f5ddd58163876d60de168ea2",
+      "groups.csv": "fa18d3f42cd24d7640bff22d7a9504293574c2338ce85d425e3134f18f169a8c",
+      "invoices.csv": "6686bd878244881bac78348a108852f3f30713ef244267f1fa3754b9be619c53",
+      "transactions.csv": "000a6820a7500c66aa70a17b3e813d0c57a8270b3c58f6f2f006708a20228f2b"
+    },
+    "run_id": "20260919T124814Z-e5302b58",
+    "run_manifest_sha256": "88059a142248927f2c6ae0816993eae6e1177abf3138f089df09d93bc642ce6b",
+    "run_path": "/home/mikel/.herdr/worktrees/predictive-models/feat-training-devin/data/runs/20260919T124814Z-e5302b58",
+    "source_sha256": {
+      "scripts/model_features.py": "984831778e8b9f2fa14be4064ecba2f98a882ca19fa2d53733594a87389b59c1",
+      "scripts/model_protocol.py": "a49307c5d1dd8846414d34007b028771284a95a110b1a57139073275a2d50c96",
+      "tests/test_model_features.py": "77dcfa92b97eb97fc43f7f320bff9a0cf266fa1388fb4247b5626eeb66c7497f",
+      "tests/test_model_protocol.py": "00024ffb0d775338593a907725ac12b06080d7b13d95f037fa341d0e3a58724f"
+    },
+    "target_access": "Byte-level SHA only in prepare; target parquet is never queried or parsed"
+  },
+  "freeze_order": [
+    "contracts",
+    "group_assignment",
+    "split_keys",
+    "features",
+    "coverage",
+    "receipt"
+  ],
+  "g_data": "Run xray.model_audit --verify after source changes and require pass before T3",
+  "label_values_fetched": 0,
+  "status": "prepared_not_trained",
+  "structural_blockers": []
+}

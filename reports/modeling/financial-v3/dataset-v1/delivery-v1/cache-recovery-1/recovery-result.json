@@ -1,0 +1,634 @@
+{
+  "status": "STOP_exact_byte_recovery_not_achieved",
+  "command": "node reports/modeling/financial-v3/dataset-v1/delivery-v1/cache-recovery-1/finalize.mjs",
+  "scope": "One authorized safe targeted recovery attempt. No current app/cache/old seal/transition/scientific files changed. Prior integration evidence retained.",
+  "target_sha256": "a3891095f07a0fd0c435132d2bc560e8970c79f2e9bc8945fe02b0a36affacbf",
+  "search": {
+    "roots": [
+      "apps/app",
+      "apps/landing",
+      "reports/modeling"
+    ],
+    "entries_visited": 3675,
+    "exact_copies_found": [],
+    "caches_checked": [
+      {
+        "path": "apps/app/.next/cache/.tsbuildinfo",
+        "bytes": 141729,
+        "sha256": "69b5368491a7c78ddaa248a76ba468b8b974dde1084f65c963f6dbb83f1cc561"
+      },
+      {
+        "path": "apps/app/tsconfig.tsbuildinfo",
+        "bytes": 138287,
+        "sha256": "8ecfc04867158213c1034082f48adf108d0a002a1aa92058617cb4334c4307fc"
+      },
+      {
+        "path": "apps/landing/.next/cache/.tsbuildinfo",
+        "bytes": 134393,
+        "sha256": "58371393c4ebc122fe8cbc5e485a70268a3f5a370cd47c14e14df17e454e6912"
+      },
+      {
+        "path": "apps/landing/tsconfig.tsbuildinfo",
+        "bytes": 131011,
+        "sha256": "c42e0ba778fe592e53a647cff3e82bb1a545d8363f36d1b05efcc557d36c71b5"
+      }
+    ],
+    "limits": "Workspace-only named cache scan, ignoring symlinks and dependency directories. Turbopack SST files were listed but not interpreted as historical TypeScript cache backups. No home/secrets/outside-workspace search."
+  },
+  "reconstruction": {
+    "method": "Single TypeScript performIncrementalCompilation with immutable workspace virtual paths, source-before read overrides, current incremental seed, original config/include order, and intercepted build-info-only output. No actual app/config/cache writes.",
+    "typescript_version": "5.9.3",
+    "next_version": "16.3.5",
+    "plan": "candidate-1-plan.json",
+    "detailed_result": "candidate-1-result.json",
+    "current_seed_sha256": "8ecfc04867158213c1034082f48adf108d0a002a1aa92058617cb4334c4307fc",
+    "candidate": {
+      "path": "reports/modeling/financial-v3/dataset-v1/delivery-v1/cache-recovery-1/candidate-1.tsbuildinfo",
+      "bytes": 137560,
+      "sha256": "761f40c0b1fe1e10f44394db96a255e1af6f46309ae6a84422f01c711cf4de7d",
+      "matches_historical_target": false
+    },
+    "compiler_exit_code": 0,
+    "diagnostics_count": 0,
+    "program_files": 579,
+    "compiler_read_inputs": 627,
+    "excluded_new_v3_files": [
+      "apps/app/components/financial-v3-assessment.tsx",
+      "apps/app/lib/financial-v3.ts",
+      "apps/app/lib/financial-v3.test.ts"
+    ],
+    "original_config_and_virtual_paths_preserved": true,
+    "generated_type_inputs": [
+      {
+        "path": "apps/app/.next/types/routes.d.ts",
+        "sha256": "db375d18994a507e67dcd457a7b4262d4695d4749dba51824af6478dafac6585"
+      },
+      {
+        "path": "apps/app/.next/types/root-params.d.ts",
+        "sha256": "f3387dd7800eec3c34273f7a8efad13e864598c7e8f788d321e407390989bb59"
+      },
+      {
+        "path": "apps/app/.next/types/cache-life.d.ts",
+        "sha256": "4f984436b10cfb43ccf7fc3114dcb851cbefa4d58b7d8ae741aaae0f6e330129"
+      },
+      {
+        "path": "apps/app/.next/types/validator.ts",
+        "sha256": "e372ac8a2bcde58e0ef2693e8e2abbdbab4ac52f54b34e360d81c5a9a9d1c500"
+      },
+      {
+        "path": "apps/app/.next/dev/types/cache-life.d.ts",
+        "sha256": "4f984436b10cfb43ccf7fc3114dcb851cbefa4d58b7d8ae741aaae0f6e330129"
+      },
+      {
+        "path": "apps/app/.next/dev/types/root-params.d.ts",
+        "sha256": "f3387dd7800eec3c34273f7a8efad13e864598c7e8f788d321e407390989bb59"
+      },
+      {
+        "path": "apps/app/.next/dev/types/routes.d.ts",
+        "sha256": "db375d18994a507e67dcd457a7b4262d4695d4749dba51824af6478dafac6585"
+      },
+      {
+        "path": "apps/app/.next/dev/types/validator.ts",
+        "sha256": "6913dacb8323257a81932cc176dcb8c1eeba54ab4e03077d3725f32e49b56ab8"
+      }
+    ],
+    "historical_application_source_versions": [
+      {
+        "path": "apps/app/next-env.d.ts",
+        "compiler_version": "1862ac4bbbc5192d4bf562161df66ea547ed3e67173100656ab606ae9797db2b",
+        "expected_sha256": "1862ac4bbbc5192d4bf562161df66ea547ed3e67173100656ab606ae9797db2b",
+        "equal": true,
+        "basis": "virtual next typegen production references, not actual file modification"
+      },
+      {
+        "path": "apps/app/next.config.ts",
+        "compiler_version": "b73bcccc177b7e9b897b6941f87182fb42e723d95f2b3144254804e275ac70f8",
+        "expected_sha256": "b73bcccc177b7e9b897b6941f87182fb42e723d95f2b3144254804e275ac70f8",
+        "equal": true,
+        "basis": "historic sealed binding"
+      },
+      {
+        "path": "apps/app/lib/api.ts",
+        "compiler_version": "634e96c26c0dff330ed6c38830bd46b3e5293293d0cb86f8e43a16ba21c6f9eb",
+        "expected_sha256": "634e96c26c0dff330ed6c38830bd46b3e5293293d0cb86f8e43a16ba21c6f9eb",
+        "equal": true,
+        "basis": "historic sealed binding"
+      },
+      {
+        "path": "apps/app/lib/format.ts",
+        "compiler_version": "46803c939a9dbc041a2e11d2dd6c5f376d5321e6f2628f821ee3f073d9b963d1",
+        "expected_sha256": "46803c939a9dbc041a2e11d2dd6c5f376d5321e6f2628f821ee3f073d9b963d1",
+        "equal": true,
+        "basis": "historic sealed binding"
+      },
+      {
+        "path": "apps/app/lib/types.ts",
+        "compiler_version": "244b09e988837a5bfa0cfe47b1fff4d4c51998d236b9ebaae9e74c1632e8159c",
+        "expected_sha256": "244b09e988837a5bfa0cfe47b1fff4d4c51998d236b9ebaae9e74c1632e8159c",
+        "equal": true,
+        "basis": "historic sealed binding"
+      },
+      {
+        "path": "apps/app/lib/trajectory-types.ts",
+        "compiler_version": "18c184503486c10df53542b967ee0adc8c0a11782d382eb6f302f387f17ed888",
+        "expected_sha256": "18c184503486c10df53542b967ee0adc8c0a11782d382eb6f302f387f17ed888",
+        "equal": true,
+        "basis": "historic sealed binding"
+      },
+      {
+        "path": "apps/app/lib/trajectory.ts",
+        "compiler_version": "9d4181be8e521e72a620b273105480055c6192e4203df3feac6c9c82e1ae8def",
+        "expected_sha256": "9d4181be8e521e72a620b273105480055c6192e4203df3feac6c9c82e1ae8def",
+        "equal": true,
+        "basis": "historic sealed binding"
+      },
+      {
+        "path": "apps/app/lib/trajectory.test.ts",
+        "compiler_version": "76679c840f8efcadc389d0290ec182d8d94006a0b7330c5ca60218cecf8838d0",
+        "expected_sha256": "76679c840f8efcadc389d0290ec182d8d94006a0b7330c5ca60218cecf8838d0",
+        "equal": true,
+        "basis": "historic sealed binding"
+      },
+      {
+        "path": "apps/app/app/error.tsx",
+        "compiler_version": "6b3d85b23befb4203f0808de3c9e8bd0ef6daeee0d2ac2865a3eb6cd04c2836f",
+        "expected_sha256": "6b3d85b23befb4203f0808de3c9e8bd0ef6daeee0d2ac2865a3eb6cd04c2836f",
+        "equal": true,
+        "basis": "historic sealed binding"
+      },
+      {
+        "path": "apps/app/app/layout.tsx",
+        "compiler_version": "9aed9cb95855b346b87d9db5de81aa830b10d1c75fccb7470b75f2de4188693a",
+        "expected_sha256": "9aed9cb95855b346b87d9db5de81aa830b10d1c75fccb7470b75f2de4188693a",
+        "equal": true,
+        "basis": "historic sealed binding"
+      },
+      {
+        "path": "apps/app/app/page.tsx",
+        "compiler_version": "ab3b856a243fefb0b8dd2e562f7914041767a8c2b6939633c85e4e4e97df6ec0",
+        "expected_sha256": "ab3b856a243fefb0b8dd2e562f7914041767a8c2b6939633c85e4e4e97df6ec0",
+        "equal": true,
+        "basis": "historic sealed binding"
+      },
+      {
+        "path": "apps/app/components/auth-layout.tsx",
+        "compiler_version": "4587784c12a9c3f1ec01c16c1cb8bd9137ade113efd7a681d3aebe2dbe7f676d",
+        "expected_sha256": "4587784c12a9c3f1ec01c16c1cb8bd9137ade113efd7a681d3aebe2dbe7f676d",
+        "equal": true,
+        "basis": "historic sealed binding"
+      },
+      {
+        "path": "apps/app/app/connect/page.tsx",
+        "compiler_version": "166b316ff507cf141291dc6128657b4401ff0f538557e1e3de0fe5a4e61bebba",
+        "expected_sha256": "166b316ff507cf141291dc6128657b4401ff0f538557e1e3de0fe5a4e61bebba",
+        "equal": true,
+        "basis": "historic sealed binding"
+      },
+      {
+        "path": "apps/app/components/cash-chart.tsx",
+        "compiler_version": "5a63c5a47f29cb0c9eb1a5da40ca9cba3c5b13dfd7d6d3fd1e37f93e1b337322",
+        "expected_sha256": "5a63c5a47f29cb0c9eb1a5da40ca9cba3c5b13dfd7d6d3fd1e37f93e1b337322",
+        "equal": true,
+        "basis": "historic sealed binding"
+      },
+      {
+        "path": "apps/app/components/dialog.tsx",
+        "compiler_version": "f5466470c4dd91c424485d2abdbaebcaca626f5240979100c3efe141c31005fe",
+        "expected_sha256": "f5466470c4dd91c424485d2abdbaebcaca626f5240979100c3efe141c31005fe",
+        "equal": true,
+        "basis": "historic sealed binding"
+      },
+      {
+        "path": "apps/app/components/planner.tsx",
+        "compiler_version": "04eaf9028d760814d0902b4e74aa85bf4c5940a2d386a6056918c81c6ad1d341",
+        "expected_sha256": "04eaf9028d760814d0902b4e74aa85bf4c5940a2d386a6056918c81c6ad1d341",
+        "equal": true,
+        "basis": "historic sealed binding"
+      },
+      {
+        "path": "apps/app/components/connections.tsx",
+        "compiler_version": "eb526a0a81f01939466ae138cb82310a4270a884ad0320918d089e827e30a7d1",
+        "expected_sha256": "eb526a0a81f01939466ae138cb82310a4270a884ad0320918d089e827e30a7d1",
+        "equal": true,
+        "basis": "historic sealed binding"
+      },
+      {
+        "path": "apps/app/components/proxy-assessment.tsx",
+        "compiler_version": "15d2d22dce6d42e0b93af1991186d338fd7a36723a5e4c65dcf9679cf23705cf",
+        "expected_sha256": "15d2d22dce6d42e0b93af1991186d338fd7a36723a5e4c65dcf9679cf23705cf",
+        "equal": true,
+        "basis": "historic sealed binding"
+      },
+      {
+        "path": "apps/app/components/trajectory-assessment.tsx",
+        "compiler_version": "f6871aa14d1d78dcbc884477be73fd539c0817d7139226a0c5afda675bc730be",
+        "expected_sha256": "f6871aa14d1d78dcbc884477be73fd539c0817d7139226a0c5afda675bc730be",
+        "equal": true,
+        "basis": "historic sealed binding"
+      },
+      {
+        "path": "apps/app/app/dashboard/page.tsx",
+        "compiler_version": "6dcccb6cf7886507fbf9537c07d2130b627338e314cf9da0bbc37ff439915fd8",
+        "expected_sha256": "6dcccb6cf7886507fbf9537c07d2130b627338e314cf9da0bbc37ff439915fd8",
+        "equal": true,
+        "basis": "historic sealed binding"
+      },
+      {
+        "path": "apps/app/app/login/page.tsx",
+        "compiler_version": "ad779eb0c0b7002584bebde1a3786faf8e543cfd5769a34da81abcb2830b031d",
+        "expected_sha256": "ad779eb0c0b7002584bebde1a3786faf8e543cfd5769a34da81abcb2830b031d",
+        "equal": true,
+        "basis": "historic sealed binding"
+      }
+    ],
+    "historical_source_version_checks_equal": true,
+    "helper_sha256_at_execution": "46f2916727644ea3ac965d28d1c883aab69512a03e8510fb169e15d9b7cb3df4",
+    "helper_sha256_now": "46f2916727644ea3ac965d28d1c883aab69512a03e8510fb169e15d9b7cb3df4",
+    "historical_cache_bytes_available_for_structural_diff": false,
+    "conclusion": "Compilation success and matching historical application source versions do not imply byte-identical incremental metadata. Candidate hash does not match the sealed cache. Incremental history or previous generated-type state may matter; cause of the exact historic hash difference is not proven."
+  },
+  "correction_budget": {
+    "principled_candidate_generations": 1,
+    "targeted_correction_generations": 0,
+    "variants_or_bruteforce": 0,
+    "reason_for_no_correction": "No understood historical-byte difference is available to justify a correction. Do not consume the permitted correction on a speculative clean/seed/order variant."
+  },
+  "working_cache": {
+    "path": "apps/app/tsconfig.tsbuildinfo",
+    "before": {
+      "path": "apps/app/tsconfig.tsbuildinfo",
+      "bytes": 138287,
+      "sha256": "8ecfc04867158213c1034082f48adf108d0a002a1aa92058617cb4334c4307fc"
+    },
+    "after": {
+      "sha256": "8ecfc04867158213c1034082f48adf108d0a002a1aa92058617cb4334c4307fc",
+      "bytes": 138287
+    },
+    "unchanged": true
+  },
+  "preservation": {
+    "protected_files_checked": 77,
+    "unchanged": true,
+    "differences": [],
+    "includes": "Current delivered app/API/MCP/helper/docs source hashes; all source-before captures; generated type declarations; .devin/goal.md; original delivery transition, source-after-blocked and verification; dataset/model manifests; installed compiler package and implementation.",
+    "full_before_hashes": "protected-before.json",
+    "full_after_hashes": {
+      ".devin/goal.md": {
+        "sha256": "2472f000f2eca5e7823b53896fdc2bdb67299e5c8f09fec72b72fd34ca63003e",
+        "bytes": 77585
+      },
+      "apps/app/.next/dev/types/cache-life.d.ts": {
+        "sha256": "4f984436b10cfb43ccf7fc3114dcb851cbefa4d58b7d8ae741aaae0f6e330129",
+        "bytes": 5905
+      },
+      "apps/app/.next/dev/types/root-params.d.ts": {
+        "sha256": "f3387dd7800eec3c34273f7a8efad13e864598c7e8f788d321e407390989bb59",
+        "bytes": 101
+      },
+      "apps/app/.next/dev/types/routes.d.ts": {
+        "sha256": "db375d18994a507e67dcd457a7b4262d4695d4749dba51824af6478dafac6585",
+        "bytes": 1545
+      },
+      "apps/app/.next/dev/types/validator.ts": {
+        "sha256": "6913dacb8323257a81932cc176dcb8c1eeba54ab4e03077d3725f32e49b56ab8",
+        "bytes": 2947
+      },
+      "apps/app/.next/types/cache-life.d.ts": {
+        "sha256": "4f984436b10cfb43ccf7fc3114dcb851cbefa4d58b7d8ae741aaae0f6e330129",
+        "bytes": 5905
+      },
+      "apps/app/.next/types/root-params.d.ts": {
+        "sha256": "f3387dd7800eec3c34273f7a8efad13e864598c7e8f788d321e407390989bb59",
+        "bytes": 101
+      },
+      "apps/app/.next/types/routes.d.ts": {
+        "sha256": "db375d18994a507e67dcd457a7b4262d4695d4749dba51824af6478dafac6585",
+        "bytes": 1545
+      },
+      "apps/app/.next/types/validator.ts": {
+        "sha256": "e372ac8a2bcde58e0ef2693e8e2abbdbab4ac52f54b34e360d81c5a9a9d1c500",
+        "bytes": 2917
+      },
+      "apps/app/app/connect/page.tsx": {
+        "sha256": "166b316ff507cf141291dc6128657b4401ff0f538557e1e3de0fe5a4e61bebba",
+        "bytes": 3218
+      },
+      "apps/app/app/dashboard/page.tsx": {
+        "sha256": "4ab513a4f2e7603cfe6bfcbb89f709130494bbc2a0f71bcd7aed425dfb276adf",
+        "bytes": 19276
+      },
+      "apps/app/app/error.tsx": {
+        "sha256": "6b3d85b23befb4203f0808de3c9e8bd0ef6daeee0d2ac2865a3eb6cd04c2836f",
+        "bytes": 338
+      },
+      "apps/app/app/globals.css": {
+        "sha256": "1d49d0454e87242898544f0e9f3bfffb44eb6bfd563d1abbc64ebcd138791647",
+        "bytes": 26892
+      },
+      "apps/app/app/layout.tsx": {
+        "sha256": "9aed9cb95855b346b87d9db5de81aa830b10d1c75fccb7470b75f2de4188693a",
+        "bytes": 498
+      },
+      "apps/app/app/login/page.tsx": {
+        "sha256": "ad779eb0c0b7002584bebde1a3786faf8e543cfd5769a34da81abcb2830b031d",
+        "bytes": 2551
+      },
+      "apps/app/app/page.tsx": {
+        "sha256": "ab3b856a243fefb0b8dd2e562f7914041767a8c2b6939633c85e4e4e97df6ec0",
+        "bytes": 105
+      },
+      "apps/app/components/auth-layout.tsx": {
+        "sha256": "4587784c12a9c3f1ec01c16c1cb8bd9137ade113efd7a681d3aebe2dbe7f676d",
+        "bytes": 1213
+      },
+      "apps/app/components/cash-chart.tsx": {
+        "sha256": "5a63c5a47f29cb0c9eb1a5da40ca9cba3c5b13dfd7d6d3fd1e37f93e1b337322",
+        "bytes": 6134
+      },
+      "apps/app/components/connections.tsx": {
+        "sha256": "eb526a0a81f01939466ae138cb82310a4270a884ad0320918d089e827e30a7d1",
+        "bytes": 4973
+      },
+      "apps/app/components/dialog.tsx": {
+        "sha256": "f5466470c4dd91c424485d2abdbaebcaca626f5240979100c3efe141c31005fe",
+        "bytes": 1318
+      },
+      "apps/app/components/financial-v3-assessment.tsx": {
+        "sha256": "755c93e056294a4eda02c0c8ccfdbcc0d415593672e5e9b594ce36a1aac3cad2",
+        "bytes": 17341
+      },
+      "apps/app/components/planner.tsx": {
+        "sha256": "04eaf9028d760814d0902b4e74aa85bf4c5940a2d386a6056918c81c6ad1d341",
+        "bytes": 10502
+      },
+      "apps/app/components/proxy-assessment.tsx": {
+        "sha256": "15d2d22dce6d42e0b93af1991186d338fd7a36723a5e4c65dcf9679cf23705cf",
+        "bytes": 4759
+      },
+      "apps/app/components/trajectory-assessment.tsx": {
+        "sha256": "f6871aa14d1d78dcbc884477be73fd539c0817d7139226a0c5afda675bc730be",
+        "bytes": 15983
+      },
+      "apps/app/lib/api.ts": {
+        "sha256": "634e96c26c0dff330ed6c38830bd46b3e5293293d0cb86f8e43a16ba21c6f9eb",
+        "bytes": 998
+      },
+      "apps/app/lib/financial-v3.test.ts": {
+        "sha256": "01da265111a2b4b940ac9c8458591ef575f8bac18abcdb6f4fdf1cfd8da54b4b",
+        "bytes": 2303
+      },
+      "apps/app/lib/financial-v3.ts": {
+        "sha256": "8a9130bc9459c6ab5628cf358879aab1d9a2e40fbb2fc6d1fb4979ea2fad7a4e",
+        "bytes": 6689
+      },
+      "apps/app/lib/format.ts": {
+        "sha256": "46803c939a9dbc041a2e11d2dd6c5f376d5321e6f2628f821ee3f073d9b963d1",
+        "bytes": 1196
+      },
+      "apps/app/lib/trajectory-types.ts": {
+        "sha256": "18c184503486c10df53542b967ee0adc8c0a11782d382eb6f302f387f17ed888",
+        "bytes": 4871
+      },
+      "apps/app/lib/trajectory.test.ts": {
+        "sha256": "76679c840f8efcadc389d0290ec182d8d94006a0b7330c5ca60218cecf8838d0",
+        "bytes": 1801
+      },
+      "apps/app/lib/trajectory.ts": {
+        "sha256": "9d4181be8e521e72a620b273105480055c6192e4203df3feac6c9c82e1ae8def",
+        "bytes": 1539
+      },
+      "apps/app/lib/types.ts": {
+        "sha256": "fdc55f241fb90f16d4ad084b675c2273ffa7e59c325c979f3effcc858fe06321",
+        "bytes": 4428
+      },
+      "apps/app/next-env.d.ts": {
+        "sha256": "0f70629890b72a0a82e91972cc032c04b658b26c265373cb711cf576bfbf8fcc",
+        "bytes": 296
+      },
+      "apps/app/next.config.ts": {
+        "sha256": "b73bcccc177b7e9b897b6941f87182fb42e723d95f2b3144254804e275ac70f8",
+        "bytes": 481
+      },
+      "apps/app/package.json": {
+        "sha256": "3a741536da28c91cef92b6a45a4aaf853307bee5543849cc800159a994422648",
+        "bytes": 657
+      },
+      "apps/app/postcss.config.mjs": {
+        "sha256": "e509558d3bdf129bc28908fc2954692855af95799cf253c0fc3cc038f5b364a9",
+        "bytes": 61
+      },
+      "apps/app/tsconfig.json": {
+        "sha256": "0879ad928555b029e6a3094506858f9dc3b26c4b27ae607e3c86a2a0d1411384",
+        "bytes": 675
+      },
+      "apps/app/tsconfig.tsbuildinfo": {
+        "sha256": "8ecfc04867158213c1034082f48adf108d0a002a1aa92058617cb4334c4307fc",
+        "bytes": 138287
+      },
+      "docs/DASHBOARD.md": {
+        "sha256": "c4c98976e812c679652b024544b4feba1ba96416c115d81915d6bb0b67657339",
+        "bytes": 10443
+      },
+      "docs/PRODUCT.md": {
+        "sha256": "54733d350139b330b25ef69e2d731cb7a52819142546df8e40cd6bbbe913eb61",
+        "bytes": 9464
+      },
+      "docs/REQUIREMENTS.md": {
+        "sha256": "e6bec2bf4f1e9aa18e65f3e34a0375f7376d80a239f77595a8f405e083980837",
+        "bytes": 14594
+      },
+      "node_modules/.bun/next@16.3.5+6da4d20581282908/node_modules/next/package.json": {
+        "sha256": "73192ad53e2c6f25f5f81177819607dff0b254548932a0a225aad09307fd6772",
+        "bytes": 3173
+      },
+      "node_modules/.bun/typescript@5.9.3/node_modules/typescript/lib/typescript.js": {
+        "sha256": "3ae902c92cc44dace175c0e69e13a4b0899f6983c6121d76b9ab8dd5795e7675",
+        "bytes": 9112572
+      },
+      "node_modules/.bun/typescript@5.9.3/node_modules/typescript/package.json": {
+        "sha256": "822ef7ca6452205657b6288b066481ecf508bfbf43455d715cf7d3ec457561e6",
+        "bytes": 3620
+      },
+      "package.json": {
+        "sha256": "5977a3eec3ab358f66b7bf617650ba3dd07fcd835a176cc4f02d9921a860268b",
+        "bytes": 1369
+      },
+      "readme.md": {
+        "sha256": "2acac9bcdd12906331e659db34b4debb8544bccdfa8adaa40ec6ab55042b3cc3",
+        "bytes": 29577
+      },
+      "reports/modeling/financial-v3/dataset-v1/delivery-v1/source-after-blocked.json": {
+        "sha256": "8e1866678150ce276ccd3e987c4789800fcebf35cff967e1d66f9cd5e7089b6c",
+        "bytes": 3977
+      },
+      "reports/modeling/financial-v3/dataset-v1/delivery-v1/source-before/apps/app/app/dashboard/page.tsx": {
+        "sha256": "6dcccb6cf7886507fbf9537c07d2130b627338e314cf9da0bbc37ff439915fd8",
+        "bytes": 18784
+      },
+      "reports/modeling/financial-v3/dataset-v1/delivery-v1/source-before/apps/app/app/globals.css": {
+        "sha256": "5c1839468736cc9576695f8d191722baaf1e19ec1fcbc5af91f28c1911933574",
+        "bytes": 25571
+      },
+      "reports/modeling/financial-v3/dataset-v1/delivery-v1/source-before/apps/app/components/trajectory-assessment.tsx": {
+        "sha256": "f6871aa14d1d78dcbc884477be73fd539c0817d7139226a0c5afda675bc730be",
+        "bytes": 15983
+      },
+      "reports/modeling/financial-v3/dataset-v1/delivery-v1/source-before/apps/app/lib/trajectory-types.ts": {
+        "sha256": "18c184503486c10df53542b967ee0adc8c0a11782d382eb6f302f387f17ed888",
+        "bytes": 4871
+      },
+      "reports/modeling/financial-v3/dataset-v1/delivery-v1/source-before/apps/app/lib/trajectory.test.ts": {
+        "sha256": "76679c840f8efcadc389d0290ec182d8d94006a0b7330c5ca60218cecf8838d0",
+        "bytes": 1801
+      },
+      "reports/modeling/financial-v3/dataset-v1/delivery-v1/source-before/apps/app/lib/trajectory.ts": {
+        "sha256": "9d4181be8e521e72a620b273105480055c6192e4203df3feac6c9c82e1ae8def",
+        "bytes": 1539
+      },
+      "reports/modeling/financial-v3/dataset-v1/delivery-v1/source-before/apps/app/lib/types.ts": {
+        "sha256": "244b09e988837a5bfa0cfe47b1fff4d4c51998d236b9ebaae9e74c1632e8159c",
+        "bytes": 4306
+      },
+      "reports/modeling/financial-v3/dataset-v1/delivery-v1/source-before/docs/DASHBOARD.md": {
+        "sha256": "f3c7a988ffc11fe6ec5f373b6e49ef85c310862ce246a3dd88570d5d71a1e9a0",
+        "bytes": 8115
+      },
+      "reports/modeling/financial-v3/dataset-v1/delivery-v1/source-before/docs/PRODUCT.md": {
+        "sha256": "ae160daff8f4afaa097ea80882f099e94c22a486115a82385190673a1a074909",
+        "bytes": 7492
+      },
+      "reports/modeling/financial-v3/dataset-v1/delivery-v1/source-before/docs/REQUIREMENTS.md": {
+        "sha256": "9929a6ded55673e94855d1c1a96d32d00fbe1ba3566df5dd6bdd5497b617cc4b",
+        "bytes": 11592
+      },
+      "reports/modeling/financial-v3/dataset-v1/delivery-v1/source-before/package.json": {
+        "sha256": "1e89e0ec7887482f68776eb5098d9a9f4cb32c974d300ca58558726eae9d69ad",
+        "bytes": 1261
+      },
+      "reports/modeling/financial-v3/dataset-v1/delivery-v1/source-before/readme.md": {
+        "sha256": "4a51ab7bb8b5db396a0cf142a16955c127256f858c491b9c4662804278042198",
+        "bytes": 24984
+      },
+      "reports/modeling/financial-v3/dataset-v1/delivery-v1/source-before/services/api/src/finance.rs": {
+        "sha256": "2d2403d70988e0cc27ac1ba17096bce549dbe2155ff38b9bbac8be21ef9512fe",
+        "bytes": 20667
+      },
+      "reports/modeling/financial-v3/dataset-v1/delivery-v1/source-before/services/api/src/lib.rs": {
+        "sha256": "a5b647213a33dbccdaca2f81b31d5ce01ca4037ff5cae6ead4b430f9eb6f0bf3",
+        "bytes": 7165
+      },
+      "reports/modeling/financial-v3/dataset-v1/delivery-v1/source-before/services/api/src/main.rs": {
+        "sha256": "ac4333fc157be9fb22949eb36464ffd36c2cbda4f3480d1d1842f98f48f86d18",
+        "bytes": 1496
+      },
+      "reports/modeling/financial-v3/dataset-v1/delivery-v1/source-before/services/mcp/src/main.rs": {
+        "sha256": "061ba5a6fd2254e6a25b0786dd0a20969cd36863b5341eab334af2aecfcd62de",
+        "bytes": 13329
+      },
+      "reports/modeling/financial-v3/dataset-v1/delivery-v1/transition-pin.json": {
+        "sha256": "ba6a0ec0c267e06496d17dde73b10be3377618f5fdcbee9c162540f5326074b6",
+        "bytes": 83
+      },
+      "reports/modeling/financial-v3/dataset-v1/delivery-v1/transition.json": {
+        "sha256": "c878d0e2767bbf71e5ae2a0da5d27709081817d0d004b5c10984b76690f33f45",
+        "bytes": 431089
+      },
+      "reports/modeling/financial-v3/dataset-v1/delivery-v1/verification.json": {
+        "sha256": "030ee1352baa4c88d670bcd61092ffb1439b13a521312a0e1b2a0e5a32697566",
+        "bytes": 14584
+      },
+      "reports/modeling/financial-v3/dataset-v1/manifest.json": {
+        "sha256": "e360ef33ba7cae39aa9c94d0f8e778f49c38a3985f77053a2f53bd4ae5ef8a44",
+        "bytes": 123051
+      },
+      "reports/modeling/financial-v3/dataset-v1/model-v1/manifest.json": {
+        "sha256": "71eae8fef2ab3466fa2545d1c38f57977508cb79b7c051280b59e02253925428",
+        "bytes": 107340
+      },
+      "scripts/check-financial-v3-e2e.ts": {
+        "sha256": "7e01c9558c2a23ffd06970e66c559e804e328fb563225ac9bdd1d0892e44def8",
+        "bytes": 18328
+      },
+      "scripts/financial_v3_dataset_delivery.py": {
+        "sha256": "c22c57c260516ec571ac68b9ef20d0cbe8c79e05d72deca98fd9a47a38f45ba1",
+        "bytes": 10440
+      },
+      "services/api/src/finance.rs": {
+        "sha256": "d4e835c88898b21c862b3e7713853d8fff797df0846ffbf17f17207eecaab2e5",
+        "bytes": 21826
+      },
+      "services/api/src/financial_v3.rs": {
+        "sha256": "99d4a8eca55f55e03b8002302b62f203401fcd6423a6d822423c2cfd5b1c8238",
+        "bytes": 24793
+      },
+      "services/api/src/financial_v3_tests.rs": {
+        "sha256": "d349202f5ceca8e66945e391436f03612aaad57c71e97059a515f203e37a6458",
+        "bytes": 10851
+      },
+      "services/api/src/lib.rs": {
+        "sha256": "3669acdef0c809a68500dfd7c28f02293d107de7a1e972d7b53552b89999f2ad",
+        "bytes": 7202
+      },
+      "services/api/src/main.rs": {
+        "sha256": "ac4333fc157be9fb22949eb36464ffd36c2cbda4f3480d1d1842f98f48f86d18",
+        "bytes": 1496
+      },
+      "services/mcp/src/financial_v3_tests.rs": {
+        "sha256": "c02ed5c28aa4e3decf7f93901e30522c13e1b3a447e785c533a0079651c32eb4",
+        "bytes": 4988
+      },
+      "services/mcp/src/main.rs": {
+        "sha256": "2378d12cf1e4305a421f9f7cac6642c6bdd000718ab553ad18007f1346102e69",
+        "bytes": 14015
+      }
+    }
+  },
+  "commands": [
+    {
+      "command": "node reports/modeling/financial-v3/dataset-v1/delivery-v1/cache-recovery-1/recovery.mjs inspect",
+      "exit_code": 0,
+      "purpose": "Bounded cache search and preserved hash capture"
+    },
+    {
+      "command": "node reports/modeling/financial-v3/dataset-v1/delivery-v1/cache-recovery-1/recovery.mjs compiler-source",
+      "exit_code": 0,
+      "purpose": "Read installed TypeScript compiler path and Next type-check semantics; compiler-source-notes.json"
+    },
+    {
+      "command": "node reports/modeling/financial-v3/dataset-v1/delivery-v1/cache-recovery-1/recovery.mjs reconstruct",
+      "exit_code": 2,
+      "compiler_exit_code": 0,
+      "purpose": "One candidate; exit 2 explicitly denotes hash mismatch, not a recovered cache"
+    },
+    {
+      "command": "node reports/modeling/financial-v3/dataset-v1/delivery-v1/cache-recovery-1/finalize.mjs",
+      "success_exit_meaning": "Evidence creation and unchanged working-file checks only, not recovery success"
+    }
+  ],
+  "read_only_listing_commands": [
+    "ls -la apps/app apps/app/.next apps/app/.next/cache apps/app/.next/dev apps/app/.next/dev/cache reports/modeling/financial-v3/dataset-v1/delivery-v1",
+    "ls -la reports/modeling/trajectory-v2/app-verification apps/app/.next/types apps/app/.next/dev/types apps/app/.next/cache/turbopack apps/app/node_modules",
+    "ls -la apps/app/.next/cache/turbopack/v16.3.5-ca2c75eb apps/app/.next/dev/cache/turbopack reports/modeling/financial-v3/dataset-v1/delivery-v1/source-before/apps/app reports/modeling/financial-v3/dataset-v1/delivery-v1/source-before/apps/app/lib"
+  ],
+  "new_recovery_files_sha256": {
+    "candidate-1-plan.json": "8d4519a13a4a4829f81c45b54be6872a617ca90bca7c5ac47bfe905e4b0354a8",
+    "candidate-1-result.json": "e8f4cb43403e4551be741a1ab6da74ca699cee6e603f6aa8d1a45f5a01588509",
+    "candidate-1.tsbuildinfo": "761f40c0b1fe1e10f44394db96a255e1af6f46309ae6a84422f01c711cf4de7d",
+    "compiler-source-notes.json": "f20e246fb461edc8ed3d1b91b965bcbb23d4f0bfd0c2f884a7c74325a569f27c",
+    "finalize.mjs": "c407d0d33874318e649830ced53ea5520632cf2f2bccc17d7321692407ff6a68",
+    "inspection.json": "3e4495cb2ee9622e51ea2aee8dd87c5acb5e279200185fe9bc22c32654560293",
+    "protected-before.json": "b7eb99a9e661b859052887c79abab99884e1fdb37b7a029d749290e690036c7c",
+    "recovery.mjs": "46f2916727644ea3ac965d28d1c883aab69512a03e8510fb169e15d9b7cb3df4",
+    "seed-current.tsbuildinfo": "8ecfc04867158213c1034082f48adf108d0a002a1aa92058617cb4334c4307fc"
+  },
+  "restored_or_applied": false,
+  "waived_integrity": false,
+  "app_source_writes": 0,
+  "old_seal_or_transition_writes": 0,
+  "scientific_artifact_writes": 0,
+  "model_or_outcome_queries": 0,
+  "real_app_check_or_build_invocations": 0,
+  "next_safe_action": "Keep the working cache and fixed transition unchanged. Candidate-1 MUST NOT replace the working cache: its hash is different. Parent must retain the integrity blocker. Further recovery requires an actual exact-byte copy or a newly justified authorized method, not an unapproved metadata variant loop. No old seal/checker waiver.",
+  "future_current_verification_strategy_not_executed": "Use an isolated virtual compiler host or isolated tree with build-info outputs intercepted/redirected; avoid real bun run check because next typegen/build also regenerate next-env and caches. Preserve exact generated inputs before any separately authorized verification.",
+  "scientific_goal": "Receipt-proxy utility failure, null full health, unsupported Q4 and disabled alerts remain unchanged. This recovery attempt cannot make V3 complete."
+}

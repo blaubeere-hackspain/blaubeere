@@ -1,0 +1,127 @@
+{
+  "task_scope": "V3T1 audit plus practical V3T2 proposal only; no model implementation or whole-goal completion",
+  "root": "/home/mikel/.herdr/worktrees/predictive-models/feat-training-devin",
+  "head": "7e9b68dac627cd19bc77a1112bd6d94ca19fc423",
+  "changed_paths_by_this_worker": [
+    "scripts/financial_v3_audit.py",
+    "tests/test_financial_v3_audit.py",
+    "reports/modeling/financial-v3/protected-baseline.json",
+    "reports/modeling/financial-v3/docs-before.json",
+    "reports/modeling/financial-v3/docs-worktree-before.patch",
+    "reports/modeling/financial-v3/audit.json",
+    "reports/modeling/financial-v3/audit-summary.json",
+    "reports/modeling/financial-v3/design-proposal.md",
+    "reports/modeling/financial-v3/verification.json",
+    "docs/PRODUCT.md",
+    "docs/REQUIREMENTS.md",
+    "docs/DASHBOARD.md",
+    "readme.md",
+    "reports/planning/financial-scoring-plan.md"
+  ],
+  "preservation": {
+    "protected_assets": 541,
+    "baseline_sha256": "e91307018fe80d59102b864eef080bd242f7974479a7f2056f1c2f718c1e79fa",
+    "audit_script_sha256_at_capture": "b688f0a8bb018efb97ae32db548e80ca3c8368a5baf5ed92d35f427643f43981",
+    "protected_check_passed": true,
+    "differences": [],
+    "old_document_content_preserved_as_suffix": true,
+    "document_changes": "Only a two-line prefix notice in each allowed document; original whole worktree document content retained in docs-before.json; original tracked diff retained in docs-worktree-before.patch",
+    "index": "Empty at start and final git diff --cached --stat",
+    "goal_file": "Read only; no worker edit",
+    "scope_of_baseline": "Raw bytes, all existing data/runs/clean/marts/pointers, existing scientific artifacts, frozen and working sources/tests plus existing application sources and relevant locks/configs. Future intentionally authorized app integration will produce explicit app-path differences; do not reset the scientific baseline to conceal them. New financial_v3 sources and financial-v3 report artifacts are excluded from this preservation check."
+  },
+  "selected_artifact_bindings": {
+    "pinned_run_manifest": "88059a142248927f2c6ae0816993eae6e1177abf3138f089df09d93bc642ce6b",
+    "group_assignment": "180e6373477e1c2fd12c69677bb43781a6c7c52334f38efc362d6b30d54217e4",
+    "v1_model_manifest": "9b30c24feeb75fb0c2f17bca9a2eb178a508dd3e24759ac53c713424dd531dc8",
+    "v1_model": "2ac7cffd080d6c0a22422c90a3b806ae2f053d585eb4b7330078ca9c588bcbf5",
+    "v1_assessment_manifest": "a530b67f81adba9ccca03446802b77c38afe071e187364f4453538d23871e13f",
+    "v1_assessment_export": "77fc696af57781dbd5e06205c56923ed04d40f89ad17d5a3a546b689cf7e707f",
+    "v2_protocol": "d37ee0cad9101b4e6ae1dbc39f69d471ff7457b2cf3c5dac8ac5bd786c70159d",
+    "v2_execution_manifest": "5a2b05bb2a83757ceaf18465c81f6db48c812a0036dcc2dd82c9566eca5f9a33",
+    "v2_assessment_manifest": "fe7e57c28a92eefbf04c6e456ba639ac6df9c481441eeda8bbfab1326458aae3",
+    "v2_assessment_export": "2c9cbfd1cb5f8976cbff5184f7eabcc796fe86763de0e0cc512c2448a579a5c9",
+    "v2_reserved_access": "2decf275e47ef57fbfe4de17753455b121115185a5c3a66ed938c481abfc04b2",
+    "verification_scope": "Every pinned-run output/frozen-source/raw-input binding, v1 model artifact/source bindings and v2 execution implementation bindings were compared against stored manifest hashes in audit.json. Assessment export hashes shown in each assessment manifest match captured baseline hashes. No model deserialization, prediction replay or outcome evaluation occurred."
+  },
+  "commands_in_observed_order": [
+    {
+      "command": "pwd && git status --short && git diff --stat && git diff --cached --stat",
+      "exit_code": 0,
+      "observed": "Correct root; complete pre-existing v2 changes visible; 14 tracked changed paths, 740 insertions/85 deletions; empty index. CRLF warnings on pre-existing package/Rust paths."
+    },
+    {
+      "command": "ls -la",
+      "exit_code": 0,
+      "observed": "Verified repository parent directories and existing .venv."
+    },
+    {
+      "command": "ls -la data/runs/20260919T124814Z-e5302b58 && git diff -- docs/PRODUCT.md docs/REQUIREMENTS.md docs/DASHBOARD.md readme.md reports/planning/financial-scoring-plan.md",
+      "exit_code": 0,
+      "observed": "Pinned run present with source/data/manifest; reviewed existing v2 documentation diff, preserved it later as docs-worktree-before.patch. Tool output was truncated; full diff captured by audit helper."
+    },
+    {
+      "command": ".venv/bin/python -B -m unittest tests.test_financial_v3_audit -v",
+      "attempt": 1,
+      "exit_code": 1,
+      "observed": "Expected red-first fixture run: ImportError because scripts.financial_v3_audit did not yet exist. One loader error; no data queried.",
+      "focused_correction": "Implemented only the new financial_v3_audit module with pinned paths, exclusions, SELECT bounds, ledger-gap aggregate, hashes and capture/check CLI."
+    },
+    {
+      "command": ".venv/bin/python -B -m unittest tests.test_financial_v3_audit -v",
+      "attempt": 2,
+      "exit_code": 0,
+      "observed": "Six fixture tests passed in 0.035s. Same initial import failure resolved on the one correction/recheck; no repeated failing attempt."
+    },
+    {
+      "command": "ls -ld reports/modeling scripts tests && git rev-parse --short HEAD",
+      "exit_code": 0,
+      "observed": "Verified output/code parent directories before capture; HEAD 7e9b68d."
+    },
+    {
+      "command": ".venv/bin/python -B scripts/financial_v3_audit.py --capture",
+      "attempt": 1,
+      "exit_code": 0,
+      "observed": "Captured 541 protected hashes, original docs and diff; all bound hashes passed. DuckDB 1.5.5: 22 aggregate audit queries plus 15 schema-only and 15 count-only inventory queries. Wrote audit.json exclusively; protected hashes unchanged before/after. No new confirmatory test identified. No capture correction/retry."
+    },
+    {
+      "command": ".venv/bin/python -B scripts/financial_v3_audit.py --check",
+      "attempt": 1,
+      "exit_code": 0,
+      "observed": "After notices: ok=true, protected_assets=541, differences=[], old_document_bytes_preserved_as_suffix=true. Hash-only read-only check, no DuckDB queries or output writes."
+    },
+    {
+      "command": "git diff --check && git diff --cached --stat",
+      "exit_code": 0,
+      "observed": "No whitespace errors; index empty. Existing CRLF warnings on package.json and four Rust source paths; those files were not changed by this worker."
+    },
+    {
+      "command": ".venv/bin/python -B -m unittest tests.test_financial_v3_audit -v",
+      "attempt": 3,
+      "exit_code": 0,
+      "observed": "Final focused recheck: all six tests passed in 0.039s; no further code correction."
+    },
+    {
+      "command": "git status --short && git diff --numstat -- docs/PRODUCT.md docs/REQUIREMENTS.md docs/DASHBOARD.md readme.md reports/planning/financial-scoring-plan.md",
+      "exit_code": 0,
+      "observed": "Only new v3 helper/test/report directory and allowed document notices added by this worker; old modified/untracked v2 paths retained. Numstat includes all pre-existing v2 changes and is not a worker-only diff."
+    }
+  ],
+  "internal_capture_git_commands": [
+    "git rev-parse HEAD",
+    "git status --short",
+    "git diff --cached --stat",
+    "git diff -- docs/PRODUCT.md docs/REQUIREMENTS.md docs/DASHBOARD.md readme.md reports/planning/financial-scoring-plan.md"
+  ],
+  "tool_discovery_issues": [
+    "Initial read attempts for xray/marts.py and xray/clean.py returned not found; file discovery identified package directories, then the existing files were read. No writes/corrections to existing source were made."
+  ],
+  "not_run": [
+    "No old v1/v2 test suite, model/export command, pipeline, inference, new outcomes/events/labels or backtest",
+    "No cash reconstruction, debt schedule projection, scorecard execution or learned model implementation",
+    "No API/MCP/UI build, runtime or browser/E2E; application sources unchanged",
+    "No dependency/environment/configuration/security changes, network, commit/push/delete or external service",
+    "No independent technical/business review; proposal approval and confirmatory freeze remain pending"
+  ],
+  "next_action": "Parent reviews/adopts or versions V3T2 development policy; next foreground worker implements pure typed records and invented cash/obligation fixtures, retaining null real-data headline until required evidence exists. Parent alone updates .devin/goal.md. Do not declare v3 complete; new untouched future/external data and independent business/reference validation remain blockers."
+}

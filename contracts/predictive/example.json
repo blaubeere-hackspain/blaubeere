@@ -1,0 +1,1943 @@
+{
+  "as_of": "2026-06-30",
+  "cash_terms": [
+    {
+      "account_id": "bank",
+      "balance_convention": "booked_before_cutoff",
+      "company_id": "invented-company",
+      "currency": "EUR",
+      "invalid_stock_values": [
+        "-999999999999"
+      ],
+      "minor_unit": "0.01",
+      "source_ref": {
+        "availability_basis": "verified",
+        "effective_at": "2026-01-01T00:00:00Z",
+        "known_on": "2026-01-01T00:00:00Z",
+        "record_id": "cash-terms",
+        "retrieved_at": "2027-01-01T00:00:00Z",
+        "source_id": "invented-core-fixture",
+        "source_sha256": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+        "source_timezone": "UTC"
+      }
+    }
+  ],
+  "classifications": [
+    {
+      "company_id": "invented-company",
+      "movement_id": "receipt-1",
+      "rule_id": "fixture:operating",
+      "source_ref": {
+        "availability_basis": "verified",
+        "effective_at": "2026-01-01T00:00:00Z",
+        "known_on": "2026-01-01T12:00:00Z",
+        "record_id": "receipt-1-classification",
+        "retrieved_at": "2027-01-01T00:00:00Z",
+        "source_id": "invented-core-fixture",
+        "source_sha256": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+        "source_timezone": "UTC"
+      }
+    },
+    {
+      "company_id": "invented-company",
+      "movement_id": "pay-1",
+      "rule_id": "fixture:operating",
+      "source_ref": {
+        "availability_basis": "verified",
+        "effective_at": "2026-01-01T00:00:00Z",
+        "known_on": "2026-01-20T12:00:00Z",
+        "record_id": "pay-1-classification",
+        "retrieved_at": "2027-01-01T00:00:00Z",
+        "source_id": "invented-core-fixture",
+        "source_sha256": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+        "source_timezone": "UTC"
+      }
+    },
+    {
+      "company_id": "invented-company",
+      "movement_id": "receipt-2",
+      "rule_id": "fixture:operating",
+      "source_ref": {
+        "availability_basis": "verified",
+        "effective_at": "2026-01-01T00:00:00Z",
+        "known_on": "2026-02-01T12:00:00Z",
+        "record_id": "receipt-2-classification",
+        "retrieved_at": "2027-01-01T00:00:00Z",
+        "source_id": "invented-core-fixture",
+        "source_sha256": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+        "source_timezone": "UTC"
+      }
+    },
+    {
+      "company_id": "invented-company",
+      "movement_id": "pay-2",
+      "rule_id": "fixture:operating",
+      "source_ref": {
+        "availability_basis": "verified",
+        "effective_at": "2026-01-01T00:00:00Z",
+        "known_on": "2026-02-20T12:00:00Z",
+        "record_id": "pay-2-classification",
+        "retrieved_at": "2027-01-01T00:00:00Z",
+        "source_id": "invented-core-fixture",
+        "source_sha256": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+        "source_timezone": "UTC"
+      }
+    },
+    {
+      "company_id": "invented-company",
+      "movement_id": "receipt-3",
+      "rule_id": "fixture:operating",
+      "source_ref": {
+        "availability_basis": "verified",
+        "effective_at": "2026-01-01T00:00:00Z",
+        "known_on": "2026-03-01T12:00:00Z",
+        "record_id": "receipt-3-classification",
+        "retrieved_at": "2027-01-01T00:00:00Z",
+        "source_id": "invented-core-fixture",
+        "source_sha256": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+        "source_timezone": "UTC"
+      }
+    },
+    {
+      "company_id": "invented-company",
+      "movement_id": "pay-3",
+      "rule_id": "fixture:operating",
+      "source_ref": {
+        "availability_basis": "verified",
+        "effective_at": "2026-01-01T00:00:00Z",
+        "known_on": "2026-03-20T12:00:00Z",
+        "record_id": "pay-3-classification",
+        "retrieved_at": "2027-01-01T00:00:00Z",
+        "source_id": "invented-core-fixture",
+        "source_sha256": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+        "source_timezone": "UTC"
+      }
+    },
+    {
+      "company_id": "invented-company",
+      "movement_id": "receipt-4",
+      "rule_id": "fixture:operating",
+      "source_ref": {
+        "availability_basis": "verified",
+        "effective_at": "2026-01-01T00:00:00Z",
+        "known_on": "2026-04-01T12:00:00Z",
+        "record_id": "receipt-4-classification",
+        "retrieved_at": "2027-01-01T00:00:00Z",
+        "source_id": "invented-core-fixture",
+        "source_sha256": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+        "source_timezone": "UTC"
+      }
+    },
+    {
+      "company_id": "invented-company",
+      "movement_id": "pay-4",
+      "rule_id": "fixture:operating",
+      "source_ref": {
+        "availability_basis": "verified",
+        "effective_at": "2026-01-01T00:00:00Z",
+        "known_on": "2026-04-20T12:00:00Z",
+        "record_id": "pay-4-classification",
+        "retrieved_at": "2027-01-01T00:00:00Z",
+        "source_id": "invented-core-fixture",
+        "source_sha256": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+        "source_timezone": "UTC"
+      }
+    },
+    {
+      "company_id": "invented-company",
+      "movement_id": "receipt-5",
+      "rule_id": "fixture:operating",
+      "source_ref": {
+        "availability_basis": "verified",
+        "effective_at": "2026-01-01T00:00:00Z",
+        "known_on": "2026-05-01T12:00:00Z",
+        "record_id": "receipt-5-classification",
+        "retrieved_at": "2027-01-01T00:00:00Z",
+        "source_id": "invented-core-fixture",
+        "source_sha256": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+        "source_timezone": "UTC"
+      }
+    },
+    {
+      "company_id": "invented-company",
+      "movement_id": "pay-5",
+      "rule_id": "fixture:operating",
+      "source_ref": {
+        "availability_basis": "verified",
+        "effective_at": "2026-01-01T00:00:00Z",
+        "known_on": "2026-05-20T12:00:00Z",
+        "record_id": "pay-5-classification",
+        "retrieved_at": "2027-01-01T00:00:00Z",
+        "source_id": "invented-core-fixture",
+        "source_sha256": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+        "source_timezone": "UTC"
+      }
+    },
+    {
+      "company_id": "invented-company",
+      "movement_id": "receipt-6",
+      "rule_id": "fixture:operating",
+      "source_ref": {
+        "availability_basis": "verified",
+        "effective_at": "2026-01-01T00:00:00Z",
+        "known_on": "2026-06-01T12:00:00Z",
+        "record_id": "receipt-6-classification",
+        "retrieved_at": "2027-01-01T00:00:00Z",
+        "source_id": "invented-core-fixture",
+        "source_sha256": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+        "source_timezone": "UTC"
+      }
+    },
+    {
+      "company_id": "invented-company",
+      "movement_id": "pay-6",
+      "rule_id": "fixture:operating",
+      "source_ref": {
+        "availability_basis": "verified",
+        "effective_at": "2026-01-01T00:00:00Z",
+        "known_on": "2026-06-20T12:00:00Z",
+        "record_id": "pay-6-classification",
+        "retrieved_at": "2027-01-01T00:00:00Z",
+        "source_id": "invented-core-fixture",
+        "source_sha256": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+        "source_timezone": "UTC"
+      }
+    },
+    {
+      "company_id": "invented-company",
+      "movement_id": "receipt-7",
+      "rule_id": "fixture:operating",
+      "source_ref": {
+        "availability_basis": "verified",
+        "effective_at": "2026-01-01T00:00:00Z",
+        "known_on": "2026-07-01T12:00:00Z",
+        "record_id": "receipt-7-classification",
+        "retrieved_at": "2027-01-01T00:00:00Z",
+        "source_id": "invented-core-fixture",
+        "source_sha256": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+        "source_timezone": "UTC"
+      }
+    },
+    {
+      "company_id": "invented-company",
+      "movement_id": "pay-7",
+      "rule_id": "fixture:operating",
+      "source_ref": {
+        "availability_basis": "verified",
+        "effective_at": "2026-01-01T00:00:00Z",
+        "known_on": "2026-07-20T12:00:00Z",
+        "record_id": "pay-7-classification",
+        "retrieved_at": "2027-01-01T00:00:00Z",
+        "source_id": "invented-core-fixture",
+        "source_sha256": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+        "source_timezone": "UTC"
+      }
+    }
+  ],
+  "company_id": "invented-company",
+  "group_id": "invented-group",
+  "invoices": [
+    {
+      "amount_native": "800",
+      "company_id": "invented-company",
+      "currency": "EUR",
+      "due_on": "2026-01-20",
+      "fx_at": null,
+      "invoice_id": "ap-1",
+      "issued_on": "2026-01-01",
+      "side": "ap",
+      "source_ref": {
+        "availability_basis": "verified",
+        "effective_at": "2026-01-01T00:00:00Z",
+        "known_on": "2026-01-01T00:00:00Z",
+        "record_id": "ap-1-document",
+        "retrieved_at": "2027-01-01T00:00:00Z",
+        "source_id": "invented-core-fixture",
+        "source_sha256": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+        "source_timezone": "UTC"
+      }
+    },
+    {
+      "amount_native": "800",
+      "company_id": "invented-company",
+      "currency": "EUR",
+      "due_on": "2026-02-20",
+      "fx_at": null,
+      "invoice_id": "ap-2",
+      "issued_on": "2026-02-01",
+      "side": "ap",
+      "source_ref": {
+        "availability_basis": "verified",
+        "effective_at": "2026-01-01T00:00:00Z",
+        "known_on": "2026-02-01T00:00:00Z",
+        "record_id": "ap-2-document",
+        "retrieved_at": "2027-01-01T00:00:00Z",
+        "source_id": "invented-core-fixture",
+        "source_sha256": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+        "source_timezone": "UTC"
+      }
+    },
+    {
+      "amount_native": "800",
+      "company_id": "invented-company",
+      "currency": "EUR",
+      "due_on": "2026-03-20",
+      "fx_at": null,
+      "invoice_id": "ap-3",
+      "issued_on": "2026-03-01",
+      "side": "ap",
+      "source_ref": {
+        "availability_basis": "verified",
+        "effective_at": "2026-01-01T00:00:00Z",
+        "known_on": "2026-03-01T00:00:00Z",
+        "record_id": "ap-3-document",
+        "retrieved_at": "2027-01-01T00:00:00Z",
+        "source_id": "invented-core-fixture",
+        "source_sha256": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+        "source_timezone": "UTC"
+      }
+    },
+    {
+      "amount_native": "800",
+      "company_id": "invented-company",
+      "currency": "EUR",
+      "due_on": "2026-04-20",
+      "fx_at": null,
+      "invoice_id": "ap-4",
+      "issued_on": "2026-04-01",
+      "side": "ap",
+      "source_ref": {
+        "availability_basis": "verified",
+        "effective_at": "2026-01-01T00:00:00Z",
+        "known_on": "2026-04-01T00:00:00Z",
+        "record_id": "ap-4-document",
+        "retrieved_at": "2027-01-01T00:00:00Z",
+        "source_id": "invented-core-fixture",
+        "source_sha256": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+        "source_timezone": "UTC"
+      }
+    },
+    {
+      "amount_native": "800",
+      "company_id": "invented-company",
+      "currency": "EUR",
+      "due_on": "2026-05-20",
+      "fx_at": null,
+      "invoice_id": "ap-5",
+      "issued_on": "2026-05-01",
+      "side": "ap",
+      "source_ref": {
+        "availability_basis": "verified",
+        "effective_at": "2026-01-01T00:00:00Z",
+        "known_on": "2026-05-01T00:00:00Z",
+        "record_id": "ap-5-document",
+        "retrieved_at": "2027-01-01T00:00:00Z",
+        "source_id": "invented-core-fixture",
+        "source_sha256": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+        "source_timezone": "UTC"
+      }
+    },
+    {
+      "amount_native": "800",
+      "company_id": "invented-company",
+      "currency": "EUR",
+      "due_on": "2026-06-20",
+      "fx_at": null,
+      "invoice_id": "ap-6",
+      "issued_on": "2026-06-01",
+      "side": "ap",
+      "source_ref": {
+        "availability_basis": "verified",
+        "effective_at": "2026-01-01T00:00:00Z",
+        "known_on": "2026-06-01T00:00:00Z",
+        "record_id": "ap-6-document",
+        "retrieved_at": "2027-01-01T00:00:00Z",
+        "source_id": "invented-core-fixture",
+        "source_sha256": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+        "source_timezone": "UTC"
+      }
+    },
+    {
+      "amount_native": "800",
+      "company_id": "invented-company",
+      "currency": "EUR",
+      "due_on": "2026-07-20",
+      "fx_at": null,
+      "invoice_id": "ap-7",
+      "issued_on": "2026-07-01",
+      "side": "ap",
+      "source_ref": {
+        "availability_basis": "verified",
+        "effective_at": "2026-01-01T00:00:00Z",
+        "known_on": "2026-07-01T00:00:00Z",
+        "record_id": "ap-7-document",
+        "retrieved_at": "2027-01-01T00:00:00Z",
+        "source_id": "invented-core-fixture",
+        "source_sha256": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+        "source_timezone": "UTC"
+      }
+    }
+  ],
+  "obligation_coverage": [
+    {
+      "company_id": "invented-company",
+      "comparable_id": "constant-eur-perimeter-v1",
+      "from_inclusive": "2026-01-01",
+      "history_from": "2026-01-01",
+      "schedule_to_exclusive": "2027-01-01",
+      "settlements_to_exclusive": "2026-02-01",
+      "source_kind": "operating_ap",
+      "source_ref": {
+        "availability_basis": "verified",
+        "effective_at": "2026-01-01T00:00:00Z",
+        "known_on": "2026-01-31T23:59:59.999999Z",
+        "record_id": "ledger-operating_ap-1",
+        "retrieved_at": "2027-01-01T00:00:00Z",
+        "source_id": "invented-core-fixture",
+        "source_sha256": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+        "source_timezone": "UTC"
+      },
+      "to_exclusive": "2026-02-01"
+    },
+    {
+      "company_id": "invented-company",
+      "comparable_id": "constant-eur-perimeter-v1",
+      "from_inclusive": "2026-01-01",
+      "history_from": "2026-01-01",
+      "schedule_to_exclusive": "2027-01-01",
+      "settlements_to_exclusive": "2026-02-01",
+      "source_kind": "financial_debt",
+      "source_ref": {
+        "availability_basis": "verified",
+        "effective_at": "2026-01-01T00:00:00Z",
+        "known_on": "2026-01-31T23:59:59.999999Z",
+        "record_id": "ledger-financial_debt-1",
+        "retrieved_at": "2027-01-01T00:00:00Z",
+        "source_id": "invented-core-fixture",
+        "source_sha256": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+        "source_timezone": "UTC"
+      },
+      "to_exclusive": "2026-02-01"
+    },
+    {
+      "company_id": "invented-company",
+      "comparable_id": "constant-eur-perimeter-v1",
+      "from_inclusive": "2026-01-01",
+      "history_from": "2026-01-01",
+      "schedule_to_exclusive": "2027-01-01",
+      "settlements_to_exclusive": "2026-02-01",
+      "source_kind": "ar",
+      "source_ref": {
+        "availability_basis": "verified",
+        "effective_at": "2026-01-01T00:00:00Z",
+        "known_on": "2026-01-31T23:59:59.999999Z",
+        "record_id": "ledger-ar-1",
+        "retrieved_at": "2027-01-01T00:00:00Z",
+        "source_id": "invented-core-fixture",
+        "source_sha256": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+        "source_timezone": "UTC"
+      },
+      "to_exclusive": "2026-02-01"
+    },
+    {
+      "company_id": "invented-company",
+      "comparable_id": "constant-eur-perimeter-v1",
+      "from_inclusive": "2026-01-01",
+      "history_from": "2026-01-01",
+      "schedule_to_exclusive": "2027-01-01",
+      "settlements_to_exclusive": "2026-03-01",
+      "source_kind": "operating_ap",
+      "source_ref": {
+        "availability_basis": "verified",
+        "effective_at": "2026-01-01T00:00:00Z",
+        "known_on": "2026-02-28T23:59:59.999999Z",
+        "record_id": "ledger-operating_ap-2",
+        "retrieved_at": "2027-01-01T00:00:00Z",
+        "source_id": "invented-core-fixture",
+        "source_sha256": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+        "source_timezone": "UTC"
+      },
+      "to_exclusive": "2026-03-01"
+    },
+    {
+      "company_id": "invented-company",
+      "comparable_id": "constant-eur-perimeter-v1",
+      "from_inclusive": "2026-01-01",
+      "history_from": "2026-01-01",
+      "schedule_to_exclusive": "2027-01-01",
+      "settlements_to_exclusive": "2026-03-01",
+      "source_kind": "financial_debt",
+      "source_ref": {
+        "availability_basis": "verified",
+        "effective_at": "2026-01-01T00:00:00Z",
+        "known_on": "2026-02-28T23:59:59.999999Z",
+        "record_id": "ledger-financial_debt-2",
+        "retrieved_at": "2027-01-01T00:00:00Z",
+        "source_id": "invented-core-fixture",
+        "source_sha256": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+        "source_timezone": "UTC"
+      },
+      "to_exclusive": "2026-03-01"
+    },
+    {
+      "company_id": "invented-company",
+      "comparable_id": "constant-eur-perimeter-v1",
+      "from_inclusive": "2026-01-01",
+      "history_from": "2026-01-01",
+      "schedule_to_exclusive": "2027-01-01",
+      "settlements_to_exclusive": "2026-03-01",
+      "source_kind": "ar",
+      "source_ref": {
+        "availability_basis": "verified",
+        "effective_at": "2026-01-01T00:00:00Z",
+        "known_on": "2026-02-28T23:59:59.999999Z",
+        "record_id": "ledger-ar-2",
+        "retrieved_at": "2027-01-01T00:00:00Z",
+        "source_id": "invented-core-fixture",
+        "source_sha256": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+        "source_timezone": "UTC"
+      },
+      "to_exclusive": "2026-03-01"
+    },
+    {
+      "company_id": "invented-company",
+      "comparable_id": "constant-eur-perimeter-v1",
+      "from_inclusive": "2026-01-01",
+      "history_from": "2026-01-01",
+      "schedule_to_exclusive": "2027-01-01",
+      "settlements_to_exclusive": "2026-04-01",
+      "source_kind": "operating_ap",
+      "source_ref": {
+        "availability_basis": "verified",
+        "effective_at": "2026-01-01T00:00:00Z",
+        "known_on": "2026-03-31T23:59:59.999999Z",
+        "record_id": "ledger-operating_ap-3",
+        "retrieved_at": "2027-01-01T00:00:00Z",
+        "source_id": "invented-core-fixture",
+        "source_sha256": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+        "source_timezone": "UTC"
+      },
+      "to_exclusive": "2026-04-01"
+    },
+    {
+      "company_id": "invented-company",
+      "comparable_id": "constant-eur-perimeter-v1",
+      "from_inclusive": "2026-01-01",
+      "history_from": "2026-01-01",
+      "schedule_to_exclusive": "2027-01-01",
+      "settlements_to_exclusive": "2026-04-01",
+      "source_kind": "financial_debt",
+      "source_ref": {
+        "availability_basis": "verified",
+        "effective_at": "2026-01-01T00:00:00Z",
+        "known_on": "2026-03-31T23:59:59.999999Z",
+        "record_id": "ledger-financial_debt-3",
+        "retrieved_at": "2027-01-01T00:00:00Z",
+        "source_id": "invented-core-fixture",
+        "source_sha256": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+        "source_timezone": "UTC"
+      },
+      "to_exclusive": "2026-04-01"
+    },
+    {
+      "company_id": "invented-company",
+      "comparable_id": "constant-eur-perimeter-v1",
+      "from_inclusive": "2026-01-01",
+      "history_from": "2026-01-01",
+      "schedule_to_exclusive": "2027-01-01",
+      "settlements_to_exclusive": "2026-04-01",
+      "source_kind": "ar",
+      "source_ref": {
+        "availability_basis": "verified",
+        "effective_at": "2026-01-01T00:00:00Z",
+        "known_on": "2026-03-31T23:59:59.999999Z",
+        "record_id": "ledger-ar-3",
+        "retrieved_at": "2027-01-01T00:00:00Z",
+        "source_id": "invented-core-fixture",
+        "source_sha256": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+        "source_timezone": "UTC"
+      },
+      "to_exclusive": "2026-04-01"
+    },
+    {
+      "company_id": "invented-company",
+      "comparable_id": "constant-eur-perimeter-v1",
+      "from_inclusive": "2026-01-01",
+      "history_from": "2026-01-01",
+      "schedule_to_exclusive": "2027-01-01",
+      "settlements_to_exclusive": "2026-05-01",
+      "source_kind": "operating_ap",
+      "source_ref": {
+        "availability_basis": "verified",
+        "effective_at": "2026-01-01T00:00:00Z",
+        "known_on": "2026-04-30T23:59:59.999999Z",
+        "record_id": "ledger-operating_ap-4",
+        "retrieved_at": "2027-01-01T00:00:00Z",
+        "source_id": "invented-core-fixture",
+        "source_sha256": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+        "source_timezone": "UTC"
+      },
+      "to_exclusive": "2026-05-01"
+    },
+    {
+      "company_id": "invented-company",
+      "comparable_id": "constant-eur-perimeter-v1",
+      "from_inclusive": "2026-01-01",
+      "history_from": "2026-01-01",
+      "schedule_to_exclusive": "2027-01-01",
+      "settlements_to_exclusive": "2026-05-01",
+      "source_kind": "financial_debt",
+      "source_ref": {
+        "availability_basis": "verified",
+        "effective_at": "2026-01-01T00:00:00Z",
+        "known_on": "2026-04-30T23:59:59.999999Z",
+        "record_id": "ledger-financial_debt-4",
+        "retrieved_at": "2027-01-01T00:00:00Z",
+        "source_id": "invented-core-fixture",
+        "source_sha256": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+        "source_timezone": "UTC"
+      },
+      "to_exclusive": "2026-05-01"
+    },
+    {
+      "company_id": "invented-company",
+      "comparable_id": "constant-eur-perimeter-v1",
+      "from_inclusive": "2026-01-01",
+      "history_from": "2026-01-01",
+      "schedule_to_exclusive": "2027-01-01",
+      "settlements_to_exclusive": "2026-05-01",
+      "source_kind": "ar",
+      "source_ref": {
+        "availability_basis": "verified",
+        "effective_at": "2026-01-01T00:00:00Z",
+        "known_on": "2026-04-30T23:59:59.999999Z",
+        "record_id": "ledger-ar-4",
+        "retrieved_at": "2027-01-01T00:00:00Z",
+        "source_id": "invented-core-fixture",
+        "source_sha256": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+        "source_timezone": "UTC"
+      },
+      "to_exclusive": "2026-05-01"
+    },
+    {
+      "company_id": "invented-company",
+      "comparable_id": "constant-eur-perimeter-v1",
+      "from_inclusive": "2026-01-01",
+      "history_from": "2026-01-01",
+      "schedule_to_exclusive": "2027-01-01",
+      "settlements_to_exclusive": "2026-06-01",
+      "source_kind": "operating_ap",
+      "source_ref": {
+        "availability_basis": "verified",
+        "effective_at": "2026-01-01T00:00:00Z",
+        "known_on": "2026-05-31T23:59:59.999999Z",
+        "record_id": "ledger-operating_ap-5",
+        "retrieved_at": "2027-01-01T00:00:00Z",
+        "source_id": "invented-core-fixture",
+        "source_sha256": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+        "source_timezone": "UTC"
+      },
+      "to_exclusive": "2026-06-01"
+    },
+    {
+      "company_id": "invented-company",
+      "comparable_id": "constant-eur-perimeter-v1",
+      "from_inclusive": "2026-01-01",
+      "history_from": "2026-01-01",
+      "schedule_to_exclusive": "2027-01-01",
+      "settlements_to_exclusive": "2026-06-01",
+      "source_kind": "financial_debt",
+      "source_ref": {
+        "availability_basis": "verified",
+        "effective_at": "2026-01-01T00:00:00Z",
+        "known_on": "2026-05-31T23:59:59.999999Z",
+        "record_id": "ledger-financial_debt-5",
+        "retrieved_at": "2027-01-01T00:00:00Z",
+        "source_id": "invented-core-fixture",
+        "source_sha256": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+        "source_timezone": "UTC"
+      },
+      "to_exclusive": "2026-06-01"
+    },
+    {
+      "company_id": "invented-company",
+      "comparable_id": "constant-eur-perimeter-v1",
+      "from_inclusive": "2026-01-01",
+      "history_from": "2026-01-01",
+      "schedule_to_exclusive": "2027-01-01",
+      "settlements_to_exclusive": "2026-06-01",
+      "source_kind": "ar",
+      "source_ref": {
+        "availability_basis": "verified",
+        "effective_at": "2026-01-01T00:00:00Z",
+        "known_on": "2026-05-31T23:59:59.999999Z",
+        "record_id": "ledger-ar-5",
+        "retrieved_at": "2027-01-01T00:00:00Z",
+        "source_id": "invented-core-fixture",
+        "source_sha256": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+        "source_timezone": "UTC"
+      },
+      "to_exclusive": "2026-06-01"
+    },
+    {
+      "company_id": "invented-company",
+      "comparable_id": "constant-eur-perimeter-v1",
+      "from_inclusive": "2026-01-01",
+      "history_from": "2026-01-01",
+      "schedule_to_exclusive": "2027-01-01",
+      "settlements_to_exclusive": "2026-07-01",
+      "source_kind": "operating_ap",
+      "source_ref": {
+        "availability_basis": "verified",
+        "effective_at": "2026-01-01T00:00:00Z",
+        "known_on": "2026-06-30T23:59:59.999999Z",
+        "record_id": "ledger-operating_ap-6",
+        "retrieved_at": "2027-01-01T00:00:00Z",
+        "source_id": "invented-core-fixture",
+        "source_sha256": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+        "source_timezone": "UTC"
+      },
+      "to_exclusive": "2026-07-01"
+    },
+    {
+      "company_id": "invented-company",
+      "comparable_id": "constant-eur-perimeter-v1",
+      "from_inclusive": "2026-01-01",
+      "history_from": "2026-01-01",
+      "schedule_to_exclusive": "2027-01-01",
+      "settlements_to_exclusive": "2026-07-01",
+      "source_kind": "financial_debt",
+      "source_ref": {
+        "availability_basis": "verified",
+        "effective_at": "2026-01-01T00:00:00Z",
+        "known_on": "2026-06-30T23:59:59.999999Z",
+        "record_id": "ledger-financial_debt-6",
+        "retrieved_at": "2027-01-01T00:00:00Z",
+        "source_id": "invented-core-fixture",
+        "source_sha256": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+        "source_timezone": "UTC"
+      },
+      "to_exclusive": "2026-07-01"
+    },
+    {
+      "company_id": "invented-company",
+      "comparable_id": "constant-eur-perimeter-v1",
+      "from_inclusive": "2026-01-01",
+      "history_from": "2026-01-01",
+      "schedule_to_exclusive": "2027-01-01",
+      "settlements_to_exclusive": "2026-07-01",
+      "source_kind": "ar",
+      "source_ref": {
+        "availability_basis": "verified",
+        "effective_at": "2026-01-01T00:00:00Z",
+        "known_on": "2026-06-30T23:59:59.999999Z",
+        "record_id": "ledger-ar-6",
+        "retrieved_at": "2027-01-01T00:00:00Z",
+        "source_id": "invented-core-fixture",
+        "source_sha256": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+        "source_timezone": "UTC"
+      },
+      "to_exclusive": "2026-07-01"
+    },
+    {
+      "company_id": "invented-company",
+      "comparable_id": "constant-eur-perimeter-v1",
+      "from_inclusive": "2026-01-01",
+      "history_from": "2026-01-01",
+      "schedule_to_exclusive": "2027-01-01",
+      "settlements_to_exclusive": "2026-08-01",
+      "source_kind": "operating_ap",
+      "source_ref": {
+        "availability_basis": "verified",
+        "effective_at": "2026-01-01T00:00:00Z",
+        "known_on": "2026-07-31T23:59:59.999999Z",
+        "record_id": "ledger-operating_ap-7",
+        "retrieved_at": "2027-01-01T00:00:00Z",
+        "source_id": "invented-core-fixture",
+        "source_sha256": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+        "source_timezone": "UTC"
+      },
+      "to_exclusive": "2026-08-01"
+    },
+    {
+      "company_id": "invented-company",
+      "comparable_id": "constant-eur-perimeter-v1",
+      "from_inclusive": "2026-01-01",
+      "history_from": "2026-01-01",
+      "schedule_to_exclusive": "2027-01-01",
+      "settlements_to_exclusive": "2026-08-01",
+      "source_kind": "financial_debt",
+      "source_ref": {
+        "availability_basis": "verified",
+        "effective_at": "2026-01-01T00:00:00Z",
+        "known_on": "2026-07-31T23:59:59.999999Z",
+        "record_id": "ledger-financial_debt-7",
+        "retrieved_at": "2027-01-01T00:00:00Z",
+        "source_id": "invented-core-fixture",
+        "source_sha256": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+        "source_timezone": "UTC"
+      },
+      "to_exclusive": "2026-08-01"
+    },
+    {
+      "company_id": "invented-company",
+      "comparable_id": "constant-eur-perimeter-v1",
+      "from_inclusive": "2026-01-01",
+      "history_from": "2026-01-01",
+      "schedule_to_exclusive": "2027-01-01",
+      "settlements_to_exclusive": "2026-08-01",
+      "source_kind": "ar",
+      "source_ref": {
+        "availability_basis": "verified",
+        "effective_at": "2026-01-01T00:00:00Z",
+        "known_on": "2026-07-31T23:59:59.999999Z",
+        "record_id": "ledger-ar-7",
+        "retrieved_at": "2027-01-01T00:00:00Z",
+        "source_id": "invented-core-fixture",
+        "source_sha256": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+        "source_timezone": "UTC"
+      },
+      "to_exclusive": "2026-08-01"
+    }
+  ],
+  "principal_observations": [],
+  "records": {
+    "account": [
+      {
+        "account_id": "bank",
+        "company_id": "invented-company",
+        "currency": "EUR",
+        "effective_from": "2026-01-01",
+        "effective_to": null,
+        "product_type": "checking",
+        "schema_version": "financial-v3-input-v1",
+        "source_ref": {
+          "availability_basis": "verified",
+          "effective_at": "2026-01-01T00:00:00Z",
+          "known_on": "2026-01-01T00:00:00Z",
+          "record_id": "bank",
+          "retrieved_at": "2027-01-01T00:00:00Z",
+          "source_id": "invented-core-fixture",
+          "source_sha256": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+          "source_timezone": "UTC"
+        },
+        "unrestricted_policy": "verified_unrestricted"
+      }
+    ],
+    "amendment": [],
+    "balance_anchor": [
+      {
+        "account_id": "bank",
+        "amount_native": "2000",
+        "anchor_id": "opening",
+        "company_id": "invented-company",
+        "currency": "EUR",
+        "cutoff_semantics": "opening",
+        "independently_observed": true,
+        "measured_at": "2026-01-01T00:00:00Z",
+        "schema_version": "financial-v3-input-v1",
+        "source_ref": {
+          "availability_basis": "verified",
+          "effective_at": "2026-01-01T00:00:00Z",
+          "known_on": "2026-01-01T00:00:00Z",
+          "record_id": "opening",
+          "retrieved_at": "2027-01-01T00:00:00Z",
+          "source_id": "invented-core-fixture",
+          "source_sha256": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+          "source_timezone": "UTC"
+        },
+        "unrestricted_native": "2000"
+      },
+      {
+        "account_id": "bank",
+        "amount_native": "2200",
+        "anchor_id": "close-1",
+        "company_id": "invented-company",
+        "currency": "EUR",
+        "cutoff_semantics": "closing",
+        "independently_observed": true,
+        "measured_at": "2026-01-31T23:59:59.999999Z",
+        "schema_version": "financial-v3-input-v1",
+        "source_ref": {
+          "availability_basis": "verified",
+          "effective_at": "2026-01-01T00:00:00Z",
+          "known_on": "2026-01-31T23:59:59.999999Z",
+          "record_id": "close-1",
+          "retrieved_at": "2027-01-01T00:00:00Z",
+          "source_id": "invented-core-fixture",
+          "source_sha256": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+          "source_timezone": "UTC"
+        },
+        "unrestricted_native": "2200"
+      },
+      {
+        "account_id": "bank",
+        "amount_native": "2400",
+        "anchor_id": "close-2",
+        "company_id": "invented-company",
+        "currency": "EUR",
+        "cutoff_semantics": "closing",
+        "independently_observed": true,
+        "measured_at": "2026-02-28T23:59:59.999999Z",
+        "schema_version": "financial-v3-input-v1",
+        "source_ref": {
+          "availability_basis": "verified",
+          "effective_at": "2026-01-01T00:00:00Z",
+          "known_on": "2026-02-28T23:59:59.999999Z",
+          "record_id": "close-2",
+          "retrieved_at": "2027-01-01T00:00:00Z",
+          "source_id": "invented-core-fixture",
+          "source_sha256": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+          "source_timezone": "UTC"
+        },
+        "unrestricted_native": "2400"
+      },
+      {
+        "account_id": "bank",
+        "amount_native": "2600",
+        "anchor_id": "close-3",
+        "company_id": "invented-company",
+        "currency": "EUR",
+        "cutoff_semantics": "closing",
+        "independently_observed": true,
+        "measured_at": "2026-03-31T23:59:59.999999Z",
+        "schema_version": "financial-v3-input-v1",
+        "source_ref": {
+          "availability_basis": "verified",
+          "effective_at": "2026-01-01T00:00:00Z",
+          "known_on": "2026-03-31T23:59:59.999999Z",
+          "record_id": "close-3",
+          "retrieved_at": "2027-01-01T00:00:00Z",
+          "source_id": "invented-core-fixture",
+          "source_sha256": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+          "source_timezone": "UTC"
+        },
+        "unrestricted_native": "2600"
+      },
+      {
+        "account_id": "bank",
+        "amount_native": "2800",
+        "anchor_id": "close-4",
+        "company_id": "invented-company",
+        "currency": "EUR",
+        "cutoff_semantics": "closing",
+        "independently_observed": true,
+        "measured_at": "2026-04-30T23:59:59.999999Z",
+        "schema_version": "financial-v3-input-v1",
+        "source_ref": {
+          "availability_basis": "verified",
+          "effective_at": "2026-01-01T00:00:00Z",
+          "known_on": "2026-04-30T23:59:59.999999Z",
+          "record_id": "close-4",
+          "retrieved_at": "2027-01-01T00:00:00Z",
+          "source_id": "invented-core-fixture",
+          "source_sha256": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+          "source_timezone": "UTC"
+        },
+        "unrestricted_native": "2800"
+      },
+      {
+        "account_id": "bank",
+        "amount_native": "3000",
+        "anchor_id": "close-5",
+        "company_id": "invented-company",
+        "currency": "EUR",
+        "cutoff_semantics": "closing",
+        "independently_observed": true,
+        "measured_at": "2026-05-31T23:59:59.999999Z",
+        "schema_version": "financial-v3-input-v1",
+        "source_ref": {
+          "availability_basis": "verified",
+          "effective_at": "2026-01-01T00:00:00Z",
+          "known_on": "2026-05-31T23:59:59.999999Z",
+          "record_id": "close-5",
+          "retrieved_at": "2027-01-01T00:00:00Z",
+          "source_id": "invented-core-fixture",
+          "source_sha256": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+          "source_timezone": "UTC"
+        },
+        "unrestricted_native": "3000"
+      },
+      {
+        "account_id": "bank",
+        "amount_native": "3200",
+        "anchor_id": "close-6",
+        "company_id": "invented-company",
+        "currency": "EUR",
+        "cutoff_semantics": "closing",
+        "independently_observed": true,
+        "measured_at": "2026-06-30T23:59:59.999999Z",
+        "schema_version": "financial-v3-input-v1",
+        "source_ref": {
+          "availability_basis": "verified",
+          "effective_at": "2026-01-01T00:00:00Z",
+          "known_on": "2026-06-30T23:59:59.999999Z",
+          "record_id": "close-6",
+          "retrieved_at": "2027-01-01T00:00:00Z",
+          "source_id": "invented-core-fixture",
+          "source_sha256": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+          "source_timezone": "UTC"
+        },
+        "unrestricted_native": "3200"
+      },
+      {
+        "account_id": "bank",
+        "amount_native": "3400",
+        "anchor_id": "close-7",
+        "company_id": "invented-company",
+        "currency": "EUR",
+        "cutoff_semantics": "closing",
+        "independently_observed": true,
+        "measured_at": "2026-07-31T23:59:59.999999Z",
+        "schema_version": "financial-v3-input-v1",
+        "source_ref": {
+          "availability_basis": "verified",
+          "effective_at": "2026-01-01T00:00:00Z",
+          "known_on": "2026-07-31T23:59:59.999999Z",
+          "record_id": "close-7",
+          "retrieved_at": "2027-01-01T00:00:00Z",
+          "source_id": "invented-core-fixture",
+          "source_sha256": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+          "source_timezone": "UTC"
+        },
+        "unrestricted_native": "3400"
+      }
+    ],
+    "cash_movement": [
+      {
+        "account_id": "bank",
+        "amount_native": "1000",
+        "booked_at": "2026-01-01T12:00:00Z",
+        "booking_status": "booked",
+        "classification_evidence": "receipt-1-classification",
+        "company_id": "invented-company",
+        "currency": "EUR",
+        "economic_bucket": "operating",
+        "movement_id": "receipt-1",
+        "obligation_allocation_ids": [],
+        "schema_version": "financial-v3-input-v1",
+        "source_ref": {
+          "availability_basis": "verified",
+          "effective_at": "2026-01-01T00:00:00Z",
+          "known_on": "2026-01-01T12:00:00Z",
+          "record_id": "receipt-1",
+          "retrieved_at": "2027-01-01T00:00:00Z",
+          "source_id": "invented-core-fixture",
+          "source_sha256": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+          "source_timezone": "UTC"
+        },
+        "transfer_pair_id": null,
+        "value_at": null
+      },
+      {
+        "account_id": "bank",
+        "amount_native": "-800",
+        "booked_at": "2026-01-20T12:00:00Z",
+        "booking_status": "booked",
+        "classification_evidence": "pay-1-classification",
+        "company_id": "invented-company",
+        "currency": "EUR",
+        "economic_bucket": "operating",
+        "movement_id": "pay-1",
+        "obligation_allocation_ids": [
+          "alloc-1"
+        ],
+        "schema_version": "financial-v3-input-v1",
+        "source_ref": {
+          "availability_basis": "verified",
+          "effective_at": "2026-01-01T00:00:00Z",
+          "known_on": "2026-01-20T12:00:00Z",
+          "record_id": "pay-1",
+          "retrieved_at": "2027-01-01T00:00:00Z",
+          "source_id": "invented-core-fixture",
+          "source_sha256": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+          "source_timezone": "UTC"
+        },
+        "transfer_pair_id": null,
+        "value_at": null
+      },
+      {
+        "account_id": "bank",
+        "amount_native": "1000",
+        "booked_at": "2026-02-01T12:00:00Z",
+        "booking_status": "booked",
+        "classification_evidence": "receipt-2-classification",
+        "company_id": "invented-company",
+        "currency": "EUR",
+        "economic_bucket": "operating",
+        "movement_id": "receipt-2",
+        "obligation_allocation_ids": [],
+        "schema_version": "financial-v3-input-v1",
+        "source_ref": {
+          "availability_basis": "verified",
+          "effective_at": "2026-01-01T00:00:00Z",
+          "known_on": "2026-02-01T12:00:00Z",
+          "record_id": "receipt-2",
+          "retrieved_at": "2027-01-01T00:00:00Z",
+          "source_id": "invented-core-fixture",
+          "source_sha256": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+          "source_timezone": "UTC"
+        },
+        "transfer_pair_id": null,
+        "value_at": null
+      },
+      {
+        "account_id": "bank",
+        "amount_native": "-800",
+        "booked_at": "2026-02-20T12:00:00Z",
+        "booking_status": "booked",
+        "classification_evidence": "pay-2-classification",
+        "company_id": "invented-company",
+        "currency": "EUR",
+        "economic_bucket": "operating",
+        "movement_id": "pay-2",
+        "obligation_allocation_ids": [
+          "alloc-2"
+        ],
+        "schema_version": "financial-v3-input-v1",
+        "source_ref": {
+          "availability_basis": "verified",
+          "effective_at": "2026-01-01T00:00:00Z",
+          "known_on": "2026-02-20T12:00:00Z",
+          "record_id": "pay-2",
+          "retrieved_at": "2027-01-01T00:00:00Z",
+          "source_id": "invented-core-fixture",
+          "source_sha256": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+          "source_timezone": "UTC"
+        },
+        "transfer_pair_id": null,
+        "value_at": null
+      },
+      {
+        "account_id": "bank",
+        "amount_native": "1000",
+        "booked_at": "2026-03-01T12:00:00Z",
+        "booking_status": "booked",
+        "classification_evidence": "receipt-3-classification",
+        "company_id": "invented-company",
+        "currency": "EUR",
+        "economic_bucket": "operating",
+        "movement_id": "receipt-3",
+        "obligation_allocation_ids": [],
+        "schema_version": "financial-v3-input-v1",
+        "source_ref": {
+          "availability_basis": "verified",
+          "effective_at": "2026-01-01T00:00:00Z",
+          "known_on": "2026-03-01T12:00:00Z",
+          "record_id": "receipt-3",
+          "retrieved_at": "2027-01-01T00:00:00Z",
+          "source_id": "invented-core-fixture",
+          "source_sha256": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+          "source_timezone": "UTC"
+        },
+        "transfer_pair_id": null,
+        "value_at": null
+      },
+      {
+        "account_id": "bank",
+        "amount_native": "-800",
+        "booked_at": "2026-03-20T12:00:00Z",
+        "booking_status": "booked",
+        "classification_evidence": "pay-3-classification",
+        "company_id": "invented-company",
+        "currency": "EUR",
+        "economic_bucket": "operating",
+        "movement_id": "pay-3",
+        "obligation_allocation_ids": [
+          "alloc-3"
+        ],
+        "schema_version": "financial-v3-input-v1",
+        "source_ref": {
+          "availability_basis": "verified",
+          "effective_at": "2026-01-01T00:00:00Z",
+          "known_on": "2026-03-20T12:00:00Z",
+          "record_id": "pay-3",
+          "retrieved_at": "2027-01-01T00:00:00Z",
+          "source_id": "invented-core-fixture",
+          "source_sha256": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+          "source_timezone": "UTC"
+        },
+        "transfer_pair_id": null,
+        "value_at": null
+      },
+      {
+        "account_id": "bank",
+        "amount_native": "1000",
+        "booked_at": "2026-04-01T12:00:00Z",
+        "booking_status": "booked",
+        "classification_evidence": "receipt-4-classification",
+        "company_id": "invented-company",
+        "currency": "EUR",
+        "economic_bucket": "operating",
+        "movement_id": "receipt-4",
+        "obligation_allocation_ids": [],
+        "schema_version": "financial-v3-input-v1",
+        "source_ref": {
+          "availability_basis": "verified",
+          "effective_at": "2026-01-01T00:00:00Z",
+          "known_on": "2026-04-01T12:00:00Z",
+          "record_id": "receipt-4",
+          "retrieved_at": "2027-01-01T00:00:00Z",
+          "source_id": "invented-core-fixture",
+          "source_sha256": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+          "source_timezone": "UTC"
+        },
+        "transfer_pair_id": null,
+        "value_at": null
+      },
+      {
+        "account_id": "bank",
+        "amount_native": "-800",
+        "booked_at": "2026-04-20T12:00:00Z",
+        "booking_status": "booked",
+        "classification_evidence": "pay-4-classification",
+        "company_id": "invented-company",
+        "currency": "EUR",
+        "economic_bucket": "operating",
+        "movement_id": "pay-4",
+        "obligation_allocation_ids": [
+          "alloc-4"
+        ],
+        "schema_version": "financial-v3-input-v1",
+        "source_ref": {
+          "availability_basis": "verified",
+          "effective_at": "2026-01-01T00:00:00Z",
+          "known_on": "2026-04-20T12:00:00Z",
+          "record_id": "pay-4",
+          "retrieved_at": "2027-01-01T00:00:00Z",
+          "source_id": "invented-core-fixture",
+          "source_sha256": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+          "source_timezone": "UTC"
+        },
+        "transfer_pair_id": null,
+        "value_at": null
+      },
+      {
+        "account_id": "bank",
+        "amount_native": "1000",
+        "booked_at": "2026-05-01T12:00:00Z",
+        "booking_status": "booked",
+        "classification_evidence": "receipt-5-classification",
+        "company_id": "invented-company",
+        "currency": "EUR",
+        "economic_bucket": "operating",
+        "movement_id": "receipt-5",
+        "obligation_allocation_ids": [],
+        "schema_version": "financial-v3-input-v1",
+        "source_ref": {
+          "availability_basis": "verified",
+          "effective_at": "2026-01-01T00:00:00Z",
+          "known_on": "2026-05-01T12:00:00Z",
+          "record_id": "receipt-5",
+          "retrieved_at": "2027-01-01T00:00:00Z",
+          "source_id": "invented-core-fixture",
+          "source_sha256": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+          "source_timezone": "UTC"
+        },
+        "transfer_pair_id": null,
+        "value_at": null
+      },
+      {
+        "account_id": "bank",
+        "amount_native": "-800",
+        "booked_at": "2026-05-20T12:00:00Z",
+        "booking_status": "booked",
+        "classification_evidence": "pay-5-classification",
+        "company_id": "invented-company",
+        "currency": "EUR",
+        "economic_bucket": "operating",
+        "movement_id": "pay-5",
+        "obligation_allocation_ids": [
+          "alloc-5"
+        ],
+        "schema_version": "financial-v3-input-v1",
+        "source_ref": {
+          "availability_basis": "verified",
+          "effective_at": "2026-01-01T00:00:00Z",
+          "known_on": "2026-05-20T12:00:00Z",
+          "record_id": "pay-5",
+          "retrieved_at": "2027-01-01T00:00:00Z",
+          "source_id": "invented-core-fixture",
+          "source_sha256": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+          "source_timezone": "UTC"
+        },
+        "transfer_pair_id": null,
+        "value_at": null
+      },
+      {
+        "account_id": "bank",
+        "amount_native": "1000",
+        "booked_at": "2026-06-01T12:00:00Z",
+        "booking_status": "booked",
+        "classification_evidence": "receipt-6-classification",
+        "company_id": "invented-company",
+        "currency": "EUR",
+        "economic_bucket": "operating",
+        "movement_id": "receipt-6",
+        "obligation_allocation_ids": [],
+        "schema_version": "financial-v3-input-v1",
+        "source_ref": {
+          "availability_basis": "verified",
+          "effective_at": "2026-01-01T00:00:00Z",
+          "known_on": "2026-06-01T12:00:00Z",
+          "record_id": "receipt-6",
+          "retrieved_at": "2027-01-01T00:00:00Z",
+          "source_id": "invented-core-fixture",
+          "source_sha256": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+          "source_timezone": "UTC"
+        },
+        "transfer_pair_id": null,
+        "value_at": null
+      },
+      {
+        "account_id": "bank",
+        "amount_native": "-800",
+        "booked_at": "2026-06-20T12:00:00Z",
+        "booking_status": "booked",
+        "classification_evidence": "pay-6-classification",
+        "company_id": "invented-company",
+        "currency": "EUR",
+        "economic_bucket": "operating",
+        "movement_id": "pay-6",
+        "obligation_allocation_ids": [
+          "alloc-6"
+        ],
+        "schema_version": "financial-v3-input-v1",
+        "source_ref": {
+          "availability_basis": "verified",
+          "effective_at": "2026-01-01T00:00:00Z",
+          "known_on": "2026-06-20T12:00:00Z",
+          "record_id": "pay-6",
+          "retrieved_at": "2027-01-01T00:00:00Z",
+          "source_id": "invented-core-fixture",
+          "source_sha256": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+          "source_timezone": "UTC"
+        },
+        "transfer_pair_id": null,
+        "value_at": null
+      },
+      {
+        "account_id": "bank",
+        "amount_native": "1000",
+        "booked_at": "2026-07-01T12:00:00Z",
+        "booking_status": "booked",
+        "classification_evidence": "receipt-7-classification",
+        "company_id": "invented-company",
+        "currency": "EUR",
+        "economic_bucket": "operating",
+        "movement_id": "receipt-7",
+        "obligation_allocation_ids": [],
+        "schema_version": "financial-v3-input-v1",
+        "source_ref": {
+          "availability_basis": "verified",
+          "effective_at": "2026-01-01T00:00:00Z",
+          "known_on": "2026-07-01T12:00:00Z",
+          "record_id": "receipt-7",
+          "retrieved_at": "2027-01-01T00:00:00Z",
+          "source_id": "invented-core-fixture",
+          "source_sha256": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+          "source_timezone": "UTC"
+        },
+        "transfer_pair_id": null,
+        "value_at": null
+      },
+      {
+        "account_id": "bank",
+        "amount_native": "-800",
+        "booked_at": "2026-07-20T12:00:00Z",
+        "booking_status": "booked",
+        "classification_evidence": "pay-7-classification",
+        "company_id": "invented-company",
+        "currency": "EUR",
+        "economic_bucket": "operating",
+        "movement_id": "pay-7",
+        "obligation_allocation_ids": [
+          "alloc-7"
+        ],
+        "schema_version": "financial-v3-input-v1",
+        "source_ref": {
+          "availability_basis": "verified",
+          "effective_at": "2026-01-01T00:00:00Z",
+          "known_on": "2026-07-20T12:00:00Z",
+          "record_id": "pay-7",
+          "retrieved_at": "2027-01-01T00:00:00Z",
+          "source_id": "invented-core-fixture",
+          "source_sha256": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+          "source_timezone": "UTC"
+        },
+        "transfer_pair_id": null,
+        "value_at": null
+      }
+    ],
+    "coverage_interval": [
+      {
+        "account_id": "bank",
+        "company_id": "invented-company",
+        "coverage_id": "cov-1",
+        "from_inclusive": "2026-01-01T00:00:00Z",
+        "genuine_zero_activity": false,
+        "schema_version": "financial-v3-input-v1",
+        "source_ref": {
+          "availability_basis": "verified",
+          "effective_at": "2026-01-01T00:00:00Z",
+          "known_on": "2026-01-31T23:59:59.999999Z",
+          "record_id": "cov-1",
+          "retrieved_at": "2027-01-01T00:00:00Z",
+          "source_id": "invented-core-fixture",
+          "source_sha256": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+          "source_timezone": "UTC"
+        },
+        "statement_complete": true,
+        "to_exclusive": "2026-02-01T00:00:00Z"
+      },
+      {
+        "account_id": "bank",
+        "company_id": "invented-company",
+        "coverage_id": "cov-2",
+        "from_inclusive": "2026-02-01T00:00:00Z",
+        "genuine_zero_activity": false,
+        "schema_version": "financial-v3-input-v1",
+        "source_ref": {
+          "availability_basis": "verified",
+          "effective_at": "2026-01-01T00:00:00Z",
+          "known_on": "2026-02-28T23:59:59.999999Z",
+          "record_id": "cov-2",
+          "retrieved_at": "2027-01-01T00:00:00Z",
+          "source_id": "invented-core-fixture",
+          "source_sha256": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+          "source_timezone": "UTC"
+        },
+        "statement_complete": true,
+        "to_exclusive": "2026-03-01T00:00:00Z"
+      },
+      {
+        "account_id": "bank",
+        "company_id": "invented-company",
+        "coverage_id": "cov-3",
+        "from_inclusive": "2026-03-01T00:00:00Z",
+        "genuine_zero_activity": false,
+        "schema_version": "financial-v3-input-v1",
+        "source_ref": {
+          "availability_basis": "verified",
+          "effective_at": "2026-01-01T00:00:00Z",
+          "known_on": "2026-03-31T23:59:59.999999Z",
+          "record_id": "cov-3",
+          "retrieved_at": "2027-01-01T00:00:00Z",
+          "source_id": "invented-core-fixture",
+          "source_sha256": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+          "source_timezone": "UTC"
+        },
+        "statement_complete": true,
+        "to_exclusive": "2026-04-01T00:00:00Z"
+      },
+      {
+        "account_id": "bank",
+        "company_id": "invented-company",
+        "coverage_id": "cov-4",
+        "from_inclusive": "2026-04-01T00:00:00Z",
+        "genuine_zero_activity": false,
+        "schema_version": "financial-v3-input-v1",
+        "source_ref": {
+          "availability_basis": "verified",
+          "effective_at": "2026-01-01T00:00:00Z",
+          "known_on": "2026-04-30T23:59:59.999999Z",
+          "record_id": "cov-4",
+          "retrieved_at": "2027-01-01T00:00:00Z",
+          "source_id": "invented-core-fixture",
+          "source_sha256": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+          "source_timezone": "UTC"
+        },
+        "statement_complete": true,
+        "to_exclusive": "2026-05-01T00:00:00Z"
+      },
+      {
+        "account_id": "bank",
+        "company_id": "invented-company",
+        "coverage_id": "cov-5",
+        "from_inclusive": "2026-05-01T00:00:00Z",
+        "genuine_zero_activity": false,
+        "schema_version": "financial-v3-input-v1",
+        "source_ref": {
+          "availability_basis": "verified",
+          "effective_at": "2026-01-01T00:00:00Z",
+          "known_on": "2026-05-31T23:59:59.999999Z",
+          "record_id": "cov-5",
+          "retrieved_at": "2027-01-01T00:00:00Z",
+          "source_id": "invented-core-fixture",
+          "source_sha256": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+          "source_timezone": "UTC"
+        },
+        "statement_complete": true,
+        "to_exclusive": "2026-06-01T00:00:00Z"
+      },
+      {
+        "account_id": "bank",
+        "company_id": "invented-company",
+        "coverage_id": "cov-6",
+        "from_inclusive": "2026-06-01T00:00:00Z",
+        "genuine_zero_activity": false,
+        "schema_version": "financial-v3-input-v1",
+        "source_ref": {
+          "availability_basis": "verified",
+          "effective_at": "2026-01-01T00:00:00Z",
+          "known_on": "2026-06-30T23:59:59.999999Z",
+          "record_id": "cov-6",
+          "retrieved_at": "2027-01-01T00:00:00Z",
+          "source_id": "invented-core-fixture",
+          "source_sha256": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+          "source_timezone": "UTC"
+        },
+        "statement_complete": true,
+        "to_exclusive": "2026-07-01T00:00:00Z"
+      },
+      {
+        "account_id": "bank",
+        "company_id": "invented-company",
+        "coverage_id": "cov-7",
+        "from_inclusive": "2026-07-01T00:00:00Z",
+        "genuine_zero_activity": false,
+        "schema_version": "financial-v3-input-v1",
+        "source_ref": {
+          "availability_basis": "verified",
+          "effective_at": "2026-01-01T00:00:00Z",
+          "known_on": "2026-07-31T23:59:59.999999Z",
+          "record_id": "cov-7",
+          "retrieved_at": "2027-01-01T00:00:00Z",
+          "source_id": "invented-core-fixture",
+          "source_sha256": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+          "source_timezone": "UTC"
+        },
+        "statement_complete": true,
+        "to_exclusive": "2026-08-01T00:00:00Z"
+      }
+    ],
+    "fx_observation": [],
+    "obligation": [
+      {
+        "company_id": "invented-company",
+        "currency": "EUR",
+        "due_date": "2026-01-20",
+        "effective_from": "2026-01-01",
+        "effective_to": null,
+        "financial_product_id": null,
+        "installment_id": null,
+        "invoice_id": "ap-1",
+        "kind": "operating_ap",
+        "obligation_id": "ap-1",
+        "principal_or_face_amount": "800",
+        "role_verified": true,
+        "schema_version": "financial-v3-input-v1",
+        "source_ref": {
+          "availability_basis": "verified",
+          "effective_at": "2026-01-01T00:00:00Z",
+          "known_on": "2026-01-01T00:00:00Z",
+          "record_id": "ap-1",
+          "retrieved_at": "2027-01-01T00:00:00Z",
+          "source_id": "invented-core-fixture",
+          "source_sha256": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+          "source_timezone": "UTC"
+        },
+        "version_id": "v1"
+      },
+      {
+        "company_id": "invented-company",
+        "currency": "EUR",
+        "due_date": "2026-02-20",
+        "effective_from": "2026-01-01",
+        "effective_to": null,
+        "financial_product_id": null,
+        "installment_id": null,
+        "invoice_id": "ap-2",
+        "kind": "operating_ap",
+        "obligation_id": "ap-2",
+        "principal_or_face_amount": "800",
+        "role_verified": true,
+        "schema_version": "financial-v3-input-v1",
+        "source_ref": {
+          "availability_basis": "verified",
+          "effective_at": "2026-01-01T00:00:00Z",
+          "known_on": "2026-02-01T00:00:00Z",
+          "record_id": "ap-2",
+          "retrieved_at": "2027-01-01T00:00:00Z",
+          "source_id": "invented-core-fixture",
+          "source_sha256": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+          "source_timezone": "UTC"
+        },
+        "version_id": "v1"
+      },
+      {
+        "company_id": "invented-company",
+        "currency": "EUR",
+        "due_date": "2026-03-20",
+        "effective_from": "2026-01-01",
+        "effective_to": null,
+        "financial_product_id": null,
+        "installment_id": null,
+        "invoice_id": "ap-3",
+        "kind": "operating_ap",
+        "obligation_id": "ap-3",
+        "principal_or_face_amount": "800",
+        "role_verified": true,
+        "schema_version": "financial-v3-input-v1",
+        "source_ref": {
+          "availability_basis": "verified",
+          "effective_at": "2026-01-01T00:00:00Z",
+          "known_on": "2026-03-01T00:00:00Z",
+          "record_id": "ap-3",
+          "retrieved_at": "2027-01-01T00:00:00Z",
+          "source_id": "invented-core-fixture",
+          "source_sha256": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+          "source_timezone": "UTC"
+        },
+        "version_id": "v1"
+      },
+      {
+        "company_id": "invented-company",
+        "currency": "EUR",
+        "due_date": "2026-04-20",
+        "effective_from": "2026-01-01",
+        "effective_to": null,
+        "financial_product_id": null,
+        "installment_id": null,
+        "invoice_id": "ap-4",
+        "kind": "operating_ap",
+        "obligation_id": "ap-4",
+        "principal_or_face_amount": "800",
+        "role_verified": true,
+        "schema_version": "financial-v3-input-v1",
+        "source_ref": {
+          "availability_basis": "verified",
+          "effective_at": "2026-01-01T00:00:00Z",
+          "known_on": "2026-04-01T00:00:00Z",
+          "record_id": "ap-4",
+          "retrieved_at": "2027-01-01T00:00:00Z",
+          "source_id": "invented-core-fixture",
+          "source_sha256": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+          "source_timezone": "UTC"
+        },
+        "version_id": "v1"
+      },
+      {
+        "company_id": "invented-company",
+        "currency": "EUR",
+        "due_date": "2026-05-20",
+        "effective_from": "2026-01-01",
+        "effective_to": null,
+        "financial_product_id": null,
+        "installment_id": null,
+        "invoice_id": "ap-5",
+        "kind": "operating_ap",
+        "obligation_id": "ap-5",
+        "principal_or_face_amount": "800",
+        "role_verified": true,
+        "schema_version": "financial-v3-input-v1",
+        "source_ref": {
+          "availability_basis": "verified",
+          "effective_at": "2026-01-01T00:00:00Z",
+          "known_on": "2026-05-01T00:00:00Z",
+          "record_id": "ap-5",
+          "retrieved_at": "2027-01-01T00:00:00Z",
+          "source_id": "invented-core-fixture",
+          "source_sha256": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+          "source_timezone": "UTC"
+        },
+        "version_id": "v1"
+      },
+      {
+        "company_id": "invented-company",
+        "currency": "EUR",
+        "due_date": "2026-06-20",
+        "effective_from": "2026-01-01",
+        "effective_to": null,
+        "financial_product_id": null,
+        "installment_id": null,
+        "invoice_id": "ap-6",
+        "kind": "operating_ap",
+        "obligation_id": "ap-6",
+        "principal_or_face_amount": "800",
+        "role_verified": true,
+        "schema_version": "financial-v3-input-v1",
+        "source_ref": {
+          "availability_basis": "verified",
+          "effective_at": "2026-01-01T00:00:00Z",
+          "known_on": "2026-06-01T00:00:00Z",
+          "record_id": "ap-6",
+          "retrieved_at": "2027-01-01T00:00:00Z",
+          "source_id": "invented-core-fixture",
+          "source_sha256": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+          "source_timezone": "UTC"
+        },
+        "version_id": "v1"
+      },
+      {
+        "company_id": "invented-company",
+        "currency": "EUR",
+        "due_date": "2026-07-20",
+        "effective_from": "2026-01-01",
+        "effective_to": null,
+        "financial_product_id": null,
+        "installment_id": null,
+        "invoice_id": "ap-7",
+        "kind": "operating_ap",
+        "obligation_id": "ap-7",
+        "principal_or_face_amount": "800",
+        "role_verified": true,
+        "schema_version": "financial-v3-input-v1",
+        "source_ref": {
+          "availability_basis": "verified",
+          "effective_at": "2026-01-01T00:00:00Z",
+          "known_on": "2026-07-01T00:00:00Z",
+          "record_id": "ap-7",
+          "retrieved_at": "2027-01-01T00:00:00Z",
+          "source_id": "invented-core-fixture",
+          "source_sha256": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+          "source_timezone": "UTC"
+        },
+        "version_id": "v1"
+      }
+    ],
+    "settlement": [
+      {
+        "allocation_id": "alloc-1",
+        "allocation_policy": "explicit",
+        "amount_native": "800",
+        "company_id": "invented-company",
+        "component": "trade",
+        "currency": "EUR",
+        "movement_id": "pay-1",
+        "obligation_id": "ap-1",
+        "paid_at": "2026-01-20T12:00:00Z",
+        "schema_version": "financial-v3-input-v1",
+        "source_ref": {
+          "availability_basis": "verified",
+          "effective_at": "2026-01-01T00:00:00Z",
+          "known_on": "2026-01-20T12:00:00Z",
+          "record_id": "alloc-1",
+          "retrieved_at": "2027-01-01T00:00:00Z",
+          "source_id": "invented-core-fixture",
+          "source_sha256": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+          "source_timezone": "UTC"
+        }
+      },
+      {
+        "allocation_id": "alloc-2",
+        "allocation_policy": "explicit",
+        "amount_native": "800",
+        "company_id": "invented-company",
+        "component": "trade",
+        "currency": "EUR",
+        "movement_id": "pay-2",
+        "obligation_id": "ap-2",
+        "paid_at": "2026-02-20T12:00:00Z",
+        "schema_version": "financial-v3-input-v1",
+        "source_ref": {
+          "availability_basis": "verified",
+          "effective_at": "2026-01-01T00:00:00Z",
+          "known_on": "2026-02-20T12:00:00Z",
+          "record_id": "alloc-2",
+          "retrieved_at": "2027-01-01T00:00:00Z",
+          "source_id": "invented-core-fixture",
+          "source_sha256": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+          "source_timezone": "UTC"
+        }
+      },
+      {
+        "allocation_id": "alloc-3",
+        "allocation_policy": "explicit",
+        "amount_native": "800",
+        "company_id": "invented-company",
+        "component": "trade",
+        "currency": "EUR",
+        "movement_id": "pay-3",
+        "obligation_id": "ap-3",
+        "paid_at": "2026-03-20T12:00:00Z",
+        "schema_version": "financial-v3-input-v1",
+        "source_ref": {
+          "availability_basis": "verified",
+          "effective_at": "2026-01-01T00:00:00Z",
+          "known_on": "2026-03-20T12:00:00Z",
+          "record_id": "alloc-3",
+          "retrieved_at": "2027-01-01T00:00:00Z",
+          "source_id": "invented-core-fixture",
+          "source_sha256": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+          "source_timezone": "UTC"
+        }
+      },
+      {
+        "allocation_id": "alloc-4",
+        "allocation_policy": "explicit",
+        "amount_native": "800",
+        "company_id": "invented-company",
+        "component": "trade",
+        "currency": "EUR",
+        "movement_id": "pay-4",
+        "obligation_id": "ap-4",
+        "paid_at": "2026-04-20T12:00:00Z",
+        "schema_version": "financial-v3-input-v1",
+        "source_ref": {
+          "availability_basis": "verified",
+          "effective_at": "2026-01-01T00:00:00Z",
+          "known_on": "2026-04-20T12:00:00Z",
+          "record_id": "alloc-4",
+          "retrieved_at": "2027-01-01T00:00:00Z",
+          "source_id": "invented-core-fixture",
+          "source_sha256": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+          "source_timezone": "UTC"
+        }
+      },
+      {
+        "allocation_id": "alloc-5",
+        "allocation_policy": "explicit",
+        "amount_native": "800",
+        "company_id": "invented-company",
+        "component": "trade",
+        "currency": "EUR",
+        "movement_id": "pay-5",
+        "obligation_id": "ap-5",
+        "paid_at": "2026-05-20T12:00:00Z",
+        "schema_version": "financial-v3-input-v1",
+        "source_ref": {
+          "availability_basis": "verified",
+          "effective_at": "2026-01-01T00:00:00Z",
+          "known_on": "2026-05-20T12:00:00Z",
+          "record_id": "alloc-5",
+          "retrieved_at": "2027-01-01T00:00:00Z",
+          "source_id": "invented-core-fixture",
+          "source_sha256": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+          "source_timezone": "UTC"
+        }
+      },
+      {
+        "allocation_id": "alloc-6",
+        "allocation_policy": "explicit",
+        "amount_native": "800",
+        "company_id": "invented-company",
+        "component": "trade",
+        "currency": "EUR",
+        "movement_id": "pay-6",
+        "obligation_id": "ap-6",
+        "paid_at": "2026-06-20T12:00:00Z",
+        "schema_version": "financial-v3-input-v1",
+        "source_ref": {
+          "availability_basis": "verified",
+          "effective_at": "2026-01-01T00:00:00Z",
+          "known_on": "2026-06-20T12:00:00Z",
+          "record_id": "alloc-6",
+          "retrieved_at": "2027-01-01T00:00:00Z",
+          "source_id": "invented-core-fixture",
+          "source_sha256": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+          "source_timezone": "UTC"
+        }
+      },
+      {
+        "allocation_id": "alloc-7",
+        "allocation_policy": "explicit",
+        "amount_native": "800",
+        "company_id": "invented-company",
+        "component": "trade",
+        "currency": "EUR",
+        "movement_id": "pay-7",
+        "obligation_id": "ap-7",
+        "paid_at": "2026-07-20T12:00:00Z",
+        "schema_version": "financial-v3-input-v1",
+        "source_ref": {
+          "availability_basis": "verified",
+          "effective_at": "2026-01-01T00:00:00Z",
+          "known_on": "2026-07-20T12:00:00Z",
+          "record_id": "alloc-7",
+          "retrieved_at": "2027-01-01T00:00:00Z",
+          "source_id": "invented-core-fixture",
+          "source_sha256": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+          "source_timezone": "UTC"
+        }
+      }
+    ],
+    "universe_attestation": [
+      {
+        "attestation_id": "cash",
+        "company_id": "invented-company",
+        "effective_from": "2026-01-01",
+        "effective_to": "2027-01-01",
+        "exhaustive": true,
+        "explicit_zero": false,
+        "schema_version": "financial-v3-input-v1",
+        "source_kind": "cash",
+        "source_ref": {
+          "availability_basis": "verified",
+          "effective_at": "2026-01-01T00:00:00Z",
+          "known_on": "2026-01-01T00:00:00Z",
+          "record_id": "cash",
+          "retrieved_at": "2027-01-01T00:00:00Z",
+          "source_id": "invented-core-fixture",
+          "source_sha256": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+          "source_timezone": "UTC"
+        }
+      },
+      {
+        "attestation_id": "operating_ap",
+        "company_id": "invented-company",
+        "effective_from": "2026-01-01",
+        "effective_to": "2027-01-01",
+        "exhaustive": true,
+        "explicit_zero": false,
+        "schema_version": "financial-v3-input-v1",
+        "source_kind": "operating_ap",
+        "source_ref": {
+          "availability_basis": "verified",
+          "effective_at": "2026-01-01T00:00:00Z",
+          "known_on": "2026-01-01T00:00:00Z",
+          "record_id": "operating_ap",
+          "retrieved_at": "2027-01-01T00:00:00Z",
+          "source_id": "invented-core-fixture",
+          "source_sha256": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+          "source_timezone": "UTC"
+        }
+      },
+      {
+        "attestation_id": "financial_debt",
+        "company_id": "invented-company",
+        "effective_from": "2026-01-01",
+        "effective_to": "2027-01-01",
+        "exhaustive": true,
+        "explicit_zero": true,
+        "schema_version": "financial-v3-input-v1",
+        "source_kind": "financial_debt",
+        "source_ref": {
+          "availability_basis": "verified",
+          "effective_at": "2026-01-01T00:00:00Z",
+          "known_on": "2026-01-01T00:00:00Z",
+          "record_id": "financial_debt",
+          "retrieved_at": "2027-01-01T00:00:00Z",
+          "source_id": "invented-core-fixture",
+          "source_sha256": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+          "source_timezone": "UTC"
+        }
+      },
+      {
+        "attestation_id": "ar",
+        "company_id": "invented-company",
+        "effective_from": "2026-01-01",
+        "effective_to": "2027-01-01",
+        "exhaustive": true,
+        "explicit_zero": true,
+        "schema_version": "financial-v3-input-v1",
+        "source_kind": "ar",
+        "source_ref": {
+          "availability_basis": "verified",
+          "effective_at": "2026-01-01T00:00:00Z",
+          "known_on": "2026-01-01T00:00:00Z",
+          "record_id": "ar",
+          "retrieved_at": "2027-01-01T00:00:00Z",
+          "source_id": "invented-core-fixture",
+          "source_sha256": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+          "source_timezone": "UTC"
+        }
+      }
+    ]
+  },
+  "reporting_currency": "EUR",
+  "request_id": "example-request",
+  "schema_version": "predictive-assessment-1",
+  "snapshot_id": "example-snapshot",
+  "view": "as_of"
+}

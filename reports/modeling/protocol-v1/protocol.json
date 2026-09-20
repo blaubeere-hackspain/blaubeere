@@ -1,0 +1,158 @@
+{
+  "acceptance": {
+    "baseline": "Constant p=mean(y_train); Brier baseline=mean((y_eval-p)^2), never fitted on evaluation",
+    "brier_max_baseline_ratio": 0.95,
+    "insufficient_support": "blocked; no metrics or success claim; no relaxing cuts after outcomes",
+    "pr_auc": "average_precision > evaluation_prevalence",
+    "required_on": [
+      "fold1_validation",
+      "fold2_validation",
+      "final_test"
+    ]
+  },
+  "binding": {
+    "current_pointer_sha256": "1de7ef03dd4af13b481bf74c50b7201684a0146eb206b36cd0a90330a6e68d33",
+    "duckdb": "1.5.5",
+    "input_sha256": {
+      "data/marts/panel_flujos.parquet": "af5cf4be59d9e3e1a98841208b69b029127345cd9c02a47a553e986dc0c7ebd7",
+      "data/marts/targets_proxy.parquet": "6529ebeadd26f67925da0d7f2d0ed155295a57598393b7fdb0c6167f958f4fc0"
+    },
+    "panel_schema": {
+      "ambiguo_entradas_conocido_eur": "DOUBLE",
+      "ambiguo_salidas_conocido_eur": "DOUBLE",
+      "available_at": "DATE",
+      "cobros_operativos_conocido_eur": "DOUBLE",
+      "company_id": "VARCHAR",
+      "es_calentamiento": "BOOLEAN",
+      "financiacion_entradas_conocido_eur": "DOUBLE",
+      "financiacion_salidas_conocido_eur": "DOUBLE",
+      "group_id": "VARCHAR",
+      "month": "DATE",
+      "n_cuentas_activas": "BIGINT",
+      "n_sin_eur": "BIGINT",
+      "n_tx_caja": "BIGINT",
+      "neto_caja_eur": "DOUBLE",
+      "operativo_max_eur": "DOUBLE",
+      "operativo_max_sin_atipicos_eur": "DOUBLE",
+      "operativo_min_eur": "DOUBLE",
+      "operativo_min_sin_atipicos_eur": "DOUBLE",
+      "pagos_operativos_conocido_eur": "DOUBLE",
+      "tiene_actividad_caja": "BOOLEAN",
+      "volumen_caja_conocido_eur": "DOUBLE"
+    },
+    "python": "3.13.15",
+    "raw_input_sha256": {
+      "balances.csv": "86664c229cf52554d75d7efb864fc07a94a1bebcd61a3ac85abc344f3ba2a30c",
+      "banking_products.csv": "0fc5aa20fea32981a962cc08251720ece3f2afad8495910111d2fd8b16514d3c",
+      "companies.csv": "5496ad00a1e9228f7e756a55c71c512fd06a73ad45a09ce3f103a620a5ad72ae",
+      "debt_products.csv": "bf38430ccd15f6a9ca8769113c5f47d4aeee8fe55c425687731481cd002f05d8",
+      "debt_schedule_config.csv": "b0d6cc3e6810e31d526eb7f4be3c2abe31496f74f5ddd58163876d60de168ea2",
+      "groups.csv": "fa18d3f42cd24d7640bff22d7a9504293574c2338ce85d425e3134f18f169a8c",
+      "invoices.csv": "6686bd878244881bac78348a108852f3f30713ef244267f1fa3754b9be619c53",
+      "transactions.csv": "000a6820a7500c66aa70a17b3e813d0c57a8270b3c58f6f2f006708a20228f2b"
+    },
+    "run_id": "20260919T124814Z-e5302b58",
+    "run_manifest_sha256": "88059a142248927f2c6ae0816993eae6e1177abf3138f089df09d93bc642ce6b",
+    "run_path": "/home/mikel/.herdr/worktrees/predictive-models/feat-training-devin/data/runs/20260919T124814Z-e5302b58",
+    "source_sha256": {
+      "scripts/model_features.py": "984831778e8b9f2fa14be4064ecba2f98a882ca19fa2d53733594a87389b59c1",
+      "scripts/model_protocol.py": "a49307c5d1dd8846414d34007b028771284a95a110b1a57139073275a2d50c96",
+      "tests/test_model_features.py": "77dcfa92b97eb97fc43f7f320bff9a0cf266fa1388fb4247b5626eeb66c7497f",
+      "tests/test_model_protocol.py": "00024ffb0d775338593a907725ac12b06080d7b13d95f037fa341d0e3a58724f"
+    },
+    "target_access": "Byte-level SHA only in prepare; target parquet is never queried or parsed"
+  },
+  "final_evaluation": {
+    "final_loader": "Not exposed by T2; T3 must require a persisted selected-model hash and one-shot evaluation record",
+    "known_as_of": "last_day(each test origin), not final training date",
+    "outcomes_sealed_in_T2": true,
+    "rule": "Select and freeze model using development folds first; train on final_train; evaluate final_test exactly once afterwards"
+  },
+  "group_assignment": {
+    "boundaries": "train ranks [0,floor(0.6*N)); validation [floor(0.6*N),floor(0.8*N)); remainder final_test",
+    "hash": "sha256(UTF-8('deficit-v1:' + group_id))",
+    "ids_are_predictors": false,
+    "order": "ascending digest, group_id tie-break",
+    "universe": "All group IDs in bound panel, before eligibility filtering"
+  },
+  "minimum_support": {
+    "groups_per_class": 5,
+    "groups_total": 10,
+    "rows_per_class": 20
+  },
+  "preparation": "Keys and contracts frozen without reading any target column; feature values and structural missingness only; dates of label availability calculated from calendar",
+  "protocol_version": "deficit-v1",
+  "scope": "Approved synthetic retrospective proxy only; not official score, default or causal health diagnosis",
+  "selection": {
+    "forbidden": [
+      "random_cross_validation",
+      "random_early_stopping",
+      "holdout_guided_features_or_cutoffs"
+    ],
+    "last_validation_label_matures": "2026-03-31",
+    "preprocessing": "Fit transforms, missing-value imputation, model and constant prevalence baseline on training split only",
+    "reason_two_not_five": "Only 24 closed months; three-month label maturity purge plus group holdout leaves two defensible chronological validation windows",
+    "required_folds": [
+      "fold1",
+      "fold2"
+    ],
+    "rule": "Both metrics must pass on BOTH folds, not a pooled average; support must pass in each training and evaluation sample"
+  },
+  "splits": {
+    "final_test": {
+      "end": "2026-05-01",
+      "groups": [
+        "final_test"
+      ],
+      "labels_as_of": "2026-08-31",
+      "start": "2026-04-01"
+    },
+    "final_train": {
+      "before": "2026-04-01",
+      "groups": [
+        "train",
+        "validation"
+      ],
+      "labels_as_of": "2026-03-31"
+    },
+    "fold1_train": {
+      "before": "2025-07-01",
+      "groups": [
+        "train"
+      ],
+      "labels_as_of": "2025-06-30"
+    },
+    "fold1_validation": {
+      "end": "2025-09-01",
+      "groups": [
+        "validation"
+      ],
+      "labels_as_of": "2025-12-31",
+      "start": "2025-07-01"
+    },
+    "fold2_train": {
+      "before": "2025-10-01",
+      "groups": [
+        "train"
+      ],
+      "labels_as_of": "2025-09-30"
+    },
+    "fold2_validation": {
+      "end": "2025-12-01",
+      "groups": [
+        "validation"
+      ],
+      "labels_as_of": "2026-03-31",
+      "start": "2025-10-01"
+    }
+  },
+  "status": "frozen_before_label_inspection",
+  "support_rationale": "Predeclared conservative feasibility floor, not a power claim: >=20 labeled rows and >=5 distinct groups in each class, >=10 total groups in both train and evaluation",
+  "target": {
+    "availability": "last_day(origin + 3 months)",
+    "censoring": "Unknown/immature/unobservable/sensitive labels remain NULL, never negative; inference eligibility is independent",
+    "name": "target_deficit_3m",
+    "positive": "Robust operating deficit in at least 2 of the next 3 calendar months",
+    "version": 1
+  }
+}

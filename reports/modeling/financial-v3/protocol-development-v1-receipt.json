@@ -1,0 +1,27 @@
+{
+  "automatic_alerts_enabled": false,
+  "bindings_sha256": {
+    "reports/modeling/financial-v3/audit-summary.json": "244e1e752295a58da436e6833925f4aadb2c21c33657ed974f56b71e326b14e9",
+    "reports/modeling/financial-v3/audit.json": "8e7f461905721c4df53231d427db5f2c185e65ca07a8584257432800bc2d040a",
+    "reports/modeling/financial-v3/design-proposal.md": "0e230766240c2e13c0357697ca2b6f3d8607552c8d3ad66f8e3dc025da2573db",
+    "reports/modeling/financial-v3/protected-baseline.json": "e91307018fe80d59102b864eef080bd242f7974479a7f2056f1c2f718c1e79fa",
+    "scripts/financial_v3_audit.py": "b688f0a8bb018efb97ae32db548e80ca3c8368a5baf5ed92d35f427643f43981",
+    "scripts/financial_v3_contract.py": "ef64bdf003dc4704b9681797769343f024b66f6d586c7ab63bf53b0a156dcd14",
+    "tests/test_financial_v3_audit.py": "c6517d49bcf9bf0f41feae7eaa4f80f79b47ee4eb28e2e35e755caa96dc41afe",
+    "tests/test_financial_v3_contract.py": "aa26e2f7ffa8dd54e6a41ab318affa63b313090e8929acfeeaf8029ec886782f"
+  },
+  "business_approved": false,
+  "confirmatory_approved": false,
+  "created_at": "2026-09-19T20:09:28Z",
+  "financial_data_queries": 0,
+  "input_schemas_sha256": "607dfa19ee798100b81033a19e5ad4e58c0b316757c5f26b193752225aaa7b8e",
+  "interruption_policy": "Exclusive artifacts; partial seal blocks replay/overwrite; inspect and version explicitly",
+  "outcome_values_read": 0,
+  "policy_canonical_sha256": "8ad1ce33e76cda8360003976b619c6c7b8cad9124243be7a79a1d5a71e21b3e1",
+  "policy_version": "financial-v3-development-v1",
+  "protocol_path": "reports/modeling/financial-v3/protocol-development-v1.json",
+  "protocol_sha256": "aefaec5905af75e0d0ea61561967a6ad7dbf0731845bf5cf853eaab57be590f0",
+  "receipt_version": 1,
+  "review": "parent_inline_fallback_independent_review_unavailable_quota",
+  "scope": "development_only"
+}

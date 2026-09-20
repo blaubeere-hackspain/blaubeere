@@ -1,0 +1,151 @@
+{
+  "status": "completed_accepted_proxy_only",
+  "scope": "Synthetic retrospective target_deficit_3m probability estimates only; not calibrated probabilities, default risk, official health scores, cash balances or causal diagnoses.",
+  "execution_order": [
+    {
+      "command": ".venv/bin/python -B -m unittest tests.test_model_training -v",
+      "attempt": 1,
+      "exit_code": 1,
+      "result": "Expected TDD red: ImportError because model_experiment did not yet exist. No real model labels accessed."
+    },
+    {
+      "command": ".venv/bin/python -B -m unittest tests.test_model_training -v",
+      "attempt": 2,
+      "exit_code": 0,
+      "tests": 17,
+      "skipped": 0,
+      "result": "Implementation green on toy data."
+    },
+    {
+      "command": ".venv/bin/python -B -m unittest tests.test_model_training -v",
+      "attempt": 3,
+      "exit_code": 0,
+      "tests": 19,
+      "skipped": 0,
+      "result": "Added stale-gate and censored-cohort coverage tests; all passed before configuration freeze."
+    },
+    {
+      "command": "git diff --check -- scripts tests requirements-model.in requirements-model.txt reports/modeling",
+      "attempt": 1,
+      "exit_code": 0
+    },
+    {
+      "command": ".venv/bin/python -B -m xray.model_audit --verify",
+      "attempt_in_T3": 1,
+      "exit_code": 0,
+      "tests": 123,
+      "skipped": 0,
+      "quality_exit_code": 0,
+      "verified_csv_files": 8,
+      "run_checks_log": "reports/modeling/run_checks.3388c761e7444d6ab1dc094401e99035.log",
+      "verify_ingest_log": "reports/modeling/verify_ingest.b78fabb4923e4b28a2e2af088f24ced5.log",
+      "result": "G-DATA pass bound to current code before any real model fitting. Prior reports and all attempts retained."
+    },
+    {
+      "command": ".venv/bin/python -B -m scripts.model_experiment freeze",
+      "attempt": 1,
+      "exit_code": 0,
+      "result": "Exact four-candidate configuration and input/code/gate hashes persisted before loading development labels."
+    },
+    {
+      "command": ".venv/bin/python -B -m scripts.model_experiment develop",
+      "attempt": 1,
+      "exit_code": 0,
+      "result": "All four support gates and all four candidates passed both folds; selected hgb_leaf15 by minimum mean Brier."
+    },
+    {
+      "command": ".venv/bin/python -B -m scripts.model_experiment fit-final",
+      "attempt": 1,
+      "exit_code": 0,
+      "result": "Final training support passed; one selected-model fit persisted and hashed before holdout."
+    },
+    {
+      "command": ".venv/bin/python -B -m scripts.model_experiment evaluate-final",
+      "attempt": 1,
+      "exit_code": 0,
+      "result": "Exclusive evaluation receipt consumed and fsynced before holdout SQL. Final support and metrics passed. Never rerun."
+    },
+    {
+      "command": ".venv/bin/python -B -m scripts.model_experiment infer-latest",
+      "attempt": 1,
+      "exit_code": 0,
+      "result": "1286 companies retained; 1010 eligible probability estimates and 276 ineligible null probabilities. No future label query."
+    },
+    {
+      "command": "git diff --check -- scripts tests requirements-model.in requirements-model.txt reports/modeling",
+      "attempt": 2,
+      "exit_code": 0
+    }
+  ],
+  "resource_bounds": {
+    "OMP_NUM_THREADS": "2",
+    "OPENBLAS_NUM_THREADS": "2",
+    "MKL_NUM_THREADS": "2",
+    "fit_and_prediction_threadpoolctl_limit": 2,
+    "training_duckdb_threads": 2
+  },
+  "real_training_corrections": 0,
+  "real_holdout_evaluations": 1,
+  "changed_source_files": [
+    "scripts/model_learning.py",
+    "scripts/model_training_io.py",
+    "scripts/model_experiment.py",
+    "scripts/model_inference.py",
+    "tests/test_model_training.py"
+  ],
+  "other_changed_paths": [
+    "reports/modeling/data_gate.json",
+    "reports/modeling/recheck.json",
+    "reports/modeling/run_checks.3388c761e7444d6ab1dc094401e99035.log",
+    "reports/modeling/verify_ingest.b78fabb4923e4b28a2e2af088f24ced5.log",
+    "reports/modeling/history/data_gate.2d6f99be7c51946b7335a04339fb6b8511f1d4c18c3a7cdfd5fa5bd2c99fa2c7.json",
+    "reports/modeling/history/recheck.70d8d10c8bde73a2abd53ab99f424f2e7a3f37259aa052755b9ab44f4775d469.json",
+    "reports/modeling/history/recheck.d06c932d0e741a1218f7d99f8fdb83d0065f3a6a9612cffa9e4c5c5cf65ef7f7.json",
+    "reports/modeling/experiment-v1/"
+  ],
+  "preserved": [
+    "Frozen T2 source, tests and protocol-v1 artifacts",
+    "Dependency manifests and lockfiles",
+    "Raw data and immutable published run/marts/source",
+    "Git configuration, ignore rules, policies and goal state"
+  ],
+  "sha256": {
+    "data_gate.json": "a1af5284d83343351a638b402b482bc166bcb4d98b643467ae3bfca6ece9b2e6",
+    "config.json": "6429b306683f37a4a3076711d0c8c4780a5c61ddef25a0ebdfe57529ef62f418",
+    "freeze.json": "15fc94f99b4016f326cebebb5a47c11c138ee325b28f6e0bbeb2fae0a4d2011c",
+    "development.json": "3e09bfd20e81acd33b6441ccfea4d3a7beb87d8b5f5fae3c9e7b043f50a078cc",
+    "selection.json": "e1f641bcdf6b3dc0e5d68b3657661f7b3f68bb4d23f0ab7ef2c4b3596949edb7",
+    "model.joblib": "2ac7cffd080d6c0a22422c90a3b806ae2f053d585eb4b7330078ca9c588bcbf5",
+    "model_manifest.json": "9b30c24feeb75fb0c2f17bca9a2eb178a508dd3e24759ac53c713424dd531dc8",
+    "evaluation_receipt.json": "96916854a53c8933f36a12b40d057044e670b1beb4484d7553bce2f07584ae95",
+    "final_test_predictions.csv": "4fa8e2a34f57840543ac955484d7eca7e15c30a15d1e983572072d5c11abf873",
+    "final_report.json": "2b248e2c798e869ca41d540a601662ee9dcbad83d3b0dd30d813e245d786c9a2",
+    "latest_predictions.json": "ec6b3d3f813238412420a0627dabf56e1ee7ef38111f92aadb2415d98a770cec"
+  },
+  "T4_interface": {
+    "preferred_artifact": "reports/modeling/experiment-v1/latest_predictions.json",
+    "schema_version": 1,
+    "rows": "predictions",
+    "keys": ["company_id", "group_id", "as_of", "origin_month", "horizon_months"],
+    "probability": "p_proxy: nullable estimate in [0,1] of target_deficit_3m; never a health score or cash balance",
+    "row_metadata": ["eligible", "accepted", "model_version", "coverage", "unavailable_reasons", "features", "missing_reason"],
+    "feature_descriptions": "Top-level feature_descriptions and feature_order reproduce frozen contract definitions/order.",
+    "accepted_semantics": "Model-level acceptance under frozen synthetic retrospective protocol, not row eligibility. Require eligible=true and p_proxy non-null before displaying a probability.",
+    "model_version": "experiment-v1:hgb_leaf15",
+    "as_of": "2026-08-31",
+    "horizon_months": 3,
+    "trusted_model_loader": "scripts.model_training_io.verify_local_model(EXPERIMENT_DIR, expected_manifest_sha256); only fixed local model path is accepted, no arbitrary external pickle loader.",
+    "inference_helpers": "build_features + matrix(feature_order) + model_learning.probabilities; load_panel projects approved inputs only.",
+    "do_not_rerun": ["freeze", "develop", "fit-final", "evaluate-final", "infer-latest"],
+    "reason": "Versioned artifacts are immutable/exclusive. Consume existing JSON for T4. Never delete or reset the consumed evaluation receipt."
+  },
+  "limitations": [
+    "Holdout metrics are conditional on 131 observed labels from 299 prospective eligible rows (43.81%); 168 unknown labels remain censored, not negative.",
+    "Group bootstrap confidence intervals use 300 group resamples conditional on the fixed fitted model, not IID row resampling or refitting.",
+    "History cohorts count valid months in the last six calendar months, not company age; six-month feature missingness is separate.",
+    "Reliability bins are diagnostics, not a demonstration or claim of calibration.",
+    "Retrospective month-end availability is not certified known_on history. Latest August predictions do not imply labels have matured."
+  ],
+  "blockers": [],
+  "next_action": "Parent independent review and T4 integration using existing immutable prediction JSON; do not tune or reevaluate on final_test. No commits, pushes, deployment or external data access performed."
+}

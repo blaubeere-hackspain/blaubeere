@@ -4,19 +4,19 @@
   "fx_unknown_rows": 142572,
   "direction_conflicts": 5371,
   "total_rows": 2510869,
-  "total_eur": 302148909378.0235,
+  "total_eur": 302148909378.0278,
   "by_flow_class": {
     "financing_out": {
       "rows": 36630,
-      "eur": 690821727.1136203
+      "eur": 690821727.1136212
     },
     "investment_in": {
       "rows": 3420,
-      "eur": 266093308.5778634
+      "eur": 266093308.5778636
     },
     "investment_out": {
       "rows": 3955,
-      "eur": 345049896.93414885
+      "eur": 345049896.934149
     },
     "non_economic": {
       "rows": 45,
@@ -24,31 +24,31 @@
     },
     "operating_in": {
       "rows": 779402,
-      "eur": 75797657823.36215
+      "eur": 75797657823.36472
     },
     "operating_out": {
       "rows": 993392,
-      "eur": 92735267099.78244
+      "eur": 92735267099.78415
     },
     "transfer": {
       "rows": 195945,
-      "eur": 111839318267.23721
+      "eur": 111839318267.23715
     },
     "unknown": {
       "rows": 498080,
-      "eur": 15474701260.016083
+      "eur": 15474701260.016092
     }
   },
   "unknown_pct_rows": 19.836956846414527,
-  "unknown_pct_eur": 5.1215479453064745,
+  "unknown_pct_eur": 5.121547945306404,
   "by_flow_source": {
     "category": {
       "rows": 1899112,
-      "eur": 279024075748.2675
+      "eur": 279024075748.26807
     },
     "rule": {
       "rows": 49441,
-      "eur": 5848846165.1797285
+      "eur": 5848846165.179732
     },
     "transferida": {
       "rows": 64450,
@@ -56,209 +56,209 @@
     },
     "unknown": {
       "rows": 497866,
-      "eur": 15474701260.016058
+      "eur": 15474701260.01606
     }
   },
   "by_rule_id": {
     "cat:collection": {
       "flow_class": "operating_in,operating_out,unknown",
       "rows": 559755,
-      "eur": 73901978709.40051
+      "eur": 73901978709.40169
     },
     "unknown": {
       "flow_class": "unknown",
       "rows": 497866,
-      "eur": 15474701260.015997
+      "eur": 15474701260.01604
     },
     "cat:payment": {
       "flow_class": "operating_out",
       "rows": 358978,
-      "eur": 86294387780.55618
+      "eur": 86294387780.55609
     },
     "cat:utility": {
       "flow_class": "operating_out",
       "rows": 253953,
-      "eur": 2174855086.473136
+      "eur": 2174855086.473135
     },
     "cat:fee": {
       "flow_class": "operating_in,operating_out",
       "rows": 177589,
-      "eur": 134950830.878673
+      "eur": 134950830.87867296
     },
     "cat:transfer": {
       "flow_class": "transfer",
       "rows": 151656,
-      "eur": 103600939618.49577
+      "eur": 103600939618.49576
     },
     "cat:bulk_collection": {
       "flow_class": "operating_in",
       "rows": 65295,
-      "eur": 454937512.89939797
+      "eur": 454937512.8993974
     },
     "cat:tax": {
       "flow_class": "operating_in,operating_out",
       "rows": 55064,
-      "eur": 1102334475.6572185
+      "eur": 1102334475.6572237
     },
     "cat:cash_settlement": {
       "flow_class": "operating_in,unknown",
       "rows": 48012,
-      "eur": 504904166.6919594
+      "eur": 504904166.69195986
     },
     "cat:pos_settlement": {
       "flow_class": "operating_in,unknown",
       "rows": 47187,
-      "eur": 109381895.31173903
+      "eur": 109381895.31173915
     },
     "cat:salary": {
       "flow_class": "operating_out",
       "rows": 41949,
-      "eur": 989032646.2116327
+      "eur": 989032646.2116337
     },
     "cat:bulk_payment": {
       "flow_class": "operating_out",
       "rows": 41266,
-      "eur": 1165743699.2931988
+      "eur": 1165743699.2932022
     },
     "cat:social_security": {
       "flow_class": "operating_out",
       "rows": 24104,
-      "eur": 402630653.99952626
+      "eur": 402630653.9995258
     },
     "cat:debt_repayment": {
       "flow_class": "financing_out",
       "rows": 22777,
-      "eur": 649008070.7592247
+      "eur": 649008070.7592257
     },
     "transf:collection": {
       "flow_class": "operating_in,operating_out,unknown",
       "rows": 18279,
-      "eur": 426143541.527223
+      "eur": 426143541.5272231
     },
     "cat:cash_withdrawal": {
       "flow_class": "transfer",
       "rows": 13870,
-      "eur": 6680057924.7875185
+      "eur": 6680057924.787535
     },
     "cat:collection_refund": {
       "flow_class": "operating_in,operating_out",
       "rows": 11812,
-      "eur": 113156771.3704327
+      "eur": 113156771.3704328
     },
     "transf:utility": {
       "flow_class": "operating_out",
       "rows": 11744,
-      "eur": 66448901.09989719
+      "eur": 66448901.09989727
     },
     "transf:transfer": {
       "flow_class": "transfer",
       "rows": 9392,
-      "eur": 1157839058.9011364
+      "eur": 1157839058.901137
     },
     "cat:interest_charge": {
       "flow_class": "financing_out",
       "rows": 7776,
-      "eur": 18606016.02533679
+      "eur": 18606016.025336757
     },
     "desc:ajuste_saldo": {
       "flow_class": "transfer",
       "rows": 7665,
-      "eur": 276494611.9752932
+      "eur": 276494611.9752935
     },
     "cat:pos_withdrawal": {
       "flow_class": "transfer",
       "rows": 7447,
-      "eur": 20842342.098167107
+      "eur": 20842342.09816709
     },
     "transf:pos_settlement": {
       "flow_class": "operating_in",
       "rows": 7152,
-      "eur": 9244917.760000005
+      "eur": 9244917.760000004
     },
     "desc:cobro_tarjeta": {
       "flow_class": "operating_in,operating_out,unknown",
       "rows": 6394,
-      "eur": 676781.1955123964
+      "eur": 676781.1955123959
     },
     "transf:payment": {
       "flow_class": "operating_out",
       "rows": 4885,
-      "eur": 50310695.65819448
+      "eur": 50310695.658194445
     },
     "transf:interest_charge": {
       "flow_class": "financing_out",
       "rows": 4730,
-      "eur": 808100.3832245071
+      "eur": 808100.383224508
     },
     "desc:cierre_tpv": {
       "flow_class": "operating_in,operating_out,unknown",
       "rows": 4648,
-      "eur": 2762099.9999999995
+      "eur": 2762100.000000002
     },
     "desc:liquidacion": {
       "flow_class": "operating_in,operating_out",
       "rows": 4375,
-      "eur": 3186593.3300000024
+      "eur": 3186593.3300000015
     },
     "cat:investment_deployment": {
       "flow_class": "investment_out",
       "rows": 3907,
-      "eur": 345033033.8541489
+      "eur": 345033033.854149
     },
     "desc:disposicion_efectivo": {
       "flow_class": "transfer",
       "rows": 3790,
-      "eur": 38432520.15
+      "eur": 38432520.150000006
     },
     "cat:investment_return": {
       "flow_class": "investment_in",
       "rows": 3420,
-      "eur": 266093308.5778634
+      "eur": 266093308.57786363
     },
     "cat:payment_refund": {
       "flow_class": "operating_in,operating_out",
       "rows": 3203,
-      "eur": 94897035.98167716
+      "eur": 94897035.98167714
     },
     "desc:cobro_pasarela_pago": {
       "flow_class": "operating_in,operating_out",
       "rows": 3194,
-      "eur": 11568184.920773478
+      "eur": 11568184.920773476
     },
     "desc:abono_menor": {
       "flow_class": "operating_in",
       "rows": 2801,
-      "eur": 197540.18999999997
+      "eur": 197540.18999999994
     },
     "desc:compra": {
       "flow_class": "operating_out",
       "rows": 2761,
-      "eur": 222307283.15999925
+      "eur": 222307283.15999928
     },
     "desc:venta": {
       "flow_class": "operating_in",
       "rows": 2753,
-      "eur": 221410062.8799992
+      "eur": 221410062.87999928
     },
     "desc:cobro_pasarela": {
       "flow_class": "operating_in,operating_out",
       "rows": 2497,
-      "eur": 19675704.942570094
+      "eur": 19675704.9425701
     },
     "transf:tax": {
       "flow_class": "operating_in,operating_out",
       "rows": 2311,
-      "eur": 16626557.48522243
+      "eur": 16626557.4852224
     },
     "desc:comision_banco": {
       "flow_class": "operating_out",
       "rows": 2063,
-      "eur": 98922.88283728765
+      "eur": 98922.88283728757
     },
     "desc:cobro_menor": {
       "flow_class": "operating_in",
       "rows": 1941,
-      "eur": 1360765.44
+      "eur": 1360765.4400000004
     },
     "desc:cobro_deudor": {
       "flow_class": "operating_in",
@@ -273,12 +273,12 @@
     "transf:cash_settlement": {
       "flow_class": "operating_in",
       "rows": 1512,
-      "eur": 9072191.439568056
+      "eur": 9072191.439568054
     },
     "transf:debt_repayment": {
       "flow_class": "financing_out",
       "rows": 1347,
-      "eur": 22399539.9458343
+      "eur": 22399539.945834305
     },
     "desc:comision": {
       "flow_class": "operating_in,operating_out",
@@ -288,17 +288,17 @@
     "transf:salary": {
       "flow_class": "operating_out",
       "rows": 974,
-      "eur": 7050316.781342572
+      "eur": 7050316.781342573
     },
     "transf:fee": {
       "flow_class": "operating_in,operating_out",
       "rows": 962,
-      "eur": 603653.4477260462
+      "eur": 603653.4477260464
     },
     "transf:pos_withdrawal": {
       "flow_class": "transfer",
       "rows": 408,
-      "eur": 29172903.38012189
+      "eur": 29172903.380121887
     },
     "transf:social_security": {
       "flow_class": "operating_out",
@@ -308,12 +308,12 @@
     "transf:payment_refund": {
       "flow_class": "operating_out",
       "rows": 212,
-      "eur": 124599.87250417726
+      "eur": 124599.87250417724
     },
     "transf:bulk_collection": {
       "flow_class": "operating_in",
       "rows": 129,
-      "eur": 592168.58
+      "eur": 592168.5800000001
     },
     "transf:cash_withdrawal": {
       "flow_class": "transfer",
@@ -328,7 +328,7 @@
     "transf:investment_deployment": {
       "flow_class": "investment_out",
       "rows": 48,
-      "eur": 16863.079999999998
+      "eur": 16863.08
     },
     "desc:compensacion_conciliacion": {
       "flow_class": "non_economic",
@@ -338,7 +338,7 @@
     "transf:bulk_payment": {
       "flow_class": "operating_out",
       "rows": 38,
-      "eur": 4052268.6100000003
+      "eur": 4052268.61
     },
     "desc:ajuste_retencion": {
       "flow_class": "non_economic",

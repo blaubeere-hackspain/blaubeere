@@ -90,6 +90,25 @@ def publish_run(root, run, manifest):
         lock.unlink()
 
 
+def snapshot_source(root, source):
+    root, source = Path(root), Path(source)
+    suffixes = {'xray': {'.py'}, 'tests': {'.py'}, 'scripts': {'.py', '.sh'},
+                'tests/fixtures': {'.csv'}}
+    for folder, allowed in suffixes.items():
+        for file in sorted((root / folder).rglob('*')):
+            relative = file.relative_to(root)
+            if not file.is_file() or file.suffix not in allowed:
+                continue
+            if any(part.startswith('.') or part == '__pycache__' for part in relative.parts):
+                continue
+            if any(parent.is_symlink() for parent in (file, *file.parents) if parent != root):
+                continue
+            target = source / relative
+            target.parent.mkdir(parents=True, exist_ok=True)
+            shutil.copy2(file, target)
+    (source / 'requirements.txt').write_text(f'duckdb=={duckdb.__version__}\n')
+
+
 def run_build():
     root = paths.ROOT
     run_id = datetime.now(timezone.utc).strftime('%Y%m%dT%H%M%SZ') + '-' + uuid4().hex[:8]
@@ -97,12 +116,7 @@ def run_build():
     run.mkdir(parents=True)
     source = run / 'source'
     source.mkdir()
-    for folder, pattern in [('xray', '*.py'), ('tests', '*.py'), ('scripts', '*.sh')]:
-        for file in sorted((root / folder).rglob(pattern)):
-            target = source / file.relative_to(root)
-            target.parent.mkdir(parents=True, exist_ok=True)
-            shutil.copy2(file, target)
-    (source / 'requirements.txt').write_text(f'duckdb=={duckdb.__version__}\n')
+    snapshot_source(root, source)
     inputs = {spec.filename: digest(paths.RAW_DIR / spec.filename) for spec in TABLES.values()}
     environment = dict(os.environ, XRAY_WORKSPACE=str(run), XRAY_PROJECT_ROOT=str(root),
                        XRAY_RAW_DIR=str(paths.RAW_DIR), PYTHONDONTWRITEBYTECODE='1',

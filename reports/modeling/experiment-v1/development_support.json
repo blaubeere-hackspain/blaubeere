@@ -1,0 +1,86 @@
+{
+  "fold1_train": {
+    "censored": 555,
+    "classes": {
+      "0": {
+        "groups": 43,
+        "rows": 342
+      },
+      "1": {
+        "groups": 41,
+        "rows": 312
+      }
+    },
+    "groups": 49,
+    "minimum": {
+      "groups_per_class": 5,
+      "groups_total": 10,
+      "rows_per_class": 20
+    },
+    "passed": true,
+    "prospective_rows": 1209
+  },
+  "fold1_validation": {
+    "censored": 194,
+    "classes": {
+      "0": {
+        "groups": 18,
+        "rows": 82
+      },
+      "1": {
+        "groups": 15,
+        "rows": 82
+      }
+    },
+    "groups": 21,
+    "minimum": {
+      "groups_per_class": 5,
+      "groups_total": 10,
+      "rows_per_class": 20
+    },
+    "passed": true,
+    "prospective_rows": 358
+  },
+  "fold2_train": {
+    "censored": 1145,
+    "classes": {
+      "0": {
+        "groups": 63,
+        "rows": 751
+      },
+      "1": {
+        "groups": 55,
+        "rows": 611
+      }
+    },
+    "groups": 70,
+    "minimum": {
+      "groups_per_class": 5,
+      "groups_total": 10,
+      "rows_per_class": 20
+    },
+    "passed": true,
+    "prospective_rows": 2507
+  },
+  "fold2_validation": {
+    "censored": 211,
+    "classes": {
+      "0": {
+        "groups": 16,
+        "rows": 76
+      },
+      "1": {
+        "groups": 19,
+        "rows": 99
+      }
+    },
+    "groups": 23,
+    "minimum": {
+      "groups_per_class": 5,
+      "groups_total": 10,
+      "rows_per_class": 20
+    },
+    "passed": true,
+    "prospective_rows": 386
+  }
+}

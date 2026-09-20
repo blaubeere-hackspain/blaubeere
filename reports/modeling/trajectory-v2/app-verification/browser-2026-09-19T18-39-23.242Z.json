@@ -1,0 +1,67 @@
+{
+  "command": "bun run test:trajectory:e2e",
+  "steps": [
+    {
+      "name": "COMP_0001 unauthenticated assessment rejected and browser login",
+      "status": "passed"
+    },
+    {
+      "name": "negative backtest, distinct axes, no planner, bounded latest payload",
+      "status": "passed"
+    },
+    {
+      "name": "all 24 closed-month API cuts for all three deterministic development cases",
+      "status": "passed"
+    },
+    {
+      "name": "COMP_0009 browser earliest/preconfirmation/confirmation/postconfirmation history",
+      "status": "passed"
+    },
+    {
+      "name": "COMP_0179 browser earliest/preconfirmation/confirmation/postconfirmation history",
+      "status": "passed"
+    },
+    {
+      "name": "COMP_0028 browser earliest/preconfirmation/confirmation/postconfirmation history",
+      "status": "passed"
+    },
+    {
+      "name": "keyboard company/month selection and eligible April–August separate probability overlay",
+      "status": "passed"
+    }
+  ],
+  "companies": 1286,
+  "points": 30864,
+  "companies_sha256": "2c9cbfd1cb5f8976cbff5184f7eabcc796fe86763de0e0cc512c2448a579a5c9",
+  "manifest_sha256": "fe7e57c28a92eefbf04c6e456ba639ac6df9c481441eeda8bbfab1326458aae3",
+  "environment": "Fresh temporary SQLite, random unlogged passwords, sandboxed system Chromium, loopback-only browser traffic, no screenshots or stored sessions",
+  "source_sha256": {
+    "package.json": "1e89e0ec7887482f68776eb5098d9a9f4cb32c974d300ca58558726eae9d69ad",
+    "scripts/check-trajectory-e2e.ts": "613bee651e9e1cda7a34eaa4296e56df6d1184c3ac2f557dd4b4051cbb13d68d",
+    "services/api/src/finance.rs": "2d2403d70988e0cc27ac1ba17096bce549dbe2155ff38b9bbac8be21ef9512fe",
+    "services/api/src/trajectory.rs": "8689fab9c391659d2c177f7d037a441df01a6d44dbae089a0a07cc9e1af5a551",
+    "services/api/src/trajectory_tests.rs": "4bd8619fea81657842501483779c020db971a567f76e230264ae1cc4768bbc95",
+    "services/api/src/main.rs": "ac4333fc157be9fb22949eb36464ffd36c2cbda4f3480d1d1842f98f48f86d18",
+    "services/mcp/src/main.rs": "061ba5a6fd2254e6a25b0786dd0a20969cd36863b5341eab334af2aecfcd62de",
+    "services/mcp/src/trajectory_tests.rs": "eb49249138eb294e7f239f3e5dfb97c735ffc604091052f0ad08a4f5aca45ce3",
+    "apps/app/app/dashboard/page.tsx": "6dcccb6cf7886507fbf9537c07d2130b627338e314cf9da0bbc37ff439915fd8",
+    "apps/app/app/globals.css": "5c1839468736cc9576695f8d191722baaf1e19ec1fcbc5af91f28c1911933574",
+    "apps/app/components/trajectory-assessment.tsx": "f6871aa14d1d78dcbc884477be73fd539c0817d7139226a0c5afda675bc730be",
+    "apps/app/lib/types.ts": "244b09e988837a5bfa0cfe47b1fff4d4c51998d236b9ebaae9e74c1632e8159c",
+    "apps/app/lib/trajectory.ts": "9d4181be8e521e72a620b273105480055c6192e4203df3feac6c9c82e1ae8def",
+    "apps/app/lib/trajectory-types.ts": "18c184503486c10df53542b967ee0adc8c0a11782d382eb6f302f387f17ed888",
+    "apps/app/lib/trajectory.test.ts": "76679c840f8efcadc389d0290ec182d8d94006a0b7330c5ca60218cecf8838d0"
+  },
+  "browser": {
+    "version": "152.0.7977.82",
+    "executable": "/usr/bin/chromium",
+    "sandbox": true,
+    "headless": true
+  },
+  "status": "failed",
+  "failed_step": "gap segmentation and accessible monthly evidence disclosure",
+  "error": "false == true",
+  "max_response_bytes": 115763,
+  "api_historical_responses": 78,
+  "ui_historical_cuts": 26
+}

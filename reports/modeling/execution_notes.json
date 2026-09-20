@@ -1,0 +1,66 @@
+{
+  "historical_source_readonly_diagnosis": {
+    "command": ["git", "diff", "--stat", "86439b6128ba5755db15b9150404a4c32a217174", "HEAD", "--", "xray"],
+    "exit_code": 0,
+    "output": "empty",
+    "interpretation": "No committed xray text change between the historical revision and HEAD. The new source-byte-hash diagnostic is false; it must not be interpreted as proof of an economic code change. Canonical-newline source comparison remains pending. Current production files do match the published build snapshot."
+  },
+  "f2_normalization_tool_blocker": {
+    "write_result": "write preserved the existing CRLF endings despite LF-only content; both script SHA-256 values remained identical to the immutable build snapshot.",
+    "edit_result": "Explicit replace_all CRLF to LF was rejected for both files: old_string and new_string must be different. Tool normalizes the replacement strings.",
+    "pre_execution_guard_command": [".venv/bin/python", "-B", "-m", "xray.model_audit", "--recheck-shells"],
+    "pre_execution_guard_exit_code": 1,
+    "pre_execution_guard_error": "F2 permits only CRLF-to-LF normalization",
+    "shell_scripts_executed_this_continuation": 0,
+    "normalization_applied": false,
+    "verified_unchanged_scripts": {
+      "scripts/run_checks.sh": {"crlf_count": 10, "sha256": "cd11920ac971243ed5fc50f77bf2385197a64cd0d5485d1813c1acac5e3f3b2e"},
+      "scripts/verify_ingest.sh": {"crlf_count": 38, "sha256": "242c37fcd59fe37db22d6ef566595c141d58c982ca46caf9cc243e328b23de81"}
+    },
+    "read_only_diagnosis": "shell_normalization returned only_crlf_to_lf=false for both scripts; git diff --no-index --ignore-space-at-eol against archived scripts returned 0 for each. No script was retried after the guard failure.",
+    "next": "Parent must authorize/provide an LF-capable byte-writing mechanism or perform the CRLF-only normalization externally. Preserve original failed attempts and use the remaining F2 shell recheck only after byte-level normalization is confirmed."
+  },
+  "authorized_f2_f3_continuation": {
+    "authorization": "Parent/user authorized one CRLF-to-LF-only correction and recheck per shell script (F2), and one joint numeric comparator correction/recheck (F3). No build replay or budget reset.",
+    "changes": "Preserve legacy attempts and strict diagnostics; append source-bound shell rechecks. Monetary equivalence additionally requires same cents, same cent-rounded signs, subcent error, and reduction error <=1e-12 of independently aggregated known EUR gross. Nonmonetary comparator unchanged.",
+    "targeted_tests": {
+      "command": [".venv/bin/python", "-B", "-m", "unittest", "tests.test_pipeline", "tests.test_model_audit", "-v"],
+      "exit_code": 0,
+      "tests_run": 20,
+      "seconds": 0.979
+    },
+    "current_results_location": "commands/current_checks/historical_comparison in data_gate.json are authoritative for this continuation; earlier notes and failed attempts below are retained history."
+  },
+  "post_build_auditor_change": "Only the new auditor and its tests were extended after the successful build: retain structural audit despite shell-check failure and allow the not-yet-attempted ingest check exactly once. One SQL aggregation binding defect in the new auditor was corrected by moving the native-currency null guard inside sum; audit-only recheck does not rebuild or rerun either shell check. Build source snapshot remains immutable; report records both auditor hashes. Pipeline correction was not changed after its successful recheck.",
+  "shell_check_blocker": "Both original Bash scripts terminate before executing their checks with exit 2: pipefail carriage-return is an invalid option. Scripts have not been modified or normalized, and neither command was retried. Authorization beyond this scope is required to correct CRLF and execute these checks.",
+  "audit_invocations": [
+    {"command": [".venv/bin/python", "-B", "-m", "xray.model_audit", "--recheck"], "exit_code": 1, "result": "Build passed, run_checks failed before tests; initial report blocked."},
+    {"command": [".venv/bin/python", "-B", "-m", "xray.model_audit", "--verify-ingest"], "exit_code": 1, "result": "Ingest script failed before checks; structural audit hit a GROUP BY binding error; previous report preserved."}
+  ],
+  "post_sql_fix_verification": {
+    "command": [".venv/bin/python", "-B", "-m", "unittest", "tests.test_pipeline", "tests.test_model_audit", "-v"],
+    "exit_code": 0,
+    "tests_run": 13,
+    "seconds": 0.513,
+    "scoped_git_diff_check_exit_code": 0,
+    "status": "Observed on final code after the successful structural audit; no further source edits."
+  },
+  "final_targeted_tests": {
+    "command": [".venv/bin/python", "-B", "-m", "unittest", "tests.test_pipeline", "tests.test_model_audit", "-v"],
+    "exit_code": 0,
+    "tests_run": 13,
+    "seconds": 0.492
+  },
+  "scoped_whitespace_check": {
+    "command": ["git", "diff", "--check", "--", "xray/pipeline.py", "tests/test_pipeline.py", "xray/model_audit.py", "tests/test_model_audit.py"],
+    "exit_code": 0,
+    "limitation": "Git diff only checks tracked changes; new untracked auditor files are covered by execution tests, not this whitespace command."
+  },
+  "incidents": [
+    {
+      "command": ["git", "diff", "--check"],
+      "result": "Interrupted via kill_shell after unscoped whitespace check emitted materialized raw CSV lines. No raw file was changed. This violated the requested no-raw-print output discipline; no raw content is reproduced in this report.",
+      "follow_up": "Limit all subsequent diff review to xray/pipeline.py, tests/test_pipeline.py, xray/model_audit.py and tests/test_model_audit.py. Do not repeat unscoped diff checks; verify raw identity by streaming SHA-256 only."
+    }
+  ]
+}

@@ -1,0 +1,40 @@
+[
+  {
+    "command": [
+      ".venv/bin/python",
+      "-B",
+      "-m",
+      "xray.cli",
+      "build"
+    ],
+    "exit_code": 0,
+    "log": "reports/modeling/build.log",
+    "log_sha256": "ce4753cdda588491572ea5e274eb60a458484f661cbe5dd293b2eee7c3df3424",
+    "unittest_summaries": [
+      {
+        "seconds": 8.793,
+        "tests": 61
+      }
+    ]
+  },
+  {
+    "command": [
+      "bash",
+      "scripts/run_checks.sh"
+    ],
+    "exit_code": 2,
+    "log": "reports/modeling/run_checks.log",
+    "log_sha256": "3b781b34f8248d87b60b522948048a3cf824593cdf0838431b72b190ea1794cb",
+    "unittest_summaries": []
+  },
+  {
+    "command": [
+      "bash",
+      "scripts/verify_ingest.sh"
+    ],
+    "exit_code": 2,
+    "log": "reports/modeling/verify_ingest.log",
+    "log_sha256": "2847ee2459601565a728b83dc5f993d78e9fa8eeabe28e8c047fef3314b3ba73",
+    "unittest_summaries": []
+  }
+]

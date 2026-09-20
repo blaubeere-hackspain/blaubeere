@@ -1,0 +1,74 @@
+{
+  "command": "bun run test:assessments:e2e",
+  "assessment_file": "reports/modeling/assessment-v1/companies.json",
+  "companies_sha256": "77fc696af57781dbd5e06205c56923ed04d40f89ad17d5a3a546b689cf7e707f",
+  "source_sha256": "ec6b3d3f813238412420a0627dabf56e1ee7ef38111f92aadb2415d98a770cec",
+  "rows_loaded_by_api": 1286,
+  "steps": [
+    {
+      "name": "COMP_0001 unauthenticated assessment rejected",
+      "status": "passed"
+    },
+    {
+      "name": "COMP_0001 login through browser UI",
+      "status": "passed"
+    },
+    {
+      "name": "eligible probability, definition, fixed calendar horizon and validation limits",
+      "status": "passed"
+    },
+    {
+      "name": "keyboard input evidence disclosure",
+      "status": "passed"
+    },
+    {
+      "name": "mobile proxy remains usable without fake cash charts",
+      "status": "passed"
+    },
+    {
+      "name": "actual exported API data matches and compare rejects both proxy rows",
+      "status": "passed"
+    },
+    {
+      "name": "company isolation preserved",
+      "status": "passed"
+    },
+    {
+      "name": "keyboard company switch shows abstention and reason with no enabled planner",
+      "status": "passed"
+    },
+    {
+      "name": "DEMO_001 unauthenticated assessment rejected",
+      "status": "passed"
+    },
+    {
+      "name": "DEMO_001 login through browser UI",
+      "status": "passed"
+    },
+    {
+      "name": "original demo cash forecast, health, horizon and planner regression",
+      "status": "passed"
+    }
+  ],
+  "environment": "Process-only configuration; fresh temporary SQLite per scenario; random unlogged bootstrap password; loopback-only browser requests; no screenshots or stored sessions",
+  "browser": {
+    "engine": "Chromium",
+    "version": "152.0.7977.82",
+    "executable": "/usr/bin/chromium",
+    "headless": true,
+    "sandbox": true
+  },
+  "proxy": {
+    "eligible_id": "COMP_0001",
+    "probability": 0.5675128970680213,
+    "displayed_probability": "56.8%",
+    "abstained_id": "COMP_0002",
+    "unavailable_reasons": [
+      "no_cash_activity"
+    ],
+    "api_compare_status": 400
+  },
+  "status": "passed",
+  "page_errors": [],
+  "cleanup": "Only owned process groups and temporary databases stopped/removed"
+}

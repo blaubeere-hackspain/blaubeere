@@ -1,0 +1,4 @@
+$ bun run test:deploy && bun run test:web && bun run typecheck && bun run build && bun run check:rust
+$ bash -n deploy/jio.sh deploy/runtime.sh && bun scripts/check-deploy.ts
+deploy/jio.sh: line 12: syntax error near unexpected token `elif'
+deploy/jio.sh: line 12: `elif [[ "$readiness" == "jio: session $vm is Stopped" ]]; then'

@@ -1,0 +1,19 @@
+test_bound_panel_hashes_and_escape_rejected (tests.test_replay_model.ReplayComparisonTests.test_bound_panel_hashes_and_escape_rejected) ... ok
+test_every_metadata_field_is_exact (tests.test_replay_model.ReplayComparisonTests.test_every_metadata_field_is_exact) ... ok
+test_exact_and_company_order_independent (tests.test_replay_model.ReplayComparisonTests.test_exact_and_company_order_independent) ... ok
+test_fixed_probability_tolerance_and_max_error (tests.test_replay_model.ReplayComparisonTests.test_fixed_probability_tolerance_and_max_error) ... ok
+test_keys_duplicates_order_and_missing_reasons (tests.test_replay_model.ReplayComparisonTests.test_keys_duplicates_order_and_missing_reasons) ... ok
+test_metadata_bool_is_not_integer_or_unknown (tests.test_replay_model.ReplayComparisonTests.test_metadata_bool_is_not_integer_or_unknown) ... ok
+test_missing_current_month_retained_as_abstention (tests.test_replay_model.ReplayComparisonTests.test_missing_current_month_retained_as_abstention) ... ok
+test_numeric_feature_difference_has_no_tolerance (tests.test_replay_model.ReplayComparisonTests.test_numeric_feature_difference_has_no_tolerance) ... ok
+test_panel_duplicate_and_group_drift_rejected (tests.test_replay_model.ReplayComparisonTests.test_panel_duplicate_and_group_drift_rejected) ... ok
+test_probability_unknown_bool_nonfinite_and_bounds_rejected (tests.test_replay_model.ReplayComparisonTests.test_probability_unknown_bool_nonfinite_and_bounds_rejected) ... ok
+test_tampered_sealed_predictions_rejected_before_panel_access (tests.test_replay_model.ReplayComparisonTests.test_tampered_sealed_predictions_rejected_before_panel_access) ... ok
+test_unknown_features_cannot_be_zero_and_reasons_are_exact (tests.test_replay_model.ReplayComparisonTests.test_unknown_features_cannot_be_zero_and_reasons_are_exact) ... ok
+test_external_pickle_rejected_before_deserialization (tests.test_replay_model.ReplayModelTests.test_external_pickle_rejected_before_deserialization) ... ok
+test_real_replay_only_projects_panel_never_fits_or_reads_labels (tests.test_replay_model.ReplayModelTests.test_real_replay_only_projects_panel_never_fits_or_reads_labels) ... ok
+
+----------------------------------------------------------------------
+Ran 14 tests in 3.900s
+
+OK

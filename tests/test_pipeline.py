@@ -1,6 +1,9 @@
 import contextlib
 import io
 import json
+import os
+import subprocess
+import sys
 import tempfile
 import unittest
 from pathlib import Path
@@ -8,6 +11,58 @@ from unittest.mock import Mock, patch
 
 from xray import pipeline
 from xray.cli import cmd_clean
+
+
+class SnapshotTest(unittest.TestCase):
+    def test_inventory_tests_run_from_snapshot_without_repository_dependencies(self):
+        with tempfile.TemporaryDirectory() as temporary:
+            source = Path(temporary)
+            pipeline.snapshot_source(Path(__file__).resolve().parents[1], source)
+            result = subprocess.run(
+                [sys.executable, '-B', '-m', 'unittest', 'discover', '-s', 'tests',
+                 '-p', 'test_audit_inventory.py', '-v'],
+                cwd=source, env=dict(os.environ, PYTHONPATH=str(source)),
+                text=True, stdout=subprocess.PIPE, stderr=subprocess.STDOUT,
+            )
+            self.assertEqual(result.returncode, 0, result.stdout)
+            self.assertIn('Ran 4 tests', result.stdout)
+
+    def test_build_snapshot_includes_test_dependencies_without_private_files(self):
+        with tempfile.TemporaryDirectory() as temporary:
+            root = Path(temporary)
+            included = {
+                'xray/__init__.py', 'xray/marts/flujos.py',
+                'tests/test_audit_inventory.py', 'scripts/audit_financial_data.py',
+                'scripts/run_checks.sh',
+                'tests/fixtures/financial_audit/materialized/companies.csv',
+                'tests/fixtures/financial_audit/materialized/balances.csv',
+            }
+            excluded = {
+                'scripts/.env', 'scripts/private.pem', 'scripts/__pycache__/cached.py',
+                'scripts/.private/credentials.py', 'tests/fixtures/.env',
+                'tests/fixtures/__pycache__/cached.csv', 'tests/fixtures/private.key',
+                'tests/fixtures/.private/credentials.csv', 'data/private.csv',
+            }
+            for relative in included | excluded:
+                file = root / relative
+                file.parent.mkdir(parents=True, exist_ok=True)
+                file.write_text(relative)
+            (root / 'scripts/linked.py').symlink_to(root / 'data/private.csv')
+            (root / 'tests/fixtures/linked.csv').symlink_to(root / 'data/private.csv')
+            (root / 'tests/fixtures/linked_dir').symlink_to(root / 'data', target_is_directory=True)
+            with patch.object(pipeline.paths, 'ROOT', root), \
+                 patch.object(pipeline, 'TABLES', {}), \
+                 patch.object(pipeline.subprocess, 'run', side_effect=RuntimeError('stop before build')), \
+                 contextlib.redirect_stdout(io.StringIO()):
+                with self.assertRaisesRegex(RuntimeError, 'stop before build'):
+                    pipeline.run_build()
+            source, = (root / 'data/runs').glob('*/source')
+            copied = {file.relative_to(source).as_posix() for file in source.rglob('*') if file.is_file()}
+            for relative in sorted(included):
+                with self.subTest(dependency=relative):
+                    self.assertIn(relative, copied)
+                    self.assertEqual((source / relative).read_bytes(), (root / relative).read_bytes())
+            self.assertEqual(copied, included | {'requirements.txt'})
 
 
 class PublicationTest(unittest.TestCase):
