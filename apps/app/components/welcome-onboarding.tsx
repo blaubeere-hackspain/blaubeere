@@ -1,7 +1,7 @@
 "use client";
 import Image from "next/image";
 import { useEffect, useRef, useState } from "react";
-import { ArrowRight, X } from "lucide-react";
+import { ArrowRight, CircleHelp, X } from "lucide-react";
 import { Dialog } from "./dialog";
 import styles from "./welcome-onboarding.module.css";
 
@@ -23,7 +23,9 @@ export function WelcomeOnboarding({ scope, hasCompanies, demo = false, autoOpen 
     setProgress(next);
     try { localStorage.setItem(key, next); } catch { /* The guide still works when browser storage is unavailable. */ }
   }
-  return <Dialog open={progress !== "done"} onClose={() => advance("done")} titleId="welcome-title" className={styles.dialog}>
+  return <>
+    <button className="icon-button" aria-label="Getting started" title="Getting started" aria-haspopup="dialog" onClick={() => advance("guide")}><CircleHelp size={18} aria-hidden/></button>
+    <Dialog open={progress !== "done"} onClose={() => advance("done")} titleId="welcome-title" className={styles.dialog}>
       <div className={styles.painting}>
         <Image src="/welcome-garden-oil.png" alt="" fill sizes="(max-width: 540px) 100vw, 512px" loading="eager"/>
         <div className={styles.brand} aria-label="blau"><span className="brand-mark" aria-hidden><i/><i/><i/><i/></span></div>
@@ -46,5 +48,6 @@ export function WelcomeOnboarding({ scope, hasCompanies, demo = false, autoOpen 
           {!hasCompanies && !demo ? <a className={`button ${styles.continue}`} href="/demo" onClick={() => advance("done")}>Explore the demo<ArrowRight size={16} aria-hidden/></a> : <button className={`button ${styles.continue}`} onClick={() => advance("done")}>Open workspace<ArrowRight size={16} aria-hidden/></button>}
         </footer>
       </div>
-    </Dialog>;
+    </Dialog>
+  </>;
 }

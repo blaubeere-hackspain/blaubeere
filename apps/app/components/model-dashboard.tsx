@@ -1,6 +1,6 @@
 "use client";
 import Link from "next/link";
-import { useState } from "react";
+import { useState, type ReactNode } from "react";
 import { ArrowLeft, ArrowRight, TrendingUp } from "lucide-react";
 import { date, money } from "../lib/format";
 import { healthHref } from "../lib/health";
@@ -38,7 +38,7 @@ export function modelReason(reason: string) {
     nota_acotada_al_rango_0_100: "The returned score was bounded to the 0–100 range.",
     sin_colchon_estimado: "No cash cushion could be estimated.", sin_mora_observable: "Payment arrears were not observable; no arrears adjustment was applied.", colchon_saturado: "The cash cushion reached the model's cap.", denominador_nulo: "No calculable flow ratio for this window.", sin_actividad_de_caja_observada: "No cash-account activity was observed.", ventana_parcial: "The assessment uses fewer than six months of history.", r_hist_indefinida: "The historical ratio was undefined; the history adjustment was omitted.", sin_actividad_en_ventana: "No cash activity was observed in this window." } as Record<string,string>)[reason] ?? reason;
 }
-export function ModelDashboard({ data, scoreDate, demo = false }: { data: ModelAssessment; scoreDate?: string; demo?: boolean }) {
+export function ModelDashboard({ data, scoreDate, demo = false, welcome }: { data: ModelAssessment; scoreDate?: string; demo?: boolean; welcome?: ReactNode }) {
   const companyName = data.company.name.replace(/^COMP_0*(\d+)$/, "COMP $1");
   const availableDates = data.records.filter(hasMonthlyData).map(record => record.as_of);
   const [month, setMonth] = useState(availableDates.at(-1) ?? "");
@@ -51,7 +51,7 @@ export function ModelDashboard({ data, scoreDate, demo = false }: { data: ModelA
   const next = data.records[selectedIndex + 1];
   return <ChartMotion><div className="model-dashboard">
     <p className="sr-only" role="status">{row ? `Showing data for ${date(row.as_of, true)}` : "No assessment selected"}</p>
-    <header className="page-heading company-heading"><div><h1>{scoreDate ? "The story behind this rating." : companyName}</h1><p className="muted mt-2">{scoreDate ? companyName : "Financial health and the movements behind it."}</p></div><div className="company-heading-actions"><AssessmentCalendar dates={availableDates} selected={row?.as_of ?? ""} onSelect={value => scoreDate ? window.location.assign(scoreHref(value)) : setMonth(value)}/>{scoreDate && <Link className="button secondary" href={`${demo ? "/demo" : "/dashboard"}?company=${encodeURIComponent(data.company.id)}`}><ArrowLeft size={16} aria-hidden/>Overview</Link>}</div></header>
+    <header className="page-heading company-heading"><div><h1>{scoreDate ? "The story behind this rating." : companyName}</h1><p className="muted mt-2">{scoreDate ? companyName : "Financial health and the movements behind it."}</p></div><div className="company-heading-actions">{welcome}<AssessmentCalendar dates={availableDates} selected={row?.as_of ?? ""} onSelect={value => scoreDate ? window.location.assign(scoreHref(value)) : setMonth(value)}/>{scoreDate && <Link className="button secondary" href={`${demo ? "/demo" : "/dashboard"}?company=${encodeURIComponent(data.company.id)}`}><ArrowLeft size={16} aria-hidden/>Overview</Link>}</div></header>
     {!row ? <section className="card metric-intro"><h2>{availableDates.length ? "No assessment for this date" : "No recorded activity yet"}</h2><p>{availableDates.length ? "Choose an available month above." : "No cash movements, invoices or model activity were recorded for this company."}</p></section> : <>
       <section className="stats-grid model-stats" aria-label="Source data at the selected cutoff">{[["Monthly net movement",euro(row.cash?.flujo_neto),`Month ending ${date(row.as_of, true)}`],["Overdue supplier payments",euro(row.payment?.pago_vencido_eur),`Due and unpaid at ${date(row.as_of, true)}`],["Overdue customer collections",euro(row.payment?.cobro_vencido_eur),`Due and uncollected at ${date(row.as_of, true)}`],["Defaulting",formatIndex(row.mora_indice),`Arrears index at ${date(row.as_of, true)}`]].map(([label,value,caption])=><article className="stat-card" key={label}><div><span>{label}</span></div><strong className="stat-value num">{value}</strong><p>{caption}</p></article>)}</section>
       <div className={scoreDate ? undefined : "dashboard-charts"}>

@@ -64,6 +64,7 @@ export function Dashboard({ demo = false, scoreDate }: { demo?: boolean; scoreDa
     catch (error) { handleError(error); setLogoutBusy(false); }
   }
   const model = assessment?.company.id === selected ? assessment : null;
+  const welcome = companies !== null && (identity || demo) && <WelcomeOnboarding scope={demo ? "demo" : identity!.email} hasCompanies={companies.length > 0} demo={demo} autoOpen={!scoreDate}/>;
   const overviewHref = `${demo ? "/demo" : "/dashboard"}${selected ? `?company=${encodeURIComponent(selected)}` : ""}`;
   const sidebar = (mobile = false) => <Sidebar selectorId={mobile ? "mobile-company" : "sidebar-company"} canInspect={Boolean(model)} overviewHref={scoreDate ? overviewHref : undefined} demo={demo} companies={companies} recentCompanies={recent.flatMap(id => companies?.find(company => company.id === id) ?? [])} selected={selected} identity={identity} logoutBusy={logoutBusy}
     onCompany={id => { setSelected(id); setMobileNavigation(false); }} onLogout={logout} onNavigate={() => setMobileNavigation(false)}/>;
@@ -78,11 +79,11 @@ export function Dashboard({ demo = false, scoreDate }: { demo?: boolean; scoreDa
         {error && <div className="error error-retry" role="alert"><span>{error}</span><button className="button secondary" onClick={() => setRetry(retry + 1)}>Try again</button></div>}
         <p className="refresh-status small" role="status">{loading && model && <><LoaderCircle className="spinner" size={14} aria-hidden/>Updating… Showing the previous assessment.</>}</p>
         {loading && !model && <DashboardSkeleton detail={Boolean(scoreDate)}/>}
+        {!loading && !model && welcome}
         {!loading && companies?.length === 0 && <PaintedEmptyState image={garden} title="No imported companies available."><p>{demo ? "The dataset has no companies to display yet." : "Your account does not have access to any imported companies yet. You can explore the published dataset in the demo."}</p>{!demo && <a className="button secondary" href="/demo">Explore company data<ArrowRight size={16} aria-hidden/></a>}</PaintedEmptyState>}
-        {model && <div aria-busy={loading}><ModelDashboard key={model.company.id} data={model} scoreDate={scoreDate} demo={demo}/></div>}
+        {model && <div aria-busy={loading}><ModelDashboard key={model.company.id} data={model} scoreDate={scoreDate} demo={demo} welcome={welcome}/></div>}
       </main>
     </div>
     <Dialog open={mobileNavigation} onClose={() => setMobileNavigation(false)} className="navigation-dialog" titleId="navigation-title"><h2 id="navigation-title" className="sr-only">Workspace navigation</h2><button className="icon-button close-navigation" aria-label="Close navigation" onClick={() => setMobileNavigation(false)}><X/></button>{mobileNavigation && sidebar(true)}</Dialog>
-    {companies !== null && (identity || demo) && <WelcomeOnboarding scope={demo ? "demo" : identity!.email} hasCompanies={companies.length > 0} demo={demo} autoOpen={!scoreDate}/>}
   </div>;
 }
