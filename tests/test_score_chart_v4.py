@@ -632,5 +632,187 @@ class FullRunSmokeTest(unittest.TestCase):
         self.assertTrue(datetime.date(2024, 10, 1))
 
 
+def write_fx_parquets(directory):
+    """Capa FX minima pero realista: fx_risk_monthly.parquet + fx_index.parquet.
+
+    Devuelve (fx_path, fx_index_path). Las divisas sin cobertura BCE van sin
+    volatilidad ni deriva (None): la vista debe declararlas como hueco, nunca
+    dibujarlas con un cero inventado.
+    """
+    directory.mkdir(parents=True, exist_ok=True)
+    fx_path = directory / 'fx_risk_monthly.parquet'
+    index_path = directory / 'fx_index.parquet'
+    con = duckdb.connect(':memory:')
+    try:
+        con.execute('CREATE TABLE fx (company_id VARCHAR, month DATE, '
+                    'perdida_eur DOUBLE, importe_vivo_eur_corte DOUBLE, '
+                    'indice_fx DOUBLE, indice_fx_vol DOUBLE, indice_fx_deriva DOUBLE, '
+                    'indice_fx_min DOUBLE, indice_es_intervalo BOOLEAN, '
+                    'tiene_opacas BOOLEAN, solo_opacas BOOLEAN, por_divisa VARCHAR)')
+        months = ('2026-07-01', '2026-08-01')
+        for month in months:
+            con.execute('INSERT INTO fx VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)',
+                        ['PERDEDORA', month, 700000.0, 10000000.0, 1.0, 1.0, 0.0,
+                         1.0, False, False, False,
+                         json.dumps([{'divisa': 'USD', 'perdida_eur': 700000.0,
+                                      'n_facturas': 5, 'importe_original': 10000000.0,
+                                      'n_opacas': 0}])])
+            con.execute('INSERT INTO fx VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)',
+                        ['GANADORA', month, -800000.0, 20000000.0, 0.5, 0.5, 0.5,
+                         0.5, False, False, False,
+                         json.dumps([{'divisa': 'TRY', 'perdida_eur': -800000.0,
+                                      'n_facturas': 3, 'importe_original': 20000000.0,
+                                      'n_opacas': 0}])])
+            con.execute('INSERT INTO fx VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)',
+                        ['INTERVALO', month, 0.0, 5000000.0, None, None, None,
+                         0.25, True, True, False,
+                         json.dumps([
+                             {'divisa': 'AED', 'perdida_eur': 0.0, 'n_facturas': 2,
+                              'importe_original': 1000.0, 'n_opacas': 2},
+                             {'divisa': 'USD', 'perdida_eur': 0.0, 'n_facturas': 1,
+                              'importe_original': 100.0, 'n_opacas': 0}])])
+            # Empresa solo-EUR: la capa F3 no trae perdida (None), no un cero.
+            con.execute('INSERT INTO fx VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)',
+                        ['SINEXPOSICION', month, None, 3000000.0, None, None, None,
+                         None, False, False, False,
+                         json.dumps([{'divisa': 'EUR', 'perdida_eur': 0.0,
+                                      'n_facturas': 4, 'importe_original': 3000000.0,
+                                      'n_opacas': 0}])])
+        con.execute("COPY fx TO '" + str(fx_path) + "' (FORMAT PARQUET)")
+        con.execute('CREATE TABLE idx (currency VARCHAR, month DATE, cobertura_bce BOOLEAN, '
+                    'vol_anualizada DOUBLE, deriva_valor DOUBLE, deriva_componente DOUBLE, '
+                    'tramo_volatilidad VARCHAR, tramo_deriva VARCHAR, tramo VARCHAR, motivo VARCHAR)')
+        for month in months:
+            con.execute('INSERT INTO idx VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)',
+                        ['USD', month, True, 0.04, 0.005, 0.0, 'volatil', 'estable',
+                         'volatil', 'cobertura_bce'])
+            con.execute('INSERT INTO idx VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)',
+                        ['TRY', month, True, 0.042, -0.143, 0.143, 'volatil', 'hipervolatil',
+                         'hipervolatil', 'cobertura_bce'])
+            con.execute('INSERT INTO idx VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)',
+                        ['AED', month, False, None, None, None, 'hipervolatil', None,
+                         'hipervolatil', 'sin_cobertura_bce_asumida_inestable'])
+        con.execute("COPY idx TO '" + str(index_path) + "' (FORMAT PARQUET)")
+    finally:
+        con.close()
+    return fx_path, index_path
+
+
+def fx_fixture_payload(root):
+    """Assessments con columnas FX + capa F3, la vista 5 completa."""
+    source = root / 'reports' / 'score_v4'
+    source.mkdir(parents=True, exist_ok=True)
+    rows = []
+    for month in ('2026-07-01', '2026-08-01'):
+        for company, score, penalty, indice in (
+                ('PERDEDORA', 80.0, 5.0, 1.0),
+                ('GANADORA', 70.0, 2.0, 0.5),
+                ('INTERVALO', 60.0, 0.5, 0.25),
+                ('SINEXPOSICION', 50.0, 0.0, 0.0)):
+            row = fixture_row(company, month, score, 'alta', [], penalties=(1.0, 1.0))
+            row['indice_fx'] = indice if company != 'INTERVALO' else None
+            row['indice_fx_min'] = 0.25 if company == 'INTERVALO' else indice
+            row['indice_es_intervalo'] = company == 'INTERVALO'
+            row['indice_fx_aplicado'] = indice
+            row['penalizacion_fx_puntos'] = penalty
+            row['beta_fx'] = 0.05
+            rows.append(row)
+    write_parquet(source / ASSESSMENTS_NAME, rows)
+    (source / SUMMARY_NAME).write_text(json.dumps(fixture_summary(), ensure_ascii=False),
+                                       encoding='utf-8')
+    fx_path, index_path = write_fx_parquets(root / 'reports' / 'fx_risk')
+    return build_payload(source / ASSESSMENTS_NAME, source / SUMMARY_NAME,
+                         fx_path=fx_path, fx_index_path=index_path)
+
+
+class Vista5RiesgoDivisaTest(unittest.TestCase):
+    """Vista 5: el ranking de perdida incurrida, la cobertura honesta y el mapa."""
+
+    @classmethod
+    def setUpClass(cls):
+        cls.tmp = tempfile.TemporaryDirectory()
+        cls.payload = fx_fixture_payload(Path(cls.tmp.name))
+
+    @classmethod
+    def tearDownClass(cls):
+        cls.tmp.cleanup()
+
+    def test_quinta_pestana_y_seccion_existen(self):
+        page = render_chart(self.payload)
+        self.assertIn('id="tab-5"', page)
+        self.assertIn('id="view-5"', page)
+        self.assertIn('Riesgo de divisa', page)
+        # Las cuatro vistas anteriores siguen presentes.
+        for tab in ('tab-1', 'tab-2', 'tab-3', 'tab-4'):
+            self.assertIn(f'id="{tab}"', page)
+
+    def test_cifras_clave_salen_del_parquet(self):
+        resumen = self.payload['fx_resumen']
+        self.assertEqual(resumen['evaluable_empresas'], 4)
+        self.assertEqual(resumen['cambian_empresas'], 3)
+        self.assertEqual(resumen['materiales_empresas'], 2)
+        self.assertEqual(resumen['intactas_empresas'], 1)
+        self.assertEqual(resumen['exposicion_empresas'], 3)
+        self.assertEqual(resumen['intervalo_empresas'], 1)
+        self.assertAlmostEqual(resumen['vol_reparto'] + resumen['deriva_reparto'], 1.0)
+
+    def test_perdida_signo_y_rama_de_intervalo_embebidos(self):
+        page = render_chart(self.payload)
+        embedded = embedded_payload(page)
+        index = embedded['months'].index('2026-08-01')
+        perdedora = next(c for c in embedded['companies'] if c['id'] == 'PERDEDORA')
+        ganadora = next(c for c in embedded['companies'] if c['id'] == 'GANADORA')
+        intervalo = next(c for c in embedded['companies'] if c['id'] == 'INTERVALO')
+        self.assertEqual(perdedora['points'][index]['pf'], 700000.0)
+        self.assertEqual(ganadora['points'][index]['pf'], -800000.0)
+        self.assertEqual(intervalo['points'][index]['pf'], 0.0)
+        self.assertEqual(intervalo['points'][index]['fi'], 1)
+        self.assertEqual(perdedora['points'][index]['fi'], 0)
+        # La nota de verificacion del signo se declara, no se esconde.
+        self.assertIn('GANANCIA, no de perdida', embedded['fx_nota'])
+
+    def test_cortes_declaran_perdiendo_y_ganando(self):
+        corte = self.payload['fx_cortes']['2026-08-01']
+        self.assertEqual(corte['perdiendo'], 1)
+        self.assertEqual(corte['ganando'], 1)
+        self.assertEqual(corte['sin_efecto'], 1)
+        self.assertEqual(corte['sin_dato'], 1)
+        self.assertEqual(corte['intervalo'], 1)
+        self.assertEqual(corte['opacas'], 1)
+
+    def test_mapa_de_divisas_y_sin_cobertura_bce(self):
+        self.assertTrue(self.payload['fx_index_disponible'])
+        divisas = {(row['c'], row['m']): row for row in self.payload['fx_divisas']}
+        aed = divisas[('AED', '2026-08-01')]
+        self.assertFalse(aed['bce'])
+        self.assertIsNone(aed['vol'])
+        cartera = self.payload['fx_cartera']['2026-08-01']
+        self.assertEqual({item['divisa'] for item in cartera}, {'USD', 'TRY', 'AED', 'EUR'})
+        aed_cartera = next(item for item in cartera if item['divisa'] == 'AED')
+        self.assertEqual(aed_cartera['n_opacas'], 2)
+
+    def test_una_empresa_sin_fila_fx_no_inventa_perdida(self):
+        index = self.payload['months'].index('2026-08-01')
+        sin = next(c for c in self.payload['companies'] if c['id'] == 'SINEXPOSICION')
+        self.assertNotIn('pf', sin['points'][index])
+
+    def test_sin_capa_fx_la_vista_se_degrada(self):
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            source = root / 'reports' / 'score_v4'
+            source.mkdir(parents=True, exist_ok=True)
+            write_parquet(source / ASSESSMENTS_NAME, fixture_rows())
+            (source / SUMMARY_NAME).write_text(json.dumps(fixture_summary(), ensure_ascii=False),
+                                               encoding='utf-8')
+            payload = build_payload(source / ASSESSMENTS_NAME, source / SUMMARY_NAME)
+            self.assertFalse(payload['fx_disponible'])
+            self.assertEqual(payload['fx_cortes'], {})
+            page = render_chart(payload)
+            self.assertIn('Vista de divisa no disponible', page)
+            # Las cuatro vistas clasicas siguen intactas.
+            self.assertIn('CASTIGADA', page)
+            self.assertIn('id="view-4"', page)
+
+
 if __name__ == '__main__':
     unittest.main()

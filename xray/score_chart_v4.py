@@ -5,7 +5,7 @@ para la comparativa A-B, reports/score_v3/assessments.parquet (flag --v3-dir;
 si falta, la vista 3 se degrada con un aviso declarado en la pagina). NO genera
 ni modifica parquets: si falta el de v4, falla con un mensaje claro.
 
-CUATRO vistas en un unico HTML sin dependencias externas (pestañas):
+CINCO vistas en un unico HTML sin dependencias externas (pestañas):
   1. Evolucion mensual: varias empresas superpuestas (hasta 8), buscador por
      company_id, huecos declarados para los meses sin nota (con su motivo,
      marcador gris en el carril inferior; nunca cero ni interpolacion).
@@ -26,6 +26,19 @@ CUATRO vistas en un unico HTML sin dependencias externas (pestañas):
      (denominador) esta DENTRO de h_antes_de_ajustes y t6_efectivo; la
      descomposicion Shapley de summary.json se muestra como referencia
      aparte, claramente etiquetada.
+  5. Riesgo de divisa (capa FX): el caso concreto que ningun otro canal ve.
+     Ranking de empresas por perdida YA INCURRIDA por movimiento de divisa
+     (perdida_eur = eur_emision - eur_corte; positivo = perdida, negativo =
+     ganancia), con perdidas y ganancias separadas visualmente; el recuento
+     honesto de a cuantas empresas toca el factor (135 de 957 cambian de
+     nota, 36 de forma material, 822 intactas: la poblacion se declara); el
+     mapa de divisas de la cartera con su volatilidad y su deriva (marca las
+     divisas sin cobertura BCE, hipervolatiles por decision, no por medicion);
+     el reparto del castigo entre volatilidad y deriva; y las empresas que
+     caen en la rama de intervalo (castigo minimo, proporcion no cerrable).
+     Datos de la capa F3 (reports/fx_risk/fx_risk_monthly.parquet) y del
+     indice F1b (reports/fx_risk/fx_index.parquet); si faltan, la vista 5 se
+     degrada con un aviso declarado y NADA se inventa.
 
 Cabecera desde el parquet y summary.json (k, alpha, beta, params_calibrados,
 advertencia), nunca de constantes escritas a mano. Serializacion con
@@ -49,8 +62,13 @@ from xray.scoring_v4 import CONFIDENCE_LEVELS, LIMITACIONES, VERSION
 
 SCORE_V4_DIR = paths.ROOT / 'reports' / 'score_v4'
 SCORE_V3_DIR = paths.ROOT / 'reports' / 'score_v3'
+FX_RISK_DIR = paths.ROOT / 'reports' / 'fx_risk'
 ASSESSMENTS_NAME = 'assessments.parquet'
 SUMMARY_NAME = 'summary.json'
+FX_RISK_NAME = 'fx_risk_monthly.parquet'
+FX_INDEX_NAME = 'fx_index.parquet'
+FX_MATERIAL_THRESHOLD = 1.0
+FX_INTERVAL_REASON = 'castigo_fx_acotado_por_intervalo'
 MISSING_MESSAGE = (f'falta reports/score_v4/{ASSESSMENTS_NAME}, '
                    'ejecuta antes xray.scoring_io_v4')
 DEFAULT_TITLE = 'Blaubeere · Healthscore v4 · notas, confianza y castigos'
@@ -86,9 +104,18 @@ SCHEMA = (
     ('penalizacion_mora_puntos', 'DOUBLE'),
     ('penalizacion_multiplicador_puntos', 'DOUBLE'),
     ('volumen_ambiguo_eur', 'DOUBLE'), ('volumen_ambiguo_pct', 'DOUBLE'),
+    ('indice_fx', 'DOUBLE'), ('indice_fx_min', 'DOUBLE'),
+    ('indice_es_intervalo', 'BOOLEAN'), ('indice_fx_aplicado', 'DOUBLE'),
+    ('penalizacion_fx_puntos', 'DOUBLE'), ('beta_fx', 'DOUBLE'),
     ('k', 'DOUBLE'), ('alpha', 'DOUBLE'), ('beta', 'DOUBLE'),
     ('reasons', 'VARCHAR[]'), ('excluida', 'BOOLEAN'),
 )
+# Campos OPCIONALES del parquet: sin ellos el lector no falla (parquets
+# anteriores a la capa FX o a la exclusion v4 se siguen leyendo). La clave
+# ausente es dato ausente, nunca cero.
+OPTIONAL_FIELDS = ('excluida', 'indice_fx', 'indice_fx_min',
+                   'indice_es_intervalo', 'indice_fx_aplicado',
+                   'penalizacion_fx_puntos', 'beta_fx')
 
 
 def _clean(value):
@@ -122,7 +149,7 @@ def load_assessments(parquet_path):
         columns = [column[0] for column in cursor.description]
         # 'excluida' es OPCIONAL (parquets anteriores a la exclusion v4): sin
         # la columna se asume que no hay ninguna empresa excluida.
-        required = [name for name, _ in SCHEMA if name != 'excluida']
+        required = [name for name, _ in SCHEMA if name not in OPTIONAL_FIELDS]
         missing = [name for name in required if name not in columns]
         if missing:
             raise ValueError(f'assessments.parquet sin columnas esperadas: {", ".join(missing)}')
@@ -151,6 +178,12 @@ def load_assessments(parquet_path):
             't6_efectivo': _clean(row['t6_efectivo']),
             'r_hist': _clean(row['r_hist']),
             'colchon_v4': _clean(row['colchon_v4']),
+            'indice_fx': _clean(row.get('indice_fx')),
+            'indice_fx_min': _clean(row.get('indice_fx_min')),
+            'indice_es_intervalo': bool(row.get('indice_es_intervalo')),
+            'indice_fx_aplicado': _clean(row.get('indice_fx_aplicado')),
+            'penalizacion_fx_puntos': _clean(row.get('penalizacion_fx_puntos')),
+            'beta_fx': _clean(row.get('beta_fx')),
             'colchon_aplicable': _clean(row['colchon_aplicable']),
             'mora_indice': _clean(row['mora_indice']),
             'multiplicador_deuda': _clean(row['multiplicador_deuda']),
@@ -257,7 +290,251 @@ def _shapley_top(summary):
     return out
 
 
-def build_payload(parquet_path, summary_path, v3_path=None):
+def load_fx_risk(parquet_path):
+    """Capa FX empresa-mes de F3: perdida ya incurrida, indice e intervalos.
+
+    Devuelve (filas, cartera): filas indexadas por (company_id, mes ISO) y
+    agregado por divisa y corte. Si el fichero no existe devuelve (None, None)
+    y la vista 5 se degrada con un aviso declarado; NUNCA se estima un valor.
+    """
+    if not parquet_path.exists():
+        return None, None
+    con = duckdb.connect(':memory:')
+    try:
+        cursor = con.execute(
+            'SELECT company_id, month, perdida_eur, importe_vivo_eur_corte, '
+            'indice_fx, indice_fx_vol, indice_fx_deriva, indice_fx_min, '
+            'indice_es_intervalo, tiene_opacas, solo_opacas, por_divisa '
+            'FROM read_parquet(?)', [str(parquet_path)])
+        columns = [column[0] for column in cursor.description]
+        raw = [dict(zip(columns, row)) for row in cursor.fetchall()]
+    finally:
+        con.close()
+    rows = {}
+    cartera = {}
+    for row in raw:
+        month = row['month'].date() if hasattr(row['month'], 'date') else row['month']
+        month_key = month.isoformat()
+        por_divisa = row['por_divisa']
+        if isinstance(por_divisa, str):
+            por_divisa = json.loads(por_divisa or '[]')
+        por_divisa = por_divisa or []
+        monedas = tuple(sorted({str(item.get('divisa')) for item in por_divisa
+                                if item.get('divisa') != 'EUR'
+                                and (item.get('n_facturas') or 0) > 0}))
+        rows[(str(row['company_id']), month_key)] = {
+            'perdida_eur': _clean(row['perdida_eur']),
+            'importe_vivo_eur_corte': _clean(row['importe_vivo_eur_corte']),
+            'indice_fx': _clean(row['indice_fx']),
+            'indice_fx_vol': _clean(row['indice_fx_vol']),
+            'indice_fx_deriva': _clean(row['indice_fx_deriva']),
+            'indice_fx_min': _clean(row['indice_fx_min']),
+            'indice_es_intervalo': bool(row['indice_es_intervalo']),
+            'tiene_opacas': bool(row['tiene_opacas']),
+            'solo_opacas': bool(row['solo_opacas']),
+            'monedas': monedas,
+        }
+        # Agregado por divisa y corte: dinero ya perdido/ganado por divisa y
+        # recuento de facturas y empresas. Es la unica fuente del mapa de
+        # divisas; no se estima ninguna cifra que no este en el parquet.
+        stats = cartera.setdefault(month_key, {})
+        for item in por_divisa:
+            divisa = str(item.get('divisa'))
+            slot = stats.setdefault(divisa, {
+                'divisa': divisa, 'perdida_eur': 0.0, 'n_facturas': 0,
+                'n_empresas': 0, 'importe_original': 0.0, 'n_opacas': 0,
+                'n_valorables_corte': 0, 'n_valorables_emision': 0,
+                'n_rescatadas_fmi': 0, 'n_con_perdida': 0,
+                'perdida_conocida': False})
+            loss = item.get('perdida_eur')
+            if isinstance(loss, float) and math.isfinite(loss):
+                slot['perdida_eur'] += loss
+            # Una divisa con al menos una factura con perdida calculable tiene
+            # tipo (BCE o FMI); sin ninguna, su perdida es DESCONOCIDA, no cero.
+            # La bandera separa '0,00 EUR medido' de 'sin dato'.
+            if int(item.get('n_con_perdida') or 0) > 0:
+                slot['perdida_conocida'] = True
+            slot['n_facturas'] += int(item.get('n_facturas') or 0)
+            slot['n_empresas'] += 1
+            slot['n_opacas'] += int(item.get('n_opacas') or 0)
+            slot['n_valorables_corte'] += int(
+                item.get('n_valorables_corte') or 0)
+            slot['n_valorables_emision'] += int(
+                item.get('n_valorables_emision') or 0)
+            slot['n_rescatadas_fmi'] += int(item.get('n_rescatadas_fmi') or 0)
+            slot['n_con_perdida'] += int(item.get('n_con_perdida') or 0)
+            amount = item.get('importe_original')
+            if isinstance(amount, float) and math.isfinite(amount):
+                slot['importe_original'] += amount
+    for stats in cartera.values():
+        for slot in stats.values():
+            slot['perdida_eur'] = _clean(slot['perdida_eur'])
+            slot['importe_original'] = _clean(slot['importe_original'])
+    return rows, cartera
+
+
+def load_fx_index(parquet_path):
+    """Indice FX por divisa-mes de F1b (volatilidad, deriva y tramos).
+
+    Devuelve None si falta el fichero: el mapa de divisas se declara no
+    disponible y no se dibuja ningun punto sin medicion detras.
+    """
+    if not parquet_path.exists():
+        return None
+    con = duckdb.connect(':memory:')
+    try:
+        raw = con.execute(
+            'SELECT currency, month, cobertura_bce, vol_anualizada, '
+            'deriva_valor, deriva_componente, tramo_volatilidad, tramo_deriva, '
+            'tramo, motivo FROM read_parquet(?)', [str(parquet_path)]).fetchall()
+    finally:
+        con.close()
+    rows = []
+    for currency, month, bce, vol, dval, dcomp, tv, td, tramo, motivo in raw:
+        if hasattr(month, 'date'):
+            month = month.date()
+        rows.append({
+            'c': str(currency), 'm': month.isoformat(), 'bce': bool(bce),
+            'vol': _clean(vol), 'dv': _clean(dval), 'dc': _clean(dcomp),
+            'tv': tv, 'td': td, 't': tramo, 'motivo': motivo,
+        })
+    return rows
+
+
+def _fx_relevant(fx):
+    """La fila FX merece ir embebida solo si aporta algo (no EUR sin efecto)."""
+    return (fx['perdida_eur'] is not None or fx['tiene_opacas']
+            or fx['indice_es_intervalo'] or (fx['indice_fx'] or 0.0) > 0.0)
+
+
+def _fx_block(assessments_rows, fx_rows, cartera, fx_index, fx_source, fx_index_source):
+    """Resumen de la capa FX con SU poblacion declarada en cada cifra.
+
+    Todas las cifras se miden aqui contra el parquet; ninguna se copia de un
+    informe. Si falta la capa F3, devuelve el bloque degradado declarado.
+    """
+    if fx_rows is None:
+        return {
+            'fx_disponible': False, 'fx_ruta': fx_source,
+            'fx_index_disponible': fx_index is not None,
+            'fx_index_ruta': fx_index_source,
+            'fx_resumen': None, 'fx_cortes': {}, 'fx_divisas': [],
+            'fx_cartera': {}, 'fx_nota': None,
+        }
+    evaluables = [row for row in assessments_rows
+                  if not row['excluida'] and row['health_score'] is not None]
+    change_rows = [row for row in evaluables
+                   if (row['penalizacion_fx_puntos'] or 0.0) > 0.0]
+    evaluable_companies = {row['company_id'] for row in evaluables}
+    change_companies = {row['company_id'] for row in change_rows}
+    material_companies = {row['company_id'] for row in evaluables
+                          if (row['penalizacion_fx_puntos'] or 0.0) >= FX_MATERIAL_THRESHOLD}
+    interval_rows = [row for row in evaluables if row['indice_es_intervalo']]
+    exposure_companies = {company for (company, _month), fx in fx_rows.items()
+                          if fx['monedas']} & evaluable_companies
+    betas = {row['beta_fx'] for row in assessments_rows if row['beta_fx'] is not None}
+    beta_fx = next(iter(betas)) if len(betas) == 1 else None
+    # Desglose volatilidad vs deriva: puntos atribuidos a cada componente sobre
+    # las empresa-mes CON castigo (misma poblacion que el efecto total). El
+    # indice combinado es el mas severo de los dos; se publican los dos efectos
+    # por separado y su reparto, no una suma aditiva.
+    volume_points = 0.0
+    drift_points = 0.0
+    if beta_fx is not None:
+        for row in change_rows:
+            fx = fx_rows.get((row['company_id'], row['month'].isoformat()))
+            if fx is None:
+                continue
+            after_mult = (row['health_score'] or 0.0) + (row['penalizacion_fx_puntos'] or 0.0)
+            if fx['indice_fx_vol'] is not None:
+                volume_points += after_mult * beta_fx * fx['indice_fx_vol']
+            if fx['indice_fx_deriva'] is not None:
+                drift_points += after_mult * beta_fx * fx['indice_fx_deriva']
+    attributable = volume_points + drift_points
+    resumen = {
+        'poblacion_evaluable': 'filas con health_score no nulo y excluida=false de assessments.parquet',
+        'evaluable_empresas': len(evaluable_companies),
+        'evaluable_empresa_mes': len(evaluables),
+        'cambian_empresas': len(change_companies),
+        'cambian_empresa_mes': len(change_rows),
+        'materiales_empresas': len(material_companies),
+        'materiales_empresa_mes': sum(1 for row in evaluables
+                                      if (row['penalizacion_fx_puntos'] or 0.0) >= FX_MATERIAL_THRESHOLD),
+        'umbral_material': FX_MATERIAL_THRESHOLD,
+        'intactas_empresas': len(evaluable_companies) - len(change_companies),
+        'exposicion_empresas': len(exposure_companies),
+        'sin_exposicion_empresas': len(evaluable_companies) - len(exposure_companies),
+        'intervalo_empresas': len({row['company_id'] for row in interval_rows}),
+        'intervalo_empresa_mes': len(interval_rows),
+        'beta_fx': beta_fx,
+        'vol_puntos': _clean(volume_points),
+        'deriva_puntos': _clean(drift_points),
+        'vol_reparto': _clean(volume_points / attributable) if attributable else None,
+        'deriva_reparto': _clean(drift_points / attributable) if attributable else None,
+        'desglose_poblacion': 'empresa-mes del panel con health_score no nulo, excluida=false y penalizacion_fx_puntos>0',
+    }
+    cortes = {}
+    for (company, month), fx in fx_rows.items():
+        slot = cortes.setdefault(month, {
+            'n': 0, 'con_dato': 0, 'perdiendo': 0, 'ganando': 0, 'sin_efecto': 0, 'sin_dato': 0,
+            'perdida_neta': 0.0, 'perdida_bruta': 0.0, 'ganancia_bruta': 0.0,
+            'indice_positivo': 0, 'intervalo': 0, 'opacas': 0, 'solo_opacas': 0})
+        slot['n'] += 1
+        loss = fx['perdida_eur']
+        if loss is None:
+            slot['sin_dato'] += 1
+        elif loss > 0:
+            slot['con_dato'] += 1
+            slot['perdiendo'] += 1
+            slot['perdida_neta'] += loss
+            slot['perdida_bruta'] += loss
+        elif loss < 0:
+            slot['con_dato'] += 1
+            slot['ganando'] += 1
+            slot['perdida_neta'] += loss
+            slot['ganancia_bruta'] += loss
+        else:
+            slot['con_dato'] += 1
+            slot['sin_efecto'] += 1
+        if (fx['indice_fx'] or 0.0) > 0:
+            slot['indice_positivo'] += 1
+        if fx['indice_es_intervalo']:
+            slot['intervalo'] += 1
+        if fx['tiene_opacas']:
+            slot['opacas'] += 1
+        if fx['solo_opacas']:
+            slot['solo_opacas'] += 1
+    for slot in cortes.values():
+        for field in ('perdida_neta', 'perdida_bruta', 'ganancia_bruta'):
+            slot[field] = _clean(slot[field])
+    cartera_out = {month: sorted(stats.values(), key=lambda item: abs(item['perdida_eur'] or 0.0),
+                                 reverse=True)
+                   for month, stats in cartera.items()}
+    # Nota de verificacion del ultimo corte: la cifra que mas circula (el mayor
+    # movimiento absoluto) puede ser una GANANCIA; se declara con el signo leido
+    # del parquet para que nadie la lea al reves.
+    last_month = max(cortes) if cortes else None
+    nota = None
+    if last_month is not None:
+        candidates = [(fx['perdida_eur'], company) for (company, month), fx in fx_rows.items()
+                      if month == last_month and fx['perdida_eur'] is not None]
+        if candidates:
+            biggest = max(candidates, key=lambda item: abs(item[0]))
+            if biggest[0] < 0:
+                nota = (f'Convencion de signo: perdida_eur = eur_emision - eur_corte; '
+                        f'positivo = perdida, negativo = ganancia. El mayor movimiento '
+                        f'absoluto del corte {last_month} es {biggest[1]} con '
+                        f'{abs(biggest[0]):,.2f} EUR de GANANCIA, no de perdida. '
+                        'La mayor PERDIDA del corte es la primera fila del ranking de abajo.')
+    return {
+        'fx_disponible': True, 'fx_ruta': fx_source,
+        'fx_index_disponible': fx_index is not None, 'fx_index_ruta': fx_index_source,
+        'fx_resumen': resumen, 'fx_cortes': cortes, 'fx_divisas': fx_index or [],
+        'fx_cartera': cartera_out, 'fx_nota': nota,
+    }
+
+
+def build_payload(parquet_path, summary_path, v3_path=None, fx_path=None, fx_index_path=None):
     rows = load_assessments(parquet_path)
     summary = {}
     if summary_path.exists():
@@ -265,6 +542,10 @@ def build_payload(parquet_path, summary_path, v3_path=None):
     v3_scores, v3_source = (None, None)
     if v3_path is not None:
         v3_scores, v3_source = load_v3_scores(v3_path)
+    fx_rows, fx_cartera = (None, None)
+    if fx_path is not None:
+        fx_rows, fx_cartera = load_fx_risk(fx_path)
+    fx_index = load_fx_index(fx_index_path) if fx_index_path is not None else None
     months = sorted({row['month'] for row in rows})
     params = {field: rows[0][field] for field in ('k', 'alpha', 'beta')}
     # Catalogo de conjuntos de motivos: los meses sin nota comparten patrones
@@ -329,6 +610,20 @@ def build_payload(parquet_path, summary_path, v3_path=None):
                 'x': 1 if row['ventana_parcial'] else 0,
                 'r': reasons_index(row['reasons']),
             }
+            if fx_rows is not None:
+                fx = fx_rows.get((company['id'], month.isoformat()))
+                if fx is not None and _fx_relevant(fx):
+                    # Solo se embebe lo que aporta: perdida ya incurrida (signo
+                    # del parquet), indice aplicado e indices de cada
+                    # componente, y las banderas de intervalo y de opacas.
+                    point['pf'] = fx['perdida_eur']
+                    point['vi'] = fx['importe_vivo_eur_corte']
+                    point['ix'] = fx['indice_fx']
+                    point['fi'] = 1 if fx['indice_es_intervalo'] else 0
+                    point['fo'] = 1 if fx['tiene_opacas'] else 0
+                    point['so'] = 1 if fx['solo_opacas'] else 0
+                    point['fv'] = fx['indice_fx_vol']
+                    point['fd'] = fx['indice_fx_deriva']
             if v3_scores is not None:
                 v3_score = v3_scores.get((company['id'], month.isoformat()))
                 if v3_score is not None:
@@ -345,6 +640,8 @@ def build_payload(parquet_path, summary_path, v3_path=None):
                     't6': row['t6_efectivo'],
                     'cv': row['colchon_v4'],
                     'rh': row['r_hist'],
+                    'fxp': row['penalizacion_fx_puntos'],
+                    'fa': row['indice_fx_aplicado'],
                 })
             points.append(point)
         scores = [point.get('s') for point in points]
@@ -359,6 +656,8 @@ def build_payload(parquet_path, summary_path, v3_path=None):
     params_calibrados = summary.get('params_calibrados')
     exclusion_summary = summary.get('exclusion') if isinstance(summary.get('exclusion'), dict) else {}
     n_excluidas = sum(1 for company in company_rows if company['excluida'])
+    fx = _fx_block(rows, fx_rows, fx_cartera, fx_index, str(fx_path) if fx_path is not None else None,
+                   str(fx_index_path) if fx_index_path is not None else None)
     return {
         'model_version': str(_summary_get(summary, ('model_version', 'version')) or VERSION),
         'formula': _formula_text(summary),
@@ -391,6 +690,7 @@ def build_payload(parquet_path, summary_path, v3_path=None):
         'es_demo_sintetica': bool(_summary_get(summary, ('es_demo_sintetica',
                                                          'demo_sintetica'))),
         'banner_texto': _summary_get(summary, ('banner_texto', 'aviso_banner')),
+        **fx,
     }
 
 
@@ -422,9 +722,10 @@ def render_chart(payload):
     return page
 
 
-def _reduced_payload(parquet_path, summary_path, v3_path=None, limit=TARGET_BYTES):
+def _reduced_payload(parquet_path, summary_path, v3_path=None, limit=TARGET_BYTES,
+                     fx_path=None, fx_index_path=None):
     """Payload completo; si supera el tope, recorta meses antiguos (nunca empresas)."""
-    payload = build_payload(parquet_path, summary_path, v3_path)
+    payload = build_payload(parquet_path, summary_path, v3_path, fx_path, fx_index_path)
     if len(_embed(payload).encode('utf-8')) <= limit:
         return payload
     total_months = len(payload['months'])
@@ -442,6 +743,14 @@ def _reduced_payload(parquet_path, summary_path, v3_path=None, limit=TARGET_BYTE
             company['scored_months'] = sum(point is not None and point.get('s') is not None
                                            for point in company['points'])
         trimmed['cuts'] = {month: cut for month, cut in trimmed['cuts'].items() if month in kept}
+        # La capa FX se recorta con la misma disciplina: nunca se recortan
+        # empresas, solo meses; las divisas y agregados que quedan fuera se
+        # eliminan enteros (jamas se mezclan meses de poblaciones distintas).
+        trimmed['fx_divisas'] = [row for row in trimmed['fx_divisas'] if row['m'] in kept]
+        trimmed['fx_cartera'] = {month: stats for month, stats in trimmed['fx_cartera'].items()
+                                 if month in kept}
+        trimmed['fx_cortes'] = {month: slot for month, slot in trimmed['fx_cortes'].items()
+                                if month in kept}
         trimmed['reduced_months'] = True
         trimmed['agregacion'] = ('RESTRICCION DE TAMANO: los meses mas antiguos del parquet se '
                                  'recortaron para que el HTML quepa; solo se embeben los '
@@ -483,6 +792,7 @@ PAGE = r'''<!doctype html>
 <button id="tab-2" aria-selected="false" data-view="view-2" type="button">2 · Distribución</button>
 <button id="tab-3" aria-selected="false" data-view="view-3" type="button">3 · Comparación A-B vs v3</button>
 <button id="tab-4" aria-selected="false" data-view="view-4" type="button">4 · Desglose del castigo</button>
+<button id="tab-5" aria-selected="false" data-view="view-5" type="button">5 · Riesgo de divisa</button>
 </nav>
 
 <section class="panel" id="view-1" aria-label="Evolución mensual">
@@ -553,6 +863,47 @@ PAGE = r'''<!doctype html>
 <div id="shapley-box"></div>
 </section>
 
+<section class="panel" id="view-5" hidden aria-label="Riesgo de divisa">
+<h2>5 · Riesgo de divisa (capa FX)</h2>
+<div id="fx-status"></div>
+<div class="note"><strong>Convención de signo:</strong> <code>perdida_eur = eur_emision − eur_corte</code>. Positivo = dinero <strong>ya perdido</strong> por moverse la divisa entre la emisión y el corte; negativo = <strong>ganancia</strong>. Es dinero incurrido, no riesgo teórico. Cada cifra de esta vista declara su población; nada se estima.</div>
+<div id="fx-nota-verificacion"></div>
+<h2>El caso concreto: pérdida ya incurrida por empresa</h2>
+<p class="small muted">La cabecera de este ranking es el mensaje de la capa: hay empresas que ya han perdido cientos de miles de euros por movimiento de divisa y <strong>ningún otro canal del motor mide esa pérdida</strong> (mora y multiplicador miden impago y deuda, no divisa). Las pérdidas y las ganancias se separan visualmente: no se compensan en la misma barra.</p>
+<div class="cards" id="fx-headline"></div>
+<div class="statgrid" id="fx-stats"></div>
+<p class="small muted" id="fx-poblaciones"></p>
+<div class="controls" style="grid-template-columns:1fr 1fr 1fr">
+<label for="fx-cut">Corte (sincronizado con la vista 2)<select id="fx-cut"></select></label>
+<label for="fx-search">Buscar empresa o grupo<input id="fx-search" type="search" placeholder="company_id o group_id…"></label>
+<label for="fx-sort">Ordenar la tabla por<select id="fx-sort">
+<option value="perdida">Pérdida ya incurrida ↓</option>
+<option value="ganancia">Ganancia ya incurrida ↓</option>
+<option value="abs">Movimiento absoluto ↓</option>
+<option value="castigo">Puntos de castigo FX ↓</option>
+<option value="id">company_id A→Z</option>
+</select></label>
+</div>
+<p class="small muted" id="fx-poblacion-corte"></p>
+<div class="chart-scroll"><svg id="fx-bars" viewBox="0 0 1100 560" role="img" aria-label="Barras divergentes: pérdida ya incurrida a la izquierda en rojo y ganancia a la derecha en azul, por empresa"></svg></div>
+<div class="legend"><span><span class="swatch" style="background:#8f1d1d;border-radius:2px"></span>Pérdida ya incurrida</span><span><span class="swatch" style="background:#186c98;border-radius:2px"></span>Ganancia ya incurrida</span><span><span class="swatch" style="background:#fff;border:2px solid #b85517;border-radius:2px"></span>Empresa en rama de intervalo (castigo mínimo, proporción no cerrable)</span></div>
+<div class="table-scroll"><table id="fx-table"></table></div>
+<div class="pager"><button id="fx-prev" type="button">← Anterior</button><span id="fx-page" class="small muted"></span><button id="fx-next" type="button">Siguiente →</button></div>
+
+<h2 style="margin-top:26px">Mapa de divisas de la cartera: volatilidad frente a deriva</h2>
+<p class="small muted">Cada punto es una divisa con cartera viva en el corte. Eje X = volatilidad robusta anualizada (medida, F1b); eje Y = deriva del último año convertida en erosión (solo cuenta la depreciación). El tramo combinado es el más severo de los dos. Se ve la intuición central de la capa: <strong>TRY</strong> tiene volatilidad baja pero una deriva enorme, mientras <strong>BRL</strong> es al revés (más volatilidad, deriva positiva = no erosiona).</p>
+<div class="chart-scroll"><svg id="fx-map" viewBox="0 0 1000 520" role="img" aria-label="Dispersión de volatilidad frente a deriva por divisa; aparte, las divisas con tipo FMI sin volatilidad medida y las divisas sin tipo en ninguna fuente (pérdida desconocida, no cero)"></svg></div>
+<div id="fx-map-note" class="note"></div>
+<div class="table-scroll"><table id="fx-map-table"></table></div>
+
+<h2 style="margin-top:26px">¿De dónde viene el castigo: volatilidad o deriva?</h2>
+<div class="chart-scroll"><svg id="fx-decomp" viewBox="0 0 900 150" role="img" aria-label="Reparto del castigo FX entre volatilidad y deriva"></svg></div>
+<div id="fx-decomp-note" class="note"></div>
+
+<h2 style="margin-top:26px">Lo que no sabemos: la rama de intervalo</h2>
+<div id="fx-interval"></div>
+</section>
+
 <footer class="footer-note"><strong>Salud del flujo observado; no es score crediticio, ni probabilidad de impago.</strong> Esta gráfica solo lee healthscore_v4 (y, solo para comparar, las notas de healthscore_v3): está prohibido mezclar series de versiones en la misma nota.<p id="source" class="source"></p></footer>
 <noscript><p class="note warning">Activa JavaScript para usar los selectores y las vistas.</p></noscript>
 </main>
@@ -612,7 +963,7 @@ function init(){
   tabs.forEach(function(tab){
     tab.addEventListener('click',function(){
       tabs.forEach(function(t){t.setAttribute('aria-selected',String(t===tab));});
-      ['view-1','view-2','view-3','view-4'].forEach(function(id){document.getElementById(id).hidden=(id!==tab.dataset.view);});
+      ['view-1','view-2','view-3','view-4','view-5'].forEach(function(id){document.getElementById(id).hidden=(id!==tab.dataset.view);});
     });
   });
 
@@ -1122,8 +1473,314 @@ function init(){
     shapleyBox.appendChild(scroll);
   }
 
-  function renderAll(){renderChips();renderSeries();renderHisto();renderAbStats();renderAbTable();renderCasTable();renderShapley();}
-  cut.addEventListener('change',function(){renderHisto();abPage=0;casPage=0;renderAbStats();renderAbTable();renderCasTable();});
+  // ===================== VISTA 5: riesgo de divisa =====================
+  // Capa FX de F3. Convencion de signo del parquet: perdida_eur positivo =
+  // perdida ya incurrida, negativo = ganancia. Nada se estima: lo que no
+  // esta medido (divisas sin BCE) se declara como hueco, no como cero.
+  var fxSearch=document.getElementById('fx-search'),fxSort=document.getElementById('fx-sort'),fxPage=0;
+  var fxCut=document.getElementById('fx-cut');
+  for(var fxM=data.months.length-1;fxM>=0;fxM--) fxCut.appendChild(new Option(longDate(fxM),data.months[fxM]));
+  fxCut.value=data.months[data.months.length-1];
+  var fxPageSize=100;
+  var tramoColor={estable:'#5d8a3c',volatil:'#186c98',hipervolatil:'#8f1d1d'};
+
+  function fxRows(){
+    var index=data.months.indexOf(fxCut.value);
+    var query=fxSearch.value.trim().toLowerCase();
+    var list=[];
+    data.companies.forEach(function(company){
+      var point=company.points[index];
+      if(!point||point.pf===undefined)return;
+      if(query&&((company.id+' '+(company.group_id||'')).toLowerCase().indexOf(query)<0))return;
+      list.push({id:company.id,group:company.group_id,perdida:point.pf,vivo:point.vi,
+                 indice:point.ix,intervalo:point.fi===1,opacas:point.fo===1,
+                 nota:(point.s===undefined?null:point.s),
+                 fxp:(point.fxp===undefined?null:point.fxp),
+                 mora:(point.pm===undefined?null:point.pm),
+                 mult:(point.pd===undefined?null:point.pd)});
+    });
+    return list;
+  }
+  function fxSorted(rows){
+    var mode=fxSort.value,copy=rows.slice();
+    copy.sort(function(a,b){
+      if(mode==='ganancia')return a.perdida-b.perdida;
+      if(mode==='abs')return Math.abs(b.perdida)-Math.abs(a.perdida);
+      if(mode==='castigo')return ((b.fxp===null)?-1:b.fxp)-((a.fxp===null)?-1:a.fxp);
+      if(mode==='id')return a.id<b.id?-1:a.id>b.id?1:0;
+      return b.perdida-a.perdida;
+    });
+    return copy;
+  }
+  function fxCard(titulo,valor,color,lineas){
+    var c=element('article',undefined,'card');c.style.borderTopColor=color;
+    c.appendChild(element('h2',titulo));
+    var big=element('div',valor,'score');big.style.color=color;c.appendChild(big);
+    lineas.forEach(function(text){c.appendChild(element('p',text,'small'));});
+    return c;
+  }
+  function renderFxHeadline(rows){
+    var box=document.getElementById('fx-headline');box.replaceChildren();
+    var res=data.fx_resumen||{};
+    var losses=rows.filter(function(r){return r.perdida>0;}).sort(function(a,b){return b.perdida-a.perdida;});
+    var gains=rows.filter(function(r){return r.perdida<0;}).sort(function(a,b){return a.perdida-b.perdida;});
+    if(losses.length){
+      var top=losses[0];
+      box.appendChild(fxCard('Mayor pérdida ya incurrida',money(top.perdida),'#8f1d1d',
+        [top.id+' · '+(top.group||'grupo desconocido'),
+         'Importe vivo '+money(top.vivo)+' · índice FX '+(top.indice===null||top.indice===undefined?'—':number(top.indice,3)),
+         'Castigo FX '+(top.fxp===null?'—':number(top.fxp,2))+' pts · mora '+(top.mora===null?'—':number(top.mora,2))+' · multiplicador '+(top.mult===null?'—':number(top.mult,2)),
+         'Ningún otro canal del motor mide esta pérdida: mora y multiplicador miden impago y deuda, no movimiento de divisa.']));
+    }
+    if(gains.length){
+      var topg=gains[0];
+      box.appendChild(fxCard('Mayor ganancia (ojo al signo)',money(-topg.perdida),'#186c98',
+        [topg.id+' · '+(topg.group||'grupo desconocido'),'Importe vivo '+money(topg.vivo),
+         'El mayor movimiento en valor absoluto de un corte puede ser una GANANCIA: perdida_eur negativo significa que la divisa se movió a favor de la empresa.']));
+    }
+    box.appendChild(fxCard('A cuántas empresas toca el factor',String(res.cambian_empresas)+' de '+String(res.evaluable_empresas),'#186c98',
+      [String(res.materiales_empresas)+' cambian de forma material (≥ '+number(res.umbral_material,0)+' punto de nota)',
+       String(res.intactas_empresas)+' NO cambian de nota: no queremos que parezca que el factor mueve más de lo que mueve.',
+       'Población: '+res.poblacion_evaluable+'.']));
+  }
+  function renderFxStats(slot){
+    var grid=document.getElementById('fx-stats');grid.replaceChildren();
+    var res=data.fx_resumen||{};
+    [['Empresas evaluables v4',res.evaluable_empresas],
+     ['Empresa-mes evaluables',res.evaluable_empresa_mes],
+     ['Empresas que cambian de nota',res.cambian_empresas],
+     ['Empresa-mes que cambian',res.cambian_empresa_mes],
+     ['Cambian de forma material (≥1 pt)',res.materiales_empresas],
+     ['Intactas (no cambian)',res.intactas_empresas],
+     ['Con exposición no-EUR (panel)',res.exposicion_empresas],
+     ['Sin exposición no-EUR (panel)',res.sin_exposicion_empresas],
+     ['En rama de intervalo (panel)',res.intervalo_empresas+' emp · '+res.intervalo_empresa_mes+' e-m']
+    ].forEach(function(pair){
+      var stat=element('div',undefined,'stat');var b=element('b');b.textContent=String(pair[1]);
+      stat.appendChild(b);stat.appendChild(element('span',pair[0],'small muted'));grid.appendChild(stat);
+    });
+    document.getElementById('fx-poblaciones').textContent='Poblaciones declaradas: el panel (todos los cortes) y el corte seleccionado son distintos y se etiquetan por separado. La materialidad usa el umbral declarado de '+number(res.umbral_material,0)+' punto(s) sobre 100.';
+    var c=slot||{};
+    document.getElementById('fx-poblacion-corte').textContent='Corte '+longDate(data.months.indexOf(fxCut.value))+' · empresas con fila en la capa F3: '+c.n+' · con dato de pérdida: '+c.con_dato+' (perdiendo '+c.perdiendo+', ganando '+c.ganando+', sin efecto '+c.sin_efecto+') · sin dato (sin divisa no-EUR o no calculable): '+c.sin_dato+' · índice FX positivo: '+c.indice_positivo+' · rama de intervalo: '+c.intervalo+' · con divisas opacas: '+c.opacas+' (solo opacas: '+c.solo_opacas+'). Pérdida neta del corte: '+money(c.perdida_neta)+' · pérdida bruta '+money(c.perdida_bruta)+' · ganancia bruta '+money(c.ganancia_bruta)+'.';
+  }
+  function renderFxBars(rows){
+    var svg=document.getElementById('fx-bars');svg.replaceChildren();
+    var draw=svgInto(svg);
+    var losses=rows.filter(function(r){return r.perdida>0;}).sort(function(a,b){return b.perdida-a.perdida;}).slice(0,16);
+    var gains=rows.filter(function(r){return r.perdida<0;}).sort(function(a,b){return a.perdida-b.perdida;}).slice(0,16);
+    if(!losses.length&&!gains.length){draw('text',{x:20,y:40,fill:'#607183','font-size':13},'Ninguna empresa de este corte tiene pérdida ni ganancia calculable por divisa.');return;}
+    var maxP=1;
+    losses.forEach(function(r){maxP=Math.max(maxP,r.perdida);});
+    gains.forEach(function(r){maxP=Math.max(maxP,-r.perdida);});
+    var cx=560,half=440,top=44,rowH=15;
+    var y=function(i){return top+i*rowH;};
+    var nRows=Math.max(losses.length,gains.length);
+    draw('line',{x1:cx,x2:cx,y1:24,y2:y(nRows)+6,stroke:'#9fb5c4','stroke-width':2});
+    draw('text',{x:cx-8,y:20,'text-anchor':'end',fill:'#8f1d1d','font-size':12,'font-weight':700},'← Pérdida ya incurrida (EUR)');
+    draw('text',{x:cx+8,y:20,'text-anchor':'start',fill:'#186c98','font-size':12,'font-weight':700},'Ganancia ya incurrida (EUR) →');
+    losses.forEach(function(r,i){
+      var w=Math.max(1,r.perdida/maxP*half),yy=y(i);
+      var rect=draw('rect',{x:cx-w,y:yy-5,width:w,height:10,fill:'#8f1d1d',rx:2});
+      if(r.intervalo){rect.setAttribute('stroke','#b85517');rect.setAttribute('stroke-width','2');}
+      var t=document.createElementNS(NS,'title');
+      t.textContent=r.id+' · pérdida '+money(r.perdida)+' · índice FX '+number(r.indice,3)+' · castigo FX '+(r.fxp===null?'—':number(r.fxp,2)+' pts')+(r.intervalo?' · RAMA DE INTERVALO (castigo mínimo)':'');
+      rect.appendChild(t);
+      draw('text',{x:cx-w-6,y:yy+4,'text-anchor':'end',fill:'#142c42','font-size':11},r.id+' · '+money(r.perdida));
+    });
+    gains.forEach(function(r,i){
+      var w=Math.max(1,-r.perdida/maxP*half),yy=y(i);
+      var rect=draw('rect',{x:cx,y:yy-5,width:w,height:10,fill:'#186c98',rx:2});
+      var t=document.createElementNS(NS,'title');t.textContent=r.id+' · ganancia '+money(-r.perdida);rect.appendChild(t);
+      draw('text',{x:cx+w+6,y:yy+4,'text-anchor':'start',fill:'#142c42','font-size':11},r.id+' · '+money(-r.perdida));
+    });
+  }
+  function renderFxTable(rows){
+    var sorted=fxSorted(rows);
+    var pages=Math.max(1,Math.ceil(sorted.length/fxPageSize));
+    if(fxPage>=pages)fxPage=pages-1;
+    var start=fxPage*fxPageSize,visible=sorted.slice(start,start+fxPageSize);
+    var table=document.getElementById('fx-table');table.replaceChildren();
+    var head=document.createElement('thead'),htr=document.createElement('tr');
+    ['#','Empresa','Grupo','Pérdida/ganancia EUR','Importe vivo EUR','Índice FX','Castigo FX pts','Castigo mora','Castigo mult.','Nota v4','Rama'].forEach(function(text,ci){
+      var th=document.createElement('th');th.textContent=text;if(ci===0||ci>=3)th.className='n';htr.appendChild(th);
+    });
+    head.appendChild(htr);table.appendChild(head);
+    var body=document.createElement('tbody');
+    visible.forEach(function(row,i){
+      var tr=document.createElement('tr');
+      var celdas=[String(start+i+1),row.id,row.group||'—',(row.perdida>0?'+':'')+money(row.perdida),
+                  money(row.vivo),number(row.indice,3),number(row.fxp,2),number(row.mora,2),
+                  number(row.mult,2),number(row.nota,2),
+                  row.intervalo?'intervalo (castigo mínimo)':(row.opacas?'con opacas':'—')];
+      celdas.forEach(function(text,ci){
+        var td=document.createElement('td');td.textContent=text;if(ci===0||ci>=3)td.className='n';
+        if(ci===3)td.style.color=row.perdida>0?'#8f1d1d':(row.perdida<0?'#186c98':'inherit');
+        tr.appendChild(td);
+      });
+      body.appendChild(tr);
+    });
+    table.appendChild(body);
+    document.getElementById('fx-page').textContent='Página '+(fxPage+1)+' de '+pages+' · empresas con dato de divisa en el filtro: '+sorted.length;
+    document.getElementById('fx-prev').disabled=fxPage===0;
+    document.getElementById('fx-next').disabled=fxPage>=pages-1;
+  }
+  function renderFxMap(){
+    var svg=document.getElementById('fx-map');svg.replaceChildren();
+    var draw=svgInto(svg);
+    var month=fxCut.value,byC={};
+    data.fx_divisas.forEach(function(d){if(d.m===month)byC[d.c]=d;});
+    var cover=[],sinMedicion=[],sinTipo=[];
+    (data.fx_cartera[month]||[]).forEach(function(item){
+      var d=byC[item.divisa];if(!d)return;
+      if(d.bce===true&&d.vol!==null&&d.vol!==undefined)cover.push({item:item,d:d});
+      else if(item.n_valorables_corte>0||item.perdida_conocida)sinMedicion.push({item:item,d:d});
+      else sinTipo.push({item:item,d:d});
+    });
+    var x0=80,x1=660,y0=430,y1=44,maxVol=0.2,maxDer=0.3;
+    var X=function(v){return x0+Math.max(0,Math.min(1,v/maxVol))*(x1-x0);};
+    var Y=function(v){return y0-Math.max(0,Math.min(1,v/maxDer))*(y0-y1);};
+    for(var g=0;g<=maxVol+0.0001;g+=0.05){
+      draw('line',{x1:X(g),x2:X(g),y1:y1,y2:y0,stroke:'#e4ecf1'});
+      draw('text',{x:X(g),y:y0+18,'text-anchor':'middle',fill:'#607183','font-size':11},number(g*100,0)+'%');
+    }
+    for(var h=0;h<=maxDer+0.0001;h+=0.05){
+      draw('line',{x1:x0,x2:x1,y1:Y(h),y2:Y(h),stroke:'#e4ecf1'});
+      draw('text',{x:x0-8,y:Y(h)+4,'text-anchor':'end',fill:'#607183','font-size':11},number(h*100,0)+'%');
+    }
+    draw('text',{x:(x0+x1)/2,y:y0+40,'text-anchor':'middle',fill:'#142c42','font-size':12,'font-weight':700},'Volatilidad robusta anualizada (medida)');
+    var mid=(y0+y1)/2;
+    draw('text',{x:20,y:mid,'text-anchor':'middle',fill:'#142c42','font-size':12,'font-weight':700,transform:'rotate(-90 20 '+mid+')'},'Deriva 12m (erosión)');
+    cover.forEach(function(entry){
+      var d=entry.d,vol=d.vol,der=(d.dc===null||d.dc===undefined)?0:d.dc;
+      var color=tramoColor[d.t]||'#607183',cx=X(vol),cy=Y(der);
+      var c=draw('circle',{cx:cx,cy:cy,r:6,fill:color,'fill-opacity':0.85,stroke:'#ffffff','stroke-width':1.5,tabindex:0,role:'button','aria-label':d.c});
+      var t=document.createElementNS(NS,'title');
+      t.textContent=d.c+' · volatilidad '+number(vol*100,2)+'% · deriva (erosión) '+number(der*100,2)+'% · tramo '+d.t+' · cartera: pérdida neta '+money(entry.item.perdida_eur)+' · '+entry.item.n_facturas+' facturas en '+entry.item.n_empresas+' empresa(s)';c.appendChild(t);
+      draw('text',{x:cx+8,y:cy+4,fill:'#142c42','font-size':11,'font-weight':700},d.c);
+    });
+    var bx=800,cy=y1+50;
+    draw('text',{x:bx,y:y1-10,fill:'#b85517','font-size':12,'font-weight':700},'Con tipo FMI (sin volatilidad medida)');
+    draw('text',{x:bx,y:y1+6,fill:'#607183','font-size':11},'hipervolátil por decisión, no por');
+    draw('text',{x:bx,y:y1+20,fill:'#607183','font-size':11},'medición: la pérdida SÍ está medida.');
+    sinMedicion.sort(function(a,b){return a.d.c<b.d.c?-1:1;});
+    sinMedicion.forEach(function(entry){
+      var c=draw('rect',{x:bx-6,y:cy-6,width:12,height:12,fill:'#b85517',transform:'rotate(45 '+bx+' '+cy+')',tabindex:0,role:'button','aria-label':entry.d.c});
+      var t=document.createElementNS(NS,'title');t.textContent=entry.d.c+' · tipo de la segunda fuente (FMI/IFS XDC_EUR): la pérdida ya incurrida SÍ está valorada ('+money(entry.item.perdida_eur)+'), pero no hay volatilidad ni deriva medidas al no tener serie BCE. Cartera: '+entry.item.n_facturas+' facturas en '+entry.item.n_empresas+' empresa(s).';c.appendChild(t);
+      draw('text',{x:bx+14,y:cy+4,fill:'#142c42','font-size':12,'font-weight':700},entry.d.c);
+      cy+=26;
+    });
+    cy+=16;
+    draw('text',{x:bx,y:cy,fill:'#8f1d1d','font-size':12,'font-weight':700},'Sin tipo (ni BCE ni FMI)');
+    draw('text',{x:bx,y:cy+16,fill:'#607183','font-size':11},'pérdida DESCONOCIDA, no cero:');
+    draw('text',{x:bx,y:cy+30,fill:'#607183','font-size':11},'no es que no hayan perdido, es que no se sabe.');
+    cy+=54;
+    sinTipo.sort(function(a,b){return a.d.c<b.d.c?-1:1;});
+    sinTipo.forEach(function(entry){
+      var c=draw('rect',{x:bx-6,y:cy-6,width:12,height:12,fill:'#8f1d1d',transform:'rotate(45 '+bx+' '+cy+')',tabindex:0,role:'button','aria-label':entry.d.c});
+      var t=document.createElementNS(NS,'title');t.textContent=entry.d.c+' · sin tipo BCE ni FMI: la pérdida NO es calculable y se muestra como "sin dato", nunca como 0,00 EUR. Cartera: '+entry.item.n_facturas+' facturas en '+entry.item.n_empresas+' empresa(s).';c.appendChild(t);
+      draw('text',{x:bx+14,y:cy+4,fill:'#142c42','font-size':12,'font-weight':700},entry.d.c);
+      cy+=26;
+    });
+  }
+  function renderFxMapTable(){
+    var month=fxCut.value,byC={};
+    data.fx_divisas.forEach(function(d){if(d.m===month)byC[d.c]=d;});
+    var cartera=(data.fx_cartera[month]||[]).slice();
+    cartera.sort(function(a,b){return Math.abs(b.perdida_eur||0)-Math.abs(a.perdida_eur||0);});
+    var table=document.getElementById('fx-map-table');table.replaceChildren();
+    var head=document.createElement('thead'),htr=document.createElement('tr');
+    ['Divisa','Cobertura de tipo','Volatilidad anual','Deriva 12m (erosión)','Tramo vol.','Tramo deriva','Tramo combinado','Pérdida EUR cartera','Facturas','Empresas'].forEach(function(text,ci){
+      var th=document.createElement('th');th.textContent=text;if(ci>=2)th.className='n';htr.appendChild(th);
+    });
+    head.appendChild(htr);table.appendChild(head);
+    var body=document.createElement('tbody');
+    cartera.forEach(function(item){
+      var d=byC[item.divisa]||{},tr=document.createElement('tr');
+      var sinTipo=(d.bce===false&&!(item.n_valorables_corte>0)&&!item.perdida_conocida);
+      var cobertura=d.bce===true?'sí (BCE)':((item.n_valorables_corte>0)?'sin BCE (tipo FMI)':(d.bce===false?'sin tipo (ni BCE ni FMI)':'—'));
+      var perdidaTxt=item.perdida_conocida?money(item.perdida_eur):'sin dato';
+      var td0=document.createElement('td');td0.textContent=item.divisa;if(sinTipo)td0.style.color='#8f1d1d';tr.appendChild(td0);
+      [cobertura,
+       (d.vol===null||d.vol===undefined)?'—':number(d.vol*100,2)+'%',
+       (d.dc===null||d.dc===undefined)?'—':number(d.dc*100,2)+'%',
+       d.tv||'—',d.td||'—',d.t||'—',perdidaTxt,String(item.n_facturas),String(item.n_empresas)
+      ].forEach(function(text,ci){
+        var td=document.createElement('td');td.textContent=text;if(ci>=1)td.className='n';
+        if(ci===6&&!item.perdida_conocida){td.style.color='#8f1d1d';td.style.fontStyle='italic';}
+        else if(ci===6){td.style.color=item.perdida_eur>0?'#8f1d1d':(item.perdida_eur<0?'#186c98':'inherit');}
+        tr.appendChild(td);
+      });
+      body.appendChild(tr);
+    });
+    table.appendChild(body);
+    var note=document.getElementById('fx-map-note');
+    if(note)note.textContent='Regla de la casa: nulo nunca es cero. "sin dato" significa que la pérdida NO es calculable porque la divisa no tiene tipo en ninguna fuente (ni BCE ni FMI/IFS); es distinto de un 0,00 EUR medido (divisa con tipo cuyo movimiento neto fue nulo). ARS, COP, CLP y PEN ya tienen tipo (FMI) desde F6; AED, MAD, MZN y NAD siguen sin dato.';
+  }
+  function renderFxDecomp(){
+    var svg=document.getElementById('fx-decomp');svg.replaceChildren();
+    var draw=svgInto(svg),res=data.fx_resumen||{};
+    var v=res.vol_reparto,d=res.deriva_reparto;
+    var note=document.getElementById('fx-decomp-note');
+    if(v===null||v===undefined||d===null||d===undefined){
+      draw('text',{x:20,y:40,fill:'#607183','font-size':13},'Desglose no disponible: falta beta_fx o los índices por componente.');
+      note.textContent='';return;
+    }
+    var x0=40,x1=760,y=54,hh=36,wv=(x1-x0)*v,wd=(x1-x0)*d;
+    draw('rect',{x:x0,y:y,width:wv,height:hh,fill:'#186c98'});
+    draw('rect',{x:x0+wv,y:y,width:wd,height:hh,fill:'#b85517'});
+    draw('text',{x:x0+wv/2,y:y+hh/2+5,'text-anchor':'middle',fill:'#ffffff','font-size':14,'font-weight':700},'Volatilidad '+number(v*100,1)+'%');
+    draw('text',{x:x0+wv+wd/2,y:y+hh/2+5,'text-anchor':'middle',fill:'#ffffff','font-size':14,'font-weight':700},'Deriva '+number(d*100,1)+'%');
+    draw('text',{x:x0,y:y-12,fill:'#142c42','font-size':12},'Efecto medido: '+number(res.vol_puntos,1)+' pts por volatilidad · '+number(res.deriva_puntos,1)+' pts por deriva');
+    note.textContent='Población: '+res.desglose_poblacion+' (beta_fx = '+number(res.beta_fx,2)+'). El índice combinado toma el más severo de los dos componentes, así que los dos efectos se publican por separado (cada uno como si fuera el único) y su reparto porcentual; no se suman como si fueran independientes.';
+  }
+  function renderFxInterval(rows){
+    var box=document.getElementById('fx-interval');box.replaceChildren();
+    var res=data.fx_resumen||{},corte=data.fx_cortes[fxCut.value]||{};
+    var inCut=rows.filter(function(r){return r.intervalo;});
+    var p=element('p',undefined,'note warning');
+    p.textContent='Estas empresas tienen facturas en divisas sin tipo en NINGUNA fuente (AED, MAD, MZN, NAD) mezcladas con divisas valorables: no se puede cerrar qué proporción de su cartera es inestable. En vez de inventar un número, el motor les aplica el castigo MÍNIMO compatible (indice_fx_min) y las marca con el motivo castigo_fx_acotado_por_intervalo; se ven con borde naranja en el gráfico y etiquetadas en la tabla. ARS, COP, CLP y PEN YA NO están aquí: las cubre la segunda fuente (FMI/IFS XDC_EUR). Población: en el panel, '+res.intervalo_empresas+' empresas ('+res.intervalo_empresa_mes+' empresa-mes) caen en esta rama; en el corte seleccionado, '+corte.intervalo+' filas de la capa F3 ('+inCut.length+' con nota en esta vista). Un hueco declarado vale más que un número inventado.';
+    box.appendChild(p);
+    if(inCut.length){
+      box.appendChild(element('p','Empresas en la rama de intervalo en este corte: '+inCut.map(function(r){return r.id+' ('+money(r.vivo)+' vivos)';}).join(' · '),'small'));
+    }else{
+      box.appendChild(element('p','Ninguna empresa con nota de este corte cae en la rama de intervalo.','small muted'));
+    }
+  }
+  function renderFx(){
+    var status=document.getElementById('fx-status');
+    if(!data.fx_disponible){
+      status.replaceChildren();
+      var w=element('div',undefined,'note warning');
+      w.textContent='Vista de divisa no disponible: no se encontró '+(data.fx_ruta||'reports/fx_risk/fx_risk_monthly.parquet')+'. Los datos FX se quedan fuera y NADA se estima; genera reports/fx_risk/fx_risk_monthly.parquet con xray.fx_risk para activarla.';
+      status.appendChild(w);
+      ['fx-headline','fx-stats','fx-bars','fx-table','fx-map','fx-map-table','fx-decomp','fx-interval','fx-page','fx-poblacion-corte','fx-poblaciones','fx-nota-verificacion'].forEach(function(id){var n=document.getElementById(id);if(n)n.replaceChildren();});
+      return;
+    }
+    status.replaceChildren();
+    var rows=fxRows();
+    renderFxHeadline(rows);
+    renderFxStats(data.fx_cortes[fxCut.value]);
+    renderFxBars(rows);
+    renderFxTable(rows);
+    renderFxMap();
+    renderFxMapTable();
+    renderFxDecomp();
+    renderFxInterval(rows);
+    var nota=document.getElementById('fx-nota-verificacion');nota.replaceChildren();
+    if(data.fx_nota)nota.appendChild(element('p',data.fx_nota,'note'));
+    if(!data.fx_index_disponible)nota.appendChild(element('p','Índice por divisa-mes no disponible ('+(data.fx_index_ruta||'fx_index.parquet')+'): el mapa de divisas no se dibuja y ninguna volatilidad se inventa.','note warning'));
+  }
+  fxSearch.addEventListener('input',function(){fxPage=0;renderFx();});
+  fxSort.addEventListener('change',function(){fxPage=0;renderFxTable(fxRows());});
+  fxCut.addEventListener('change',function(){
+    cut.value=fxCut.value;fxPage=0;abPage=0;casPage=0;
+    renderHisto();renderAbStats();renderAbTable();renderCasTable();renderFx();
+  });
+  document.getElementById('fx-prev').addEventListener('click',function(){if(fxPage>0){fxPage--;renderFxTable(fxRows());}});
+  document.getElementById('fx-next').addEventListener('click',function(){fxPage++;renderFxTable(fxRows());});
+
+  function renderAll(){renderChips();renderSeries();renderHisto();renderAbStats();renderAbTable();renderCasTable();renderShapley();renderFx();}
+  cut.addEventListener('change',function(){renderHisto();abPage=0;casPage=0;renderAbStats();renderAbTable();renderCasTable();fxCut.value=cut.value;fxPage=0;renderFx();});
   renderAll();
 }
 if(typeof document!=='undefined')init();
@@ -1144,13 +1801,21 @@ def main(argv=None):
                         help='directorio con el assessments.parquet de healthscore_v3 '
                              'para la comparativa A-B (por defecto reports/score_v3; '
                              'si no existe, la vista 3 se degrada con aviso)')
+    parser.add_argument('--fx-dir', type=Path, default=None,
+                        help='directorio con fx_risk_monthly.parquet (capa F3) y '
+                             'fx_index.parquet (indice F1b) para la vista 5 '
+                             '(por defecto reports/fx_risk; si faltan, la vista 5 se '
+                             'degrada con aviso declarado)')
     args = parser.parse_args(argv)
     if args.output.exists():
         parser.error('La salida ya existe; usa --output con una ruta nueva para conservarla')
     score_dir = args.input_dir if args.input_dir is not None else paths.ROOT / 'reports' / 'score_v4'
     v3_dir = args.v3_dir if args.v3_dir is not None else paths.ROOT / 'reports' / 'score_v3'
+    fx_dir = args.fx_dir if args.fx_dir is not None else paths.ROOT / 'reports' / 'fx_risk'
     payload = _reduced_payload(score_dir / ASSESSMENTS_NAME, score_dir / SUMMARY_NAME,
-                               v3_dir / ASSESSMENTS_NAME)
+                               v3_dir / ASSESSMENTS_NAME,
+                               fx_path=fx_dir / FX_RISK_NAME,
+                               fx_index_path=fx_dir / FX_INDEX_NAME)
     page = render_chart(payload)
     size = len(page.encode('utf-8'))
     if size > MAX_BYTES:
@@ -1160,6 +1825,7 @@ def main(argv=None):
         output.write(page)
     print(json.dumps({'output': str(args.output), 'input_dir': str(score_dir),
                       'v3_dir': str(v3_dir), 'v3_disponible': payload['v3_disponible'],
+                      'fx_dir': str(fx_dir), 'fx_disponible': payload['fx_disponible'],
                       'model_version': payload['model_version'],
                       'months': len(payload['months']), 'companies': payload['total_companies'],
                       'reduced_months': payload['reduced_months'], 'bytes': size}, ensure_ascii=False))
