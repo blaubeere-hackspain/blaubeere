@@ -33,7 +33,7 @@ export function CompanyPicker({ id, companies, selected, onSelect }: { id: strin
   return <div className="sidebar-company-picker" ref={root}
     onBlur={event => { if (!event.currentTarget.contains(event.relatedTarget)) setOpen(false); }}
     onKeyDown={event => { if (open && event.key === "Escape") { event.preventDefault(); event.stopPropagation(); close(); } }}>
-    <span className="company-picker-label" id={`${id}-label`}>Company</span>
+    <span className="sr-only" id={`${id}-label`}>Company</span>
     <button type="button" className="company-picker-trigger" id={id} ref={trigger} disabled={!companies?.length}
       aria-labelledby={`${id}-label ${id}-value`} aria-haspopup="dialog" aria-expanded={open} aria-controls={open ? `${id}-panel` : undefined}
       onClick={() => open ? close() : show()} onKeyDown={event => { if (event.key === "ArrowDown" || event.key === "ArrowUp") { event.preventDefault(); show(); } }}>

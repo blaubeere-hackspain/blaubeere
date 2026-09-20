@@ -74,7 +74,6 @@ body { background: #f1f1ee; }
 .sidebar-primary { padding-top: 12px; }
 .sidebar-recents .nav-link { font-size: var(--text-ui); }
 .sidebar-company-picker { position: relative; padding-bottom: 18px; border-bottom: 1px solid var(--line); }
-.company-picker-label { display: block; padding-inline: 12px; color: var(--muted); font-size: var(--text-caption); margin-bottom: 8px; }
 .company-picker-trigger { display: flex; align-items: center; gap: 10px; width: 100%; padding: 10px 12px; color: var(--ink); background: var(--surface); border: 1px solid var(--line); border-radius: 10px; text-align: left; }
 .company-picker-trigger > span, .company-picker-option > span { flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 .company-picker-trigger svg, .company-picker-option svg, .company-picker-search svg { width: 16px; height: 16px; stroke-width: 1.5px; color: var(--muted); }
