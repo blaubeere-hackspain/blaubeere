@@ -48,7 +48,7 @@ export function ModelDashboard({ data, scoreDate, demo = false }: { data: ModelA
     {!row ? <section className="card metric-intro"><h2>{availableDates.length ? "No assessment for this date" : "No recorded activity yet"}</h2><p>{availableDates.length ? "Choose an available month above." : "No cash movements, invoices or model activity were recorded for this company."}</p></section> : <>
       <section className="stats-grid model-stats" aria-label="Source data at the selected cutoff">{[["Monthly net movement",euro(row.cash?.flujo_neto),`Month ending ${date(row.as_of, true)}`],["Overdue supplier payments",euro(row.payment?.pago_vencido_eur),`Due and unpaid at ${date(row.as_of, true)}`],["Overdue customer collections",euro(row.payment?.cobro_vencido_eur),`Due and uncollected at ${date(row.as_of, true)}`],["Defaulting",formatArrearsIndex(row.mora_indice),`Arrears index at ${date(row.as_of, true)}`]].map(([label,value,caption])=><article className="stat-card" key={label}><div><span>{label}</span></div><strong className="stat-value num">{value}</strong><p>{caption}</p></article>)}</section>
       <div className={scoreDate ? undefined : "dashboard-charts"}>
-      <HealthScorePanel records={data.records} row={row} explanationHref={scoreHref(row.as_of)} detail={Boolean(scoreDate)}/>
+      <HealthScorePanel records={data.records} row={row} detail={Boolean(scoreDate)}/>
       {!scoreDate && <MonthlyCashChart row={row}/>}
       </div>
       {!scoreDate ? <div className="obligation-cards" id="payments"><AgingCard row={row} side="cobro"/><AgingCard row={row} side="pago"/><DefaultingCard row={row}/></div> : <section className="card health-assessment-card"><div className="metric-columns">

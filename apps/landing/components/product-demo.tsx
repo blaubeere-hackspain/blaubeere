@@ -17,7 +17,7 @@ export function ProductDemo() {
       <div className="demo-topbar"><Image className="brand-logo" src={logo} alt="blau"/><a className="text-link" href={companyUrl}>Explore the dashboard<ArrowRight size={16} aria-hidden/></a></div>
       <div className="dashboard-preview">
         <div className="demo-heading"><div><h3>COMP 6</h3><p>Financial health and the movements behind it.</p></div><span className="demo-period"><CalendarDays size={15} aria-hidden/>August 2026</span></div>
-        <div className="dashboard-charts"><HealthScorePanel records={snapshot.history} row={row} chartHeight={220} explanationHref={`${appOrigin}/demo/health/${row.as_of}?company=${snapshot.company_id}`}/><MonthlyCashChart row={row} chartHeight={220}/></div>
+        <div className="dashboard-charts"><HealthScorePanel records={snapshot.history} row={row} chartHeight={220}/><MonthlyCashChart row={row} chartHeight={220}/></div>
         <div className="obligation-cards"><AgingCard row={row} side="cobro"/><AgingCard row={row} side="pago"/><DefaultingCard row={row}/></div>
       </div>
     </div>
