@@ -189,6 +189,7 @@ impl ServerHandler for FinanceTools {
         input: ReadResourceRequestParams,
         ctx: RequestContext<RoleServer>,
     ) -> Result<ReadResourceResponse, ErrorData> {
+        println!("MCP UI resource requested: {:?}", input.uri);
         principal(&ctx)?;
         if input.uri != COMPANY_PICKER && input.uri != CHATGPT_PICKER {
             return Err(ErrorData::invalid_params("Unknown resource", None));
@@ -212,6 +213,10 @@ async fn authorize(State(state): State<AppState>, mut request: Request, next: Ne
             next.run(request).await
         }
         Err(_) => {
+            println!(
+                "MCP authorization rejected for {} request",
+                request.method()
+            );
             let base = state.config.mcp_resource.trim_end_matches("/mcp");
             let mut response = (
                 StatusCode::UNAUTHORIZED,

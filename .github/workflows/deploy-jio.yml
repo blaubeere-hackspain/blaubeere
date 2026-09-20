@@ -17,6 +17,10 @@ on:
         description: Comma-separated imported company IDs (optional)
         type: string
         required: false
+      mcp_diagnostics:
+        description: Read recent MCP service diagnostics
+        type: boolean
+        default: false
 
 permissions:
   contents: read
@@ -101,6 +105,16 @@ jobs:
           command = 'set -ae; cd /var/lib/blaubeere/data; . /var/lib/blaubeere/runtime.env; exec /var/lib/blaubeere/current/bin/blaubeere-api grant-company-access ' + shlex.join([email, *companies])
           subprocess.run(['jio', 'exec', os.environ['JIO_VM_ID'], 'sudo -n -u blaubeere bash -c ' + shlex.quote(command), '--timeout', '30'], check=True)
           PY
+      - name: MCP diagnostics
+        if: ${{ inputs.mcp_diagnostics }}
+        env:
+          JIO_STATE_DIR: ${{ runner.temp }}/jio
+          JIO_API_KEY: ${{ secrets.JIO_API_KEY }}
+          JIO_ENDPOINT: ${{ vars.JIO_ENDPOINT }}
+          JIO_VM_ID: ${{ vars.JIO_VM_ID }}
+        run: |
+          [[ -n "$JIO_ENDPOINT" ]] || unset JIO_ENDPOINT
+          jio exec "$JIO_VM_ID" 'sudo -n journalctl -u blaubeere-mcp --since "15 minutes ago" --no-pager -n 100' --timeout 30
       - name: Landing URL
         if: ${{ success() && steps.deploy.outputs.landing_url != '' }}
         env:
