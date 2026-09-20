@@ -6,6 +6,7 @@ import { ArrowRight, LoaderCircle, PanelLeft, PanelLeftClose, X } from "lucide-r
 import { ApiError, api } from "../lib/api";
 import type { CompanySummary, Identity, ModelAssessment } from "../lib/types";
 import { ModelDashboard } from "./model-dashboard";
+import { DashboardSkeleton } from "./dashboard-skeleton";
 import { Connections } from "./connections";
 import { WelcomeOnboarding } from "./welcome-onboarding";
 import { Sidebar } from "./sidebar";
@@ -78,7 +79,7 @@ export function Dashboard({ demo = false, scoreDate }: { demo?: boolean; scoreDa
         <button className="icon-button mobile-sidebar-toggle" aria-label="Open navigation" aria-haspopup="dialog" onClick={() => setMobileNavigation(true)}><PanelLeft aria-hidden/></button>
         {error && <div className="error error-retry" role="alert"><span>{error}</span><button className="button secondary" onClick={() => setRetry(retry + 1)}>Try again</button></div>}
         <p className="refresh-status small" role="status">{loading && model && <><LoaderCircle className="spinner" size={14} aria-hidden/>Updating… Showing the previous assessment.</>}</p>
-        {loading && !model && <div className="dashboard-skeleton" role="status"><span className="sr-only">Loading company health and source records…</span><div className="skeleton-chart"/><div className="skeleton-stats">{[1,2,3,4].map(n => <div key={n}/>)}</div></div>}
+        {loading && !model && <DashboardSkeleton detail={Boolean(scoreDate)}/>}
         {!loading && companies?.length === 0 && <PaintedEmptyState image={garden} title="No imported companies available."><p>{demo ? "The dataset has no companies to display yet." : "Your account does not have access to any imported companies yet. You can explore the published dataset in the demo."}</p>{!demo && <a className="button secondary" href="/demo">Explore company data<ArrowRight size={16} aria-hidden/></a>}</PaintedEmptyState>}
         {model && <div aria-busy={loading}><ModelDashboard key={model.company.id} data={model} scoreDate={scoreDate} demo={demo}/></div>}
       </main>

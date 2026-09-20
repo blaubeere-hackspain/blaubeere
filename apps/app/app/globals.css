@@ -243,9 +243,26 @@ body { background: #f1f1ee; }
 .connection-dialog .empty-message :is(h2, h3) { font-size: 22px; line-height: 1.4; }
 .connection-dialog .empty-message p { font-size: var(--text-caption); }
 
-.skeleton-stats { display: grid; grid-template-columns: repeat(4,1fr); gap: 16px; margin-bottom: 24px; }
-.skeleton-stats > div, .skeleton-chart { background: var(--line); border-radius: var(--radius); height: 140px; }
-.skeleton-chart { height: 420px; }
+.skeleton-line { display: block; width: 70%; max-width: 100%; height: 12px; border-radius: 4px; background: var(--line); }
+.skeleton-title { width: 140px; height: 1em; margin-block: .1em; }
+.skeleton-value { width: 140px; height: 28px; border-radius: 6px; }
+.skeleton-control { display: block; width: 158px; height: 44px; border: 1px solid var(--line); border-radius: 10px; background: var(--surface); }
+.skeleton-currency { width: 76px; height: 36px; border-radius: 999px; }
+.dashboard-skeleton .stat-card p { min-height: 1.5em; }
+.dashboard-skeleton .stat-card p .skeleton-line { margin-block: 4px; }
+.dashboard-skeleton .health-score-value .skeleton-value { width: 80px; height: 35px; }
+.dashboard-skeleton .health-score-context { width: 180px; gap: 10px; }
+.dashboard-skeleton .small .skeleton-line, .dashboard-skeleton .financial-card-heading .skeleton-line { width: 150px; margin-block: 4px; }
+.dashboard-skeleton .cash-flow-legend .skeleton-line { width: 74px; margin-block: 4px; }
+.skeleton-plot { height: 290px; margin-inline: 26px 4px; background: repeating-linear-gradient(to top, transparent 0 54px, var(--line) 54px 55px); border-bottom: 1px solid var(--line); }
+.dashboard-skeleton .chart-note .skeleton-line { margin-block: 8px; width: 95%; }
+.dashboard-skeleton .chart-note .skeleton-line:last-child { width: 64%; }
+.dashboard-skeleton .cash-inspected-period .skeleton-line { width: 160px; margin-block: 4px; }
+.dashboard-skeleton .aging-total .skeleton-line { margin-inline: auto; }
+.skeleton-row { display: flex; justify-content: space-between; gap: 24px; padding-block: 12px; }
+.skeleton-row .skeleton-line { width: 40%; }
+.dashboard-skeleton .aging-buckets .skeleton-row { display: flex; }
+@media (max-width: 700px) { .dashboard-skeleton .stat-card p { min-height: 3em; } }
 .planning-dialog, .connection-dialog { color: var(--ink); border: 0; background: var(--surface); padding: 0; border-radius: 28px; max-height: calc(100svh - 48px); width: min(1040px, calc(100% - 48px)); max-width: none; box-shadow: var(--shadow-raised), 0 24px 100px #131a2430; }
 .planning-dialog { display: none; width: min(640px, calc(100% - 24px)); height: calc(100svh - 24px); max-height: none; margin: 12px 12px 12px auto; border-radius: 16px; overflow: hidden; box-shadow: var(--shadow-raised), -16px 0 64px -24px oklch(0 0 0 / .16); }
 .planning-dialog[open] { display: flex; flex-direction: column; }
@@ -301,7 +318,7 @@ body { background: #f1f1ee; }
   .mobile-sidebar-toggle { display: inline-grid; }
   .insight-grid { grid-template-columns: 1.5fr 1fr; }
 }
-@media (max-width: 700px) { .desktop-label { display: none; } .dashboard-main { padding: 16px 12px; } .page-heading { align-items: flex-start; flex-direction: column; gap: 12px; } .page-heading > button { width: 100%; } .context-row { gap: 8px; } .company-selector { width: 100%; } .company-selector select { max-width: none; width: 100%; } .context-date { font-size: 12px; } .horizon-select { margin: 8px 0 0; width: 100%; justify-content: space-between; } .stats-grid { grid-template-columns: 1fr 1fr; gap: 10px; } .stat-card { padding: 14px; } .stat-card > div { min-height: 30px; margin-bottom: 12px; align-items: flex-start; } .stat-value { font-size: clamp(1.125rem,5.1vw,1.25rem); } .stat-card p { font-size: var(--text-caption); } .card-heading { padding: 16px 16px 12px; } .card-heading > .badge { font-size: 12px; } .cash-chart { padding: 0 8px; } .cash-chart > svg { min-height: 180px; } .cash-chart svg text { font-size: 12px; } .chart-legend { gap: 10px; font-size: var(--text-caption); padding-inline: 8px; } .chart-inspector { align-items: flex-start; flex-direction: column; gap: 8px; padding: 12px 8px; } .chart-inspector input { width: 120px; min-height: 44px; } .chart-inspector output { flex-wrap: wrap; gap: 8px; } .chart-note { padding: 4px 8px 16px; } .checkpoints > div { padding: 14px 12px; } .checkpoints strong { font-size: 15px; } .insight-grid { grid-template-columns: 1fr; gap: 16px; } .driver-list { padding: 0 16px; } .coverage-grid { grid-template-columns: 1fr; padding-inline: 16px; } .source-records > summary { padding: 16px; } .source-records > summary .badge { display: none; } .dashboard-footer { flex-direction: column; gap: 8px; } .planning-dialog { margin: 0; width: 100%; max-height: 100svh; height: 100svh; border-radius: 0; } .panel-head { padding: 20px; } .panel-head h2 { font-size: 21px; } .panel-body { padding: 20px; } .form-grid { grid-template-columns: 1fr; gap: 16px; } .planner-submit { flex-direction: column; align-items: stretch; } .plan-grid { grid-template-columns: 1fr; } .plan-card { padding: 20px; } .plan-card > .button { font-size: var(--text-caption); } .skeleton-stats { grid-template-columns: 1fr 1fr; } .plan-overlay-banner { margin-inline: 16px; } }
+@media (max-width: 700px) { .desktop-label { display: none; } .dashboard-main { padding: 16px 12px; } .page-heading { align-items: flex-start; flex-direction: column; gap: 12px; } .page-heading > button { width: 100%; } .context-row { gap: 8px; } .company-selector { width: 100%; } .company-selector select { max-width: none; width: 100%; } .context-date { font-size: 12px; } .horizon-select { margin: 8px 0 0; width: 100%; justify-content: space-between; } .stats-grid { grid-template-columns: 1fr 1fr; gap: 10px; } .stat-card { padding: 14px; } .stat-card > div { min-height: 30px; margin-bottom: 12px; align-items: flex-start; } .stat-value { font-size: clamp(1.125rem,5.1vw,1.25rem); } .stat-card p { font-size: var(--text-caption); } .card-heading { padding: 16px 16px 12px; } .card-heading > .badge { font-size: 12px; } .cash-chart { padding: 0 8px; } .cash-chart > svg { min-height: 180px; } .cash-chart svg text { font-size: 12px; } .chart-legend { gap: 10px; font-size: var(--text-caption); padding-inline: 8px; } .chart-inspector { align-items: flex-start; flex-direction: column; gap: 8px; padding: 12px 8px; } .chart-inspector input { width: 120px; min-height: 44px; } .chart-inspector output { flex-wrap: wrap; gap: 8px; } .chart-note { padding: 4px 8px 16px; } .checkpoints > div { padding: 14px 12px; } .checkpoints strong { font-size: 15px; } .insight-grid { grid-template-columns: 1fr; gap: 16px; } .driver-list { padding: 0 16px; } .coverage-grid { grid-template-columns: 1fr; padding-inline: 16px; } .source-records > summary { padding: 16px; } .source-records > summary .badge { display: none; } .dashboard-footer { flex-direction: column; gap: 8px; } .planning-dialog { margin: 0; width: 100%; max-height: 100svh; height: 100svh; border-radius: 0; } .panel-head { padding: 20px; } .panel-head h2 { font-size: 21px; } .panel-body { padding: 20px; } .form-grid { grid-template-columns: 1fr; gap: 16px; } .planner-submit { flex-direction: column; align-items: stretch; } .plan-grid { grid-template-columns: 1fr; } .plan-card { padding: 20px; } .plan-card > .button { font-size: var(--text-caption); } .plan-overlay-banner { margin-inline: 16px; } }
 
 .refresh-status { min-height: 20px; display: flex; align-items: center; gap: 8px; color: var(--muted); margin-top: -12px; margin-bottom: 12px; }
 .chart-controls { display: flex; align-items: center; gap: 16px; flex-wrap: wrap; }
