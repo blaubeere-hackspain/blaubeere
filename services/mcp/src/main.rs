@@ -178,21 +178,19 @@ impl ServerHandler for FinanceTools {
     async fn list_resources(
         &self,
         _: Option<PaginatedRequestParams>,
-        ctx: RequestContext<RoleServer>,
+        _ctx: RequestContext<RoleServer>,
     ) -> Result<ListResourcesResult, ErrorData> {
-        principal(&ctx)?;
         Ok(serde_json::from_value(json!({"resources":[{"uri":COMPANY_PICKER,"name":"Blau company picker","mimeType":"text/html+skybridge"}]})).expect("valid resource list"))
     }
     async fn read_resource(
         &self,
         input: ReadResourceRequestParams,
-        ctx: RequestContext<RoleServer>,
+        _ctx: RequestContext<RoleServer>,
     ) -> Result<ReadResourceResponse, ErrorData> {
-        println!("MCP UI resource requested: {:?}", input.uri);
-        principal(&ctx)?;
         if input.uri != COMPANY_PICKER {
             return Err(ErrorData::invalid_params("Unknown resource", None));
         }
+        println!("Serving MCP UI template");
         Ok(serde_json::from_value::<ReadResourceResult>(json!({"contents":[{"uri":input.uri,"mimeType":"text/html+skybridge","text":include_str!("company-picker.html"),"_meta":{"ui":{"prefersBorder":true,"csp":{"connectDomains":[],"resourceDomains":[]}},"openai/widgetPrefersBorder":true,"openai/widgetCSP":{"connect_domains":[],"resource_domains":[]},"openai/widgetDescription":"Pick an authorised company and inspect its dated financial health, alerts and metrics."}}]})).expect("valid UI resource").into())
     }
     fn get_info(&self) -> ServerInfo {
