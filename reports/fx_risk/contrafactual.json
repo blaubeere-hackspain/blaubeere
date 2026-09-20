@@ -1,0 +1,600 @@
+{
+  "censo": {
+    "corte": "2026-08-01",
+    "rescate_por_emision": {
+      "facturas_no_eur_sin_eur_propio_en_el_corte": 13010,
+      "facturas_rescatadas_con_tipo_bce_de_emision": 10867,
+      "eur_rescatados_bce": 408667544.75,
+      "facturas_rescatadas_con_tipo_fmi_de_emision": 2093,
+      "eur_rescatados_fmi": 9060885.79,
+      "facturas_rescatadas_total": 12960,
+      "eur_rescatados_total": 417728430.53,
+      "facturas_opacas_sin_eur_propio": 50,
+      "facturas_no_eur_vivas": 14544,
+      "importe_original_no_eur": 21410235541.17,
+      "desfase_fmi": {
+        "emision": {
+          "n": 2093,
+          "mediano_meses": 1.0,
+          "p90_meses": 2.0,
+          "max_meses": 4,
+          "min_meses": 0,
+          "distribucion_meses": {
+            "0": 1044,
+            "1": 621,
+            "2": 227,
+            "3": 71,
+            "4": 130
+          }
+        },
+        "corte": {
+          "n": 2097,
+          "mediano_meses": 2.0,
+          "p90_meses": 4.0,
+          "max_meses": 4,
+          "min_meses": 2,
+          "distribucion_meses": {
+            "2": 1508,
+            "4": 589
+          }
+        }
+      }
+    },
+    "perdida_ya_incurrida": {
+      "corte": "2026-08-01",
+      "facturas_con_perdida_calculable": 14487,
+      "perdida_neta_eur": 94554.5,
+      "perdida_positiva_eur": 3658787.05,
+      "perdida_negativa_eur": -3564232.55,
+      "por_divisa": {
+        "USD": {
+          "n": 6220,
+          "perdida_eur": 1067931.83,
+          "eur_emision": 263632084.08,
+          "eur_corte": 262564152.26,
+          "perdida_pct": 0.0041
+        },
+        "BRL": {
+          "n": 702,
+          "perdida_eur": -435059.1,
+          "eur_emision": 13645389.5,
+          "eur_corte": 14080448.6,
+          "perdida_pct": -0.0319
+        },
+        "MXN": {
+          "n": 441,
+          "perdida_eur": -344566.68,
+          "eur_emision": 5722643.19,
+          "eur_corte": 6067209.86,
+          "perdida_pct": -0.0602
+        },
+        "AUD": {
+          "n": 448,
+          "perdida_eur": -206103.55,
+          "eur_emision": 4587574.86,
+          "eur_corte": 4793678.41,
+          "perdida_pct": -0.0449
+        },
+        "ARS": {
+          "n": 552,
+          "perdida_eur": 151199.82,
+          "eur_emision": 2423313.42,
+          "eur_corte": 2272113.6,
+          "perdida_pct": 0.0624
+        },
+        "GBP": {
+          "n": 3212,
+          "perdida_eur": -106798.73,
+          "eur_emision": 153031750.3,
+          "eur_corte": 153138549.03,
+          "perdida_pct": -0.0007
+        },
+        "COP": {
+          "n": 589,
+          "perdida_eur": -92878.06,
+          "eur_emision": 2999192.13,
+          "eur_corte": 3092070.19,
+          "perdida_pct": -0.031
+        },
+        "INR": {
+          "n": 5,
+          "perdida_eur": 66847.37,
+          "eur_emision": 396693.21,
+          "eur_corte": 329845.84,
+          "perdida_pct": 0.1685
+        },
+        "CAD": {
+          "n": 681,
+          "perdida_eur": 26440.3,
+          "eur_emision": 5142034.86,
+          "eur_corte": 5115594.55,
+          "perdida_pct": 0.0051
+        },
+        "CLP": {
+          "n": 523,
+          "perdida_eur": -21350.64,
+          "eur_emision": 3531608.21,
+          "eur_corte": 3552958.85,
+          "perdida_pct": -0.006
+        },
+        "NOK": {
+          "n": 7,
+          "perdida_eur": -8040.32,
+          "eur_emision": 1747820.94,
+          "eur_corte": 1755861.26,
+          "perdida_pct": -0.0046
+        },
+        "HUF": {
+          "n": 3,
+          "perdida_eur": 5901.5,
+          "eur_emision": 5968.85,
+          "eur_corte": 67.35,
+          "perdida_pct": 0.9887
+        },
+        "PEN": {
+          "n": 433,
+          "perdida_eur": -5403.3,
+          "eur_emision": 219603.5,
+          "eur_corte": 225006.8,
+          "perdida_pct": -0.0246
+        },
+        "SGD": {
+          "n": 127,
+          "perdida_eur": -4025.04,
+          "eur_emision": 1606822.8,
+          "eur_corte": 1610847.84,
+          "perdida_pct": -0.0025
+        },
+        "ISK": {
+          "n": 4,
+          "perdida_eur": -1040.23,
+          "eur_emision": 49025.57,
+          "eur_corte": 50065.8,
+          "perdida_pct": -0.0212
+        },
+        "CHF": {
+          "n": 5,
+          "perdida_eur": 689.23,
+          "eur_emision": 47499.9,
+          "eur_corte": 46810.67,
+          "perdida_pct": 0.0145
+        },
+        "DKK": {
+          "n": 411,
+          "perdida_eur": 522.72,
+          "eur_emision": 1176875.65,
+          "eur_corte": 1176352.93,
+          "perdida_pct": 0.0004
+        },
+        "PLN": {
+          "n": 4,
+          "perdida_eur": 151.29,
+          "eur_emision": 11289.22,
+          "eur_corte": 11137.93,
+          "perdida_pct": 0.0134
+        },
+        "JPY": {
+          "n": 8,
+          "perdida_eur": 131.39,
+          "eur_emision": 9872.46,
+          "eur_corte": 9741.08,
+          "perdida_pct": 0.0133
+        },
+        "SEK": {
+          "n": 9,
+          "perdida_eur": 56.98,
+          "eur_emision": 19481.53,
+          "eur_corte": 19424.55,
+          "perdida_pct": 0.0029
+        },
+        "HKD": {
+          "n": 14,
+          "perdida_eur": -30.18,
+          "eur_emision": 12252.89,
+          "eur_corte": 12283.06,
+          "perdida_pct": -0.0025
+        },
+        "NZD": {
+          "n": 83,
+          "perdida_eur": -12.63,
+          "eur_emision": 392324.3,
+          "eur_corte": 392336.93,
+          "perdida_pct": -0.0
+        },
+        "ZAR": {
+          "n": 3,
+          "perdida_eur": -7.89,
+          "eur_emision": 897.86,
+          "eur_corte": 905.75,
+          "perdida_pct": -0.0088
+        },
+        "CZK": {
+          "n": 3,
+          "perdida_eur": -1.56,
+          "eur_emision": 146.46,
+          "eur_corte": 148.02,
+          "perdida_pct": -0.0107
+        }
+      }
+    },
+    "opacas_ultimo_corte": {
+      "empresas_con_cartera": 667,
+      "empresas_solo_opacas": 0,
+      "empresas_mezcla_opaca_y_valorable": 7,
+      "nota": "solo opacas = todas sus divisas vivas son opacas (sin BCE); su indice es 1.0 exacto. mezcla = tiene opacas y valorables; su indice puntual es NULL y se publica [min, max]."
+    },
+    "cruce_evaluables_v4": {
+      "corte": "2026-08-01",
+      "empresas_evaluables": 957,
+      "evaluables_con_cartera_en_el_corte": 614,
+      "evaluables_con_exposicion_no_eur_en_el_corte": 111,
+      "evaluables_con_exposicion_no_eur_alguna_vez": 139
+    },
+    "universo": "flow_side='inflow', document_type_norm='invoice', status_norm<>'cancel', issuance_date_ok <= fin de m (cartera viva de cobros: incluye lo aun no vencido) y NOT (status_norm='paid' AND payment_date_ok <= fin de m). payment_date_ok solo es fecha REAL si status_norm='paid'; en otro estado es fecha PREVISTA y se ignora (criterio status-aware, identico a F2).",
+    "criterio_confidence": "ninguna=sin cartera viva de cobros; baja=facturas no valoradas al corte >=50% de la cartera (en numero); media=algun hueco de valoracion (incluye intervalo por divisas opacas) o cartera fina (<3 facturas o <2000 EUR); alta=sin huecos y cartera gruesa",
+    "limitaciones": "El agujero residual de las divisas opacas (AED, MAD, MZN, NAD): el BCE no las publica y el FMI/IFS tampoco, asi que no se imputa un tipo. Una empresa con solo opacas publica 100% inestable por construccion; una con mezcla publica un intervalo con el valor puntual a NULL. ARS, COP, CLP y PEN ya NO son opacas: las cubre la segunda fuente (FMI/IFS XDC_EUR) con regla point-in-time. La deriva PASADA no predice la deriva FUTURA: el componente de deriva mide erosion ya ocurrida en 12 meses, no una expectativa. El corte del 6% de deriva es una decision de politica, no un hueco natural de la distribucion (lo dice el informe de F1b): la distribucion de deriva es un continuo y el corte se eligio para separar la cola de depreciacion gestionada del bloque leve. La fuente no tiene fecha de importacion: la cartera viva se reconstruye por emision y pago, no por disponibilidad de registro certificada. El FMI/IFS publica con ~2 meses de retardo (4 en COP), asi que valorar a una fecha reciente usa un tipo mas antiguo; el desfase se publica en meses, no se esconde.",
+    "desfase_fmi_panel": {
+      "disponible": true,
+      "tipo": "fin_de_periodo",
+      "fuente": "imf_ifs_er_xdc_eur",
+      "unidad": "meses entre el mes de la fecha objetivo y el mes del tipo FMI usado",
+      "emision": {
+        "n": 37017,
+        "mediano_meses": 1.0,
+        "p90_meses": 3.0,
+        "max_meses": 4,
+        "min_meses": 0,
+        "distribucion_meses": {
+          "0": 12455,
+          "1": 14174,
+          "2": 6322,
+          "3": 1757,
+          "4": 2309
+        }
+      },
+      "corte": {
+        "n": 37065,
+        "mediano_meses": 2.0,
+        "p90_meses": 4.0,
+        "max_meses": 4,
+        "min_meses": 2,
+        "distribucion_meses": {
+          "2": 23994,
+          "4": 13071
+        }
+      },
+      "nota": "El desfase del corte es el retardo de publicacion de la fuente (2 meses; 4 en COP), no un defecto: se publica para que sea auditable. El de emision es 0 cuando la factura es anterior a la ventana de publicacion y sube hasta ese retardo en las recientes."
+    },
+    "fuente_extra": {
+      "disponible": true,
+      "ruta": "/Users/josemariaiznardosalar/orca/workspaces/embat-hack/f6-fmi/reports/fx_risk/rates_extra.parquet",
+      "tipo": "fin_de_periodo",
+      "fuente": "imf_ifs_er_xdc_eur",
+      "divisas": [
+        "ARS",
+        "CLP",
+        "COP",
+        "PEN"
+      ],
+      "regla": "observacion con available_at <= cierre del corte mas cercana a la fecha objetivo; nunca una publicada despues del corte"
+    }
+  },
+  "contrafactual": {
+    "poblacion": {
+      "empresas_evaluables_v4": 957,
+      "empresas_mes_evaluables": 15116,
+      "empresas_evaluables_con_indice_positivo_alguna_vez": 139,
+      "empresas_grid_con_indice_positivo_alguna_vez": 181,
+      "empresas_intactas_sin_exposicion_no_eur": 818,
+      "empresas_evaluables_con_exposicion_no_eur_ultimo_corte": 111,
+      "corte_ultimo": "2026-08-01"
+    },
+    "por_beta": {
+      "0.05": {
+        "beta_fx": 0.05,
+        "empresas_mes_evaluables": 15116,
+        "empresas_mes_con_cambio": 1207,
+        "empresas_mes_con_cambio_incluyendo_intervalo": 1251,
+        "empresas_mes_materiales": 254,
+        "empresas_con_cambio": 135,
+        "empresas_materiales": 41,
+        "empresas_mes_con_indice_intervalo": 58,
+        "dh_abs_todos": {
+          "n": 8978,
+          "min": 0.0,
+          "p50": 0.0,
+          "p90": 0.011918269390239324,
+          "p99": 1.8790630112449178,
+          "max": 4.568612838178704,
+          "media": 0.07070740998896846
+        },
+        "dh_abs_cambian": {
+          "n": 1207,
+          "min": 1.1606343602356069e-07,
+          "p50": 0.11300519383550663,
+          "p90": 1.6573221347018756,
+          "p99": 3.7688342652865154,
+          "max": 4.568612838178704,
+          "media": 0.5259412815915152
+        },
+        "dh_abs_intervalo_inferior": {
+          "n": 58,
+          "min": 0.0,
+          "p50": 0.0006479526946482771,
+          "p90": 0.6824443736065291,
+          "p99": 2.4340193515474806,
+          "max": 2.4341095188207715,
+          "media": 0.261774138594374
+        },
+        "dh_abs_intervalo_superior": {
+          "n": 58,
+          "min": 0.0,
+          "p50": 0.6812118386041661,
+          "p90": 1.622844195719561,
+          "p99": 4.869346050974113,
+          "max": 4.869622778613042,
+          "media": 0.9285783101630064
+        },
+        "efecto_total_puntos": 634.8111268809588,
+        "efecto_total_intervalo_superior_puntos": 53.85754198945437,
+        "efecto_volatilidad_puntos": 559.8128604915381,
+        "efecto_deriva_puntos": 468.69353355437903,
+        "pct_efecto_volatilidad": 0.544296918067138
+      },
+      "0.1": {
+        "beta_fx": 0.1,
+        "empresas_mes_evaluables": 15116,
+        "empresas_mes_con_cambio": 1207,
+        "empresas_mes_con_cambio_incluyendo_intervalo": 1251,
+        "empresas_mes_materiales": 400,
+        "empresas_con_cambio": 135,
+        "empresas_materiales": 59,
+        "empresas_mes_con_indice_intervalo": 58,
+        "dh_abs_todos": {
+          "n": 8978,
+          "min": 0.0,
+          "p50": 0.0,
+          "p90": 0.023836538780478648,
+          "p99": 3.7581260224898356,
+          "max": 9.137225676357408,
+          "media": 0.14141481997793692
+        },
+        "dh_abs_cambian": {
+          "n": 1207,
+          "min": 2.3212687204712138e-07,
+          "p50": 0.22601038767101325,
+          "p90": 3.3146442694037512,
+          "p99": 7.537668530573031,
+          "max": 9.137225676357408,
+          "media": 1.0518825631830304
+        },
+        "dh_abs_intervalo_inferior": {
+          "n": 58,
+          "min": 0.0,
+          "p50": 0.0012959053892965542,
+          "p90": 1.3648887472130582,
+          "p99": 4.868038703094961,
+          "max": 4.868219037641543,
+          "media": 0.523548277188748
+        },
+        "dh_abs_intervalo_superior": {
+          "n": 58,
+          "min": 0.0,
+          "p50": 1.3624236772083322,
+          "p90": 3.245688391439122,
+          "p99": 9.738692101948226,
+          "max": 9.739245557226084,
+          "media": 1.8571566203260128
+        },
+        "efecto_total_puntos": 1269.6222537619176,
+        "efecto_total_intervalo_superior_puntos": 107.71508397890874,
+        "efecto_volatilidad_puntos": 1119.6257209830762,
+        "efecto_deriva_puntos": 937.3870671087581,
+        "pct_efecto_volatilidad": 0.544296918067138
+      },
+      "0.25": {
+        "beta_fx": 0.25,
+        "empresas_mes_evaluables": 15116,
+        "empresas_mes_con_cambio": 1207,
+        "empresas_mes_con_cambio_incluyendo_intervalo": 1251,
+        "empresas_mes_materiales": 554,
+        "empresas_con_cambio": 135,
+        "empresas_materiales": 76,
+        "empresas_mes_con_indice_intervalo": 58,
+        "dh_abs_todos": {
+          "n": 8978,
+          "min": 0.0,
+          "p50": 0.0,
+          "p90": 0.05959134695119662,
+          "p99": 9.39531505622459,
+          "max": 22.84306419089352,
+          "media": 0.35353704994484225
+        },
+        "dh_abs_cambian": {
+          "n": 1207,
+          "min": 5.803171801178034e-07,
+          "p50": 0.5650259691775331,
+          "p90": 8.286610673509378,
+          "p99": 18.844171326432576,
+          "max": 22.84306419089352,
+          "media": 2.6297064079575754
+        },
+        "dh_abs_intervalo_inferior": {
+          "n": 58,
+          "min": 0.0,
+          "p50": 0.003239763473241385,
+          "p90": 3.4122218680326455,
+          "p99": 12.1700967577374,
+          "max": 12.170547594103857,
+          "media": 1.3088706929718696
+        },
+        "dh_abs_intervalo_superior": {
+          "n": 58,
+          "min": 0.0,
+          "p50": 3.4060591930208304,
+          "p90": 8.114220978597805,
+          "p99": 24.34673025487056,
+          "max": 24.348113893065207,
+          "media": 4.6428915508150315
+        },
+        "efecto_total_puntos": 3174.0556344047936,
+        "efecto_total_intervalo_superior_puntos": 269.2877099472718,
+        "efecto_volatilidad_puntos": 2799.0643024576902,
+        "efecto_deriva_puntos": 2343.467667771895,
+        "pct_efecto_volatilidad": 0.544296918067138
+      }
+    },
+    "top_castigo_por_beta": {
+      "0.05": [
+        {
+          "company_id": "COMP_0658",
+          "max_dh_puntos": 4.8696
+        },
+        {
+          "company_id": "COMP_0359",
+          "max_dh_puntos": 4.5686
+        },
+        {
+          "company_id": "COMP_0666",
+          "max_dh_puntos": 4.4614
+        },
+        {
+          "company_id": "COMP_0384",
+          "max_dh_puntos": 4.3393
+        },
+        {
+          "company_id": "COMP_0287",
+          "max_dh_puntos": 4.1433
+        },
+        {
+          "company_id": "COMP_1244",
+          "max_dh_puntos": 3.9403
+        },
+        {
+          "company_id": "COMP_0525",
+          "max_dh_puntos": 3.4062
+        },
+        {
+          "company_id": "COMP_0029",
+          "max_dh_puntos": 3.3871
+        },
+        {
+          "company_id": "COMP_0341",
+          "max_dh_puntos": 3.3413
+        },
+        {
+          "company_id": "COMP_0614",
+          "max_dh_puntos": 3.0955
+        }
+      ],
+      "0.1": [
+        {
+          "company_id": "COMP_0658",
+          "max_dh_puntos": 9.7392
+        },
+        {
+          "company_id": "COMP_0359",
+          "max_dh_puntos": 9.1372
+        },
+        {
+          "company_id": "COMP_0666",
+          "max_dh_puntos": 8.9228
+        },
+        {
+          "company_id": "COMP_0384",
+          "max_dh_puntos": 8.6786
+        },
+        {
+          "company_id": "COMP_0287",
+          "max_dh_puntos": 8.2866
+        },
+        {
+          "company_id": "COMP_1244",
+          "max_dh_puntos": 7.8806
+        },
+        {
+          "company_id": "COMP_0525",
+          "max_dh_puntos": 6.8124
+        },
+        {
+          "company_id": "COMP_0029",
+          "max_dh_puntos": 6.7742
+        },
+        {
+          "company_id": "COMP_0341",
+          "max_dh_puntos": 6.6825
+        },
+        {
+          "company_id": "COMP_0614",
+          "max_dh_puntos": 6.191
+        }
+      ],
+      "0.25": [
+        {
+          "company_id": "COMP_0658",
+          "max_dh_puntos": 24.3481
+        },
+        {
+          "company_id": "COMP_0359",
+          "max_dh_puntos": 22.8431
+        },
+        {
+          "company_id": "COMP_0666",
+          "max_dh_puntos": 22.3071
+        },
+        {
+          "company_id": "COMP_0384",
+          "max_dh_puntos": 21.6965
+        },
+        {
+          "company_id": "COMP_0287",
+          "max_dh_puntos": 20.7166
+        },
+        {
+          "company_id": "COMP_1244",
+          "max_dh_puntos": 19.7015
+        },
+        {
+          "company_id": "COMP_0525",
+          "max_dh_puntos": 17.0311
+        },
+        {
+          "company_id": "COMP_0029",
+          "max_dh_puntos": 16.9355
+        },
+        {
+          "company_id": "COMP_0341",
+          "max_dh_puntos": 16.7063
+        },
+        {
+          "company_id": "COMP_0614",
+          "max_dh_puntos": 15.4775
+        }
+      ]
+    },
+    "spearman": {
+      "castigo_fx_vs_penalizacion_mora_puntos": 0.1093926823469577,
+      "castigo_fx_vs_penalizacion_multiplicador_puntos": 0.0746101390069806,
+      "indice_fx_vs_mora_indice": 0.1567561197143479,
+      "indice_fx_vs_multiplicador_deuda": -0.15232917745926805,
+      "n_pares_castigo_mora": 8978,
+      "n_pares_castigo_multiplicador": 8978,
+      "nota": "Spearman del castigo FX en puntos (H_final * indice_fx) contra las penalizaciones ya existentes del motor v4. Beta_fx no afecta al rango, por lo que el coeficiente no depende del escenario."
+    },
+    "materialidad": {
+      "umbral_puntos": 1.0,
+      "justificacion": "1 punto sobre la escala 0-100 es el 1% de la nota y esta por encima de la mediana de las penalizaciones existentes (medido en la poblacion evaluable: 0,34 puntos de mora; 0,78 de multiplicador de deuda). Se publica ademas cuantas empresas-mes cambian con cualquier |dH|>0."
+    },
+    "f1b_index": "/Users/josemariaiznardosalar/orca/workspaces/embat-hack/f6-fmi/reports/fx_risk/fx_index.parquet",
+    "f2_exposure": "/Users/josemariaiznardosalar/orca/workspaces/embat-hack/f2-exposicion/reports/fx_risk/exposicion.parquet",
+    "f2_exposure_filas": 30864,
+    "extra_rates": "/Users/josemariaiznardosalar/orca/workspaces/embat-hack/f6-fmi/reports/fx_risk/rates_extra.parquet",
+    "extra_rates_cargados": true,
+    "extra_rates_divisas": [
+      "ARS",
+      "CLP",
+      "COP",
+      "PEN"
+    ]
+  }
+}
