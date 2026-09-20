@@ -3,6 +3,7 @@
 <title>Blau · Your companies</title>
 <style>
 :root{color-scheme:light dark;font-family:Inter,system-ui,sans-serif;color:light-dark(#252724,#eee);background:light-dark(#fff,#202020);font-size:14px}*{box-sizing:border-box}body{margin:0;padding:20px}h1{font-size:20px;margin:0 0 6px}h2{font-size:18px;margin:0}p{line-height:1.5;margin:6px 0;color:light-dark(#676b65,#aaa)}button{font:inherit;color:inherit;background:transparent;border:1px solid light-dark(#e4e6e1,#555);border-radius:12px;padding:12px 16px;cursor:pointer;text-align:left;min-height:44px}button:hover,button[aria-pressed=true]{background:light-dark(#f1f5f0,#303d32)}button:focus-visible{outline:2px solid #719b86;outline-offset:3px}button:disabled{opacity:.6;cursor:wait}#companies{display:flex;flex-wrap:wrap;gap:8px;margin:16px 0}#result{border-top:1px solid light-dark(#e4e6e1,#555);padding-top:16px}dl{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px;margin:20px 0}dt{color:light-dark(#676b65,#aaa);font-size:12px}dd{font-size:20px;font-variant-numeric:tabular-nums;margin:5px 0;overflow-wrap:anywhere}ul{padding-left:20px}li{margin:10px 0;line-height:1.5}.alert{background:light-dark(#fff8e9,#3c3422);border:1px solid light-dark(#ead9b4,#776444);border-radius:12px;padding:12px;margin-top:16px}.note{font-size:12px}#status{min-height:21px}@media(max-width:360px){dl{grid-template-columns:1fr}}
+.actions{display:flex;flex-wrap:wrap;gap:8px;margin-top:12px}
 </style>
 <h1>Your companies</h1><p>Choose a company to see its financial health and what needs attention.</p>
 <div id="companies" aria-label="Choose a company"></div><p id="status" role="status">Loading your companies…</p><section id="result" hidden aria-label="Company health"></section>
@@ -53,8 +54,13 @@ async function selectCompany(company, button) {
       for (const issue of data.health.issues) { const item = element('li','',list); element('strong',issue.title,item); element('p',`${issue.detail}${issue.unit === 'EUR' ? ` Amount: ${money(issue.value)}.` : ''}`,item); }
     }
     element('p','Historical evidence, not live cash or a default prediction. Missing amounts remain unknown. The health score and alert thresholds are provisional.',result).className = 'note';
-    const explain = element('button','Discuss this company in chat',result);
-    explain.onclick = async () => { explain.disabled = true; try { await request('ui/message',{role:'user',content:[{type:'text',text:`Explain the financial health, issues and key metrics for ${company.id} at ${data.as_of}. Use the saved evidence and state its limitations.`}]}); } catch(error) { status.textContent = error.message || 'Could not send to chat.'; } finally { explain.disabled = false; } };
+    const prompts = [['Discuss this company in chat', `Explain the financial health, issues and key metrics for ${company.id} at ${data.as_of}. Use the saved evidence and state its limitations.`]];
+    if (data.forecast_available === true) prompts.push(['Forecast', `Show the available 30/60/90-day cash and health score forecasts for ${company.id}, using get_company_health with month ${data.as_of.slice(0,7)}. Keep the cutoff at ${data.as_of}. Distinguish invoice cash estimates from conditional cash-only health estimates, and leave missing values unknown.`]);
+    const actions = element('div','',result); actions.className = 'actions';
+    for (const [label,text] of prompts) {
+      const action = element('button',label,actions); action.type = 'button';
+      action.onclick = async () => { action.disabled = true; try { await request('ui/message',{role:'user',content:[{type:'text',text}]}); } catch(error) { if (current === selection) status.textContent = error.message || 'Could not send to chat.'; } finally { action.disabled = false; } };
+    }
     request('ui/update-model-context',{structuredContent:data}).catch(()=>{});
   } catch (error) { if (current === selection) status.textContent = error.message || 'Could not load the company. Select it to retry.'; }
   finally { if (current === selection) result.setAttribute('aria-busy','false'); }

@@ -26,12 +26,13 @@ use serde::Deserialize;
 use serde_json::{Value, json};
 use std::sync::Arc;
 
-const COMPANY_PICKER: &str = "ui://blau/company-picker-v4.html";
+const COMPANY_PICKER: &str = "ui://blau/company-picker-v5.html";
 const PICKER_VERSIONS: &[&str] = &[
     COMPANY_PICKER,
     "ui://blau/company-picker-v1.html",
     "ui://blau/company-picker-chatgpt-v2.html",
     "ui://blau/company-picker-v3.html",
+    "ui://blau/company-picker-v4.html",
 ];
 
 #[derive(Clone)]
@@ -93,7 +94,7 @@ fn failure(error: blaubeere_api::ApiError) -> ErrorData {
 #[tool_router]
 impl FinanceTools {
     #[tool(
-        description = "Get a company's financial health state, saved monthly score, risk alerts, current issues at that cutoff and valuable metrics: cash movements, reconstructed cash, overdue collections/payments, aging, arrears and original-currency totals. Use for 'How is Blau doing?' or 'What needs attention?'. Returns dated evidence and missing coverage, not a prediction or credit rating. Use list_companies to resolve the company name to its exact ID. Read-only.",
+        description = "Get a company's financial health, saved monthly score, risk alerts, cash, overdue payments/collections, aging and currency totals. Also returns forecast_available, cash_projection (30/60/90-day invoice forecasts in EUR, not cents) and health_projection (conditional cash-only score estimates). Use for 'How is Blau doing?', 'What needs attention?' or 'Forecast', with an optional YYYY-MM cutoff. After showing company data, offer a 'Forecast' follow-up only if forecast_available is true. Missing forecast values stay unknown; estimates are not observed future scores or default predictions. Resolve company IDs with list_companies. Read-only.",
         annotations(
             read_only_hint = true,
             destructive_hint = false,
@@ -169,7 +170,7 @@ impl FinanceTools {
         Ok(company_result(companies))
     }
     #[tool(
-        description = "Read a dated cash outlook or imported monthly model assessments, evidence and missing inputs for an authorised company. Imported model inputs are EUR amounts; forecasts use integer cents. No forecast is inferred from relative cash movements. Demo fixtures and reconstructed history are labelled.",
+        description = "Read the full dated cash outlook or imported monthly assessments for an authorised company. For a selected month's summary and forecasts, prefer get_company_health. Imported records include 30/60/90-day cash_projection in EUR major units and conditional cash-only health_projection in points. Legacy demo forecast fields ending in _cents use integer cents. Preserve missing values, cutoff dates and forecast assumptions; never infer balances from relative cash movements.",
         annotations(
             read_only_hint = true,
             destructive_hint = false,
@@ -247,7 +248,7 @@ impl ServerHandler for FinanceTools {
         Ok(serde_json::from_value::<ReadResourceResult>(json!({"contents":[{"uri":input.uri,"mimeType":mime,"text":include_str!("company-picker.html"),"_meta":{"ui":{"prefersBorder":true,"csp":{"connectDomains":[],"resourceDomains":[]}},"openai/widgetPrefersBorder":true,"openai/widgetCSP":{"connect_domains":[],"resource_domains":[]},"openai/widgetDescription":"Pick an authorised company and inspect its dated financial health, alerts and metrics."}}]})).expect("valid UI resource").into())
     }
     fn get_info(&self) -> ServerInfo {
-        ServerInfo::new(ServerCapabilities::builder().enable_tools().enable_resources().build()).with_instructions("Blaubeere supports internal finance planning. First use list_companies to retrieve authorised company IDs, then render_company_picker with those IDs when the user wants an interactive selector. Use get_company_health for a company's health, issues and metrics. Surface returned risk alerts and the assessment date; historical snapshots are not live financial status. Insufficient evidence is not poor health. Attention thresholds are provisional, not default probabilities. Preserve source labels, dates, missing coverage and explicit assumptions in every answer. Scenarios are conditional, not guarantees. Never infer retention or profit from bank data. Each company is authorised independently.")
+        ServerInfo::new(ServerCapabilities::builder().enable_tools().enable_resources().build()).with_instructions("Blaubeere supports internal finance planning. First use list_companies to retrieve authorised company IDs, then render_company_picker with those IDs when the user wants an interactive selector. Use get_company_health for a company's health, issues, metrics and forecasts. After presenting company data, offer a 'Forecast' follow-up in the user's language only when forecast_available is true. When requested, use get_company_health for that same company and month, then present the available 30/60/90-day cash_projection and health_projection with their dates. Cash forecasts are cumulative invoice estimates in EUR major units; never sum horizons. Health forecasts change only the cash cushion while freezing other model inputs. Missing balances or health estimates remain unknown, even when invoice flows are available. If forecast_available is false, explain that this cutoff lacks forecast data; do not invent estimates or switch months silently. Surface returned risk alerts and the assessment date; historical snapshots are not live financial status. Insufficient evidence is not poor health. Attention thresholds are provisional, not default probabilities. Preserve source labels, dates, missing coverage and explicit assumptions in every answer. Scenarios are conditional, not guarantees. Never infer retention or profit from bank data. Each company is authorised independently.")
     }
 }
 
@@ -454,16 +455,25 @@ mod tests {
             .await
             .unwrap();
         sqlx::raw_sql("CREATE TABLE dataset_companies(id TEXT PRIMARY KEY, group_id TEXT, name TEXT); CREATE TABLE parquet_records(source TEXT, record_key TEXT, company_id TEXT, period TEXT, payload TEXT); CREATE TABLE dataset_metadata(payload TEXT); INSERT INTO dataset_metadata VALUES ('{}'); INSERT INTO dataset_companies VALUES ('COMP_0006','GROUP_TEST','COMP_0006'),('COMP_PRIVATE','GROUP_PRIVATE','COMP_PRIVATE');").execute(&pool).await.unwrap();
-        let fixture: Value = serde_json::from_str(include_str!(
+        let mut fixture: Value = serde_json::from_str(include_str!(
             "../../../apps/landing/data/product-preview.json"
         ))
         .unwrap();
+        fixture["record"]["confidence"] = json!("alta");
+        fixture["record"]["beta_fx"] = json!(0.05);
+        fixture["record"]["indice_fx_aplicado"] = json!(0.0);
+        let projection = json!({"version":"cashflow_projection_v1","as_of":"2026-08-31","currency":"EUR","horizons":[
+            {"h":30,"date":"2026-09-30","saldo_corte_eur":15564.58,"saldo_proyectado_eur":17000.0},
+            {"h":60,"date":"2026-10-30","saldo_corte_eur":15564.58,"saldo_proyectado_eur":null},
+            {"h":90,"date":"2026-11-29","saldo_corte_eur":15564.58,"saldo_proyectado_eur":21000.0}
+        ]});
         for (source, payload) in [
             ("scores", &fixture["record"]),
             ("cash", &fixture["record"]["cash"]),
             ("payments", &fixture["record"]["payment"]),
             ("debt", &fixture["record"]["debt"]),
             ("daily_cash", &fixture["record"]["daily_cash"]),
+            ("cash_projection", &projection),
         ] {
             sqlx::query("INSERT INTO parquet_records VALUES (?,'COMP_0006:2026-08','COMP_0006','2026-08-01',?)").bind(source).bind(payload.to_string()).execute(&pool).await.unwrap();
         }
@@ -580,8 +590,26 @@ mod tests {
                 assert_eq!(summary["company"]["id"], "COMP_0006");
                 assert_eq!(summary["as_of"], "2026-08-31");
                 assert_eq!(summary["metrics"]["overdue_supplier_payments"], 5870.98);
-                assert_eq!(summary["health"]["state"], "insufficient_evidence");
-                assert_eq!(summary["health"]["issues"][0]["code"], "overdue_payments");
+                assert_eq!(summary["health"]["state"], "attention_needed");
+                assert_eq!(summary["health"]["issues"][0]["code"], "low_health_score");
+                assert_eq!(summary["forecast_available"], true);
+                assert_eq!(summary["cash_projection"], projection);
+                assert_eq!(summary["health_projection"]["as_of"], summary["as_of"]);
+                assert_eq!(
+                    summary["health_projection"]["method"],
+                    "cash_only_scenario_v1"
+                );
+                let points = summary["health_projection"]["points"].as_array().unwrap();
+                assert_eq!(points.len(), 3);
+                for (i, point) in points.iter().enumerate() {
+                    assert_eq!(point["date"], projection["horizons"][i]["date"]);
+                    assert_eq!(point["h"], projection["horizons"][i]["h"]);
+                    if i == 1 {
+                        assert!(point["health_score"].is_null());
+                    } else {
+                        assert!((0.0..=100.0).contains(&point["health_score"].as_f64().unwrap()));
+                    }
+                }
             }
             if allowed && name == "list_companies" {
                 assert_eq!(
@@ -613,6 +641,7 @@ mod tests {
             ("resources/read", json!({"uri":PICKER_VERSIONS[1]})),
             ("resources/read", json!({"uri":PICKER_VERSIONS[2]})),
             ("resources/read", json!({"uri":PICKER_VERSIONS[3]})),
+            ("resources/read", json!({"uri":PICKER_VERSIONS[4]})),
         ] {
             let request = Request::builder()
                 .method("POST")

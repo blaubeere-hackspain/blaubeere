@@ -223,18 +223,40 @@ pub fn summarize(assessment: &Value, month: Option<&str>, today: NaiveDate) -> A
             .is_some_and(|m| r["month"].as_str().is_some_and(|s| s.starts_with(m)))
     });
     let cash_by_currency: Vec<Value> = row["daily_cash"].as_array().into_iter().flatten().map(|c| json!({"currency":c["currency"],"income":c["income"],"expenses":c["expense"],"month_end_cash":c["closing_balance"],"anchor_date":c["anchor_date"]})).collect();
+    let forecast_available = row["cash_projection"]["horizons"]
+        .as_array()
+        .into_iter()
+        .flatten()
+        .any(|point| {
+            [
+                "/entrada_esperada_eur",
+                "/salida_esperada_eur",
+                "/flujo_neto_esperado_eur",
+                "/saldo_proyectado_eur",
+            ]
+            .iter()
+            .any(|path| number(point, path).is_some())
+        })
+        || row["health_projection"]["points"]
+            .as_array()
+            .into_iter()
+            .flatten()
+            .any(|point| number(point, "/health_score").is_some());
     Ok(json!({
         "company":assessment["company"],"as_of":row["as_of"],"requested_month":month,
         "latest_available_as_of":available.last().map(|r| &r["as_of"]),
         "available_months":available.iter().filter_map(|r| r["month"].as_str().map(|s| s.chars().take(7).collect::<String>())).collect::<Vec<_>>(),
         "retrieved_on":today.to_string(),"data_age_days":cutoff.map(|d| (today-d).num_days()),
         "health":status(row, previous),
+        "forecast_available":forecast_available,
+        "cash_projection":row["cash_projection"],
+        "health_projection":row["health_projection"],
         "metrics":{"currency":"EUR","amount_unit":"major units, not cents","monthly_net_movement":row["cash"]["flujo_neto"],"reconstructed_cash":row["cash"]["saldo_reversa_eur"],"overdue_supplier_payments":row["payment"]["pago_vencido_eur"],"overdue_customer_collections":row["payment"]["cobro_vencido_eur"],"payment_arrears_index":row["mora_indice"],"cash_by_original_currency":cash_by_currency},
         "payment_aging":row["payment"],
         "model_inputs":{"observed_months":row["n_meses_con_actividad"],"window_months":row["n_meses_ventana"],"collections_eur":row["c6"],"effective_obligations_eur":row["t6_efectivo"],"applicable_cash_cushion_eur":row["colchon_aplicable"],"arrears_penalty_points":row["penalizacion_mora_puntos"],"debt_multiplier_penalty_points":row["penalizacion_multiplicador_puntos"]},
         "coverage":{"reasons":row["reasons"],"cash_confidence":row["cash"]["confidence"],"cash_flags":row["cash"]["flags"],"payment_confidence":row["payment"]["confidence"]},
         "provenance":{"source_revision":assessment["provenance"]["source_revision"],"imported_at":assessment["provenance"]["imported_at"],"files":assessment["provenance"]["files"],"model_version":row["version"],"model_limitations":assessment["provenance"]["model_summary"]["limitaciones"]},
-        "interpretation":["This is the selected historical month-end snapshot, not live cash or a prediction of default.","The challenge data is synthetic. Scores and attention thresholds are provisional, not credit ratings.","Missing values are unknown, never zero. A missing or excluded score is insufficient evidence, not poor health.","Reconstructed cash uses a later anchor; it is not a bank balance observed on the cutoff date.","Currency subtotals remain separate. Do not add amounts in different currencies or infer revenue or profit from cash flows."]
+        "interpretation":["This is the selected historical month-end snapshot, not live cash or a prediction of default.","The challenge data is synthetic. Scores and attention thresholds are provisional, not credit ratings.","Missing values are unknown, never zero. A missing or excluded score is insufficient evidence, not poor health.","Reconstructed cash uses a later anchor; it is not a bank balance observed on the cutoff date.","Currency subtotals remain separate. Do not add amounts in different currencies or infer revenue or profit from cash flows.","Cash projections are cumulative 30/60/90-day estimates from the selected cutoff, in EUR major units, not cents. Outflows are negative. They cover open invoices only, excluding payroll, taxes and other cash movements; do not add the horizons together. Missing opening balances can leave projected balances unknown even when invoice flows are available.","Health projections are conditional 0–100 cash-only estimates, not published future scores. Only the cash cushion changes; all other model inputs remain fixed at the selected month. Forecasts are not guarantees."]
     }))
 }
 
@@ -315,12 +337,25 @@ mod tests {
         previous["month"] = json!("2026-07-01");
         previous["as_of"] = json!("2026-07-31");
         previous["health_score"] = json!(45.1);
+        row["cash_projection"] = json!({"as_of":"2026-08-31","currency":"EUR","horizons":[
+            {"h":30,"date":"2026-09-30","saldo_proyectado_eur":17000.0},
+            {"h":60,"date":"2026-10-30","saldo_proyectado_eur":null},
+            {"h":90,"date":"2026-11-29","saldo_proyectado_eur":21000.0}
+        ]});
+        row["health_projection"] = json!({"as_of":"2026-08-31","method":"cash_only_scenario_v1","points":[
+            {"h":30,"date":"2026-09-30","health_score":31.0},
+            {"h":60,"date":"2026-10-30","health_score":null},
+            {"h":90,"date":"2026-11-29","health_score":32.0}
+        ]});
         let assessment =
             json!({"company":{"id":"COMP_0006"},"records":[previous,row],"provenance":{}});
         let today = NaiveDate::from_ymd_opt(2026, 9, 20).unwrap();
         let result = summarize(&assessment, None, today).unwrap();
         assert_eq!(result["as_of"], "2026-08-31");
         assert_eq!(result["data_age_days"], 20);
+        assert_eq!(result["forecast_available"], true);
+        assert_eq!(result["cash_projection"], row["cash_projection"]);
+        assert_eq!(result["health_projection"], row["health_projection"]);
         assert_eq!(result["health"]["state"], "insufficient_evidence");
         assert_eq!(result["metrics"]["monthly_net_movement"], 4419.34);
         assert_eq!(
@@ -334,10 +369,11 @@ mod tests {
                 .iter()
                 .any(|i| i["code"] == "overdue_payments")
         );
-        assert_eq!(
-            summarize(&assessment, Some("2026-07"), today).unwrap()["as_of"],
-            "2026-07-31"
-        );
+        let earlier = summarize(&assessment, Some("2026-07"), today).unwrap();
+        assert_eq!(earlier["as_of"], "2026-07-31");
+        assert_eq!(earlier["forecast_available"], false);
+        assert!(earlier["cash_projection"].is_null());
+        assert!(earlier["health_projection"].is_null());
         assert!(summarize(&assessment, Some("2026-09"), today).is_err());
         for month in ["2026-13", "2026-8", "2026-08-31"] {
             assert!(summarize(&assessment, Some(month), today).is_err());
@@ -361,5 +397,16 @@ mod tests {
         assert!(status(&row, None)["issues"].as_array().unwrap().is_empty());
         let unknown = summarize(&json!({"records":[row]}), None, today).unwrap();
         assert!(unknown["metrics"]["monthly_net_movement"].is_null());
+        row["health_projection"] = Value::Null;
+        row["cash_projection"]["horizons"] = json!([
+            {"h":30,"saldo_proyectado_eur":null,"flujo_neto_esperado_eur":null}
+        ]);
+        let unavailable = summarize(&json!({"records":[row]}), None, today).unwrap();
+        assert_eq!(unavailable["forecast_available"], false);
+        row["cash_projection"]["horizons"][0]["flujo_neto_esperado_eur"] = json!(0.0);
+        let flows_only = summarize(&json!({"records":[row]}), None, today).unwrap();
+        assert_eq!(flows_only["forecast_available"], true, "Known zero is data");
+        assert!(flows_only["cash_projection"]["horizons"][0]["saldo_proyectado_eur"].is_null());
+        assert!(flows_only["health_projection"].is_null());
     }
 }

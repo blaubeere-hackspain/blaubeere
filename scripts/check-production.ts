@@ -129,14 +129,14 @@ assert.equal((await fetch(`${app}/api/me`)).status, 401);
 const challenge = await fetch(`${app}/mcp`, { method: "POST" });
 assert.equal(challenge.status, 401);
 assert.ok(challenge.headers.get("www-authenticate")?.includes(`${app}/.well-known/oauth-protected-resource/mcp`));
-for (const [method, params] of [["tools/list", {}], ["resources/read", { uri: "ui://blau/company-picker-v4.html" }]] as const) {
+for (const [method, params] of [["tools/list", {}], ["resources/read", { uri: "ui://blau/company-picker-v5.html" }]] as const) {
   const response = await fetch(`${app}/mcp`, { method: "POST", headers: { "Content-Type": "application/json", Accept: "application/json, text/event-stream" }, body: JSON.stringify({ jsonrpc: "2.0", id: 1, method, params }) });
   assert.equal(response.status, 200, "ChatGPT must be able to discover tools and load the static widget without a user token");
   const payload = await response.json();
   assert.ok(payload.result, JSON.stringify(payload.error));
   if (method === "resources/read") assert.equal(payload.result.contents[0].mimeType, "text/html;profile=mcp-app");
   else {
-    assert.equal(payload.result.tools.find((tool: { name: string }) => tool.name === "render_company_picker")._meta.ui.resourceUri, "ui://blau/company-picker-v4.html");
+    assert.equal(payload.result.tools.find((tool: { name: string }) => tool.name === "render_company_picker")._meta.ui.resourceUri, "ui://blau/company-picker-v5.html");
     assert.equal(payload.result.tools.find((tool: { name: string }) => tool.name === "list_companies")._meta.ui.resourceUri, undefined);
   }
 }
