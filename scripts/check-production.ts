@@ -41,6 +41,17 @@ for (const company of [companies[0], companies.at(-1)]) {
 }
 assert.equal((await fetch(`${app}/api/companies/${companies[0].id}/assessment`)).status, 401, "Private company access must still require authentication");
 assert.equal((await fetch(`${app}/api/demo/companies/DEMO_001/assessment`)).status, 404, "Public dataset endpoints cannot read private fixture data");
+const predictive = await (await read(`${app}/api/demo/companies/COMP_0009/assessment`)).json();
+assert.equal(predictive.provenance.predictive.input_rows, 25872, "Import every published monthly prediction input");
+const outlook = predictive.records.at(-1).predictive;
+assert.equal(outlook.schema_version, "receipt-outlook-1");
+assert.equal(outlook.view, "reconstructed_retrospective");
+assert.equal(outlook.horizon_start, "2026-09-01");
+assert.equal(outlook.horizon_end, "2026-11-30");
+assert.equal(outlook.automatic_alerts, false);
+assert.ok(Math.abs(outlook.predictions.receipt_contraction_3m.probabilities["1"] - 0.5780864197530865) < 1e-12);
+assert.equal(outlook.predictions.current_receipt_dip_3m.probabilities, null);
+assert.equal(predictive.records[0].predictive.predictions.receipt_contraction_3m.probabilities, null);
 const homepage = await (await read(landing)).text();
 assert.ok(homepage.includes(app), "Landing must link to the deployed app");
 for (const title of ["Health score", "Cash flow", "Overdue collections", "Overdue payments", "Defaulting"]) assert.ok(homepage.includes(title), `Landing includes the actual dashboard panel: ${title}`);

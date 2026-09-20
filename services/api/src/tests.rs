@@ -39,6 +39,24 @@ async fn parquet_snapshot_preserves_model_data_and_requires_membership() {
         std::fs::create_dir_all(destination.parent().unwrap()).unwrap();
         std::fs::copy(root.join(path), destination).unwrap();
     }
+    let predictive_directory = root.join(predictive::DIRECTORY);
+    let index: Value =
+        serde_json::from_slice(&std::fs::read(predictive_directory.join("index.json")).unwrap())
+            .unwrap();
+    let paths = ["manifest.json", "models.json", "index.json"]
+        .into_iter()
+        .chain(
+            index["companies"]
+                .as_array()
+                .unwrap()
+                .iter()
+                .map(|entry| entry["path"].as_str().unwrap()),
+        );
+    for path in paths {
+        let destination = source.path().join(predictive::DIRECTORY).join(path);
+        std::fs::create_dir_all(destination.parent().unwrap()).unwrap();
+        std::fs::copy(predictive_directory.join(path), destination).unwrap();
+    }
     let file = dataset_import::build(source.path(), output.path(), "test-revision")
         .await
         .unwrap();
@@ -56,6 +74,21 @@ async fn parquet_snapshot_preserves_model_data_and_requires_membership() {
             .unwrap(),
     );
     let pool = state.dataset.as_ref().unwrap();
+    let prediction = dataset::assessment(&state, "COMP_0009")
+        .await
+        .unwrap()
+        .unwrap();
+    let latest = prediction["records"].as_array().unwrap().last().unwrap();
+    assert!(
+        (latest["predictive"]["predictions"]["receipt_contraction_3m"]["probabilities"]["1"]
+            .as_f64()
+            .unwrap()
+            - 0.5780864197530865)
+            .abs()
+            < 1e-12
+    );
+    assert_eq!(latest["predictive"]["horizon_end"], "2026-11-30");
+    assert!(prediction["records"][0]["predictive"]["predictions"]["receipt_contraction_3m"]["probabilities"].is_null());
     assert!(
         sqlx::query("DELETE FROM parquet_records")
             .execute(pool)
@@ -366,6 +399,9 @@ async fn parquet_snapshot_preserves_model_data_and_requires_membership() {
             .iter()
             .map(|file| file["rows"].as_i64().unwrap())
             .sum::<i64>()
+            + result["provenance"]["predictive"]["input_rows"]
+                .as_i64()
+                .unwrap()
     );
     let demo = request(
         app.clone(),

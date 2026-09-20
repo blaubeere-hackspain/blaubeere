@@ -47,7 +47,7 @@ git -C "$root/repo" -c protocol.version=2 fetch --depth=1 --filter=blob:none ori
 # materialized from LFS at this exact revision for Rust's daily aggregation.
 release="$(mktemp -d "$root/releases/$revision.XXXXXX")"
 chmod 755 "$release"
-git -C "$root/repo" archive "$revision" Cargo.toml Cargo.lock package.json bun.lock apps services fixtures scripts reports/score_v4/assessments.parquet reports/score_v4/summary.json reports/cash_backfill/cash_backfill_monthly.parquet reports/payment_delay_v2/payment_delay_v2_monthly.parquet reports/debt_obligation/debt_obligation_monthly.parquet reports/transfer_resolution_v2/resolution.parquet | tar -x -C "$release"
+git -C "$root/repo" archive "$revision" Cargo.toml Cargo.lock package.json bun.lock apps services fixtures scripts reports/score_v4/assessments.parquet reports/score_v4/summary.json reports/cash_backfill/cash_backfill_monthly.parquet reports/payment_delay_v2/payment_delay_v2_monthly.parquet reports/debt_obligation/debt_obligation_monthly.parquet reports/transfer_resolution_v2/resolution.parquet reports/modeling/financial-v3/dataset-v1/model-v1/manifest.json reports/modeling/financial-v3/dataset-v1/model-v1/models.json reports/modeling/financial-v3/dataset-v1/model-v1/index.json reports/modeling/financial-v3/dataset-v1/model-v1/profiles | tar -x -C "$release"
 git -C "$root/repo" lfs fetch --include='data/clean/transactions.parquet,data/clean/balances.parquet' --exclude='' origin "$revision"
 mkdir -p "$release/data/clean"
 chmod 755 "$release/data" "$release/data/clean"
